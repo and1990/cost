@@ -1,0 +1,55 @@
+body {
+	background-color: #eeeeee;
+	position: absolute;
+	left: 205px;
+}
+
+div.user_login_header {
+	height: 60px;
+	width: 940px;
+	position: absolute;
+	top: 20px;
+	/* border:solid 1px;
+			border-style:dashed */
+}
+
+div.user_login_div {
+	height: 250px;
+	width: 940px;
+	position: absolute;
+	top: 110px;
+	background-color: #fafafa;
+	/* border:solid 1px;
+			border-style:dashed; */
+}
+
+div.user_login_image {
+	height: 250px;
+	width: 555px;
+	float: left;
+	/* border:solid 1px;
+			border-style:dashed */
+}
+
+div.user_login_input {
+	height: 250px;
+	width: 380px;
+	float: left;
+	font-size: 14;
+	/* border:solid 1px;
+			border-style:board; */
+}
+
+.input_text {
+	width: 350px;
+	height: 30px
+}
+
+.input_button {
+	width: 350px;
+	height: 35px;
+	font-size: 16px;
+	font-weight:900;
+	color: white;
+	background-color: #DC143C;
+}

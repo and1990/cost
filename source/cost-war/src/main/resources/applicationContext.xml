@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:tx="http://www.springframework.org/schema/tx" xmlns:jpa="http://www.springframework.org/schema/data/jpa"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+	http://www.springframework.org/schema/beans/spring-beans.xsd 
+	http://www.springframework.org/schema/context 
+	http://www.springframework.org/schema/context/spring-context.xsd 
+	http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.5.xsd 
+	http://www.springframework.org/schema/data/jpa http://www.springframework.org/schema/data/jpa/spring-jpa-1.0.xsd">
+
+	<context:property-placeholder location="classpath*:cost.properties" />
+
+	<context:component-scan base-package="org.fire.cost" />
+	<!-- <context:component-scan base-package="org.open.cost"> <context:include-filter 
+		type="regex" expression=".service.impl" /> <context:include-filter type="regex" 
+		expression=".dao.impl" /> </context:component-scan> -->
+
+	<bean id="cost_dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource"
+		destroy-method="close">
+		<property name="driverClass" value="${cost.jdbc.driverClassName}" />
+		<property name="jdbcUrl" value="${cost.jdbc.url}" />
+		<property name="user" value="${cost.jdbc.username}" />
+		<property name="password" value="${cost.jdbc.password}" />
+		<property name="initialPoolSize" value="${cost.jdbc.initialPoolSize}" />
+		<property name="minPoolSize" value="${cost.jdbc.minPoolSize}" />
+		<property name="maxPoolSize" value="${cost.jdbc.maxPoolSize}" />
+		<property name="maxIdleTime" value="${cost.jdbc.maxIdleTime}" />
+		<property name="acquireIncrement" value="${cost.jdbc.acquireIncrement}" />
+		<property name="idleConnectionTestPeriod" value="${cost.jdbc.idleConnectionTestPeriod}" />
+		<property name="testConnectionOnCheckout" value="${cost.jdbc.testConnectionOnCheckout}" />
+		<property name="testConnectionOnCheckin" value="${cost.jdbc.testConnectionOnCheckin}" />
+		<property name="checkoutTimeout" value="${cost.jdbc.checkoutTimeout}" />
+		<property name="preferredTestQuery">
+			<value>SELECT NOW() FROM DUAL</value>
+		</property>
+	</bean>
+
+	<!-- 配置实体管理器 -->
+	<bean id="cost_entityManagerFactory"
+		class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
+		<property name="dataSource" ref="cost_dataSource" />
+		<property name="persistenceUnitName" value="cost" />
+		<property name="persistenceXmlLocation" value="classpath*:META-INF/persistence.xml" />
+		<property name="jpaVendorAdapter">
+			<bean class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter">
+				<property name="generateDdl" value="false" />
+				<property name="showSql" value="true" />
+			</bean>
+		</property>
+	</bean>
+
+	<bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
+		<property name="entityManagerFactory" ref="cost_entityManagerFactory" />
+	</bean>
+
+	<jpa:repositories base-package="org.fire.cost.dao"
+		query-lookup-strategy="create-if-not-found" repository-impl-postfix="CustomImpl"
+		entity-manager-factory-ref="cost_entityManagerFactory">
+	</jpa:repositories>
+	<tx:annotation-driven transaction-manager="transactionManager" />
+
+	<!--memcache -->
+	<bean name="memcachedClientBuilder" class="net.rubyeye.xmemcached.XMemcachedClientBuilder">
+		<constructor-arg>
+			<list>
+				<bean class="java.net.InetSocketAddress">
+					<constructor-arg>
+						<value>${memcached.server.address}</value>
+					</constructor-arg>
+					<constructor-arg>
+						<value>${memcached.server.port}</value>
+					</constructor-arg>
+				</bean>
+			</list>
+		</constructor-arg>
+		<constructor-arg>
+			<list>
+				<value>1</value>
+			</list>
+		</constructor-arg>
+		<property name="connectionPoolSize" value="50"></property>
+		<property name="opTimeout" value="50000"></property>
+		<property name="commandFactory">
+			<bean class="net.rubyeye.xmemcached.command.TextCommandFactory" />
+		</property>
+		<property name="sessionLocator">
+			<bean class="net.rubyeye.xmemcached.impl.KetamaMemcachedSessionLocator" />
+		</property>
+		<property name="transcoder">
+			<bean class="net.rubyeye.xmemcached.transcoders.SerializingTranscoder" />
+		</property>
+	</bean>
+	<bean name="memcachedClient" factory-bean="memcachedClientBuilder"
+		factory-method="build" destroy-method="shutdown" />
+
+	<!-- shiro -->
+	<bean id="shiroFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">
+		<property name="securityManager" ref="securityManager" />
+		<!--<property name="loginUrl" value="/index.jsp" /> -->
+		<!--<property name="successUrl" value="/success.jsp" /> -->
+		<!--<property name="unauthorizedUrl" value="/401.jsp" /> -->
+		<property name="filters">
+			<map>
+				<entry key="costAuth">
+					<bean class="org.fire.cost.filter.CostAuthenticationFilter" />
+				</entry>
+			</map>
+		</property>
+		<property name="filterChainDefinitions">
+			<value>
+				/user/userLogin.jsp=anon
+				/main.jsp = costAuth
+			</value>
+		</property>
+	</bean>
+	<bean id="securityManager" class="org.apache.shiro.web.mgt.DefaultWebSecurityManager">
+		<property name="realm" ref="authenticationService" />
+	</bean>
+	<bean id="lifecycleBeanPostProcessor" class="org.apache.shiro.spring.LifecycleBeanPostProcessor" />
+</beans>

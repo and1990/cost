@@ -1,0 +1,81 @@
+body {
+	background-color: #eeeeee;
+	position: absolute;
+	left: 283px;
+}
+
+div {
+	margin-top: 15px;
+}
+
+div.user_regist_header {
+	height: 60px;
+	width: 800px;
+	position: absolute;
+	top: 20px;
+	/* border: solid 1px;
+	border-style: dashed */
+}
+
+div.user_regist_div {
+	height: 420px;
+	width: 800px;
+	position: absolute;
+	top: 85px;
+	background-color: #fafafa;
+	/* border: solid 1px;
+	border-style: dashed; */
+}
+
+div.left {
+	width: 245px;
+	height: 25px;
+	text-align: right;
+	line-height: 25px;
+	float: left;
+	/* border: solid 1px;
+	border-style: dashed; */
+}
+
+div.center {
+	width: 300px;
+	height: 25px;
+	align: left;
+	float: left;
+	/* border: solid 1px;
+	border-style: dashed; */
+}
+
+div.right {
+	width: 245px;
+	height: 25px;
+	align: left;
+	float: left;
+	/* border: solid 1px;
+	border-style: dashed; */
+}
+
+.button_div {
+	width: 300px;
+	height: 35px;
+	text-align: center;
+	float: left;
+	margin-top: 25px;
+	margin-left: 245px;
+	/* border: solid 1px;
+	border-style: dashed; */
+}
+
+.input_text {
+	width: 300px;
+	height: 25px
+}
+
+.input_button {
+	width: 110px;
+	height: 35px;
+	font-size: 16px;
+	font-weight:900;
+	color: white;
+	background-color: #DC143C;
+}
