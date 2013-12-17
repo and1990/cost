@@ -117,6 +117,10 @@ public class CostAuthenticationFilter implements Filter
 	 */
 	private String getCookieValue(Cookie[] cookieArr, String key)
 	{
+		if (cookieArr == null || cookieArr.length == 0)
+		{
+			return null;
+		}
 		for (Cookie cookie : cookieArr)
 		{
 			if ("sessionId".equals(cookie.getName()) && "sessionId".equals(key))
