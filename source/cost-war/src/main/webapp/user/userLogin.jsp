@@ -48,9 +48,6 @@
 		        type: "POST",
 		        url:loginUrl,
 		        success: function(resultData){
-		        	document.cookie="sessionId="+resultData.data.sessionId;
-		        	document.cookie="userId="+resultData.data.userId;
-		        	document.cookie="uuid="+resultData.data.uuid;
 		        	window.location.href="<%=basePath%>/main.jsp";
 		        },
 		        error:function(msg){

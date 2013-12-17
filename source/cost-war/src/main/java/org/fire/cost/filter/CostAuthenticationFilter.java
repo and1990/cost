@@ -57,18 +57,17 @@ public class CostAuthenticationFilter implements Filter
 		String sessionId = getCookieValue(cookieArr, "sessionId");
 		if (sessionId != null && sessionId.trim().length() > 0)
 		{
-			String uuid = getCookieValue(cookieArr, "uuid");
 			UserContext cache = costContextService.getUserContext(sessionId);
 			if (cache != null)
 			{
 				UserContext userContext = new UserContext();
 				String userId = getCookieValue(cookieArr, "userId");
+				String uuid = getCookieValue(cookieArr, "uuid");
 				userContext.setSessionId(sessionId);
 				userContext.setUserId(Long.valueOf(userId));
 				userContext.setUuid(uuid);
 				userContext.setTimeStamp(cache.getTimeStamp());
 				userContext.setUserType(cache.getUserType());
-				ThreadMessageContext.set(userContext);
 				try
 				{
 					costContextService.delay(sessionId);

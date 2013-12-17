@@ -23,10 +23,10 @@ public class ThreadMessageContext
 	{
 		if (userContext != null)
 		{
-			//			threadLocal.remove();
-			//			threadLocal.set(userContext);
-			userContextList.clear();
-			userContextList.add(userContext);
+			threadLocal.remove();
+			threadLocal.set(userContext);
+			//			userContextList.clear();
+			//			userContextList.add(userContext);
 		}
 
 	}
@@ -38,8 +38,8 @@ public class ThreadMessageContext
 	 */
 	public static UserContext getUserContext()
 	{
-		//		UserContext userContext = threadLocal.get();
-		UserContext userContext = userContextList.get(0);
+		UserContext userContext = threadLocal.get();
+		//		UserContext userContext = userContextList.get(0);
 		return userContext;
 	}
 
