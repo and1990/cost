@@ -7,7 +7,6 @@ import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
 import org.fire.cost.enums.HttpStatusEnum;
@@ -123,17 +122,17 @@ public class UserAction
 	@Path("deleteUser")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
-	public Message deleteUser(@QueryParam(value = "userId") Long userId)
+	public Message deleteUser(UserVO userVO)
 	{
 		Message message = new Message();
-		if (userId == null)
+		if (userVO == null || userVO.getUserId() == null)
 		{
 			MessageUtil.setMessage(message, ResultEnum.Fail, HttpStatusEnum.Warn, "请求数据不能为空", null);
 			return message;
 		}
 		try
 		{
-			if (userService.deleteUser(userId))
+			if (userService.deleteUser(userVO.getUserId()))
 				MessageUtil.setMessage(message, ResultEnum.Success, HttpStatusEnum.Success, null, null);
 			else
 				MessageUtil.setMessage(message, ResultEnum.Fail, HttpStatusEnum.ServerError, null, null);

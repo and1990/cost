@@ -21,6 +21,10 @@ public class DateUtil
 	 */
 	public static String makeDate2Str(Date date, boolean showSeconed)
 	{
+		if (date == null)
+		{
+			return null;
+		}
 		String dateStr = date.toString();
 		if (showSeconed)
 		{
@@ -39,6 +43,10 @@ public class DateUtil
 	 */
 	public static String makeDate2Str(Date date)
 	{
+		if (date == null)
+		{
+			return null;
+		}
 		String dateStr = date.toString();
 		return dateStr.substring(0, dateStr.length() - 2);
 	}
@@ -52,7 +60,11 @@ public class DateUtil
 	 */
 	public static Date makeStr2Date(String dateStr) throws ParseException
 	{
-		SimpleDateFormat format = new SimpleDateFormat("mm/dd/yyyy");
+		if (dateStr == null || dateStr.length() == 0)
+		{
+			return null;
+		}
+		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
 		Date date = format.parse(dateStr);
 		return date;
 	}

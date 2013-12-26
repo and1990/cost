@@ -1,74 +1,57 @@
-//var basePath = 'http://192.168.1.101:8080/cost';
-var basePath = 'http://cost.coolfire.com';
-
 // 行索引
 var rowIndex = undefined;
 // 操作类型，0：增加，1：修改，2：删除
 var actionType = undefined;
-// 请求地址
+// 发送URL
 var httpUrl = undefined;
 // 发送数据
 var sendData = undefined;
 
 // 增加记录
-function addData(dataTableId)
+function addData(dataTableId, url)
 {
 	if (actionType != undefined)
 	{
 		return;
 	}
+	actionType = 0;
 	$(dataTableId).datagrid('appendRow', {});
 	rowIndex = $(dataTableId).datagrid('getRows').length - 1;
-	$(dataTableId).datagrid('selectRow', rowIndex).datagrid('beginEdit',
-			rowIndex);
-	actionType = 0;
+	$(dataTableId).datagrid('selectRow', rowIndex).datagrid('beginEdit', rowIndex);
+	
+	httpUrl = url;
 	sendData = $(dataTableId).datagrid('getSelected');
-	if (dataTableId === '#user_data_table')
-	{
-		httpUrl = basePath + '/rest/user/addUser';
-	} else if (dataTableId === '#account_data_table')
-	{
-		httpUrl = basePath + '/rest/account/addAccount';
-	}
 }
 
 // 编辑记录
-function editData(dataTableId)
+function editData(dataTableId, url)
 {
 	if (actionType != undefined)
 	{
 		return;
 	}
-	$(dataTableId).datagrid('selectRow', rowIndex).datagrid('beginEdit',
-			rowIndex);
 	actionType = 1;
+	$(dataTableId).datagrid('selectRow', rowIndex).datagrid('beginEdit', rowIndex);
+	
+	httpUrl = url;
 	sendData = $(dataTableId).datagrid('getSelected');
-	if (dataTableId === '#user_data_table')
-	{
-		httpUrl = basePath + '/rest/user/editUser';
-	} else if (dataTableId === '#account_data_table')
-	{
-		httpUrl = basePath + '/rest/account/editAccount';
-	}
 }
 
 // 删除记录
-function removeData(dataTableId)
+function removeData(dataTableId, url)
 {
 	if (actionType != undefined)
 	{
 		return;
 	}
-	$(dataTableId).datagrid('cancelEdit', rowIndex).datagrid('deleteRow',
-			rowIndex);
-	actionType = 2;
-	sendData = $(dataTableId).datagrid('getSelected');
-	if (dataTableId === '#user_data_table')
-	{
-		httpUrl = basePath + '/rest/user/deleteUser';
-	} else if (dataTableId === '#account_data_table')
-	{
-		httpUrl = basePath + '/rest/account/deleteAccount';
+	
+	if (window.confirm("确定删除？")) {
+		actionType = 2;
+		sendData = $(dataTableId).datagrid('getSelected');
+		var jsonData = JSON.stringify(sendData);
+		sendRequest(jsonData, url);
+		$(dataTableId).datagrid('cancelEdit', rowIndex).datagrid('deleteRow', rowIndex);
+		actionType = undefined;
 	}
 }
 
@@ -81,7 +64,9 @@ function saveData(dataTableId)
 	}
 	$(dataTableId).datagrid('acceptChanges');
 	$(dataTableId).datagrid("selectRow", rowIndex);
-	sendRequest(sendData, httpUrl);
+	
+	var jsonData = JSON.stringify(sendData);
+	sendRequest(jsonData, httpUrl);
 	actionType = undefined;
 }
 
@@ -100,10 +85,8 @@ function getChanges(dataTableId)
 }
 
 // 向服务端发送请求
-function sendRequest(sendData, httpUrl)
+function sendRequest(jsonData, httpUrl)
 {
-	var jsonData = JSON.stringify(sendData);
-	//alert("url:"+httpUrl);
 	$.ajax({
 		type : "POST",
 		contentType : "application/json",
@@ -111,12 +94,18 @@ function sendRequest(sendData, httpUrl)
 		url : httpUrl,
 		success : function(data)
 		{
-			alert("添加成功");
+			// 成功
+			if (data.result == 1) {
+				alert("操作成功");
+			}
+			
+			if (data.result == 2) {
+				alert(data.exceptionMsg);
+			}
 		},
 		error : function(data)
 		{
-			alert("添加失败");
+			alert("系统错误，请联系管理员");
 		}
 	});
 }
-

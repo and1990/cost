@@ -9,23 +9,18 @@
 		<class>org.fire.cost.entity.Account</class>
 		<properties>
 			<property name="hibernate.dialect" value="org.hibernate.dialect.MySQLDialect" />
-			<!-- <property name="hibernate.hbm2ddl.auto" value="update" />
+			<property name="hibernate.hbm2ddl.auto" value="update" />
 			<property name="hibernate.cache.use_second_level_cache"
 				value="true" />
 			<property name="hibernate.show_sql" value="true" />
-			结构化方式存储
 			<property name="hibernate.cache.use_structured_entries"
 				value="true" />
-			查询缓存
 			<property name="hibernate.cache.use_query_cache" value="true" />
-			二级缓存服务类
 			<property name="hibernate.cache.provider_class"
 				value="com.googlecode.hibernate.memcached.MemcachedCacheProvider" />
-			二级缓存服务地址和端口
 			<property name="hibernate.memcached.servers" value="127.0.0.1:11211" />
-			memcache的调用客户端
 			<property name="hibernate.memcached.memcacheClientFactory"
-				value="net.rubyeye.xmemcached.utils.hibernate.XmemcachedClientFactory" /> -->
+				value="net.rubyeye.xmemcached.utils.hibernate.XmemcachedClientFactory" />
 		</properties>
 	</persistence-unit>
 </persistence>

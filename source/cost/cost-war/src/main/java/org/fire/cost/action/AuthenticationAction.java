@@ -162,6 +162,7 @@ public class AuthenticationAction
 						cookie.setValue(userContext.getSessionId());
 					else if ("uuid".equals(name))
 						cookie.setValue(userContext.getUuid());
+					cookie.setPath("/");
 					response.addCookie(cookie);
 				}
 			}

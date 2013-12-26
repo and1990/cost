@@ -2,7 +2,6 @@
 <% 
 	String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+ request.getContextPath(); 
 %>
-<base href='<%=basePath %>'>
 <html>
 	<head>
 		<title>注册——COST信息系统</title>

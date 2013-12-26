@@ -14,6 +14,9 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+
 /**
  * user实体类
  * 
@@ -22,6 +25,7 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "cost_user")
+@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 public class User implements Serializable
 {
 
@@ -30,7 +34,7 @@ public class User implements Serializable
 	@Id
 	@Column(name = "user_id")
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	private long userId;
+	private Long userId;
 
 	@Column(name = "user_name")
 	private String userName;
@@ -42,7 +46,7 @@ public class User implements Serializable
 	private String loginName;
 
 	@Column(name = "user_age")
-	private int userAge;
+	private Integer userAge;
 
 	@Column(name = "user_address")
 	private String userAddress;
@@ -54,13 +58,13 @@ public class User implements Serializable
 	private String userImage;
 
 	@Column(name = "user_status")
-	private int userStatus;
+	private Integer userStatus;
 
 	@Column(name = "login_time")
 	private Date loginTime;
 
 	@Column(name = "is_admin")
-	private int isAdmin;
+	private Integer isAdmin;
 
 	@Column(name = "create_user")
 	private String createUser;
@@ -81,12 +85,12 @@ public class User implements Serializable
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "user")
 	private List<Account> accountList;
 
-	public long getUserId()
+	public Long getUserId()
 	{
 		return userId;
 	}
 
-	public void setUserId(long userId)
+	public void setUserId(Long userId)
 	{
 		this.userId = userId;
 	}
@@ -121,12 +125,12 @@ public class User implements Serializable
 		this.loginName = loginName;
 	}
 
-	public int getUserAge()
+	public Integer getUserAge()
 	{
 		return userAge;
 	}
 
-	public void setUserAge(int userAge)
+	public void setUserAge(Integer userAge)
 	{
 		this.userAge = userAge;
 	}
@@ -161,12 +165,12 @@ public class User implements Serializable
 		this.userImage = userImage;
 	}
 
-	public int getUserStatus()
+	public Integer getUserStatus()
 	{
 		return userStatus;
 	}
 
-	public void setUserStatus(int userStatus)
+	public void setUserStatus(Integer userStatus)
 	{
 		this.userStatus = userStatus;
 	}
@@ -181,12 +185,12 @@ public class User implements Serializable
 		this.loginTime = loginTime;
 	}
 
-	public int getIsAdmin()
+	public Integer getIsAdmin()
 	{
 		return isAdmin;
 	}
 
-	public void setIsAdmin(int isAdmin)
+	public void setIsAdmin(Integer isAdmin)
 	{
 		this.isAdmin = isAdmin;
 	}
@@ -250,4 +254,5 @@ public class User implements Serializable
 	{
 		this.accountList = accountList;
 	}
+
 }

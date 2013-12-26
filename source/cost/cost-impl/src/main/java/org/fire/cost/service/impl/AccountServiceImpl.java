@@ -162,6 +162,7 @@ public class AccountServiceImpl implements AccountService
 	private AccountVO makeAccount2VO(Account account)
 	{
 		AccountVO vo = new AccountVO();
+		vo.setAccountId(account.getAccountId());
 		vo.setUserId(account.getUser().getUserId());
 		vo.setUserName(account.getUser().getUserName());
 		vo.setAccountMoney(account.getAccountMoney());

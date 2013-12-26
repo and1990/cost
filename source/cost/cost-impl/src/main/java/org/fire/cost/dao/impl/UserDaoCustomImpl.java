@@ -7,6 +7,7 @@ import javax.persistence.Query;
 import org.fire.cost.dao.custom.UserDaoCustom;
 import org.fire.cost.entity.User;
 import org.fire.cost.vo.UserVO;
+import org.hibernate.ejb.QueryImpl;
 
 /**
  * 用户dao扩展实现类
@@ -23,6 +24,10 @@ public class UserDaoCustomImpl extends BaseJpaDaoSupport<User, Long> implements 
 	{
 		String sql = "select * from cost_user";
 		Query query = entityManager.createNativeQuery(sql, User.class);
+		if (query instanceof org.hibernate.ejb.QueryImpl)
+		{
+			((QueryImpl<?>) query).getHibernateQuery().setCacheable(true);
+		}
 		List<User> resultList = query.getResultList();
 		return resultList;
 	}

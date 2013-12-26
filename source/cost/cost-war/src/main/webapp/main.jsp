@@ -1,22 +1,20 @@
 <%@ page language="java" contentType="text/html; charset=utf8"
 	pageEncoding="utf8"%>
 <% 
-	String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+ request.getContextPath(); 
+	String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort() + request.getContextPath();
 %>
-<base href='<%=basePath %>'>
 <html>
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=utf8">
-		<link rel="shortcut icon" href="<%=basePath %>/image/ico.jpg" type="image/x-icon" />
+		<link rel="shortcut icon" href="<%=basePath%>/image/ico.jpg" type="image/x-icon" />
 		<link rel="stylesheet" type="text/css" href="<%=basePath %>/easy-ui/themes/default/easyui.css">
 		<link rel="stylesheet" type="text/css" href="<%=basePath %>/easy-ui/themes/icon.css">
-		<script type="text/javascript" src="<%=basePath %>/easy-ui/jquery.min.js"></script>
-		<script type="text/javascript" src="<%=basePath %>/easy-ui/jquery.easyui.min.js"></script>
-		<script type="text/javascript" src="<%=basePath %>/js/cost.js"></script>
+		<script type="text/javascript" src="<%=basePath%>/easy-ui/jquery.min.js"></script>
+		<script type="text/javascript" src="<%=basePath%>/easy-ui/jquery.easyui.min.js"></script>
+		<script type="text/javascript" src="<%=basePath%>/js/cost.js"></script>
 	</head>
 	<body>
 		<div class="easyui-layout" data-options="fit:true">
-			<div data-options="region:'north'" style="height: 70px"></div>
 			<div id="sysMenuInfo"
 				data-options="region:'west',title:'系统功能',split:true,href:'<%=basePath %>/main/sysMenu.jsp'"
 				style="width: 205px;"></div>

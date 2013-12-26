@@ -2,7 +2,6 @@
 <% 
 	String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+ request.getContextPath(); 
 %>
-<base href='<%=basePath %>'>
 <link rel="stylesheet" type="text/css" href="<%=basePath %>/css/registDialog.css">
 <div id="user_regist_div" class="user_regist_div">
  	<form>

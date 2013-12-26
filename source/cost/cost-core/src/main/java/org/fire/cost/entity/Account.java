@@ -29,22 +29,22 @@ public class Account implements Serializable
 	@Id
 	@Column(name = "account_id")
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	private int accountId;
+	private Long accountId;
 
 	@Column(name = "account_money")
-	private double accountMoney;
+	private Double accountMoney;
 
 	@Column(name = "account_time")
 	private Date accountTime;
 
 	@Column(name = "account_type")
-	private int accountType;
+	private Integer accountType;
 
 	@Column(name = "approve_time")
 	private Date approveTime;
 
 	@Column(name = "is_approve")
-	private int isApprove;
+	private Integer isApprove;
 
 	@Column(name = "account_partner")
 	private String accountPartner;
@@ -72,22 +72,22 @@ public class Account implements Serializable
 	@JoinColumn(name = "user_id")
 	private User user;
 
-	public int getAccountId()
+	public Long getAccountId()
 	{
 		return accountId;
 	}
 
-	public void setAccountId(int accountId)
+	public void setAccountId(Long accountId)
 	{
 		this.accountId = accountId;
 	}
 
-	public double getAccountMoney()
+	public Double getAccountMoney()
 	{
 		return accountMoney;
 	}
 
-	public void setAccountMoney(double accountMoney)
+	public void setAccountMoney(Double accountMoney)
 	{
 		this.accountMoney = accountMoney;
 	}
@@ -102,12 +102,12 @@ public class Account implements Serializable
 		this.accountTime = accountTime;
 	}
 
-	public int getAccountType()
+	public Integer getAccountType()
 	{
 		return accountType;
 	}
 
-	public void setAccountType(int accountType)
+	public void setAccountType(Integer accountType)
 	{
 		this.accountType = accountType;
 	}
@@ -122,12 +122,12 @@ public class Account implements Serializable
 		this.approveTime = approveTime;
 	}
 
-	public int getIsApprove()
+	public Integer getIsApprove()
 	{
 		return isApprove;
 	}
 
-	public void setIsApprove(int isApprove)
+	public void setIsApprove(Integer isApprove)
 	{
 		this.isApprove = isApprove;
 	}
@@ -202,8 +202,6 @@ public class Account implements Serializable
 		this.accountRemark = accountRemark;
 	}
 
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "user_id")
 	public User getUser()
 	{
 		return user;
