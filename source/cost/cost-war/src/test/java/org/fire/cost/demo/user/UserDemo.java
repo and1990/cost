@@ -19,6 +19,7 @@ public class UserDemo
 	private UserDao userDao;
 
 	@Test
+	//	@Transactional(value="transactionManager")
 	public void add()
 	{
 		User user = new User();
