@@ -29,6 +29,5 @@ public class UserDemo
 		user.setUserEmail("123@123.com");
 		user.setCreateTime(new Date());
 		userDao.save(user);
-        System.out.println("hello world");
     }
 }
