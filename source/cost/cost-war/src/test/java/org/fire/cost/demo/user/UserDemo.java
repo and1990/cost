@@ -30,8 +30,5 @@ public class UserDemo
 		userDao.save(user);
 
         System.out.println("hello world");
-        if (user == null) {
-            System.out.println("just test");
-        }
     }
 }
