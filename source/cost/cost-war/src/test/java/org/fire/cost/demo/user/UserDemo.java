@@ -1,15 +1,14 @@
 package org.fire.cost.demo.user;
 
-import java.util.Date;
-
-import javax.annotation.Resource;
-
 import org.fire.cost.dao.UserDao;
 import org.fire.cost.entity.User;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+
+import javax.annotation.Resource;
+import java.util.Date;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(value = { "classpath*:applicationContext.xml" })
@@ -30,10 +29,5 @@ public class UserDemo
 		user.setCreateTime(new Date());
 		userDao.save(user);
 
-        System.out.println("hello");
-        System.out.println("world");
-        System.out.println("just");
-        System.out.println("test");
-        System.out.println("try");
     }
 }
