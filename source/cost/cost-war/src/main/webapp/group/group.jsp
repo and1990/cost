@@ -133,6 +133,7 @@
 		});
 	}
 
+	//组操作
 	function appendOrDelete(from,to) {
 		var selectRows = $(from).datagrid("getSelections");
 		for (var i = 0; i < selectRows.length; i++) {
