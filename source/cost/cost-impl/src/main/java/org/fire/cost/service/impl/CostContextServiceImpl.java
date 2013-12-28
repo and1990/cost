@@ -1,19 +1,17 @@
-package org.fire.cost.context.impl;
-
-import java.util.concurrent.TimeoutException;
-
-import javax.annotation.Resource;
+package org.fire.cost.service.impl;
 
 import net.rubyeye.xmemcached.MemcachedClient;
 import net.rubyeye.xmemcached.exception.MemcachedException;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.codehaus.jackson.map.ObjectMapper;
-import org.fire.cost.context.CostContextService;
 import org.fire.cost.context.UserContext;
+import org.fire.cost.service.CostContextService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+
+import javax.annotation.Resource;
+import java.util.concurrent.TimeoutException;
 
 /**
  * cost信息上下文实现

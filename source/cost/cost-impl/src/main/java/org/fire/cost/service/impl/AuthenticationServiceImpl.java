@@ -15,7 +15,7 @@ import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.authz.UnauthenticatedException;
 import org.apache.shiro.realm.AuthenticatingRealm;
 import org.codehaus.jackson.map.ObjectMapper;
-import org.fire.cost.context.CostContextService;
+import org.fire.cost.service.CostContextService;
 import org.fire.cost.context.UserContext;
 import org.fire.cost.dao.UserDao;
 import org.fire.cost.entity.User;

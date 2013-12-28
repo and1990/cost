@@ -1,8 +1,9 @@
-package org.fire.cost.context;
-
-import java.util.concurrent.TimeoutException;
+package org.fire.cost.service;
 
 import net.rubyeye.xmemcached.exception.MemcachedException;
+import org.fire.cost.context.UserContext;
+
+import java.util.concurrent.TimeoutException;
 
 /**
  * cost信息上下文

@@ -15,8 +15,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import net.rubyeye.xmemcached.exception.MemcachedException;
 
-import org.fire.cost.context.CostContextService;
-import org.fire.cost.context.ThreadMessageContext;
+import org.fire.cost.service.CostContextService;
 import org.fire.cost.context.UserContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
