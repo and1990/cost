@@ -1,7 +1,7 @@
 package org.fire.cost.vo;
 
 /**
- * @author liutengfei
+ * @author liutengfei c
  */
 public class GroupVO {
     private Long groupId;
