@@ -3,6 +3,7 @@ package org.fire.cost.service.impl;
 import org.fire.cost.dao.GroupDao;
 import org.fire.cost.entity.Group;
 import org.fire.cost.service.GroupService;
+import org.fire.cost.util.DateUtil;
 import org.fire.cost.vo.GroupVO;
 import org.springframework.stereotype.Service;
 
@@ -16,8 +17,7 @@ import java.util.List;
  * 时间：13-12-28 下午9:41
  */
 @Service
-public class GroupServiceImpl implements GroupService
-{
+public class GroupServiceImpl implements GroupService {
     @Resource
     private GroupDao groupDao;
 
@@ -28,22 +28,17 @@ public class GroupServiceImpl implements GroupService
      * @return
      */
     @Override
-    public List<GroupVO> getGroupByFilter(GroupVO vo)
-    {
-        try
-        {
+    public List<GroupVO> getGroupByFilter(GroupVO vo) {
+        try {
             List<Group> groupList = groupDao.getGroupByFilter(vo);
-            if (groupList != null && groupList.size() != 0)
-            {
+            if (groupList != null && groupList.size() != 0) {
                 List<GroupVO> voList = new ArrayList<GroupVO>();
-                for (Group group : groupList)
-                {
+                for (Group group : groupList) {
                     voList.add(makeGroup2VO(group));
                 }
                 return voList;
             }
-        } catch (Exception ex)
-        {
+        } catch (Exception ex) {
             ex.printStackTrace();
             throw new RuntimeException(ex);
         }
@@ -57,9 +52,14 @@ public class GroupServiceImpl implements GroupService
      * @return
      */
     @Override
-    public boolean addGroup(GroupVO vo)
-    {
-        return false;
+    public boolean addGroup(GroupVO vo) {
+        try {
+            groupDao.save(makeVO2Group(vo, null));
+            return true;
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            throw new RuntimeException(ex);
+        }
     }
 
     /**
@@ -69,9 +69,15 @@ public class GroupServiceImpl implements GroupService
      * @return
      */
     @Override
-    public boolean updateGroup(GroupVO vo)
-    {
-        return false;
+    public boolean updateGroup(GroupVO vo) {
+        try {
+            Long groupId = vo.getGroupId();
+            groupDao.save(makeVO2Group(vo, groupDao.findOne(groupId)));
+            return true;
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            throw new RuntimeException(ex);
+        }
     }
 
     /**
@@ -81,9 +87,14 @@ public class GroupServiceImpl implements GroupService
      * @return
      */
     @Override
-    public boolean deleteGroup(Long groupId)
-    {
-        return false;
+    public boolean deleteGroup(Long groupId) {
+        try {
+            groupDao.delete(groupId);
+            return true;
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            throw new RuntimeException(ex);
+        }
     }
 
     /**
@@ -93,20 +104,39 @@ public class GroupServiceImpl implements GroupService
      * @param group po对象
      * @return
      */
-    private Group makeVO2Group(GroupVO vo, Group group)
-    {
+    private Group makeVO2Group(GroupVO vo, Group group) throws Exception {
+        if (group == null) {
+            group = new Group();
+        }
+        group.setGroupId(vo.getGroupId());
+        group.setGroupName(vo.getGroupName());
+        group.setUserIds(null);//TODO
+        group.setGroupStatus(vo.getGroupStatus());
+        group.setCreateUser(vo.getCreateUser());
+        group.setCreateTime(DateUtil.makeStr2Date(vo.getCreateTime()));
+        group.setModifyUser(vo.getModifyUser());
+        group.setModifyTime(DateUtil.makeStr2Date(vo.getModifyTime()));
+        group.setGroupRemark(vo.getGroupRemark());
         return group;
     }
 
     /**
      * 将po对象转成vo
      *
-     * @param group
+     * @param group po对象
      * @return
      */
-    private GroupVO makeGroup2VO(Group group)
-    {
+    private GroupVO makeGroup2VO(Group group) {
         GroupVO vo = new GroupVO();
+        vo.setGroupId(group.getGroupId());
+        vo.setGroupName(group.getGroupName());
+        vo.setUserNames(null);//TODO
+        vo.setGroupStatus(group.getGroupStatus());
+        vo.setCreateUser(group.getCreateUser());
+        vo.setCreateTime(DateUtil.makeDate2Str(group.getCreateTime()));
+        vo.setModifyUser(group.getModifyUser());
+        vo.setModifyTime(DateUtil.makeDate2Str(group.getModifyTime()));
+        vo.setGroupRemark(group.getGroupRemark());
         return vo;
     }
 }

@@ -1,14 +1,5 @@
 package org.fire.cost.action;
 
-import java.util.List;
-
-import javax.annotation.Resource;
-import javax.ws.rs.Consumes;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-import javax.ws.rs.core.MediaType;
-
 import org.fire.cost.enums.HttpStatusEnum;
 import org.fire.cost.enums.ResultEnum;
 import org.fire.cost.service.UserService;
@@ -16,6 +7,14 @@ import org.fire.cost.util.MessageUtil;
 import org.fire.cost.vo.Message;
 import org.fire.cost.vo.UserVO;
 import org.springframework.stereotype.Controller;
+
+import javax.annotation.Resource;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.POST;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
+import java.util.List;
 
 @Controller
 @Path("user")
@@ -115,7 +114,7 @@ public class UserAction
 	/**
 	 * 删除用户信息
 	 * 
-	 * @param vo
+	 * @param
 	 * @return
 	 */
 	@POST
