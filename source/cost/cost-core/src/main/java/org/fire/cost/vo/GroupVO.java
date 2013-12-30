@@ -1,13 +1,19 @@
 package org.fire.cost.vo;
 
+import java.io.Serializable;
+
 /**
  * @author liutengfei
  */
-public class GroupVO
+public class GroupVO implements Serializable
 {
+    private static final long serialVersionUID = 1L;
+
     private Long groupId;
 
     private String groupName;
+
+    private String userIds;
 
     private String userNames;
 
@@ -41,6 +47,16 @@ public class GroupVO
     public void setGroupName(String groupName)
     {
         this.groupName = groupName;
+    }
+
+    public String getUserIds()
+    {
+        return userIds;
+    }
+
+    public void setUserIds(String userIds)
+    {
+        this.userIds = userIds;
     }
 
     public String getUserNames()
