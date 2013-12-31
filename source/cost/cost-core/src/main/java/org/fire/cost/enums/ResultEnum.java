@@ -2,71 +2,72 @@ package org.fire.cost.enums;
 
 public enum ResultEnum
 {
-	Success(1, "成功"), Fail(2, "失败");
-	
-	private int code;
-	private String name;
+    Success(1, "成功"), Fail(2, "失败");
 
-	private ResultEnum(int code, String name)
-	{
-		this.code = code;
-		this.name = name;
-	}
+    private int code;
 
-	/**
-	 * 根据名称得到码
-	 * 
-	 * @param name
-	 * @return
-	 */
-	public static int getCode(String name)
-	{
-		for (UserStatusEnum enumType : UserStatusEnum.values())
-		{
-			if (name != null && name.equals(enumType.getName()))
-			{
-				return enumType.getCode();
-			}
-		}
-		return -1;
-	}
+    private String name;
 
-	/**
-	 * 根据码得到名称
-	 * 
-	 * @param code
-	 * @return
-	 */
-	public static String getName(int code)
-	{
-		for (UserStatusEnum enumType : UserStatusEnum.values())
-		{
-			if (code == enumType.getCode())
-			{
-				return enumType.getName();
-			}
-		}
-		return null;
-	}
+    private ResultEnum(int code, String name)
+    {
+        this.code = code;
+        this.name = name;
+    }
 
-	public int getCode()
-	{
-		return code;
-	}
+    /**
+     * 根据名称得到码
+     *
+     * @param name
+     * @return
+     */
+    public static int getCode(String name)
+    {
+        for (ResultEnum enumType : ResultEnum.values())
+        {
+            if (name != null && name.equals(enumType.getName()))
+            {
+                return enumType.getCode();
+            }
+        }
+        return -1;
+    }
 
-	public void setCode(int code)
-	{
-		this.code = code;
-	}
+    /**
+     * 根据码得到名称
+     *
+     * @param code
+     * @return
+     */
+    public static String getName(int code)
+    {
+        for (ResultEnum enumType : ResultEnum.values())
+        {
+            if (code == enumType.getCode())
+            {
+                return enumType.getName();
+            }
+        }
+        return null;
+    }
 
-	public String getName()
-	{
-		return name;
-	}
+    public int getCode()
+    {
+        return code;
+    }
 
-	public void setName(String name)
-	{
-		this.name = name;
-	}
+    public void setCode(int code)
+    {
+        this.code = code;
+    }
+
+    public String getName()
+    {
+        return name;
+    }
+
+    public void setName(String name)
+    {
+        this.name = name;
+    }
 
 }

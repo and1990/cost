@@ -3,6 +3,7 @@ package org.fire.cost.dao.impl;
 import org.fire.cost.dao.custom.GroupDaoCustom;
 import org.fire.cost.entity.Group;
 import org.fire.cost.vo.GroupVO;
+import org.hibernate.ejb.QueryImpl;
 
 import javax.persistence.Query;
 import java.util.List;
@@ -24,10 +25,13 @@ public class GroupDaoCustomImpl extends BaseJpaDaoSupport<Group, Long> implement
     @Override
     public List<Group> getGroupByFilter(GroupVO vo)
     {
-        StringBuffer buffer = new StringBuffer();
-        buffer.append("select * from cost_group ");
-        Query query = entityManager.createNativeQuery(buffer.toString());
-        List<Group> groupList = query.getResultList();
-        return groupList;
+        String sql = "select * from cost_group ";
+        Query query = entityManager.createNativeQuery(sql, Group.class);
+        if (query instanceof org.hibernate.ejb.QueryImpl)
+        {
+            ((QueryImpl<?>) query).getHibernateQuery().setCacheable(true);
+        }
+        List<Group> resultList = query.getResultList();
+        return resultList;
     }
 }

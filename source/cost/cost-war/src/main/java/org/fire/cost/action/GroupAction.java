@@ -9,7 +9,11 @@ import org.fire.cost.vo.Message;
 import org.springframework.stereotype.Controller;
 
 import javax.annotation.Resource;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
 import java.util.List;
 
 /**
@@ -30,6 +34,10 @@ public class GroupAction
      * @param vo 客户端传递的过滤数据
      * @return
      */
+    @POST
+    @Path("getGroupByFilter")
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
     public Message getGroupByFilter(GroupVO vo)
     {
         Message message = new Message();
@@ -55,6 +63,10 @@ public class GroupAction
      * @param vo 客户端传递的数据
      * @return
      */
+    @POST
+    @Path("addGroup")
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
     public Message addGroup(GroupVO vo)
     {
         Message message = new Message();
@@ -85,6 +97,10 @@ public class GroupAction
      * @param vo 客户端传递的数据
      * @return
      */
+    @POST
+    @Path("updateGroup")
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
     public Message updateGroup(GroupVO vo)
     {
         Message message = new Message();
@@ -115,6 +131,10 @@ public class GroupAction
      * @param groupId 组id
      * @return
      */
+    @POST
+    @Path("deleteGroup")
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
     public Message deleteGroup(Long groupId)
     {
         Message message = new Message();

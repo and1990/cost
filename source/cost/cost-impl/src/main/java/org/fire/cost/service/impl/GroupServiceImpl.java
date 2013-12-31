@@ -2,6 +2,7 @@ package org.fire.cost.service.impl;
 
 import org.fire.cost.dao.GroupDao;
 import org.fire.cost.entity.Group;
+import org.fire.cost.enums.StatusEnum;
 import org.fire.cost.service.GroupService;
 import org.fire.cost.service.UserService;
 import org.fire.cost.util.DateUtil;
@@ -10,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -66,6 +68,11 @@ public class GroupServiceImpl implements GroupService
     {
         try
         {
+            vo.setGroupStatus(StatusEnum.Enable.getCode());
+            vo.setCreateUser(userService.getLoginUserName());
+            vo.setCreateTime(DateUtil.makeDate2Str(new Date(), true));
+            vo.setModifyUser(userService.getLoginUserName());
+            vo.setModifyTime(DateUtil.makeDate2Str(new Date(), true));
             groupDao.save(makeVO2Group(vo, null));
             return true;
         } catch (Exception ex)
@@ -152,6 +159,7 @@ public class GroupServiceImpl implements GroupService
         GroupVO vo = new GroupVO();
         vo.setGroupId(group.getGroupId());
         vo.setGroupName(group.getGroupName());
+        vo.setUserIds(group.getUserIds());
         vo.setUserNames(userService.getUserNamesByUserIds(group.getUserIds()));
         vo.setGroupStatus(group.getGroupStatus());
         vo.setCreateUser(group.getCreateUser());

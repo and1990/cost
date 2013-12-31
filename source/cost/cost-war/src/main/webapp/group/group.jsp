@@ -94,8 +94,9 @@
 	//页面加载完成触发
 	$(function ()
 	{
-		noDisplay();
+		getGroupData();
 		getUserData();
+		noDisplay();
 	});
 	//点击行操作
 	function onClickRow(index)
@@ -168,6 +169,21 @@
 	function groupCancel()
 	{
 		noDisplay();
+	}
+	//得到组数据
+	function getGroupData()
+	{
+		$.ajax({
+			type: "POST",
+			data: '{}',
+			contentType: "application/json",
+			url: '<%=basePath%>/rest/group/getGroupByFilter',
+			dataType: 'json',
+			success: function (resultData)
+			{
+				$('#group_data_table').datagrid('loadData', resultData.data);
+			}
+		});
 	}
 	//得到用户数据
 	function getUserData()

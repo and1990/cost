@@ -15,11 +15,11 @@ import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.authz.UnauthenticatedException;
 import org.apache.shiro.realm.AuthenticatingRealm;
 import org.codehaus.jackson.map.ObjectMapper;
+import org.fire.cost.enums.StatusEnum;
 import org.fire.cost.service.CostContextService;
 import org.fire.cost.context.UserContext;
 import org.fire.cost.dao.UserDao;
 import org.fire.cost.entity.User;
-import org.fire.cost.enums.UserStatusEnum;
 import org.fire.cost.service.AuthenticationService;
 import org.springframework.stereotype.Service;
 
@@ -59,7 +59,7 @@ public class AuthenticationServiceImpl extends AuthenticatingRealm implements Au
 		User user = userDao.findByLoginName(loginName);
 		if (user != null && user.getPassword().equals(new String(chars)))
 		{
-			if (user.getUserStatus() == UserStatusEnum.Enable.getCode())
+			if (user.getUserStatus() == StatusEnum.Enable.getCode())
 			{
 				return new SimpleAuthenticationInfo(token.getPrincipal(), token.getPassword(), token.getUsername());
 			} else
