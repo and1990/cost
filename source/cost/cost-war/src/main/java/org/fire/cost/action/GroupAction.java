@@ -9,10 +9,7 @@ import org.fire.cost.vo.Message;
 import org.springframework.stereotype.Controller;
 
 import javax.annotation.Resource;
-import javax.ws.rs.Consumes;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
+import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import java.util.List;
 
@@ -135,7 +132,7 @@ public class GroupAction
     @Path("deleteGroup")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    public Message deleteGroup(Long groupId)
+    public Message deleteGroup(@QueryParam(value = "groupId") Long groupId)
     {
         Message message = new Message();
         if (groupId == null || groupId == 0)

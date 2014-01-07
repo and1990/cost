@@ -67,7 +67,7 @@
 	<div id="group_data_south" style="height: 60px" data-options="region:'south',border:0">
 		<div style="text-align:center">
 			<hr color="lightBlue">
-			<input type="button" value="确定" onclick="groupSave('<%=basePath%>/rest/group/addGroup');">
+			<input type="button" value="确定" onclick="groupSave();">
 			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 			<input type="button" value="取消" onclick="groupCancel();">
 		</div>
@@ -77,11 +77,11 @@
 <div id="group_filter_bar" style="padding: 5px; height: auto">
 	<div style="margin-bottom: 5px">
 		<a href="javascript:void(0);" class="easyui-linkbutton" iconCls="icon-add" plain="true"
-		   onclick="addGroup();">增加</a>
+		   onclick="addGroup('<%=basePath%>/rest/group/addGroup');">增加</a>
 		<a href="javascript:void(0);" class="easyui-linkbutton" iconCls="icon-edit" plain="true"
-		   onclick="editGroup();">修改</a>
+		   onclick="editGroup('<%=basePath%>/rest/group/updateGroup');">修改</a>
 		<a href="javascript:void(0);" class="easyui-linkbutton" iconCls="icon-remove" plain="true"
-		   onclick="removeData('#group_data_table', '<%=basePath%>/rest/group/deleteGroup');">删除</a>
+		   onclick="deleteGroup('<%=basePath%>/rest/group/deleteGroup');">删除</a>
 		<a href="javascript:void(0);" class="easyui-linkbutton" iconCls="icon-undo" plain="true"
 		   onclick="undoData('#group_data_table');">撤销</a>
 		<a href="javascript:void(0);" class="easyui-linkbutton" iconCls="icon-save" plain="true"
