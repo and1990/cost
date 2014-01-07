@@ -12,6 +12,7 @@
 		<script type="text/javascript" src="<%=basePath%>/easy-ui/jquery.min.js"></script>
 		<script type="text/javascript" src="<%=basePath%>/easy-ui/jquery.easyui.min.js"></script>
 		<script type="text/javascript" src="<%=basePath%>/js/cost.js"></script>
+		<script type="text/javascript" src="<%=basePath%>/js/group.js"></script>
 	</head>
 	<body>
 		<div class="easyui-layout" data-options="fit:true">

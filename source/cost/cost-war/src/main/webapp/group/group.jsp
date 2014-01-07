@@ -15,7 +15,7 @@
 			<tr>
 				<th data-options="field:'groupName',width:80,align:'center',editor:'text'">组名</th>
 				<th data-options="field:'userNames',width:80,align:'center',editor:'text'">用户</th>
-				<th data-options="field:'groupStatus',width:80,align:'center',editor:'text'">状态</th>
+				<th data-options="field:'groupStatusName',width:80,align:'center',editor:'text'">状态</th>
 				<th data-options="field:'groupRemark',width:120,align:'center',editor:'text'">备注</th>
 				<th data-options="field:'createUser',width:120,align:'center'">创建人</th>
 				<th data-options="field:'createTime',width:120,align:'center'">创建时间</th>
@@ -67,7 +67,7 @@
 	<div id="group_data_south" style="height: 60px" data-options="region:'south',border:0">
 		<div style="text-align:center">
 			<hr color="lightBlue">
-			<input type="button" value="确定" onclick="groupSave();">
+			<input type="button" value="确定" onclick="groupSave('<%=basePath%>/rest/group/addGroup');">
 			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 			<input type="button" value="取消" onclick="groupCancel();">
 		</div>
@@ -79,7 +79,7 @@
 		<a href="javascript:void(0);" class="easyui-linkbutton" iconCls="icon-add" plain="true"
 		   onclick="addGroup();">增加</a>
 		<a href="javascript:void(0);" class="easyui-linkbutton" iconCls="icon-edit" plain="true"
-		   onclick="editData('#group_data_table', '<%=basePath%>/rest/group/modifyGroup');">修改</a>
+		   onclick="editGroup();">修改</a>
 		<a href="javascript:void(0);" class="easyui-linkbutton" iconCls="icon-remove" plain="true"
 		   onclick="removeData('#group_data_table', '<%=basePath%>/rest/group/deleteGroup');">删除</a>
 		<a href="javascript:void(0);" class="easyui-linkbutton" iconCls="icon-undo" plain="true"
@@ -94,138 +94,8 @@
 	//页面加载完成触发
 	$(function ()
 	{
-		getGroupData();
-		getUserData();
+		getGroupData('<%=basePath%>/rest/group/getGroupByFilter');
+		getUserData('<%=basePath%>/rest/user/getUserByFilter');
 		noDisplay();
 	});
-	//点击行操作
-	function onClickRow(index)
-	{
-		if (actionType != undefined)
-		{
-			$('#group_data_table').datagrid('selectRow', rowIndex);
-		} else
-		{
-			rowIndex = index;
-		}
-	}
-	//组增加操作
-	function addGroup()
-	{
-		display();
-	}
-	//点击“>>”按钮操作
-	function appendToGroup()
-	{
-		appendOrDelete("#user_data_table_left", "#user_data_table_right");
-	}
-	//点击“<<”按钮操作
-	function deleteFromGroup()
-	{
-		appendOrDelete("#user_data_table_right", "#user_data_table_left");
-	}
-	//点击”保存“按钮操作
-	function groupSave()
-	{
-		var groupName = $("#group_name_text").val();
-		if (groupName == undefined || groupName.length == 0)
-		{
-			alert("请输入组名称");
-			return;
-		}
-		var allRows = $("#user_data_table_right").datagrid("getRows");
-		if (allRows.length <= 0)
-		{
-			alert("请添加用户");
-			return;
-		}
-		var userIds = undefined;
-		for (var i = 0; i < allRows.length; i++)
-		{
-			var userId = allRows[i].userId;
-			if (userIds == undefined)
-			{
-				userIds = userId;
-			} else
-			{
-				userIds += "," + userId;
-			}
-		}
-		var jsonData = '{"groupName":"' + groupName + '","userIds":"' + userIds + '"}';
-		alert(jsonData);
-		$.ajax({
-			type: "POST",
-			data: jsonData,
-			contentType: "application/json",
-			url: '<%=basePath%>/rest/group/addGroup',
-			dataType: 'json',
-			success: function (resultData)
-			{
-				alert("添加成功");
-			}
-		});
-	}
-	//点击“取消”按钮操作
-	function groupCancel()
-	{
-		noDisplay();
-	}
-	//得到组数据
-	function getGroupData()
-	{
-		$.ajax({
-			type: "POST",
-			data: '{}',
-			contentType: "application/json",
-			url: '<%=basePath%>/rest/group/getGroupByFilter',
-			dataType: 'json',
-			success: function (resultData)
-			{
-				$('#group_data_table').datagrid('loadData', resultData.data);
-			}
-		});
-	}
-	//得到用户数据
-	function getUserData()
-	{
-		$.ajax({
-			type: "POST",
-			data: '{}',
-			contentType: "application/json",
-			url: '<%=basePath%>/rest/user/getUserByFilter',
-			dataType: 'json',
-			success: function (resultData)
-			{
-				$('#user_data_table_left').datagrid('loadData', resultData.data);
-			}
-		});
-	}
-	//组操作
-	function appendOrDelete(from, to)
-	{
-		var selectRows = $(from).datagrid("getSelections");
-		for (var i = 0; i < selectRows.length; i++)
-		{
-			var row = selectRows[i];
-			$(to).datagrid("appendRow", {'userName': row.userName, 'userId': row.userId});
-			var rowIndex = $(from).datagrid("getRowIndex", row);
-			$(from).datagrid("deleteRow", rowIndex);
-		}
-	}
-	//显示“组增加、修改”界面
-	function display()
-	{
-		$("#group_data_west").fadeIn(500);
-		$("#group_data_center").fadeIn(500);
-		$("#group_data_east").fadeIn(500);
-		$("#group_data_south").fadeIn(500);
-	}
-	//不显示“组增加、修改”界面
-	function noDisplay()
-	{
-		$("#group_data_west").fadeOut(500);
-		$("#group_data_center").fadeOut(500);
-		$("#group_data_east").fadeOut(500);
-		$("#group_data_south").fadeOut(500);
-	}
 </script>

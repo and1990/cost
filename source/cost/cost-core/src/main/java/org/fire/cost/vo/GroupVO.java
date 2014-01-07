@@ -19,6 +19,8 @@ public class GroupVO implements Serializable
 
     private Integer groupStatus;
 
+    private String groupStatusName;
+
     private String createUser;
 
     private String createTime;
@@ -77,6 +79,16 @@ public class GroupVO implements Serializable
     public void setGroupStatus(Integer groupStatus)
     {
         this.groupStatus = groupStatus;
+    }
+
+    public String getGroupStatusName()
+    {
+        return groupStatusName;
+    }
+
+    public void setGroupStatusName(String groupStatusName)
+    {
+        this.groupStatusName = groupStatusName;
     }
 
     public String getCreateUser()
