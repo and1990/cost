@@ -141,9 +141,9 @@ public class GroupServiceImpl implements GroupService
         group.setUserIds(vo.getUserIds());
         group.setGroupStatus(vo.getGroupStatus());
         group.setCreateUser(vo.getCreateUser());
-        group.setCreateTime(DateUtil.makeStr2Date(vo.getCreateTime()));
+        group.setCreateTime(DateUtil.makeStr2Date(vo.getCreateTime(), true));
         group.setModifyUser(vo.getModifyUser());
-        group.setModifyTime(DateUtil.makeStr2Date(vo.getModifyTime()));
+        group.setModifyTime(DateUtil.makeStr2Date(vo.getModifyTime(), true));
         group.setGroupRemark(vo.getGroupRemark());
         return group;
     }
@@ -164,9 +164,9 @@ public class GroupServiceImpl implements GroupService
         vo.setGroupStatus(group.getGroupStatus());
         vo.setGroupStatusName(StatusEnum.getName(group.getGroupStatus()));
         vo.setCreateUser(group.getCreateUser());
-        vo.setCreateTime(DateUtil.makeDate2Str(group.getCreateTime()));
+        vo.setCreateTime(DateUtil.makeDate2Str(group.getCreateTime(),true));
         vo.setModifyUser(group.getModifyUser());
-        vo.setModifyTime(DateUtil.makeDate2Str(group.getModifyTime()));
+        vo.setModifyTime(DateUtil.makeDate2Str(group.getModifyTime(),true));
         vo.setGroupRemark(group.getGroupRemark());
         return vo;
     }

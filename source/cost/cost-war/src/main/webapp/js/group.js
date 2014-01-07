@@ -1,4 +1,3 @@
-
 //点击行操作
 function onClickRow(index)
 {
@@ -21,19 +20,20 @@ function editGroup()
     var selectRow = $('#group_data_table').datagrid('getSelected');
     var userIdArr = selectRow.userIds.split(",");
     var leftUserRows = $("#user_data_table_left").datagrid("getRows");
+    var appendLeftUserRows = undefined;
     for (var i = 0; i < leftUserRows.length; i++)
     {
         var leftUserId = leftUserRows[i].userId;
         for (var j = 0; j < userIdArr.length; j++)
         {
             var rightUserId = userIdArr[j];
-            if (leftUserId == rightUserId)
+            if (leftUserId != rightUserId)
             {
-                $("#user_data_table_left").datagrid("deleteRow", leftUserId);
+                appendLeftUserRows = appendLeftUserRows == undefined ? leftUserId : "," + leftUserId;
             }
         }
     }
-    //$("#user_data_table_right").datagrid("appendRow", {'userName': row.userName, 'userId': rightUserId});
+    $("#user_data_table_left").datagrid("deleteRow", leftUserId);
     display();
 }
 //点击“>>”按钮操作
@@ -82,7 +82,7 @@ function groupSave(httpUrl)
         dataType: 'json',
         success: function (resultData)
         {
-            alert("添加成功");
+            alert("操作成功");
         }
     });
 }
