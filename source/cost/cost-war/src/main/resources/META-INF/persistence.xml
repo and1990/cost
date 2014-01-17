@@ -7,6 +7,7 @@
 		<!-- <class>cn.damai.dao.entity.User</class> -->
 		<class>org.fire.cost.entity.User</class>
 		<class>org.fire.cost.entity.Account</class>
+        <class>org.fire.cost.entity.Group</class>
 		<properties>
 			<property name="hibernate.dialect" value="org.hibernate.dialect.MySQLDialect" />
 			<property name="hibernate.hbm2ddl.auto" value="update" />
