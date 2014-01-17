@@ -21,10 +21,10 @@
 
 	<!-- 添加仓库 -->
 	<repositories>
-		<repository>
+		<!--<repository>
 			<id>htmleasy</id>
 			<url>http://htmleasy-maven.googlecode.com/svn/trunk/</url>
-		</repository>
+		</repository>-->
 		<repository>
 			<id>hibernate-memcached</id>
 			<url>http://raykrueger.googlecode.com/svn/repository</url>
@@ -67,11 +67,11 @@
 		</dependency>
 
 		<!-- 配置htmleasy -->
-		<dependency>
+		<!--<dependency>
 			<groupId>com.googlecode.htmleasy</groupId>
 			<artifactId>htmleasy</artifactId>
 			<version>0.7</version>
-		</dependency>
+		</dependency>-->
 
 		<!-- shiro -->
 		<dependency>
