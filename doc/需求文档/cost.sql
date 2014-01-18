@@ -44,3 +44,15 @@ modify_time TIMESTAMP,
 account_remark VARCHAR(200),
 FOREIGN KEY(user_id) REFERENCES cost_user(user_id)
 )engine=InnoDB DEFAULT CHARSET=UTF8 AUTO_INCREMENT=1;
+
+CREATE TABLE cost_group(
+  group_id BIGINT PRIMARY KEY AUTO_INCREMENT,
+  group_name VARCHAR(20) NOT NULL,
+  user_ids VARCHAR(200) NOT NULL,
+  group_status TINYINT(1) NOT NULL DEFAULT '2' COMMENT '1：不可用；2：可用',
+  create_user VARCHAR(20),
+  create_time TIMESTAMP,
+  modify_user VARCHAR(20),
+  modify_time TIMESTAMP,
+  group_remark varchar(200) DEFAULT NULL
+)ENGINE=InnoDB DEFAULT CHARSET=UTF8 AUTO_INCREMENT=1;
