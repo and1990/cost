@@ -7,7 +7,8 @@
 	<div id="account_data_north"
 		data-options="region:'north',border:0,fit:true">
 		<table id="account_data_table" class="easyui-datagrid"
-			data-options="rownumbers:true,singleSelect:true,pagination:true,fit:true,fitColumns:true,toolbar:'#account_filter_bar',onClickRow:onClickRow">
+			data-options="rownumbers:true,singleSelect:true,pagination:true,fit:true,fitColumns:true,
+			toolbar:'#account_filter_bar',onClickRow:onClickRow,onClickCell:accessoryDo">
 			<thead>
 				<tr>
 					<th data-options="field:'userName',width:80,align:'center'">用户名</th>
@@ -31,6 +32,11 @@
                             	options:{data:isApproveData,valueField:'value',textField:'name'}
                         }"
                     >是否审批</th>
+					<th data-options="field:'accountAccessory',width:80,align:'center',formatter:showAccessoryText,
+					    editor:{
+							options:{data:isApproveData,valueField:'value',textField:'name'}
+						}"
+					>附件</th>
 					<th data-options="field:'approveTime',width:120,align:'center'">审批时间</th>
 					<th data-options="field:'accountRemark',width:120,align:'center',editor:'text'">备注</th>
 				</tr>
@@ -84,6 +90,8 @@
 	
 	var accountTypeData = [{'value': '1', 'name': '公共'},{'value': '2', 'name': '组'},{'value': '3', 'name': '个人'}];
 	var isApproveData = [{'value': '1', 'name': '未审批'},{'value': '2', 'name': '已审批'}];
+	var accessoryData = [{'value': '1', 'name': '<a href="javascript:void();">上传</a>'},
+						 {'value': '2', 'name': '<a href="javascript:void();">浏览</a>'}];
 	
 	//显示“审批类型”文本
 	function showAccountTypeText(value){
@@ -102,6 +110,15 @@
 		}
 		return value;
 	}
+
+	//显示“附件”文本
+	function showAccessoryText(value){
+		for (var i = 0; i < accessoryData.length; i++) {
+			if (accessoryData[i].value == value)
+				return accessoryData[i].name;
+		}
+		return value;
+	}
 	
 	//日期格式
 	$.fn.datebox.defaults.formatter = function(date){
@@ -110,5 +127,4 @@
 		var d = date.getDate();
 		return y+'-'+m+'-'+d;
 	}
-	
 </script>

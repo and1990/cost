@@ -26,17 +26,20 @@
 			{
 				$('#file_upload').uploadify({
 					'swf'      : '<%=basePath%>/js/uploadify/uploadify.swf',
-					'uploader' : '<%=basePath%>/account/fileUpload',
+					'uploader' : '<%=basePath%>/rest/account/fileUpload',
 					'cancelImg' : '<%=basePath%>/js/uploadify/uploadify-cancel.png',
-					'buttonText' : '上传',
 					'auto':true,
+					'buttonText' : '上传',
 					'removeCompleted': false,
+					"fileObjName":"fileName",  // 后台接受参数名称
 					'fileTypeDesc': '选择文件',
 					'fileTypeExts': '*.gif; *.jpg; *.png',
 					'method' : 'post',
-					'formData':{'key':'value'},
+					'onUploadStart': function (file) {
+						$("#file_upload").uploadify("settings", "formData", { 'accountId': '12' });
+					},
 					'onUploadSuccess' : function(file,data,response){
-						alert("save data : " + data);
+						//alert("save data : " + data);
 					}
 				});
 			});

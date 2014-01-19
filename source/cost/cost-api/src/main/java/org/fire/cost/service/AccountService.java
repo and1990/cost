@@ -1,8 +1,10 @@
 package org.fire.cost.service;
 
-import java.util.List;
-
 import org.fire.cost.vo.AccountVO;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.util.List;
 
 /**
  * 账单service接口
@@ -44,4 +46,6 @@ public interface AccountService
 	 * @return
 	 */
 	boolean deleteAccount(Long accountId);
+
+    void fileUpload(HttpServletRequest request, HttpServletResponse response);
 }
