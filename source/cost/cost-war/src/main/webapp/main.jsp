@@ -9,6 +9,8 @@
 		<link rel="shortcut icon" href="<%=basePath%>/image/ico.jpg" type="image/x-icon" />
 		<link rel="stylesheet" type="text/css" href="<%=basePath %>/easy-ui/themes/default/easyui.css">
 		<link rel="stylesheet" type="text/css" href="<%=basePath %>/easy-ui/themes/icon.css">
+		<link rel="stylesheet" type="text/css" href="<%=basePath%>/js/uploadify/uploadify.css">
+		<script type="text/javascript" src="<%=basePath%>/js/uploadify/jquery.uploadify.min.js"></script>
 		<script type="text/javascript" src="<%=basePath%>/easy-ui/jquery.min.js"></script>
 		<script type="text/javascript" src="<%=basePath%>/easy-ui/jquery.easyui.min.js"></script>
 		<script type="text/javascript" src="<%=basePath%>/js/cost.js"></script>
@@ -22,9 +24,9 @@
 			<div id="mainInfo" data-options="region:'center',title:'业务信息'">
 				<div class="easyui-tabs"
 					data-options="border:false,plain:true,fit:true" id="main_tabs">
+					<div title="账单信息" data-options="href:'<%=basePath %>/account/accountData.jsp'" style="padding: 2px"></div>
 					<div title="组信息" data-options="href:'<%=basePath %>/group/group.jsp'" style="padding: 2px"></div>
 					<div title="用户信息" data-options="href:'<%=basePath %>/user/userData.jsp'" style="padding: 2px"></div>
-					<div title="账单信息" data-options="href:'<%=basePath %>/account/accountData.jsp'" style="padding: 2px"></div>
 				</div>
 			</div>
 			<div id="noticeInfo"

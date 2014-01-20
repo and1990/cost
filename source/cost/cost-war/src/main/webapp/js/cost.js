@@ -100,23 +100,3 @@ function sendRequest(jsonData, httpUrl)
         }
     });
 }
-//附件处理
-function accessoryDo(index, field, value)
-{
-    if ("accountAccessory" === field)
-    {
-        if (1 === value)
-            fileUpload(index);
-        else
-            browse(index);
-    }
-}
-//文件上传
-function fileUpload(index)
-{
-    
-}
-//文件浏览
-function browse(index)
-{
-}

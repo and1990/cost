@@ -28,10 +28,9 @@
 					'swf'      : '<%=basePath%>/js/uploadify/uploadify.swf',
 					'uploader' : '<%=basePath%>/rest/account/fileUpload',
 					'cancelImg' : '<%=basePath%>/js/uploadify/uploadify-cancel.png',
-					'auto':true,
+					'auto':false,
 					'buttonText' : '上传',
 					'removeCompleted': false,
-					"fileObjName":"fileName",  // 后台接受参数名称
 					'fileTypeDesc': '选择文件',
 					'fileTypeExts': '*.gif; *.jpg; *.png',
 					'method' : 'post',
