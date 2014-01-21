@@ -4,6 +4,7 @@ import org.fire.cost.vo.AccountVO;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.util.List;
 
 /**
@@ -47,5 +48,11 @@ public interface AccountService
 	 */
 	boolean deleteAccount(Long accountId);
 
-    void fileUpload(HttpServletRequest request, HttpServletResponse response);
+    /**
+     * 文件上传
+     * @param request
+     * @param response
+     * @return
+     */
+    boolean fileUpload(HttpServletRequest request, HttpServletResponse response) throws IOException;
 }

@@ -3,6 +3,10 @@
 <%
 	String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + request.getContextPath();
 %>
+
+<link rel="stylesheet" type="text/css" href="<%=basePath%>/js/uploadify/uploadify.css">
+<script type="text/javascript" src="<%=basePath%>/js/uploadify/jquery.uploadify.min.js"></script>
+
 <div id="account_data_layout" class="easyui-layout" data-options="fit:true">
 	<div id="account_data_north"
 	     data-options="region:'north',border:0,fit:true">
@@ -36,6 +40,7 @@
                         }"
 						>是否审批
 				</th>
+				<%--<th data-options="field:'isApproveName',width:60,align:'center',editor:'combobox',loader:getApproveText,mode:'remote'">是否审批</th>--%>
 				<th data-options="field:'accountAccessory',width:80,align:'center',formatter:showAccessoryText,
 					    editor:{
 							options:{data:isApproveData,valueField:'value',textField:'name'}
@@ -61,7 +66,6 @@
 		   onclick="undoData('#account_data_table');">撤销</a>
 		<a href="javascript:void(0);" class="easyui-linkbutton" iconCls="icon-save" plain="true"
 		   onclick="saveData('#account_data_table');">保存</a>
-		<%--<a href="javascript:void(0);" class="easyui-linkbutton" data-options="iconCls:'icon-search',plain:true" onclick="getChanges('#account_data_table')">GetChanges</a>--%>
 	</div>
 	<div>
 		创建时间从: <input class="easyui-datebox" style="width: 80px">
@@ -90,7 +94,7 @@
 			}
 		});
 	});
-
+	//点击“行”操作
 	function onClickRow(index)
 	{
 		if (actionType != undefined)
@@ -109,10 +113,6 @@
 	var isApproveData = [
 		{'value': '1', 'name': '未审批'},
 		{'value': '2', 'name': '已审批'}
-	];
-	var accessoryData = [
-		{'value': '1', 'name': '<a href="javascript:void();">上传</a>'},
-		{'value': '2', 'name': '<a href="javascript:void();">浏览</a>'}
 	];
 	//显示“审批类型”文本
 	function showAccountTypeText(value)
@@ -137,12 +137,13 @@
 	//显示“附件”文本
 	function showAccessoryText(value)
 	{
-		for (var i = 0; i < accessoryData.length; i++)
+		if (value == undefined)
 		{
-			if (accessoryData[i].value == value)
-				return accessoryData[i].name;
+			return '<a href="javascript:void();">上传</a>';
+		} else
+		{
+			return "<div class='yoxview'><a class='yoxviewLink' href='image/login.jpg'>浏览</a></div>";
 		}
-		return value;
 	}
 	//日期格式
 	$.fn.datebox.defaults.formatter = function (date)
@@ -152,4 +153,5 @@
 		var d = date.getDate();
 		return y + '-' + m + '-' + d;
 	}
+
 </script>

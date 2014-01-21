@@ -159,6 +159,35 @@ public class AccountAction
     }
 
     /**
+     * 得到消费类型枚举
+     *
+     * @return
+     */
+    @POST
+    @Path("getAccountTypeText")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Message getAccountTypeText()
+    {
+        Message message = new Message();
+        return message;
+    }
+
+    /**
+     * 得到审批类型枚举
+     *
+     * @return
+     */
+    @POST
+    @Path("getApproveText")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Message getApproveText()
+    {
+        //TODO
+        Message message = new Message();
+        return message;
+    }
+
+    /**
      * 文件上传
      *
      * @param request  请求
@@ -168,15 +197,21 @@ public class AccountAction
     @POST
     @Path("fileUpload")
     @Produces(MediaType.APPLICATION_JSON)
-    //@Consumes(MediaType.APPLICATION_JSON)
     public Message fileUpload(@Context HttpServletRequest request, @Context HttpServletResponse response)
     {
         Message message = new Message();
         try
         {
-            accountService.fileUpload(request, response);
+            if (accountService.fileUpload(request, response))
+            {
+                MessageUtil.setMessage(message, ResultEnum.Success, HttpStatusEnum.Success, "上传成功", null);
+            } else
+            {
+                MessageUtil.setMessage(message, ResultEnum.Fail, HttpStatusEnum.Success, "上传失败", null);
+            }
         } catch (Exception e)
         {
+            MessageUtil.setMessage(message, ResultEnum.Fail, HttpStatusEnum.ServerError, "上传失败，服务器内部错误", null);
             e.printStackTrace();
         }
         return message;

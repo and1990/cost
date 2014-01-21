@@ -21,10 +21,7 @@ import javax.annotation.Resource;
 import javax.persistence.RollbackException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.*;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
@@ -74,20 +71,18 @@ public class AccountServiceImpl implements AccountService
     @Transactional(value = "transactionManager", rollbackFor = RollbackException.class)
     public boolean addAccount(AccountVO vo)
     {
-        boolean isTrue = true;
         try
         {
             vo.setIsApprove(Integer.valueOf(vo.getIsApproveName()));
             vo.setAccountType(Integer.valueOf(vo.getAccountTypeName()));
             Account account = makeVO2Account(vo, null);
             accountDao.save(account);
+            return true;
         } catch (Exception e)
         {
-            isTrue = false;
             e.printStackTrace();
             throw new RollbackException();
         }
-        return isTrue;
     }
 
     /**
@@ -96,20 +91,19 @@ public class AccountServiceImpl implements AccountService
     @Transactional(value = "transactionManager", rollbackFor = RollbackException.class)
     public boolean modifyAccount(AccountVO vo)
     {
-        boolean isTrue = true;
         try
         {
             Long accountId = vo.getAccountId();
             Account account = accountDao.findOne(accountId);
             makeVO2Account(vo, account);
             accountDao.save(account);
+            return true;
         } catch (Exception e)
         {
-            isTrue = false;
+
             e.printStackTrace();
             throw new RollbackException();
         }
-        return isTrue;
     }
 
     /**
@@ -118,17 +112,15 @@ public class AccountServiceImpl implements AccountService
     @Transactional(value = "transactionManager", rollbackFor = RollbackException.class)
     public boolean deleteAccount(Long accountId)
     {
-        boolean isTrue = true;
         try
         {
             accountDao.delete(accountId);
+            return true;
         } catch (Exception e)
         {
-            isTrue = false;
             e.printStackTrace();
             throw new RollbackException();
         }
-        return isTrue;
     }
 
 
@@ -140,8 +132,10 @@ public class AccountServiceImpl implements AccountService
      */
     @Override
     @Transactional(value = "transactionManager", rollbackFor = RollbackException.class)
-    public void fileUpload(HttpServletRequest request, HttpServletResponse response)
+    public boolean fileUpload(HttpServletRequest request, HttpServletResponse response)
     {
+        OutputStream outputStream = null;
+        InputStream inputStream = null;
         try
         {
             request.setCharacterEncoding("UTF-8");
@@ -152,13 +146,11 @@ public class AccountServiceImpl implements AccountService
             ServletFileUpload upload = new ServletFileUpload(factory);
             List<FileItem> itemList = upload.parseRequest(request);
             long accountId = 0;
-            OutputStream outputStream = null;
-            InputStream inputStream = null;
             for (FileItem item : itemList)
             {
                 if (!item.isFormField())
                 {
-                    String name = item.getName();
+                    String name = item.getName() + "_" + System.currentTimeMillis();
                     outputStream = new FileOutputStream(new File(path, name));
                     inputStream = item.getInputStream();
                     int length = 0;
@@ -176,22 +168,35 @@ public class AccountServiceImpl implements AccountService
                     }
                 }
             }
-            if (outputStream != null)
+            //更新数据库
+            if (accountId != 0)
             {
-                outputStream.close();
+                Account account = accountDao.findOne(accountId);
+                account.setAccountAccessory("path");
+                accountDao.save(account);
             }
-            if (inputStream != null)
-            {
-                inputStream.close();
-            }
-            //更新数据库附件
-            Account account = accountDao.findOne(accountId);
-            account.setAccountAccessory("path");
-            accountDao.save(account);
+            return true;
         } catch (Exception e)
         {
             e.printStackTrace();
             throw new RollbackException();
+        } finally
+        {
+            try
+            {
+                if (outputStream != null)
+                {
+                    outputStream.close();
+                }
+                if (inputStream != null)
+                {
+                    inputStream.close();
+                }
+            } catch (IOException e)
+            {
+                e.printStackTrace();
+                throw new RollbackException();
+            }
         }
     }
 
