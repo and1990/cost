@@ -9,7 +9,7 @@ function accessoryDo(index, field, value)
             fileUpload(index);
         } else
         {
-            browse(index);
+            browse(value);
         }
     }
 }
@@ -65,8 +65,10 @@ function fileUpload(index)
     });
 }
 //文件浏览
-function browse(index)
+function browse(value)
 {
+    var imgContent = "<img width='640' height='466' src='image/FileUpload/6131_1392108000311.jpg' />";
+    TINY.box.show(imgContent, 0, 0, 0, 1);
 }
 //开始文件上传
 function startFileUpLoad()

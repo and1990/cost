@@ -165,7 +165,7 @@ public class AccountServiceImpl implements AccountService
             List<FileItem> itemList = upload.parseRequest(request);
             long accountId = 0;
             String accessoryValue = null;
-            String filePrefix = "image/" + fileUpLoadDirname + "/";
+            String filePrefix = request.getContextPath() + "image/" + fileUpLoadDirname + "/";
             for (FileItem item : itemList)
             {
                 if (!item.isFormField())

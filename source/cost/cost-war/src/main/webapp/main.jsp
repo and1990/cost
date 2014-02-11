@@ -13,6 +13,7 @@
 	<script type="text/javascript" src="<%=basePath%>/js/uploadify/jquery.uploadify.min.js"></script>
 	<script type="text/javascript" src="<%=basePath%>/easy-ui/jquery.min.js"></script>
 	<script type="text/javascript" src="<%=basePath%>/easy-ui/jquery.easyui.min.js"></script>
+	<script type="text/javascript" src="<%=basePath%>/js/tinybox.js"></script>
 	<script type="text/javascript" src="<%=basePath%>/js/cost.js"></script>
 	<script type="text/javascript" src="<%=basePath%>/js/account.js"></script>
 	<script type="text/javascript" src="<%=basePath%>/js/group.js"></script>

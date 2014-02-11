@@ -10,6 +10,7 @@
 	<script type="text/javascript" src="<%=basePath%>/easy-ui/jquery.min.js"></script>
 	<script type="text/javascript" src="<%=basePath%>/js/uploadify/jquery.uploadify.min.js"></script>
 	<script type="text/javascript" src="<%=basePath%>/js/yoxview/yoxview-init.js"></script>
+	<script type="text/javascript" src="<%=basePath%>/js/tinybox.js"></script>
 	<style type="text/css">
 		.uploadify-button {
 
@@ -46,28 +47,37 @@
 				}
 			});
 		});
-		$(document).ready(function ()
+		/*$(document).ready(function ()
+		 {
+		 $(".yoxview").yoxview();
+		 $("#yoxviewText").yoxview({ textLinksSelector: ""});
+		 });*/
+		function openImage()
 		{
-			$(".yoxview").yoxview();
-			$("#yoxviewText").yoxview({ textLinksSelector: ""});
-		});
+			var imgContent = "<img width='640' height='466' src='image/FileUpload/6131_1392108000311.jpg' />";
+			TINY.box.show(imgContent, 0, 0, 0, 1);
+		}
 	</script>
 </head>
 <body>
-	<div>
-		<input type="file" name="file_upload" id="file_upload"/>
-	</div>
-	<a href="javascript:$('#file_upload').uploadify('upload','*')">Upload Files</a>
+<div>
+	<input type="file" name="file_upload" id="file_upload"/>
+</div>
+<a href="javascript:$('#file_upload').uploadify('upload','*')">Upload Files</a>
 
 
-	<div class='yoxview'>
-		Would you like to see a photo of
-		<a class='yoxviewLink' href='image/login.jpg' title='Behind you!'>a three headed monkey?</a>
-	</div>
+<div class='yoxview'>
+	Would you like to see a photo of
+	<a class='yoxviewLink' href='image/login.jpg' title='Behind you!'>a three headed monkey?</a>
+</div>
 
-	<div id='yoxviewText'>
-		There are also photos of <a href='image/login.jpg'>hot redheads</a>
-		and <a href='image/login.jpg'>amusing skepticists</a>!
-	</div>
+<div id='yoxviewText'>
+	There are also photos of <a href='image/login.jpg'>hot redheads</a>
+	and <a href='image/login.jpg'>amusing skepticists</a>!
+</div>
+
+<div>
+	<span onclick="openImage()">Test Open Image</span>
+</div>
 </body>
 </html>

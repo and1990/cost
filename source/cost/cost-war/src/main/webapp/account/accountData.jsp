@@ -142,7 +142,7 @@
 			return '<a href="javascript:void();">上传</a>';
 		} else
 		{
-			return "<a href='image/login.jpg'>浏览</a>";
+			return "<a href='javascript:void();'>浏览</a>";
 		}
 	}
 	//日期格式
