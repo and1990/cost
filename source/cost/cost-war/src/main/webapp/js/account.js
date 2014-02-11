@@ -26,7 +26,7 @@ function openFileUploadDialog()
         shadow: false,
         buttons: [
             {
-                text: '确定',
+                text: '上传',
                 handler: startFileUpLoad
             },
             {
@@ -39,6 +39,8 @@ function openFileUploadDialog()
 //文件上传
 function fileUpload(index)
 {
+    var allRowData = $('#account_data_table').datagrid('getRows');
+    var accountId = allRowData[index].accountId;
     $('#file_upload').uploadify({
         'swf': 'js/uploadify/uploadify.swf',
         'cancelImg': 'js/uploadify/uploadify-cancel.png',
@@ -52,7 +54,7 @@ function fileUpload(index)
         'onUploadStart': function (file)
         {
             //在jsp页面中添加一个<img src=""></img>,当上传完成后在onComplete事件中修改img的src值
-            $("#file_upload").uploadify("settings", "formData", { 'accountId': '12' });
+            $("#file_upload").uploadify("settings", "formData", { 'accountId': accountId });
         },
         'onComplete': function ()
         {
@@ -74,5 +76,5 @@ function startFileUpLoad()
 //取消文件上传
 function cancelFileUpLoad()
 {
-    $('#file_upload').uploadify('cancelUpload', '*');
+    $('#file_upload').uploadify('cancel', '*');
 }

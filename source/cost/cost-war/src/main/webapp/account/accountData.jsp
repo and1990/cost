@@ -142,16 +142,16 @@
 			return '<a href="javascript:void();">上传</a>';
 		} else
 		{
-			return "<div class='yoxview'><a class='yoxviewLink' href='image/login.jpg'>浏览</a></div>";
+			return "<a href='image/login.jpg'>浏览</a>";
 		}
 	}
 	//日期格式
 	$.fn.datebox.defaults.formatter = function (date)
 	{
-		var y = date.getFullYear();
-		var m = date.getMonth() + 1;
-		var d = date.getDate();
-		return y + '-' + m + '-' + d;
+		var year = date.getFullYear();
+		var month = date.getMonth() + 1;
+		var day = date.getDate();
+		return year + '-' + month + '-' + day;
 	}
 
 </script>

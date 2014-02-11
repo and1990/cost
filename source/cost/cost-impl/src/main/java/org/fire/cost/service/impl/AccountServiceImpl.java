@@ -139,19 +139,42 @@ public class AccountServiceImpl implements AccountService
         try
         {
             request.setCharacterEncoding("UTF-8");
+            String path = request.getSession().getServletContext().getRealPath("") + File.separator + "image";
+            //判断FileUpload文件夹是否存在，如果不存在，创建文件夹
+            String fileUpLoadDirname = "FileUpload";
+            File file = new File(path);
+            File[] fileArr = file.listFiles();
+            boolean isFileUploadExist = false;
+            for (File f : fileArr)
+            {
+                if (f.isDirectory() && fileUpLoadDirname.equals(f.getName()))
+                {
+                    isFileUploadExist = true;
+                    break;
+                }
+            }
+            if (!isFileUploadExist)
+            {
+                new File(path + File.separator + fileUpLoadDirname).mkdir();
+            }
             DiskFileItemFactory factory = new DiskFileItemFactory();
-            String path = request.getSession().getServletContext().getRealPath("");
-            factory.setRepository(new File(path));
+            String filePath = path + File.separator + fileUpLoadDirname;
+            factory.setRepository(new File(filePath));
             factory.setSizeThreshold(1024 * 1024);
             ServletFileUpload upload = new ServletFileUpload(factory);
             List<FileItem> itemList = upload.parseRequest(request);
             long accountId = 0;
+            String accessoryValue = null;
+            String filePrefix = "image/" + fileUpLoadDirname + "/";
             for (FileItem item : itemList)
             {
                 if (!item.isFormField())
                 {
-                    String name = item.getName() + "_" + System.currentTimeMillis();
-                    outputStream = new FileOutputStream(new File(path, name));
+                    String itemName = item.getName();
+                    String itemPrefix = itemName.substring(0, itemName.indexOf("."));
+                    String itemPostfix = itemName.substring(itemName.indexOf("."), itemName.length());
+                    String fileName = itemPrefix + "_" + System.currentTimeMillis() + itemPostfix;
+                    outputStream = new FileOutputStream(new File(filePath, fileName));
                     inputStream = item.getInputStream();
                     int length = 0;
                     byte[] byteArr = new byte[1024];
@@ -159,6 +182,7 @@ public class AccountServiceImpl implements AccountService
                     {
                         outputStream.write(byteArr, 0, length);
                     }
+                    accessoryValue = accessoryValue == null ? "" + filePrefix + fileName : "," + filePrefix + fileName;
                 } else
                 {
                     String fieldName = item.getFieldName();
@@ -172,7 +196,7 @@ public class AccountServiceImpl implements AccountService
             if (accountId != 0)
             {
                 Account account = accountDao.findOne(accountId);
-                account.setAccountAccessory("path");
+                account.setAccountAccessory(accessoryValue);
                 accountDao.save(account);
             }
             return true;

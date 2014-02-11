@@ -11,7 +11,6 @@
 	<link rel="stylesheet" type="text/css" href="<%=basePath %>/easy-ui/themes/icon.css">
 	<link rel="stylesheet" type="text/css" href="<%=basePath%>/js/uploadify/uploadify.css">
 	<script type="text/javascript" src="<%=basePath%>/js/uploadify/jquery.uploadify.min.js"></script>
-	<script type="text/javascript" src="<%=basePath%>/js/yoxview/yoxview-init.js"></script>
 	<script type="text/javascript" src="<%=basePath%>/easy-ui/jquery.min.js"></script>
 	<script type="text/javascript" src="<%=basePath%>/easy-ui/jquery.easyui.min.js"></script>
 	<script type="text/javascript" src="<%=basePath%>/js/cost.js"></script>
