@@ -100,7 +100,7 @@
 				$('#account_data_table').datagrid('loadData', resultData.data);
 			}
 		});
-		$('#coin-slider').coinslider({navigation: true, hoverPause: true });
+//		$('#coin-slider').coinslider({navigation: true, hoverPause: true });
 	});
 	//点击“行”操作
 	function onClickRow(index)

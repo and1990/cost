@@ -86,5 +86,6 @@ function browse(value)
             innerHTML += "<a href='javascript:void(0)'><img src='" + valueArr[index] + "'><span>" + (index + 1) + "</span></a>";
     }
     $('#coin-slider').append("<a href='javascript:void(0)'><img src='image/login.jpg'><span>1</span></a><a href='javascript:void(0)'><img src='image/ico.jpg'><span>2</span></a>");
+    $('#coin-slider').coinslider({navigation: true, hoverPause: true });
     $('#w').window('open');
 }
