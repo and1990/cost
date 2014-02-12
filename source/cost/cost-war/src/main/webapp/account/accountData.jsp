@@ -81,8 +81,7 @@
 
 //图片浏览对话框
 <div id="w" class="easyui-window" data-options="modal:true,closed:true" style="width:1000px;height:600px;padding:10px;">
-	<div id='coin-slider'>
-	</div>
+	<div id='coin-slider'></div>
 </div>
 
 <script type="text/javascript">

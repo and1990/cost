@@ -76,16 +76,19 @@ function cancelFileUpLoad()
 //文件浏览
 function browse(value)
 {
-    var valueArr = value.split(",");
-    var innerHTML = undefined;
-    for (var index = 0; index < valueArr.length; index++)
+    if ($('#coin-slider').html() == '')
     {
-        if (innerHTML === undefined)
-            innerHTML = "<a href='javascript:void(0)'><img src='" + valueArr[index] + "'><span>" + (index + 1) + "</span></a>";
-        else
-            innerHTML += "<a href='javascript:void(0)'><img src='" + valueArr[index] + "'><span>" + (index + 1) + "</span></a>";
+        var valueArr = value.split(",");
+        var innerHTML = undefined;
+        for (var index = 0; index < valueArr.length; index++)
+        {
+            if (innerHTML === undefined)
+                innerHTML = "<a href='javascript:void(0)'><img src='" + valueArr[index] + "'><span>" + (index + 1) + "</span></a>";
+            else
+                innerHTML += "<a href='javascript:void(0)'><img src='" + valueArr[index] + "'><span>" + (index + 1) + "</span></a>";
+        }
+        $('#coin-slider').append(innerHTML);
+        $('#coin-slider').coinslider({navigation: true, hoverPause: true });
     }
-    $('#coin-slider').append(innerHTML);
-    $('#coin-slider').coinslider({navigation: true, hoverPause: true });
     $('#w').window('open');
 }
