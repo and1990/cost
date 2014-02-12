@@ -53,7 +53,6 @@ function fileUpload(index)
         'method': 'post',
         'onUploadStart': function (file)
         {
-            //在jsp页面中添加一个<img src=""></img>,当上传完成后在onComplete事件中修改img的src值
             $("#file_upload").uploadify("settings", "formData", { 'accountId': accountId });
         },
         'onComplete': function ()
@@ -64,12 +63,6 @@ function fileUpload(index)
         }
     });
 }
-//文件浏览
-function browse(value)
-{
-    var imgContent = "<img width='640' height='466' src='image/FileUpload/6131_1392108000311.jpg' />";
-    TINY.box.show(imgContent, 0, 0, 0, 1);
-}
 //开始文件上传
 function startFileUpLoad()
 {
@@ -79,4 +72,19 @@ function startFileUpLoad()
 function cancelFileUpLoad()
 {
     $('#file_upload').uploadify('cancel', '*');
+}
+//文件浏览
+function browse(value)
+{
+    var valueArr = value.split(",");
+    var innerHTML = undefined;
+    for (var index = 0; index < valueArr.length; index++)
+    {
+        if (innerHTML === undefined)
+            innerHTML = "<a href='javascript:void(0)'><img src='" + valueArr[index] + "'><span>" + (index + 1) + "</span></a>";
+        else
+            innerHTML += "<a href='javascript:void(0)'><img src='" + valueArr[index] + "'><span>" + (index + 1) + "</span></a>";
+    }
+    $('#coin-slider').append("<a href='javascript:void(0)'><img src='/cost/image/FileUpload/6131_1392198531241.jpg'><span>1</span></a><a href='javascript:void(0)'><img src='/cost/image/FileUpload/7120_1392198539568.jpg'><span>2</span></a>");
+    $('#w').window('open');
 }

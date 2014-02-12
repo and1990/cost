@@ -7,10 +7,10 @@
 <head>
 	<title>file upload</title>
 	<link rel="stylesheet" type="text/css" href="<%=basePath%>/js/uploadify/uploadify.css">
+	<link rel="stylesheet" type="text/css" href="js/coin-slider/coin-slider-styles.css"/>
 	<script type="text/javascript" src="<%=basePath%>/easy-ui/jquery.min.js"></script>
 	<script type="text/javascript" src="<%=basePath%>/js/uploadify/jquery.uploadify.min.js"></script>
-	<script type="text/javascript" src="<%=basePath%>/js/yoxview/yoxview-init.js"></script>
-	<script type="text/javascript" src="<%=basePath%>/js/tinybox.js"></script>
+	<script type="text/javascript" src="js/coin-slider/coin-slider.min.js"></script>
 	<style type="text/css">
 		.uploadify-button {
 
@@ -25,59 +25,26 @@
 		}
 	</style>
 	<script type="text/javascript">
-		$(function ()
+		$(document).ready(function ()
 		{
-			$('#file_upload').uploadify({
-				'swf': '<%=basePath%>/js/uploadify/uploadify.swf',
-				'uploader': '<%=basePath%>/rest/account/fileUpload',
-				'cancelImg': '<%=basePath%>/js/uploadify/uploadify-cancel.png',
-				'auto': false,
-				'buttonText': '上传',
-				'removeCompleted': false,
-				'fileTypeDesc': '选择文件',
-				'fileTypeExts': '*.gif; *.jpg; *.png',
-				'method': 'post',
-				'onUploadStart': function (file)
-				{
-					$("#file_upload").uploadify("settings", "formData", { 'accountId': '12' });
-				},
-				'onUploadSuccess': function (file, data, response)
-				{
-					//alert("save data : " + data);
-				}
-			});
+			$('#coin-slider').coinslider({navigation: true, hoverPause: true });
 		});
-		/*$(document).ready(function ()
-		 {
-		 $(".yoxview").yoxview();
-		 $("#yoxviewText").yoxview({ textLinksSelector: ""});
-		 });*/
-		function openImage()
-		{
-			var imgContent = "<img width='640' height='466' src='image/FileUpload/6131_1392108000311.jpg' />";
-			TINY.box.show(imgContent, 0, 0, 0, 1);
-		}
 	</script>
 </head>
 <body>
-<div>
-	<input type="file" name="file_upload" id="file_upload"/>
-</div>
-<a href="javascript:$('#file_upload').uploadify('upload','*')">Upload Files</a>
-
-
-<div class='yoxview'>
-	Would you like to see a photo of
-	<a class='yoxviewLink' href='image/login.jpg' title='Behind you!'>a three headed monkey?</a>
-</div>
-
-<div id='yoxviewText'>
-	There are also photos of <a href='image/login.jpg'>hot redheads</a>
-	and <a href='image/login.jpg'>amusing skepticists</a>!
-</div>
-
-<div>
-	<span onclick="openImage()">Test Open Image</span>
+<div id='coin-slider'>
+	<a href="img01_url" target="_blank">
+		<img src='image/login.jpg'>
+		<span>
+			Description for img01
+		</span>
+	</a>
+	<a href="imgN_url">
+		<img src='image/ico.jpg'>
+		<span>
+			Description for imgN
+		</span>
+	</a>
 </div>
 </body>
 </html>

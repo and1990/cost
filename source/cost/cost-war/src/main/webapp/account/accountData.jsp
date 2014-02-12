@@ -74,8 +74,15 @@
 	</div>
 </div>
 
+//文件上传对话框
 <div id="fileUploadDialog">
 	<input type="file" name="file_upload" id="file_upload"/>
+</div>
+
+//图片浏览对话框
+<div id="w" class="easyui-window" data-options="modal:true,closed:true" style="width:800px;height:400px;padding:10px;">
+	<div id='coin-slider'>
+	</div>
 </div>
 
 <script type="text/javascript">
@@ -93,6 +100,7 @@
 				$('#account_data_table').datagrid('loadData', resultData.data);
 			}
 		});
+		$('#coin-slider').coinslider({navigation: true, hoverPause: true });
 	});
 	//点击“行”操作
 	function onClickRow(index)
