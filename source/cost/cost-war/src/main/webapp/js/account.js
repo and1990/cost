@@ -44,7 +44,7 @@ function fileUpload(index)
     $('#file_upload').uploadify({
         'swf': 'js/uploadify/uploadify.swf',
         'cancelImg': 'js/uploadify/uploadify-cancel.png',
-        'uploader': 'http://localhost:8090/cost/rest/account/fileUpload',
+        'uploader': 'http://localhost:8080/cost/rest/account/fileUpload',
         'auto': false,
         'buttonText': '选择文件',
         'removeCompleted': false,
@@ -85,7 +85,7 @@ function browse(value)
         else
             innerHTML += "<a href='javascript:void(0)'><img src='" + valueArr[index] + "'><span>" + (index + 1) + "</span></a>";
     }
-    $('#coin-slider').append("<a href='javascript:void(0)'><img src='image/login.jpg'><span>1</span></a><a href='javascript:void(0)'><img src='image/ico.jpg'><span>2</span></a>");
+    $('#coin-slider').append(innerHTML);
     $('#coin-slider').coinslider({navigation: true, hoverPause: true });
     $('#w').window('open');
 }
