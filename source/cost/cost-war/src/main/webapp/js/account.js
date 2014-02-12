@@ -85,6 +85,6 @@ function browse(value)
         else
             innerHTML += "<a href='javascript:void(0)'><img src='" + valueArr[index] + "'><span>" + (index + 1) + "</span></a>";
     }
-    $('#coin-slider').append("<a href='javascript:void(0)'><img src='/cost/image/FileUpload/6131_1392198531241.jpg'><span>1</span></a><a href='javascript:void(0)'><img src='/cost/image/FileUpload/7120_1392198539568.jpg'><span>2</span></a>");
+    $('#coin-slider').append("<a href='javascript:void(0)'><img src='image/login.jpg'><span>1</span></a><a href='javascript:void(0)'><img src='image/ico.jpg'><span>2</span></a>");
     $('#w').window('open');
 }
