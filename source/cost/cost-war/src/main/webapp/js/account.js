@@ -94,19 +94,28 @@ function browse(value)
 }
 function browseTest(value)
 {
+    $('#lightbox').val('');
     if ($('#lightbox').html() == '')
     {
         var valueArr = value.split(",");
         var innerHTML = undefined;
-        /*for (var index = 0; index < valueArr.length; index++)
+        for (var index = 0; index < valueArr.length; index++)
         {
             if (innerHTML === undefined)
-                innerHTML = "<a href='" + valueArr[index] + "' class='123'></a>";
+                innerHTML = "<a href='" + valueArr[index] + "' class='imageBrowse'></a>";
             else
-                innerHTML = "<a href='" + valueArr[index] + "' class='123'></a>";
-        }*/
-        innerHTML = "<a href='" + valueArr[index] + "' class='123'></a>";
+                innerHTML += "<a href='" + valueArr[index] + "' class='imageBrowse'></a>";
+        }
+        //innerHTML = "<a href='image/login.jpg' class='imageBrowse'></a><a href='image/login.jpg' class='imageBrowse'></a>";
         $('#lightbox').append(innerHTML);
-        $('a').lightBox({overlayOpacity: 0.2});
     }
+    $('a.imageBrowse').lightBox(
+        {
+            fixedNavigation:true,
+            overlayOpacity: 0.2,
+            containerBorderSize:5,
+            txtImage:'',
+            txtOf:'/'
+        });
+    $('#lightbox').children().first().click();
 }

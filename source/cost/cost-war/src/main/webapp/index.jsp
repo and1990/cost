@@ -33,7 +33,7 @@
 		 });*/
 		$(function ()
 		{
-			$('a').lightBox({overlayOpacity: 0.2});
+			$('a').lightBox({fixedNavigation: true, overlayOpacity: 0.2});
 		});
 	</script>
 </head>
@@ -53,7 +53,12 @@
 	</a>
 </div>--%>
 <div>
+	<%--<ul>
+		<li><a href="image/login.jpg" class="lightbox">12</a></li>
+		<li><a href="image/ico.jpg" class="lightbox">34</a></li>
+	</ul>--%>
 	<a href="image/login.jpg" class="lightbox">12</a>
+	<a href="image/ico.jpg" class="lightbox">34</a>
 </div>
 </body>
 </html>
