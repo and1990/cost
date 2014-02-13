@@ -10,11 +10,13 @@
 	<link rel="stylesheet" type="text/css" href="<%=basePath %>/easy-ui/themes/default/easyui.css">
 	<link rel="stylesheet" type="text/css" href="<%=basePath %>/easy-ui/themes/icon.css">
 	<link rel="stylesheet" type="text/css" href="<%=basePath%>/js/uploadify/uploadify.css">
+	<link rel="stylesheet" type="text/css" href="js/lightbox/css/jquery.lightbox-0.5.css" media="screen"/>
 	<script type="text/javascript" src="<%=basePath%>/js/uploadify/jquery.uploadify.min.js"></script>
-	<link rel="stylesheet" type="text/css" href="js/coin-slider/coin-slider-styles.css"/>
+	<%--<link rel="stylesheet" type="text/css" href="js/coin-slider/coin-slider-styles.css"/>--%>
 	<script type="text/javascript" src="<%=basePath%>/easy-ui/jquery.min.js"></script>
 	<script type="text/javascript" src="<%=basePath%>/easy-ui/jquery.easyui.min.js"></script>
-	<script type="text/javascript" src="js/coin-slider/coin-slider.min.js"></script>
+	<%--<script type="text/javascript" src="js/coin-slider/coin-slider.min.js"></script>--%>
+	<script type="text/javascript" src="js/lightbox/js/jquery.lightbox-0.5.js"></script>
 	<script type="text/javascript" src="<%=basePath%>/js/cost.js"></script>
 	<script type="text/javascript" src="<%=basePath%>/js/account.js"></script>
 	<script type="text/javascript" src="<%=basePath%>/js/group.js"></script>

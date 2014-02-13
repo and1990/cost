@@ -9,7 +9,7 @@ function accessoryDo(index, field, value)
             fileUpload(index);
         } else
         {
-            browse(value);
+            browseTest(value);
         }
     }
 }
@@ -44,7 +44,7 @@ function fileUpload(index)
     $('#file_upload').uploadify({
         'swf': 'js/uploadify/uploadify.swf',
         'cancelImg': 'js/uploadify/uploadify-cancel.png',
-        'uploader': 'http://localhost:8080/cost/rest/account/fileUpload',
+        'uploader': 'http://localhost:8090/cost/rest/account/fileUpload',
         'auto': false,
         'buttonText': '选择文件',
         'removeCompleted': false,
@@ -88,7 +88,25 @@ function browse(value)
                 innerHTML += "<a href='javascript:void(0)'><img src='" + valueArr[index] + "'><span>" + (index + 1) + "</span></a>";
         }
         $('#coin-slider').append(innerHTML);
-        $('#coin-slider').coinslider({navigation: true, hoverPause: true });
+        $('#coin-slider').coinslider({hoverPause: true});
     }
     $('#w').window('open');
+}
+function browseTest(value)
+{
+    if ($('#lightbox').html() == '')
+    {
+        var valueArr = value.split(",");
+        var innerHTML = undefined;
+        /*for (var index = 0; index < valueArr.length; index++)
+        {
+            if (innerHTML === undefined)
+                innerHTML = "<a href='" + valueArr[index] + "' class='123'></a>";
+            else
+                innerHTML = "<a href='" + valueArr[index] + "' class='123'></a>";
+        }*/
+        innerHTML = "<a href='" + valueArr[index] + "' class='123'></a>";
+        $('#lightbox').append(innerHTML);
+        $('a').lightBox({overlayOpacity: 0.2});
+    }
 }

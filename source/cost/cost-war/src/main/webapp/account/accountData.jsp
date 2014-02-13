@@ -84,6 +84,8 @@
 	<div id='coin-slider'></div>
 </div>
 
+<div id="lightbox"></div>
+
 <script type="text/javascript">
 	//页面加载完成，加载数据
 	$(function ()
@@ -99,7 +101,6 @@
 				$('#account_data_table').datagrid('loadData', resultData.data);
 			}
 		});
-//		$('#coin-slider').coinslider({navigation: true, hoverPause: true });
 	});
 	//点击“行”操作
 	function onClickRow(index)
