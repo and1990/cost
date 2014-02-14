@@ -13,10 +13,13 @@
 		</ul>
 	</div>
 	<!-- 费用报销 -->
-	<div title="报销管理" style="padding: 10px;">
+	<div title="我的消费" style="padding: 10px;">
 		<ul class="easyui-tree" data-options="animate:true" id="account_tree">
 			<li>
-				<a style="text-decoration:none;" href="#" onclick="openTab('accountData','消费记录')">消费记录</a>
+				<a style="text-decoration:none;" href="#" onclick="openTab('myAccountData','我的消费')">我的消费</a>
+			</li>
+			<li>
+				<a style="text-decoration:none;" href="#" onclick="openTab('groupAccountData','组消费')">组消费</a>
 			</li>
 		</ul>
 	</div>
@@ -54,9 +57,12 @@
 		} else if ("userChange" === menuId)
 		{
 			url = "group/group.jsp";
-		} else if ("accountData" === menuId)
+		} else if ("myAccountData" === menuId)
 		{
 			url = "account/accountData.jsp";
+		} else if ("groupAccountData" === menuId)
+		{
+			//TODO
 		}
 		if ($('#main_tabs').tabs('exists', menuText))
 		{

@@ -23,9 +23,15 @@
 </head>
 <body>
 <div class="easyui-layout" data-options="fit:true">
+	<!--头信息-->
+	<div id="headInfo"
+	     data-options="region:'north',title:'',split:true,href:''"
+	     style="height: 30px;"></div>
+	<!--系统菜单信息-->
 	<div id="sysMenuInfo"
 	     data-options="region:'west',title:'系统功能',split:true,href:'<%=basePath %>/main/sysMenu.jsp'"
 	     style="width: 205px;"></div>
+	<!--主页面信息-->
 	<div id="mainInfo" data-options="region:'center',title:'业务信息'">
 		<div class="easyui-tabs"
 		     data-options="border:false,plain:true,fit:true" id="main_tabs">
@@ -34,6 +40,7 @@
 			<div title="用户信息" data-options="href:'<%=basePath %>/user/userData.jsp'" style="padding: 2px"></div>
 		</div>
 	</div>
+	<!--公告信息-->
 	<div id="noticeInfo"
 	     data-options="region:'east',title:'公告信息',split:true,href:'<%=basePath %>/main/notice.jsp'"
 	     style="width: 205px; padding: 2px"></div>
