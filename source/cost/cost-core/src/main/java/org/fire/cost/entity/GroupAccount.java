@@ -7,10 +7,11 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
 
+
 /**
- * 组账单信息统计表
- *
- * @author liutengfei
+ * 注释：
+ * 作者：liutengfei 【刘腾飞】
+ * 时间：14-2-14 下午2:08
  */
 @Entity
 @Table(name = "cost_group_account")

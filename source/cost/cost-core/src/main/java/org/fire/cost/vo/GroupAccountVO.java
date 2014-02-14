@@ -2,10 +2,11 @@ package org.fire.cost.vo;
 
 import java.io.Serializable;
 
+
 /**
- * 组账单信息统计VO
- *
- * @author liutengfei
+ * 注释：
+ * 作者：liutengfei 【刘腾飞】
+ * 时间：14-2-14 下午2:07
  */
 public class GroupAccountVO implements Serializable
 {
