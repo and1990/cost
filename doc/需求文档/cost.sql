@@ -49,10 +49,23 @@ CREATE TABLE cost_group(
   group_id BIGINT PRIMARY KEY AUTO_INCREMENT,
   group_name VARCHAR(20) NOT NULL,
   user_ids VARCHAR(200) NOT NULL,
-  group_status TINYINT(1) NOT NULL DEFAULT '2' COMMENT '1：不可用；2：可用',
+  group_status TINYINT(1) NOT NULL DEFAULT 1 COMMENT '1：不可用；2：可用',
   create_user VARCHAR(20),
   create_time TIMESTAMP,
   modify_user VARCHAR(20),
   modify_time TIMESTAMP,
   group_remark varchar(200) DEFAULT NULL
+)ENGINE=InnoDB DEFAULT CHARSET=UTF8 AUTO_INCREMENT=1;
+
+CREATE TABLE cost_group_account(
+  group_account_id BIGINT PRIMARY KEY AUTO_INCREMENT,
+  group_id BIGINT NOT NULL,
+  account_money DOUBLE NOT NULL,
+  start_date DATE NOT NULL,
+  end_date DATE NOT NULL,
+  is_over TINYINT(1) NOT NULL DEFAULT 1 COMMENT "1:未完结；2：已完结",
+  create_user VARCHAR(20),
+  create_time TIMESTAMP,
+  group_account_remark varchar(200) DEFAULT NULL,
+  FOREIGN KEY(group_id) REFERENCES cost_group(group_id)
 )ENGINE=InnoDB DEFAULT CHARSET=UTF8 AUTO_INCREMENT=1;
