@@ -30,6 +30,7 @@ function onClickRow(index)
 function openUserDialog(index, field, value)
 {
     $('.combobox-f').combo('hidePanel');
+    $('.combobox-f').attr('id','select-user_combo');
     $('#user_data_div').dialog('open');
     getUserData("/cost/rest/user/getUserByFilter");
 }
@@ -135,7 +136,7 @@ function groupSave()
         return;
     }
     var selectUserNames = getSelectUserNames(allRows);
-    $('.combobox-f').combo('setText',selectUserNames);
+    $('#select-user_combo').combo('setText',selectUserNames);
     $('#user_data_div').dialog('close');
     /*var jsonData = undefined;
      if (actionType == 0)

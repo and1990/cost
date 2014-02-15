@@ -17,7 +17,7 @@
 				<th data-options="field:'userNames',width:80,align:'center',editor:{
                             type:'combobox',
                             options:{
-							  editable:false,
+							   editable:false,
                                onShowPanel:openUserDialog
                             }}"
 						>组员
@@ -28,9 +28,10 @@
                             options:{
                                 data:statusData,
                                 valueField:'value',
-                                textField:'name'
+                                textField:'name',
+                                editable:false
                             }}"
-						>用户状态
+						>状态
 				</th>
 				<th data-options="field:'groupRemark',width:120,align:'center',editor:'text'">备注</th>
 				<th data-options="field:'createUser',width:120,align:'center'">创建人</th>
