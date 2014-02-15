@@ -100,3 +100,31 @@ function sendRequest(jsonData, httpUrl)
         }
     });
 }
+//显示状态文本
+var statusData = [
+    {'value': '1', 'name': '不可用'},
+    {'value': '2', 'name': '可用'}
+];
+function showStatusText(value)
+{
+    for (var i = 0; i < statusData.length; i++)
+    {
+        if (statusData[i].value == value)
+            return statusData[i].name;
+    }
+    return value;
+}
+//显示是否是管理员文本
+var isAdminData = [
+    {'value': '1', 'name': '否'},
+    {'value': '2', 'name': '是'}
+];
+function showIsAdminText(value)
+{
+    for (var i = 0; i < isAdminData.length; i++)
+    {
+        if (isAdminData[i].value == value)
+            return isAdminData[i].name;
+    }
+    return value;
+}
