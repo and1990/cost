@@ -1,32 +1,28 @@
 package org.fire.cost.action;
 
-import javax.annotation.Resource;
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.ws.rs.GET;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
-import javax.ws.rs.core.Context;
-import javax.ws.rs.core.MediaType;
-
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.subject.Subject;
-import org.fire.cost.service.CostContextService;
 import org.fire.cost.context.ThreadMessageContext;
 import org.fire.cost.context.UserContext;
 import org.fire.cost.enums.HttpStatusEnum;
 import org.fire.cost.enums.ResultEnum;
 import org.fire.cost.service.AuthenticationService;
+import org.fire.cost.service.CostContextService;
 import org.fire.cost.service.UserService;
 import org.fire.cost.util.AuthenticationUtil;
 import org.fire.cost.util.MessageUtil;
 import org.fire.cost.vo.Message;
 import org.jboss.resteasy.annotations.GZIP;
 import org.springframework.stereotype.Controller;
+
+import javax.annotation.Resource;
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.ws.rs.*;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.MediaType;
 
 @Controller
 @Path("auth")
@@ -48,7 +44,10 @@ public class AuthenticationAction
 	/**
 	 * 用户登录
 	 * 
-	 * @param vo
+	 * @param request
+     * @param  response
+     * @param  loginName
+     * @param  password
 	 */
 	@POST
 	@Path("userLogin")
@@ -68,7 +67,7 @@ public class AuthenticationAction
 			UserContext userContext = authenticationService.buildUserContext(loginName);
 			//创建cookie
 			setCookie(request, response, userContext);
-			userService.changeUserLoginTime(userContext.getUserId());
+            userService.changeUserLoginTime(userContext.getUserId());
 			ThreadMessageContext.set(userContext);
 			MessageUtil.setMessage(message, ResultEnum.Success, HttpStatusEnum.Success, null, userContext);
 		} catch (Exception e)
