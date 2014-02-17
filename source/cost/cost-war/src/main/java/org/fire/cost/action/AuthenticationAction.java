@@ -3,7 +3,6 @@ package org.fire.cost.action;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.subject.Subject;
-import org.fire.cost.context.ThreadMessageContext;
 import org.fire.cost.context.UserContext;
 import org.fire.cost.enums.HttpStatusEnum;
 import org.fire.cost.enums.ResultEnum;
@@ -68,7 +67,7 @@ public class AuthenticationAction
 			//创建cookie
 			setCookie(request, response, userContext);
             userService.changeUserLoginTime(userContext.getUserId());
-			ThreadMessageContext.set(userContext);
+			//ThreadMessageContext.set(userContext);
 			MessageUtil.setMessage(message, ResultEnum.Success, HttpStatusEnum.Success, null, userContext);
 		} catch (Exception e)
 		{
