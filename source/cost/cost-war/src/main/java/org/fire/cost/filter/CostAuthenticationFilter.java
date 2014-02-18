@@ -72,8 +72,9 @@ public class CostAuthenticationFilter implements Filter
                 try
                 {
                     int path = httpRequest.getRequestURI().lastIndexOf(palpitationPath);
+                    //业务请求 延迟会话
                     if (path < 0)
-                    { //业务请求 延迟会话
+                    {
                         costContextService.delay(sessionId);
                     }
                     chain.doFilter(request, response);

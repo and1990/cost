@@ -55,19 +55,20 @@ public class AuthenticationAction
 			@QueryParam(value = "loginName") String loginName, @QueryParam(value = "password") String password)
 	{
 		Message message = new Message();
-		Subject currentUser = SecurityUtils.getSubject();
 		UsernamePasswordToken token = new UsernamePasswordToken();
-		token.setUsername(loginName);
-		token.setPassword(password.toCharArray());
-		token.setRememberMe(true);
-		try
+        token.setUsername(loginName);
+        token.setPassword(password.toCharArray());
+        token.setRememberMe(true);
+        try
 		{
-			currentUser.login(token);//自动调用AuthenticationService的doGetAuthenticationInfo方法验证
+            //自动调用AuthenticationService的doGetAuthenticationInfo方法验证
+            Subject currentUser = SecurityUtils.getSubject();
+            currentUser.login(token);
+            //建立用户上下文
 			UserContext userContext = authenticationService.buildUserContext(loginName);
 			//创建cookie
 			setCookie(request, response, userContext);
             userService.changeUserLoginTime(userContext.getUserId());
-			//ThreadMessageContext.set(userContext);
 			MessageUtil.setMessage(message, ResultEnum.Success, HttpStatusEnum.Success, null, userContext);
 		} catch (Exception e)
 		{

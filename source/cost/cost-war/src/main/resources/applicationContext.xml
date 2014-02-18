@@ -110,7 +110,9 @@
 		<property name="filterChainDefinitions">
 			<value>
 				/user/userLogin.jsp=anon
-				/main.jsp = costAuth
+                /rest/auth/* = anon
+                /main.jsp = costAuth
+                /rest/** = costAuth
 			</value>
 		</property>
 	</bean>
