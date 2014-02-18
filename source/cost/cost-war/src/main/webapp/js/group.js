@@ -97,28 +97,6 @@ function groupConfirm()
     var selectUserNames = getSelectUserNames();
     $('#select-user_combo').combo('setText', selectUserNames);
     $('#user_data_div').dialog('close');
-    /*var jsonData = undefined;
-     if (actionType == 0)
-     {
-     jsonData = '{"userIds":"' + userIds + '"}';
-     } else if (actionType == 1)
-     {
-     var selectData = $('#group_data_table').datagrid('getSelected');
-     selectData.userIds = userIds;
-     jsonData = JSON.stringify(selectData);
-     }
-     $.ajax({
-     type: "POST",
-     data: jsonData,
-     contentType: "application/json",
-     url: httpUrl,
-     dataType: 'json',
-     success: function (resultData)
-     {
-     alert("操作成功");
-     }
-     });
-     actionType = undefined;*/
 }
 //点击“取消”按钮操作
 function groupCancel()
