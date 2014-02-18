@@ -1,5 +1,3 @@
-var actionType = undefined;
-var httpUrl = undefined;
 //得到组数据
 function getGroupData(httpUrl)
 {
@@ -15,44 +13,20 @@ function getGroupData(httpUrl)
         }
     });
 }
-//点击行操作
-function onClickRow(index)
-{
-    if (actionType != undefined)
-    {
-        $('#group_data_table').datagrid('selectRow', rowIndex);
-    } else
-    {
-        rowIndex = index;
-    }
-}
 //弹出选择用户对话框
 function openUserDialog(index, field, value)
 {
     $('.combobox-f').combo('hidePanel');
-    $('.combobox-f').attr('id','select-user_combo');
+    $('.combobox-f').attr('id', 'select-user_combo');
     $('#user_data_div').dialog('open');
-    getUserData("/cost/rest/user/getUserByFilter");
-}
-//组增加操作
-function addGroup(url)
-{
-    if (actionType != undefined)
+    if (actionType == 1)
     {
-        return;
+        editGroup();
     }
-    actionType = 0;
-    getUserData("/cost/rest/user/getUserByFilter");
-    httpUrl = url;
 }
 //组修改操作
-function editGroup(url)
+function editGroup()
 {
-    if (actionType != undefined)
-    {
-        return;
-    }
-    actionType = 1;
     var leftUserRowArr = new Array();
     var rightUserRowArr = new Array();
     var selectRow = $('#group_data_table').datagrid('getSelected');
@@ -74,8 +48,6 @@ function editGroup(url)
             leftUserRowArr.push(allUserRows[i]);
         }
     }
-    display();
-    $("#group_name_text").val(selectRow.groupName);
     $('#user_data_dialog_left').datagrid('loadData', { total: 0, rows: [] });
     for (var i = 0; i < leftUserRowArr.length; i++)
     {
@@ -87,34 +59,21 @@ function editGroup(url)
         var row = rightUserRowArr[i];
         $("#user_data_dialog_right").datagrid("appendRow", {'userName': row.userName, 'userId': row.userId});
     }
-    httpUrl = url;
 }
-//删除操作
-function deleteGroup(url)
+//保存组
+function saveGroup()
 {
-    if (actionType != undefined)
+    if (actionType == undefined)
     {
         return;
     }
-    actionType = 2;
-    if (!window.confirm("是否删除？"))
-    {
-        actionType = undefined;
-        return;
-    }
-    var groupId = $('#group_data_table').datagrid('getSelected').groupId;
-    url += "?groupId=" + groupId;
-    $.ajax({
-        type: "POST",
-        data: '{}',
-        contentType: "application/json",
-        url: url,
-        dataType: 'json',
-        success: function (resultData)
-        {
-            alert("操作成功");
-        }
-    });
+    $('#group_data_table').datagrid('acceptChanges');
+    $('#group_data_table').datagrid("selectRow", rowIndex);
+    var sendData = $('#group_data_table').datagrid('getSelected')
+    sendData.userIds = getSelectUserIds();
+    var jsonData = JSON.stringify(sendData);
+    sendRequest(jsonData, httpUrl);
+    actionType = undefined;
 }
 //点击“>>”按钮操作
 function appendToGroup()
@@ -127,7 +86,7 @@ function deleteFromGroup()
     appendOrDelete("#user_data_dialog_right", "#user_data_dialog_left");
 }
 //点击”确定“按钮操作
-function groupSave()
+function groupConfirm()
 {
     var allRows = $("#user_data_dialog_right").datagrid("getRows");
     if (allRows.length <= 0)
@@ -135,8 +94,8 @@ function groupSave()
         alert("请添加用户");
         return;
     }
-    var selectUserNames = getSelectUserNames(allRows);
-    $('#select-user_combo').combo('setText',selectUserNames);
+    var selectUserNames = getSelectUserNames();
+    $('#select-user_combo').combo('setText', selectUserNames);
     $('#user_data_div').dialog('close');
     /*var jsonData = undefined;
      if (actionType == 0)
@@ -195,9 +154,10 @@ function appendOrDelete(from, to)
     }
 }
 //得到选择的用户ID
-function getSelectUserIds(allRows)
+function getSelectUserIds()
 {
     var userIds = undefined;
+    var allRows = $("#user_data_dialog_right").datagrid("getRows");
     for (var index = 0; index < allRows.length; index++)
     {
         var row = allRows[index];
@@ -213,8 +173,9 @@ function getSelectUserIds(allRows)
     return userIds;
 }
 //得到选择的用户名称
-function getSelectUserNames(allRows)
+function getSelectUserNames()
 {
+    var allRows = $("#user_data_dialog_right").datagrid("getRows");
     var userNames = undefined;
     for (var index = 0; index < allRows.length; index++)
     {
@@ -225,7 +186,7 @@ function getSelectUserNames(allRows)
         }
         else
         {
-            userNames += ","+row.userName;
+            userNames += "," + row.userName;
         }
     }
     return userNames;

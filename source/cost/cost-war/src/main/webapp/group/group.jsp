@@ -14,7 +14,8 @@
 			<thead>
 			<tr>
 				<th data-options="field:'groupName',width:80,align:'center',editor:'text'">组名</th>
-				<th data-options="field:'userNames',width:80,align:'center',editor:{
+				<th data-options="field:'userIds',width:80,align:'center',editor:'text',hidden:true">组员ID</th>
+				<th data-options="field:'userNames',width:120,align:'center',editor:{
                             type:'combobox',
                             options:{
 							   editable:false,
@@ -22,7 +23,7 @@
                             }}"
 						>组员
 				</th>
-				<th data-options="field:'userStatusName',width:120,align:'center',formatter:showStatusText,
+				<th data-options="field:'groupStatusName',width:60,align:'center',formatter:showStatusText,
 						editor:{
                             type:'combobox',
                             options:{
@@ -57,22 +58,22 @@
 	</div>--%>
 	<div style="margin-bottom: 5px">
 		<a href="javascript:void(0);" class="easyui-linkbutton" iconCls="icon-add" plain="true"
-		   onclick="addData('#group_data_table','<%=basePath%>/rest/account/addAccount');">增加</a>
+		   onclick="addData('#group_data_table','<%=basePath%>/rest/group/addGroup');">增加</a>
 		<a href="javascript:void(0);" class="easyui-linkbutton" iconCls="icon-edit" plain="true"
-		   onclick="editData('#group_data_table','<%=basePath%>/rest/account/modifyAccount');">修改</a>
+		   onclick="editData('#group_data_table','<%=basePath%>/rest/group/updateGroup');">修改</a>
 		<a href="javascript:void(0);" class="easyui-linkbutton" iconCls="icon-remove" plain="true"
-		   onclick="removeData('#group_data_table','<%=basePath%>/rest/account/deleteAccount');">删除</a>
+		   onclick="removeData('#group_data_table','<%=basePath%>/rest/group/deleteGroup');">删除</a>
 		<a href="javascript:void(0);" class="easyui-linkbutton" iconCls="icon-undo" plain="true"
 		   onclick="undoData('#group_data_table');">撤销</a>
 		<a href="javascript:void(0);" class="easyui-linkbutton" iconCls="icon-save" plain="true"
-		   onclick="saveData('#group_data_table');">保存</a>
+		   onclick="saveGroup();">保存</a>
 	</div>
 </div>
 
 
 <!--点击增加、修改按钮时，显示界面-->
 <div id="user_data_div" class="easyui-dialog" title="选择用户" style="width:600px;height:400px"
-     data-options="closed: true">
+     data-options="closed: true,modal:true">
 	<div id="user_data_dialog" class="easyui-layout" data-options="fit:true">
 		<div id="user_data_dialog_north" style="height: 30px" data-options="region:'north',border:0"></div>
 		<div id="user_data_dialog_west" style="width: 250px" data-options="region:'west',border:0">
@@ -110,7 +111,7 @@
 		<div id="user_data_dialog_south" style="height: 70px" data-options="region:'south',border:0">
 			<div style="text-align:center">
 				<hr color="powderblue">
-				<input type="button" value="确定" onclick="groupSave();">
+				<input type="button" value="确定" onclick="groupConfirm();">
 				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 				<input type="button" value="取消" onclick="groupCancel();">
 			</div>
@@ -119,10 +120,21 @@
 </div>
 
 <script>
-	//页面加载完成触发
 	$(function ()
 	{
 		getGroupData('<%=basePath%>/rest/group/getGroupByFilter');
-		<%--getUserData('<%=basePath%>/rest/user/getUserByFilter');--%>
+		getUserData("/cost/rest/user/getUserByFilter");
 	});
+	//点击行操作
+	var rowIndex = undefined;
+	function onClickRow(index)
+	{
+		if (actionType != undefined)
+		{
+			$('#group_data_table').datagrid('selectRow', rowIndex);
+		} else
+		{
+			rowIndex = index;
+		}
+	}
 </script>

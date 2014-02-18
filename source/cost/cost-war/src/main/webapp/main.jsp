@@ -35,8 +35,8 @@
 	<div id="mainInfo" data-options="region:'center',title:'业务信息'">
 		<div class="easyui-tabs"
 		     data-options="border:false,plain:true,fit:true" id="main_tabs">
-			<div title="账单信息" data-options="href:'<%=basePath %>/account/accountData.jsp'" style="padding: 2px"></div>
 			<div title="组信息" data-options="href:'<%=basePath %>/group/group.jsp'" style="padding: 2px"></div>
+			<div title="账单信息" data-options="href:'<%=basePath %>/account/accountData.jsp'" style="padding: 2px"></div>
 			<div title="用户信息" data-options="href:'<%=basePath %>/user/userData.jsp'" style="padding: 2px"></div>
 		</div>
 	</div>

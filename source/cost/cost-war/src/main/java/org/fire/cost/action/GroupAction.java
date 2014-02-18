@@ -125,16 +125,17 @@ public class GroupAction
     /**
      * 根据组id删除“组数据”
      *
-     * @param groupId 组id
+     * @param vo 组VO
      * @return
      */
     @POST
     @Path("deleteGroup")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    public Message deleteGroup(@QueryParam(value = "groupId") Long groupId)
+    public Message deleteGroup(GroupVO vo)
     {
         Message message = new Message();
+        Long groupId = vo.getGroupId();
         if (groupId == null || groupId == 0)
         {
             MessageUtil.setMessage(message, ResultEnum.Fail, HttpStatusEnum.Warn, "请求数据不正确", null);
