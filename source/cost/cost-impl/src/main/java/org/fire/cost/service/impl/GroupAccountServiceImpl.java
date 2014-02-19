@@ -54,8 +54,7 @@ public class GroupAccountServiceImpl implements GroupAccountService
     {
         //TODO
         Group group = groupDao.findGroupByStatus();
-        Date modifyTime;
-        modifyTime = group.getModifyTime();
+        Date modifyTime = group.getModifyTime();
         String startTime = DateUtil.makeDate2Str(modifyTime, false);
         String endTime = null;
         AccountVO vo = new AccountVO();
