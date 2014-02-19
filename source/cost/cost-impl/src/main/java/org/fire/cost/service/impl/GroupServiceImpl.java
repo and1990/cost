@@ -77,8 +77,8 @@ public class GroupServiceImpl implements GroupService
             vo.setCreateTime(DateUtil.makeDate2Str(new Date(), true));
             vo.setModifyUser(userService.getLoginUserName());
             vo.setModifyTime(DateUtil.makeDate2Str(new Date(), true));
-            groupDao.save(makeVO2Group(vo, null));
-            groupAccountService.addGroupAccount();
+            Group group = groupDao.save(makeVO2Group(vo, null));
+            groupAccountService.addGroupAccount(group.getGroupId());
             return true;
         } catch (Exception ex)
         {

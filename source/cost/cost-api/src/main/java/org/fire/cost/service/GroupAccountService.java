@@ -22,7 +22,8 @@ public interface GroupAccountService
     /**
      * 添加组消费
      *
+     * @param groupId 组ID
      * @return
      */
-    public boolean addGroupAccount();
+    public boolean addGroupAccount(Long groupId);
 }
