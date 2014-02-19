@@ -44,7 +44,7 @@ function fileUpload(index)
     $('#file_upload').uploadify({
         'swf': 'js/uploadify/uploadify.swf',
         'cancelImg': 'js/uploadify/uploadify-cancel.png',
-        'uploader': 'http://localhost:8090/cost/rest/account/fileUpload',
+        'uploader': '/cost/rest/account/fileUpload',
         'auto': false,
         'buttonText': '选择文件',
         'removeCompleted': false,

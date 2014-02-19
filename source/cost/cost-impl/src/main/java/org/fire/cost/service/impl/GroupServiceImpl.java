@@ -3,6 +3,7 @@ package org.fire.cost.service.impl;
 import org.fire.cost.dao.GroupDao;
 import org.fire.cost.entity.Group;
 import org.fire.cost.enums.StatusEnum;
+import org.fire.cost.service.GroupAccountService;
 import org.fire.cost.service.GroupService;
 import org.fire.cost.service.UserService;
 import org.fire.cost.util.DateUtil;
@@ -24,6 +25,9 @@ public class GroupServiceImpl implements GroupService
 {
     @Resource
     private UserService userService;
+
+    @Resource
+    private GroupAccountService groupAccountService;
 
     @Resource
     private GroupDao groupDao;
@@ -74,6 +78,7 @@ public class GroupServiceImpl implements GroupService
             vo.setModifyUser(userService.getLoginUserName());
             vo.setModifyTime(DateUtil.makeDate2Str(new Date(), true));
             groupDao.save(makeVO2Group(vo, null));
+            groupAccountService.addGroupAccount();
             return true;
         } catch (Exception ex)
         {
@@ -164,9 +169,9 @@ public class GroupServiceImpl implements GroupService
         vo.setGroupStatus(group.getGroupStatus());
         vo.setGroupStatusName(StatusEnum.getName(group.getGroupStatus()));
         vo.setCreateUser(group.getCreateUser());
-        vo.setCreateTime(DateUtil.makeDate2Str(group.getCreateTime(),true));
+        vo.setCreateTime(DateUtil.makeDate2Str(group.getCreateTime(), true));
         vo.setModifyUser(group.getModifyUser());
-        vo.setModifyTime(DateUtil.makeDate2Str(group.getModifyTime(),true));
+        vo.setModifyTime(DateUtil.makeDate2Str(group.getModifyTime(), true));
         vo.setGroupRemark(group.getGroupRemark());
         return vo;
     }

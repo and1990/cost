@@ -9,7 +9,7 @@ import java.util.Date;
 
 
 /**
- * 注释：
+ * 注释：组消费
  * 作者：liutengfei 【刘腾飞】
  * 时间：14-2-14 下午2:08
  */
