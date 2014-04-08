@@ -103,7 +103,6 @@ public class AccountServiceImpl implements AccountService
             return true;
         } catch (Exception e)
         {
-
             e.printStackTrace();
             throw new RollbackException();
         }
@@ -136,8 +135,6 @@ public class AccountServiceImpl implements AccountService
     @Override
     public boolean fileUpload(HttpServletRequest request, HttpServletResponse response)
     {
-        OutputStream outputStream = null;
-        InputStream inputStream = null;
         try
         {
             request.setCharacterEncoding("UTF-8");
