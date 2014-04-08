@@ -4,11 +4,11 @@
     <persistence-unit name="cost" transaction-type="RESOURCE_LOCAL">
         <provider>org.hibernate.ejb.HibernatePersistence</provider>
         <jta-data-source>java:/MySqlDS</jta-data-source>
-        <!-- <class>cn.damai.dao.entity.User</class> -->
         <class>org.fire.cost.entity.User</class>
         <class>org.fire.cost.entity.Account</class>
         <class>org.fire.cost.entity.Group</class>
         <class>org.fire.cost.entity.GroupAccount</class>
+
         <properties>
             <property name="hibernate.dialect" value="org.hibernate.dialect.MySQLDialect"/>
             <property name="hibernate.hbm2ddl.auto" value="update"/>
@@ -24,5 +24,6 @@
             <property name="hibernate.memcached.memcacheClientFactory"
                       value="net.rubyeye.xmemcached.utils.hibernate.XmemcachedClientFactory"/>
         </properties>
+
     </persistence-unit>
 </persistence>
