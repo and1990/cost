@@ -78,7 +78,6 @@
 			<version>1.2.2</version>
 		</dependency>
 
-
 		<!-- spring -->
 		<dependency>
 			<groupId>org.springframework</groupId>
