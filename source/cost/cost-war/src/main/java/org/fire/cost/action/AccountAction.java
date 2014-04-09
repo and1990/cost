@@ -1,5 +1,9 @@
 package org.fire.cost.action;
 
+import org.apache.struts2.ServletActionContext;
+import org.apache.struts2.convention.annotation.Action;
+import org.apache.struts2.convention.annotation.Namespace;
+import org.apache.struts2.convention.annotation.Result;
 import org.fire.cost.enums.HttpStatusEnum;
 import org.fire.cost.enums.ResultEnum;
 import org.fire.cost.service.AccountService;
@@ -11,12 +15,6 @@ import org.springframework.stereotype.Controller;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.ws.rs.Consumes;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-import javax.ws.rs.core.Context;
-import javax.ws.rs.core.MediaType;
 import java.util.List;
 
 /**
@@ -24,10 +22,9 @@ import java.util.List;
  *
  * @author liutengfei
  */
+@Namespace("/")
 @Controller
-@Path("account")
-public class AccountAction
-{
+public class AccountAction {
 
     @Resource
     private AccountService accountService;
@@ -38,24 +35,17 @@ public class AccountAction
      * @param vo
      * @return
      */
-    @POST
-    @Path("getAccountByFilter")
-    @Produces(MediaType.APPLICATION_JSON)
-    @Consumes(MediaType.APPLICATION_JSON)
-    public Message getAccountByFilter(AccountVO vo)
-    {
+    @Action(value = "getAccountByFilter", results = {@Result(type = "json", params = {"root", "returnData", "contentType", "text/html"})})
+    public Message getAccountByFilter(AccountVO vo) {
         Message message = new Message();
-        if (vo == null)
-        {
+        if (vo == null) {
             MessageUtil.setMessage(message, ResultEnum.Fail, HttpStatusEnum.Warn, "请求数据不能为空", null);
             return message;
         }
-        try
-        {
+        try {
             List<AccountVO> voList = accountService.getAccountByFilter(vo);
             MessageUtil.setMessage(message, ResultEnum.Success, HttpStatusEnum.Success, null, voList);
-        } catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
             MessageUtil.setMessage(message, ResultEnum.Fail, HttpStatusEnum.ServerError, e.getMessage(), null);
         }
@@ -68,26 +58,18 @@ public class AccountAction
      * @param vo
      * @return
      */
-    @POST
-    @Path("addAccount")
-    @Produces(MediaType.APPLICATION_JSON)
-    @Consumes(MediaType.APPLICATION_JSON)
-    public Message addAccount(AccountVO vo)
-    {
+    @Action(value = "addAccount", results = {@Result(type = "json", params = {"root", "returnData", "contentType", "text/html"})})
+    public Message addAccount(AccountVO vo) {
         Message message = new Message();
-        if (vo == null)
-        {
+        if (vo == null) {
             MessageUtil.setMessage(message, ResultEnum.Fail, HttpStatusEnum.Warn, "请求数据不能为空", null);
             return message;
         }
-        try
-        {
-            if (accountService.addAccount(vo))
-            {
+        try {
+            if (accountService.addAccount(vo)) {
                 MessageUtil.setMessage(message, ResultEnum.Success, HttpStatusEnum.Success, null, null);
             }
-        } catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
             MessageUtil.setMessage(message, ResultEnum.Fail, HttpStatusEnum.ServerError, e.getMessage(), null);
         }
@@ -100,26 +82,18 @@ public class AccountAction
      * @param vo
      * @return
      */
-    @POST
-    @Path("modifyAccount")
-    @Produces(MediaType.APPLICATION_JSON)
-    @Consumes(MediaType.APPLICATION_JSON)
-    public Message modifyAccount(AccountVO vo)
-    {
+    @Action(value = "modifyAccount", results = {@Result(type = "json", params = {"root", "returnData", "contentType", "text/html"})})
+    public Message modifyAccount(AccountVO vo) {
         Message message = new Message();
-        if (vo == null)
-        {
+        if (vo == null) {
             MessageUtil.setMessage(message, ResultEnum.Fail, HttpStatusEnum.Warn, "请求数据不能为空", null);
             return message;
         }
-        try
-        {
-            if (accountService.modifyAccount(vo))
-            {
+        try {
+            if (accountService.modifyAccount(vo)) {
                 MessageUtil.setMessage(message, ResultEnum.Success, HttpStatusEnum.Success, null, null);
             }
-        } catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
             MessageUtil.setMessage(message, ResultEnum.Fail, HttpStatusEnum.ServerError, e.getMessage(), null);
         }
@@ -132,26 +106,18 @@ public class AccountAction
      * @param vo
      * @return
      */
-    @POST
-    @Path("deleteAccount")
-    @Produces(MediaType.APPLICATION_JSON)
-    @Consumes(MediaType.APPLICATION_JSON)
-    public Message deleteAccount(AccountVO vo)
-    {
+    @Action(value = "deleteAccount", results = {@Result(type = "json", params = {"root", "returnData", "contentType", "text/html"})})
+    public Message deleteAccount(AccountVO vo) {
         Message message = new Message();
-        if (vo == null)
-        {
+        if (vo == null) {
             MessageUtil.setMessage(message, ResultEnum.Fail, HttpStatusEnum.Warn, "请求数据不能为空", null);
             return message;
         }
-        try
-        {
-            if (accountService.deleteAccount(vo.getAccountId()))
-            {
+        try {
+            if (accountService.deleteAccount(vo.getAccountId())) {
                 MessageUtil.setMessage(message, ResultEnum.Success, HttpStatusEnum.Success, null, null);
             }
-        } catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
             MessageUtil.setMessage(message, ResultEnum.Fail, HttpStatusEnum.ServerError, e.getMessage(), null);
         }
@@ -159,58 +125,22 @@ public class AccountAction
     }
 
     /**
-     * 得到消费类型枚举
-     *
-     * @return
-     */
-    @POST
-    @Path("getAccountTypeText")
-    @Produces(MediaType.APPLICATION_JSON)
-    public Message getAccountTypeText()
-    {
-        Message message = new Message();
-        return message;
-    }
-
-    /**
-     * 得到审批类型枚举
-     *
-     * @return
-     */
-    @POST
-    @Path("getApproveText")
-    @Produces(MediaType.APPLICATION_JSON)
-    public Message getApproveText()
-    {
-        //TODO
-        Message message = new Message();
-        return message;
-    }
-
-    /**
      * 文件上传
      *
-     * @param request  请求
-     * @param response 响应
      * @return
      */
-    @POST
-    @Path("fileUpload")
-    @Produces(MediaType.APPLICATION_JSON)
-    public Message fileUpload(@Context HttpServletRequest request, @Context HttpServletResponse response)
-    {
+    @Action(value = "fileUpload", results = {@Result(type = "json", params = {"root", "returnData", "contentType", "text/html"})})
+    public Message fileUpload() {
         Message message = new Message();
-        try
-        {
-            if (accountService.fileUpload(request, response))
-            {
+        try {
+            HttpServletRequest request = ServletActionContext.getRequest();
+            HttpServletResponse response = ServletActionContext.getResponse();
+            if (accountService.fileUpload(request, response)) {
                 MessageUtil.setMessage(message, ResultEnum.Success, HttpStatusEnum.Success, "上传成功", null);
-            } else
-            {
+            } else {
                 MessageUtil.setMessage(message, ResultEnum.Fail, HttpStatusEnum.Success, "上传失败", null);
             }
-        } catch (Exception e)
-        {
+        } catch (Exception e) {
             MessageUtil.setMessage(message, ResultEnum.Fail, HttpStatusEnum.ServerError, "上传失败，服务器内部错误", null);
             e.printStackTrace();
         }

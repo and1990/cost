@@ -1,5 +1,8 @@
 package org.fire.cost.action;
 
+import org.apache.struts2.convention.annotation.Action;
+import org.apache.struts2.convention.annotation.Namespace;
+import org.apache.struts2.convention.annotation.Result;
 import org.fire.cost.enums.HttpStatusEnum;
 import org.fire.cost.enums.ResultEnum;
 import org.fire.cost.service.GroupService;
@@ -9,8 +12,6 @@ import org.fire.cost.vo.Message;
 import org.springframework.stereotype.Controller;
 
 import javax.annotation.Resource;
-import javax.ws.rs.*;
-import javax.ws.rs.core.MediaType;
 import java.util.List;
 
 /**
@@ -18,10 +19,9 @@ import java.util.List;
  *
  * @author liutengfei
  */
+@Namespace("/")
 @Controller
-@Path("group")
-public class GroupAction
-{
+public class GroupAction {
     @Resource
     private GroupService groupService;
 
@@ -31,24 +31,17 @@ public class GroupAction
      * @param vo 客户端传递的过滤数据
      * @return
      */
-    @POST
-    @Path("getGroupByFilter")
-    @Produces(MediaType.APPLICATION_JSON)
-    @Consumes(MediaType.APPLICATION_JSON)
-    public Message getGroupByFilter(GroupVO vo)
-    {
+    @Action(value = "getGroupByFilter", results = {@Result(type = "json", params = {"root", "returnData", "contentType", "text/html"})})
+    public Message getGroupByFilter(GroupVO vo) {
         Message message = new Message();
-        if (vo == null)
-        {
+        if (vo == null) {
             MessageUtil.setMessage(message, ResultEnum.Fail, HttpStatusEnum.Warn, "请求数据不能为空", null);
             return message;
         }
-        try
-        {
+        try {
             List<GroupVO> voList = groupService.getGroupByFilter(vo);
             MessageUtil.setMessage(message, ResultEnum.Success, HttpStatusEnum.Success, "查询成功", voList);
-        } catch (Exception e)
-        {
+        } catch (Exception e) {
             MessageUtil.setMessage(message, ResultEnum.Fail, HttpStatusEnum.ServerError, e.getMessage(), null);
         }
         return message;
@@ -60,29 +53,20 @@ public class GroupAction
      * @param vo 客户端传递的数据
      * @return
      */
-    @POST
-    @Path("addGroup")
-    @Produces(MediaType.APPLICATION_JSON)
-    @Consumes(MediaType.APPLICATION_JSON)
-    public Message addGroup(GroupVO vo)
-    {
+    @Action(value = "addGroup", results = {@Result(type = "json", params = {"root", "returnData", "contentType", "text/html"})})
+    public Message addGroup(GroupVO vo) {
         Message message = new Message();
-        if (vo == null)
-        {
+        if (vo == null) {
             MessageUtil.setMessage(message, ResultEnum.Fail, HttpStatusEnum.Warn, "请求数据不能为空", null);
             return message;
         }
-        try
-        {
-            if (groupService.addGroup(vo))
-            {
+        try {
+            if (groupService.addGroup(vo)) {
                 MessageUtil.setMessage(message, ResultEnum.Success, HttpStatusEnum.Success, "增加成功", null);
-            } else
-            {
+            } else {
                 MessageUtil.setMessage(message, ResultEnum.Fail, HttpStatusEnum.Success, "增加失败", null);
             }
-        } catch (Exception e)
-        {
+        } catch (Exception e) {
             MessageUtil.setMessage(message, ResultEnum.Fail, HttpStatusEnum.ServerError, e.getMessage(), null);
         }
         return message;
@@ -94,29 +78,20 @@ public class GroupAction
      * @param vo 客户端传递的数据
      * @return
      */
-    @POST
-    @Path("updateGroup")
-    @Produces(MediaType.APPLICATION_JSON)
-    @Consumes(MediaType.APPLICATION_JSON)
-    public Message updateGroup(GroupVO vo)
-    {
+    @Action(value = "updateGroup", results = {@Result(type = "json", params = {"root", "returnData", "contentType", "text/html"})})
+    public Message updateGroup(GroupVO vo) {
         Message message = new Message();
-        if (vo == null)
-        {
+        if (vo == null) {
             MessageUtil.setMessage(message, ResultEnum.Fail, HttpStatusEnum.Warn, "请求数据不能为空", null);
             return message;
         }
-        try
-        {
-            if (groupService.updateGroup(vo))
-            {
+        try {
+            if (groupService.updateGroup(vo)) {
                 MessageUtil.setMessage(message, ResultEnum.Success, HttpStatusEnum.Success, "更新成功", null);
-            } else
-            {
+            } else {
                 MessageUtil.setMessage(message, ResultEnum.Fail, HttpStatusEnum.Success, "更新失败", null);
             }
-        } catch (Exception e)
-        {
+        } catch (Exception e) {
             MessageUtil.setMessage(message, ResultEnum.Fail, HttpStatusEnum.ServerError, e.getMessage(), null);
         }
         return message;
@@ -128,30 +103,21 @@ public class GroupAction
      * @param vo 组VO
      * @return
      */
-    @POST
-    @Path("deleteGroup")
-    @Produces(MediaType.APPLICATION_JSON)
-    @Consumes(MediaType.APPLICATION_JSON)
-    public Message deleteGroup(GroupVO vo)
-    {
+    @Action(value = "deleteGroup", results = {@Result(type = "json", params = {"root", "returnData", "contentType", "text/html"})})
+    public Message deleteGroup(GroupVO vo) {
         Message message = new Message();
         Long groupId = vo.getGroupId();
-        if (groupId == null || groupId == 0)
-        {
+        if (groupId == null || groupId == 0) {
             MessageUtil.setMessage(message, ResultEnum.Fail, HttpStatusEnum.Warn, "请求数据不正确", null);
             return message;
         }
-        try
-        {
-            if (groupService.deleteGroup(groupId))
-            {
+        try {
+            if (groupService.deleteGroup(groupId)) {
                 MessageUtil.setMessage(message, ResultEnum.Success, HttpStatusEnum.Success, "删除成功", null);
-            } else
-            {
+            } else {
                 MessageUtil.setMessage(message, ResultEnum.Fail, HttpStatusEnum.Success, "删除失败", null);
             }
-        } catch (Exception e)
-        {
+        } catch (Exception e) {
             MessageUtil.setMessage(message, ResultEnum.Fail, HttpStatusEnum.ServerError, e.getMessage(), null);
         }
         return message;
