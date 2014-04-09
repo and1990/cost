@@ -21,7 +21,7 @@ import java.util.List;
  */
 @Namespace("/")
 @Controller
-public class GroupAction {
+public class GroupAction extends BaseAction {
     @Resource
     private GroupService groupService;
 

@@ -25,7 +25,7 @@ import javax.servlet.http.HttpServletResponse;
 
 @Namespace("/")
 @Controller
-public class AuthenticationAction {
+public class AuthenticationAction extends BaseAction {
 
     //用户服务
     @Resource

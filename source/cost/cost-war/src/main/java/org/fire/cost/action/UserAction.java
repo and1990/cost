@@ -16,7 +16,7 @@ import java.util.List;
 
 @Namespace("/")
 @Controller
-public class UserAction {
+public class UserAction extends BaseAction {
     @Resource
     private UserService userService;
 

@@ -15,7 +15,7 @@ import javax.annotation.Resource;
  */
 @Namespace("/")
 @Controller
-public class GroupAccountAction {
+public class GroupAccountAction extends BaseAction {
     @Resource
     private GroupAccountService groupAccountService;
 

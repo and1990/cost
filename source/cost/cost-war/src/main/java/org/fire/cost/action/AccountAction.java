@@ -24,7 +24,7 @@ import java.util.List;
  */
 @Namespace("/")
 @Controller
-public class AccountAction {
+public class AccountAction extends BaseAction{
 
     @Resource
     private AccountService accountService;
