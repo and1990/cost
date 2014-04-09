@@ -23,7 +23,7 @@ import java.util.List;
 public class GroupAccountServiceImpl implements GroupAccountService
 {
 
-    @Resource
+    //@Resource
     private GroupAccountDao groupAccountDao;
 
     @Resource

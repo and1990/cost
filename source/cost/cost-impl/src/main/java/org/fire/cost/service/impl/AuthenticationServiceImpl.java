@@ -1,27 +1,22 @@
 package org.fire.cost.service.impl;
 
-import java.io.IOException;
-import java.util.UUID;
-
-import javax.annotation.Resource;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.apache.shiro.authc.AuthenticationException;
-import org.apache.shiro.authc.AuthenticationInfo;
-import org.apache.shiro.authc.AuthenticationToken;
-import org.apache.shiro.authc.SimpleAuthenticationInfo;
-import org.apache.shiro.authc.UsernamePasswordToken;
+import org.apache.shiro.authc.*;
 import org.apache.shiro.authz.UnauthenticatedException;
 import org.apache.shiro.realm.AuthenticatingRealm;
 import org.codehaus.jackson.map.ObjectMapper;
-import org.fire.cost.enums.StatusEnum;
-import org.fire.cost.service.CostContextService;
 import org.fire.cost.context.UserContext;
 import org.fire.cost.dao.UserDao;
 import org.fire.cost.entity.User;
+import org.fire.cost.enums.StatusEnum;
 import org.fire.cost.service.AuthenticationService;
+import org.fire.cost.service.CostContextService;
 import org.springframework.stereotype.Service;
+
+import javax.annotation.Resource;
+import java.io.IOException;
+import java.util.UUID;
 
 /**
  * 认证信息实现
@@ -81,23 +76,23 @@ public class AuthenticationServiceImpl extends AuthenticatingRealm implements Au
 	public UserContext buildUserContext(String loginName)
 	{
 		UserContext userContext = buildContext(loginName);
-		String json = null;
-		try
-		{
-			json = jsonMapper.writeValueAsString(userContext);
-			if (log.isDebugEnabled())
-			{
-				log.debug("用户上下文信息\n" + json);
-			}
-			// 用户信息放入缓存
-			costContextService.add(userContext.getSessionId(), json);
-		} catch (IOException e1)
-		{
-			e1.printStackTrace();
-			log.error("创建用户上下文信息失败");
-		}
+        String json = null;
+        try
+        {
+            json = jsonMapper.writeValueAsString(userContext);
+            if (log.isDebugEnabled())
+            {
+                log.debug("用户上下文信息\n" + json);
+            }
+            // 用户信息放入缓存
+            costContextService.add(userContext.getSessionId(), json);
+        } catch (IOException e1)
+        {
+            e1.printStackTrace();
+            log.error("创建用户上下文信息失败");
+        }
 
-		return userContext;
+        return userContext;
 	}
 
 	/**
