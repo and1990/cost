@@ -11,5 +11,4 @@ import org.springframework.stereotype.Controller;
 @ParentPackage("json-default")
 @Namespace("/")
 @Controller
-public abstract class BaseAction extends ActionSupport {
-}
+public abstract class BaseAction extends ActionSupport {}
