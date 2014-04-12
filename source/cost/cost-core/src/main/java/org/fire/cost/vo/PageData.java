@@ -9,7 +9,7 @@ import java.util.List;
  */
 public class PageData<T> {
     //当前页
-    private int pageIndex = PageData.DEFAULT_PAGE_INDEX;
+    private int page = PageData.DEFAULT_PAGE;
     //每页显示条数
     private int pageSize = PageData.DEFAULT_PAGE_SIZE;
     //总页数
@@ -17,19 +17,19 @@ public class PageData<T> {
     //总记录数
     private int dataTotal;
     //当前页数据
-    private List<T> dataList;
+    private List<T> rows;
 
     //默认显示第一页
-    private final static int DEFAULT_PAGE_INDEX = 1;
+    private final static int DEFAULT_PAGE = 1;
     //默认显示条数
     private final static int DEFAULT_PAGE_SIZE = 10;
 
-    public int getPageIndex() {
-        return pageIndex;
+    public int getPage() {
+        return page;
     }
 
-    public void setPageIndex(int pageIndex) {
-        this.pageIndex = pageIndex;
+    public void setPage(int page) {
+        this.page = page;
     }
 
     public int getPageSize() {
@@ -61,11 +61,11 @@ public class PageData<T> {
         this.dataTotal = dataTotal;
     }
 
-    public List<T> getDataList() {
-        return dataList;
+    public List<T> getRows() {
+        return rows;
     }
 
-    public void setDataList(List<T> dataList) {
-        this.dataList = dataList;
+    public void setRows(List<T> rows) {
+        this.rows = rows;
     }
 }

@@ -24,7 +24,7 @@ public class UserDaoCustomImpl extends BaseJpaDaoSupport<User, Long> implements 
         if (query instanceof org.hibernate.ejb.QueryImpl) {
             ((QueryImpl<?>) query).getHibernateQuery().setCacheable(true);
         }
-        query.setFirstResult(pageData.getPageIndex()-1);
+        query.setFirstResult(pageData.getPage()-1);
         query.setMaxResults(pageData.getPageSize());
         List<User> resultList = query.getResultList();
         return resultList;

@@ -70,7 +70,7 @@
 <form>
     <input type="hidden" name="pageSize" value="${pageData.pageSize}">
     <input type="hidden" name="pageTotal" value="${pageData.pageTotal}">
-    <input type="hidden" name="pageIndex" value="${pageData.pageIndex}">
+    <input type="hidden" name="page" value="${pageData.page}">
     <input type="hidden" name="dataTotal" value="${pageData.dataTotal}">
 </form>
 
@@ -81,21 +81,15 @@
             striped: true,
             border: true,
             collapsible: false,
-            loadMsg:'数据装载中......',
+            loadMsg: '数据装载中......',
             url: '<%=basePath%>/getUserByFilter.do',
             idField: 'userId',
             fit: true,
             fitColumns: true,
             singleSelect: true,
             pagination: true,
-            pageSize:5,
-            pageList:[5,10,15,20],
-            frozenColumns: [
-                [
-                    {field: 'userName', checkbox: true},
-                    {field: 'loginName', checkbox: true}
-                ]
-            ],
+            pageSize: 5,
+            pageList: [5, 10, 15, 20],
             toolbar: [
                 {
                     text: '添加',
@@ -137,30 +131,20 @@
                     }
                 }
             ]
+
         });
 
         $('#user_data_table').datagrid('getPager').pagination({
-            displayMsg:'当前显示从{from}到{to}共{total}记录',
-            onBeforeRefresh:function(pageNumber, pageSize){
+            displayMsg: '当前显示从{from}到{to}共{total}记录',
+            onBeforeRefresh: function (pageNumber, pageSize) {
                 $(this).pagination('loading');
-                alert('pageNumber:'+pageNumber+',pageSize:'+pageSize);
                 $(this).pagination('loaded');
             }
         });
 
+
     });
 
-
-    /*  $(function () {
-     $.ajax({
-     type: "POST",
-     url: '<%=basePath%>/getUserByFilter.do',
-     success: function (pageData) {
-     var pageObj = JSON.parse(pageData);
-     $('#user_data_table').datagrid('loadData', pageObj.dataList);
-     }
-     });
-     });*/
     function onClickRow(index) {
         if (actionType != undefined) {
             $('#user_data_table').datagrid('selectRow', rowIndex);

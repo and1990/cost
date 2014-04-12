@@ -15,12 +15,4 @@ import org.springframework.stereotype.Controller;
 public abstract class BaseAction extends ActionSupport {
     //返回客户端信息
     protected Message message = new Message();
-
-    public Message getMessage() {
-        return message;
-    }
-
-    public void setMessage(Message message) {
-        this.message = message;
-    }
 }
