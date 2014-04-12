@@ -1,7 +1,9 @@
 package org.fire.cost.action;
 
 import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.UsernamePasswordToken;
+import org.apache.shiro.authz.UnauthenticatedException;
 import org.apache.shiro.subject.Subject;
 import org.apache.struts2.ServletActionContext;
 import org.apache.struts2.convention.annotation.Action;
@@ -25,10 +27,9 @@ import javax.servlet.http.HttpServletResponse;
 
 @Namespace("/")
 @Controller
-public class AuthenticationAction extends BaseAction
-{
+public class AuthenticationAction extends BaseAction {
 
-    //用户服务
+    //用户服务类
     @Resource
     private UserService userService;
 
@@ -36,7 +37,7 @@ public class AuthenticationAction extends BaseAction
     @Resource
     private AuthenticationService authenticationService;
 
-    //项目上下文
+    //上下文信息
     @Resource
     private CostContextService costContextService;
 
@@ -48,33 +49,28 @@ public class AuthenticationAction extends BaseAction
     /**
      * 用户登录
      */
-    @Action(value = "userLogin", results = {@Result(type = "json", params = {"root", "returnData", "contentType", "text/html"})})
-    public Message userLogin()
-    {
-        HttpServletRequest request = ServletActionContext.getRequest();
-        HttpServletResponse response = ServletActionContext.getResponse();
-        Message message = new Message();
-        UsernamePasswordToken token = new UsernamePasswordToken();
-        token.setUsername(loginName);
-        token.setPassword(password.toCharArray());
-        token.setRememberMe(true);
-        try
-        {
+    @Action(value = "userLogin", results = {@Result(type = "json", params = {"root", "message", "contentType", "text/html"})})
+    public String userLogin() {
+        try {
+            UsernamePasswordToken token = new UsernamePasswordToken();
+            token.setUsername(loginName);
+            token.setPassword(password.toCharArray());
+            token.setRememberMe(true);
             //自动调用AuthenticationService的doGetAuthenticationInfo方法验证
             Subject currentUser = SecurityUtils.getSubject();
             currentUser.login(token);
             //建立用户上下文
             UserContext userContext = authenticationService.buildUserContext(loginName);
             //创建cookie
-            setCookie(request, response, userContext);
+            setCookie(userContext);
             userService.changeUserLoginTime(userContext.getUserId());
-            MessageUtil.setMessage(message, ResultEnum.Success, HttpStatusEnum.Success, null, userContext);
-        } catch (Exception e)
-        {
-            e.printStackTrace();
-            MessageUtil.setMessage(message, ResultEnum.Fail, HttpStatusEnum.ServerError, null, null);
+            MessageUtil.setMessage(message, ResultEnum.Success, HttpStatusEnum.Success, null, null);
+        } catch (AuthenticationException e) {
+            MessageUtil.setMessage(message, ResultEnum.Fail, HttpStatusEnum.ServerError, e.getMessage(), null);
+        } catch (UnauthenticatedException e) {
+            MessageUtil.setMessage(message, ResultEnum.Fail, HttpStatusEnum.ServerError, e.getMessage(), null);
         }
-        return message;
+        return SUCCESS;
     }
 
     /**
@@ -83,17 +79,14 @@ public class AuthenticationAction extends BaseAction
      * @return
      */
     @Action(value = "palpitation", results = {@Result(type = "json", params = {"root", "returnData", "contentType", "text/html"})})
-    public Message palpitation()
-    {
+    public Message palpitation() {
         String sessionId = AuthenticationUtil.getSessionId();
         String uuid = AuthenticationUtil.getUUId();
 
         UserContext userContext = costContextService.getUserContext(sessionId);
         Message message = new Message();
-        if (userContext != null)
-        {
-            if (!userContext.getUuid().equals(uuid))
-            {
+        if (userContext != null) {
+            if (!userContext.getUuid().equals(uuid)) {
                 userContext = null;
             }
         }
@@ -102,8 +95,7 @@ public class AuthenticationAction extends BaseAction
     }
 
     @Action(value = "loginOut", results = {@Result(type = "json", params = {"root", "returnData", "contentType", "text/html"})})
-    public Message loginOut()
-    {
+    public Message loginOut() {
         clear();
         return new Message();
 
@@ -112,15 +104,13 @@ public class AuthenticationAction extends BaseAction
     /**
      * 设置cookie
      *
-     * @param request
-     * @param response
      * @param userContext
      */
-    private void setCookie(HttpServletRequest request, HttpServletResponse response, UserContext userContext)
-    {
+    private void setCookie(UserContext userContext) {
+        HttpServletRequest request = ServletActionContext.getRequest();
+        HttpServletResponse response = ServletActionContext.getResponse();
         Cookie[] cookieArr = request.getCookies();
-        if (cookieArr == null || cookieArr.length <= 2)
-        {
+        if (cookieArr == null || cookieArr.length <= 2) {
             Cookie userIdCookie = new Cookie("userId", String.valueOf(userContext.getUserId()));
             userIdCookie.setPath("/");
             Cookie sessionIdCookie = new Cookie("sessionId", userContext.getSessionId());
@@ -130,13 +120,10 @@ public class AuthenticationAction extends BaseAction
             response.addCookie(userIdCookie);
             response.addCookie(sessionIdCookie);
             response.addCookie(uuidCookie);
-        } else
-        {
-            for (Cookie cookie : cookieArr)
-            {
+        } else {
+            for (Cookie cookie : cookieArr) {
                 String name = cookie.getName();
-                if ("userId".equals(name) || "sessionId".equals(name) || "uuid".equals(name))
-                {
+                if ("userId".equals(name) || "sessionId".equals(name) || "uuid".equals(name)) {
                     if ("userId".equals(name))
                         cookie.setValue(String.valueOf(userContext.getUserId()));
                     else if ("sessionId".equals(name))
@@ -153,34 +140,28 @@ public class AuthenticationAction extends BaseAction
     /**
      * 清空缓存
      */
-    private void clear()
-    {
+    private void clear() {
         String sessionId = AuthenticationUtil.getSessionId();
 
-        if (sessionId != null && sessionId.trim().length() > 0)
-        {
+        if (sessionId != null && sessionId.trim().length() > 0) {
             costContextService.remove(sessionId);
         }
 
     }
 
-    public String getLoginName()
-    {
+    public String getLoginName() {
         return loginName;
     }
 
-    public void setLoginName(String loginName)
-    {
+    public void setLoginName(String loginName) {
         this.loginName = loginName;
     }
 
-    public String getPassword()
-    {
+    public String getPassword() {
         return password;
     }
 
-    public void setPassword(String password)
-    {
+    public void setPassword(String password) {
         this.password = password;
     }
 }

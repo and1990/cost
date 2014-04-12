@@ -8,11 +8,11 @@
 <head>
     <title>登录——COST信息系统</title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf8">
-    <link rel="stylesheet" type="text/css" href="<%=basePath %>/easy-ui/themes/default/easyui.css">
-    <link rel="stylesheet" type="text/css" href="<%=basePath %>/easy-ui/themes/icon.css">
+    <link rel="stylesheet" type="text/css" href="<%=basePath %>/third/easy-ui/themes/default/easyui.css">
+    <link rel="stylesheet" type="text/css" href="<%=basePath %>/third/easy-ui/themes/icon.css">
     <link rel="stylesheet" type="text/css" href="<%=basePath %>/css/login.css">
-    <script type="text/javascript" src="<%=basePath %>/easy-ui/jquery.min.js"></script>
-    <script type="text/javascript" src="<%=basePath %>/easy-ui/jquery.easyui.min.js"></script>
+    <script type="text/javascript" src="<%=basePath %>/third/easy-ui/jquery.min.js"></script>
+    <script type="text/javascript" src="<%=basePath %>/third/easy-ui/jquery.easyui.min.js"></script>
 </head>
 <body>
 <div id="user_login_header" class="user_login_header">
@@ -26,7 +26,7 @@
         <form method="post" id="user_login_form">
             <br>
 
-            <div><span>用户名/邮箱/手机号</span></div>
+            <div><span>用户名</span></div>
             <div><input type="text" name="loginName" id="loginName" class="input_text"/></div>
             <br>
 
@@ -48,15 +48,19 @@
 </body>
 <script type="text/javascript">
     function userLogin() {
-        var loginUrl = "<%=basePath%>/userLogin.do?" + $('#user_login_form').serialize();
         $.ajax({
             type: "POST",
-            url: loginUrl,
-            success: function (resultData) {
-                window.location.href = "main.jsp";
+            url: "<%=basePath%>/userLogin.do?" + $('#user_login_form').serialize(),
+            success: function (message) {
+                var messageObj = JSON.parse(message);
+                if (messageObj.status == 200) {
+                    window.location.href = "<%=basePath%>/view.do";
+                } else {
+                    alert(messageObj.descMsg);
+                }
             },
             error: function (msg) {
-                alert(msg);
+                alert("服务器内部错误，请重试");
             }
         });
     }

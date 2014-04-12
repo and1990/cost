@@ -6,14 +6,14 @@ package org.fire.cost.enums;
  * @author liutengfei
  * 
  */
-public enum StatusEnum
+public enum UserStatusEnum
 {
 	Disable(1, "不可用"), Enable(2, "可用");
 
 	private int code;
 	private String name;
 
-	private StatusEnum(int code, String name)
+	private UserStatusEnum(int code, String name)
 	{
 		this.code = code;
 		this.name = name;
@@ -27,7 +27,7 @@ public enum StatusEnum
 	 */
 	public static int getCode(String name)
 	{
-		for (StatusEnum enumType : StatusEnum.values())
+		for (UserStatusEnum enumType : UserStatusEnum.values())
 		{
 			if (name != null && name.equals(enumType.getName()))
 			{
@@ -45,7 +45,7 @@ public enum StatusEnum
 	 */
 	public static String getName(int code)
 	{
-		for (StatusEnum enumType : StatusEnum.values())
+		for (UserStatusEnum enumType : UserStatusEnum.values())
 		{
 			if (code == enumType.getCode())
 			{

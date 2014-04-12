@@ -2,7 +2,7 @@ package org.fire.cost.service.impl;
 
 import org.fire.cost.dao.GroupDao;
 import org.fire.cost.entity.Group;
-import org.fire.cost.enums.StatusEnum;
+import org.fire.cost.enums.UserStatusEnum;
 import org.fire.cost.service.GroupAccountService;
 import org.fire.cost.service.GroupService;
 import org.fire.cost.service.UserService;
@@ -72,7 +72,7 @@ public class GroupServiceImpl implements GroupService
     {
         try
         {
-            vo.setGroupStatus(StatusEnum.Enable.getCode());
+            vo.setGroupStatus(UserStatusEnum.Enable.getCode());
             vo.setCreateUser(userService.getLoginUserName());
             vo.setCreateTime(DateUtil.makeDate2Str(new Date(), true));
             vo.setModifyUser(userService.getLoginUserName());
@@ -167,7 +167,7 @@ public class GroupServiceImpl implements GroupService
         vo.setUserIds(group.getUserIds());
         vo.setUserNames(userService.getUserNamesByUserIds(group.getUserIds()));
         vo.setGroupStatus(group.getGroupStatus());
-        vo.setGroupStatusName(StatusEnum.getName(group.getGroupStatus()));
+        vo.setGroupStatusName(UserStatusEnum.getName(group.getGroupStatus()));
         vo.setCreateUser(group.getCreateUser());
         vo.setCreateTime(DateUtil.makeDate2Str(group.getCreateTime(), true));
         vo.setModifyUser(group.getModifyUser());
