@@ -1,6 +1,7 @@
 package org.fire.cost.dao.custom;
 
 import org.fire.cost.entity.User;
+import org.fire.cost.vo.PageData;
 import org.fire.cost.vo.UserVO;
 
 import java.util.List;
@@ -10,8 +11,7 @@ import java.util.List;
  *
  * @author liutengfei
  */
-public interface UserDaoCustom
-{
+public interface UserDaoCustom {
 
     /**
      * 根据过滤条件查询用户
@@ -19,7 +19,7 @@ public interface UserDaoCustom
      * @param vo
      * @return
      */
-    public List<User> getUserByFilter(UserVO vo);
+    List<User> getUserByFilter(UserVO vo, PageData<UserVO> pageData);
 
     /**
      * 根据用户id查询用户
@@ -28,4 +28,11 @@ public interface UserDaoCustom
      * @return
      */
     List<User> getUsersByUserIds(String userIds);
+
+    /**
+     * 获取用户总记录数
+     *
+     * @return
+     */
+    int getUserDataTotal();
 }

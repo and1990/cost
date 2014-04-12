@@ -1,11 +1,11 @@
 package org.fire.cost.service;
 
+import org.fire.cost.vo.PageData;
 import org.fire.cost.vo.UserVO;
 
 import java.util.List;
 
-public interface UserService
-{
+public interface UserService {
 
     /**
      * 用户登录
@@ -28,14 +28,21 @@ public interface UserService
      *
      * @return
      */
-    public String getLoginUserName();
+    String getLoginUserName();
 
     /**
      * 根据过滤条件查询用户
      *
      * @param vo
      */
-    List<UserVO> getUserByFilter(UserVO vo);
+    List<UserVO> getUserByFilter(UserVO vo,PageData<UserVO> pageData);
+
+    /**
+     * 获取总用户记录数
+     *
+     * @return
+     */
+    int getUserDataTotal();
 
     /**
      * 增加用户

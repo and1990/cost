@@ -2,6 +2,7 @@ package org.fire.cost.dao.impl;
 
 import org.fire.cost.dao.custom.UserDaoCustom;
 import org.fire.cost.entity.User;
+import org.fire.cost.vo.PageData;
 import org.fire.cost.vo.UserVO;
 import org.hibernate.ejb.QueryImpl;
 
@@ -13,21 +14,32 @@ import java.util.List;
  *
  * @author liutengfei
  */
-public class UserDaoCustomImpl extends BaseJpaDaoSupport<User, Long> implements UserDaoCustom
-{
+public class UserDaoCustomImpl extends BaseJpaDaoSupport<User, Long> implements UserDaoCustom {
     /**
      * 根据过滤条件查询用户
      */
-    public List<User> getUserByFilter(UserVO vo)
-    {
+    public List<User> getUserByFilter(UserVO vo, PageData<UserVO> pageData) {
         String sql = "select * from cost_user";
         Query query = entityManager.createNativeQuery(sql, User.class);
-        if (query instanceof org.hibernate.ejb.QueryImpl)
-        {
+        if (query instanceof org.hibernate.ejb.QueryImpl) {
             ((QueryImpl<?>) query).getHibernateQuery().setCacheable(true);
         }
+        query.setFirstResult(pageData.getPageIndex()-1);
+        query.setMaxResults(pageData.getPageSize());
         List<User> resultList = query.getResultList();
         return resultList;
+    }
+
+    /**
+     * 获取用户总记录数
+     *
+     * @return
+     */
+    public int getUserDataTotal() {
+        String sql = "select count(*) from cost_user";
+        Query query = entityManager.createNativeQuery(sql);
+        int total = query.getFirstResult();
+        return total;
     }
 
     /**
@@ -37,12 +49,10 @@ public class UserDaoCustomImpl extends BaseJpaDaoSupport<User, Long> implements 
      * @return
      */
     @Override
-    public List<User> getUsersByUserIds(String userIds)
-    {
+    public List<User> getUsersByUserIds(String userIds) {
         String sql = "select * from cost_user where user_id in(" + userIds + ")";
         Query query = entityManager.createNativeQuery(sql, User.class);
-        if (query instanceof org.hibernate.ejb.QueryImpl)
-        {
+        if (query instanceof org.hibernate.ejb.QueryImpl) {
             ((QueryImpl<?>) query).getHibernateQuery().setCacheable(true);
         }
         List<User> resultList = query.getResultList();

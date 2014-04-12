@@ -47,6 +47,13 @@
             <version>${struts.version}</version>
         </dependency>
 
+        <!-- jstl -->
+        <dependency>
+            <groupId>jstl</groupId>
+            <artifactId>jstl</artifactId>
+            <version>1.2</version>
+        </dependency>
+
         <!-- 子工程 -->
         <dependency>
             <groupId>org.fire.cost</groupId>

@@ -9,6 +9,7 @@ import org.fire.cost.enums.YesOrNoEnum;
 import org.fire.cost.service.UserService;
 import org.fire.cost.util.AuthenticationUtil;
 import org.fire.cost.util.DateUtil;
+import org.fire.cost.vo.PageData;
 import org.fire.cost.vo.UserVO;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,8 +21,7 @@ import java.util.Date;
 import java.util.List;
 
 @Service
-public class UserServiceImpl implements UserService
-{
+public class UserServiceImpl implements UserService {
     private static org.apache.log4j.Logger logger = Logger.getLogger(UserServiceImpl.class);
 
     @Resource
@@ -31,17 +31,13 @@ public class UserServiceImpl implements UserService
      * @param name     用户名
      * @param password 密码
      */
-    public boolean userLogin(String name, String password)
-    {
-        try
-        {
+    public boolean userLogin(String name, String password) {
+        try {
             User user = userDao.findByLoginName(name);
-            if (user != null && user.getPassword().equals(password))
-            {
+            if (user != null && user.getPassword().equals(password)) {
                 return true;
             }
-        } catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
             throw new RollbackException();
         }
@@ -52,14 +48,11 @@ public class UserServiceImpl implements UserService
      * 更新用户登录时间
      */
     @Transactional(value = "transactionManager", rollbackFor = RollbackException.class)
-    public boolean changeUserLoginTime(Long userId)
-    {
-        try
-        {
+    public boolean changeUserLoginTime(Long userId) {
+        try {
             userDao.changeUserLoginTime(userId);
             return true;
-        } catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
             throw new RollbackException();
         }
@@ -68,41 +61,44 @@ public class UserServiceImpl implements UserService
     /**
      * 根据过滤条件查询用户记录
      */
-    public List<UserVO> getUserByFilter(UserVO vo)
-    {
+    public List<UserVO> getUserByFilter(UserVO vo, PageData<UserVO> pageData) {
         List<UserVO> userVOList = new ArrayList<UserVO>();
-        try
-        {
-            List<User> userList = userDao.getUserByFilter(vo);
-            for (User user : userList)
-            {
+        try {
+            List<User> userList = userDao.getUserByFilter(vo, pageData);
+            for (User user : userList) {
                 UserVO userVO = makeUser2VO(user);
                 userVOList.add(userVO);
             }
-        } catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return userVOList;
     }
 
     /**
+     * 获取用户总记录数
+     *
+     * @return
+     */
+    @Override
+    public int getUserDataTotal() {
+        int total = userDao.getUserDataTotal();
+        return total;
+    }
+
+    /**
      * 增加用户
      */
     @Transactional(value = "transactionManager", rollbackFor = RollbackException.class)
-    public boolean addUser(UserVO vo)
-    {
-        try
-        {
+    public boolean addUser(UserVO vo) {
+        try {
             Integer addType = vo.getAddType();
-            if (addType != null && addType == AddTypeEnum.UserAdd.getCode())
-            {
+            if (addType != null && addType == AddTypeEnum.UserAdd.getCode()) {
                 vo.setUserStatus(UserStatusEnum.Enable.getCode());
                 vo.setIsAdmin(YesOrNoEnum.No.getCode());
                 vo.setCreateUser(vo.getUserName());
                 vo.setModifyUser(vo.getUserName());
-            } else
-            {
+            } else {
                 vo.setUserStatus(Integer.valueOf(vo.getUserStatusName()));//修改
                 vo.setIsAdmin(Integer.valueOf(vo.getIsAdminName()));
                 vo.setCreateUser(getLoginUserName());
@@ -112,8 +108,7 @@ public class UserServiceImpl implements UserService
             User user = makeVO2User(vo, null);
             userDao.save(user);
             return true;
-        } catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
             throw new RollbackException();
         }
@@ -123,17 +118,14 @@ public class UserServiceImpl implements UserService
      * 修改用户信息
      */
     @Transactional(value = "transactionManager", rollbackFor = RollbackException.class)
-    public boolean modifyUser(UserVO vo)
-    {
-        try
-        {
+    public boolean modifyUser(UserVO vo) {
+        try {
             Long userId = vo.getUserId();
             User user = userDao.findOne(userId);
             makeVO2User(vo, user);
             userDao.save(user);
             return true;
-        } catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
             throw new RollbackException();
         }
@@ -145,14 +137,11 @@ public class UserServiceImpl implements UserService
      * @return
      */
     @Transactional(value = "transactionManager", rollbackFor = RollbackException.class)
-    public boolean deleteUser(Long userId)
-    {
-        try
-        {
+    public boolean deleteUser(Long userId) {
+        try {
             userDao.delete(userId);
             return true;
-        } catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
             throw new RollbackException();
         }
@@ -163,14 +152,11 @@ public class UserServiceImpl implements UserService
      *
      * @return
      */
-    public String getLoginUserName()
-    {
+    public String getLoginUserName() {
         Long userId = AuthenticationUtil.getLoginUserId();
-        if (userId != null && userId != 0)
-        {
+        if (userId != null && userId != 0) {
             User user = userDao.findByUserId(userId);
-            if (user != null)
-            {
+            if (user != null) {
                 return user.getUserName();
             }
         }
@@ -183,23 +169,18 @@ public class UserServiceImpl implements UserService
      * @param userIds 用户id，格式：id1,id2,..idn
      * @return
      */
-    public List<UserVO> getUsersByUserIds(String userIds)
-    {
-        if (userIds == null || userIds.trim().length() == 0)
-        {
+    public List<UserVO> getUsersByUserIds(String userIds) {
+        if (userIds == null || userIds.trim().length() == 0) {
             throw new RuntimeException("数据格式不正确");
         }
-        try
-        {
+        try {
             List<User> userList = userDao.getUsersByUserIds(userIds);
             List<UserVO> userVOList = new ArrayList<UserVO>();
-            for (User user : userList)
-            {
+            for (User user : userList) {
                 userVOList.add(makeUser2VO(user));
             }
             return userVOList;
-        } catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
             throw new RuntimeException();
         }
@@ -211,14 +192,11 @@ public class UserServiceImpl implements UserService
      * @param userIds 用户id
      * @return
      */
-    public String getUserNamesByUserIds(String userIds)
-    {
+    public String getUserNamesByUserIds(String userIds) {
         String userNames = null;
         List<UserVO> userVOList = getUsersByUserIds(userIds);
-        if (userVOList != null || userVOList.size() != 0)
-        {
-            for (UserVO userVO : userVOList)
-            {
+        if (userVOList != null || userVOList.size() != 0) {
+            for (UserVO userVO : userVOList) {
                 String userName = userVO.getUserName();
                 userNames = userNames == null ? userName : userNames + "," + userName;
             }
@@ -232,16 +210,13 @@ public class UserServiceImpl implements UserService
      * @param vo
      * @return
      */
-    private User makeVO2User(UserVO vo, User user)
-    {
-        if (user == null)
-        {
+    private User makeVO2User(UserVO vo, User user) {
+        if (user == null) {
             user = new User();
             user.setLoginTime(new Date());
             user.setCreateTime(new Date());
             user.setModifyTime(new Date());
-        } else
-        {
+        } else {
             user.setUserId(vo.getUserId());
         }
         user.setUserName(vo.getUserName());
@@ -265,8 +240,7 @@ public class UserServiceImpl implements UserService
      * @param user
      * @return
      */
-    private UserVO makeUser2VO(User user)
-    {
+    private UserVO makeUser2VO(User user) {
         UserVO vo = new UserVO();
         vo.setUserId(user.getUserId());
         vo.setUserName(user.getUserName());

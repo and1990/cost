@@ -3,11 +3,8 @@ package org.fire.cost.action;
 import org.apache.struts2.convention.annotation.Action;
 import org.apache.struts2.convention.annotation.Namespace;
 import org.apache.struts2.convention.annotation.Result;
-import org.fire.cost.enums.HttpStatusEnum;
-import org.fire.cost.enums.ResultEnum;
 import org.fire.cost.service.UserService;
-import org.fire.cost.util.MessageUtil;
-import org.fire.cost.vo.Message;
+import org.fire.cost.vo.PageData;
 import org.fire.cost.vo.UserVO;
 import org.springframework.stereotype.Controller;
 
@@ -20,26 +17,30 @@ public class UserAction extends BaseAction {
     @Resource
     private UserService userService;
 
+    //用户vo对象
+    private UserVO userVO;
+
+    //分页对象
+    private PageData<UserVO> pageData;
+
     /**
      * 根据过滤条件查询用户
      *
-     * @param vo
      * @return
      */
-    @Action(value = "getUserByFilter", results = {@Result(type = "json", params = {"root", "returnData", "contentType", "text/html"})})
-    public Message getUserByFilter(UserVO vo) {
-        Message message = new Message();
-        if (vo == null) {
-            MessageUtil.setMessage(message, ResultEnum.Fail, HttpStatusEnum.Warn, "请求数据不能为空", null);
-            return message;
-        }
+    @Action(value = "getUserByFilter", results = {@Result(type = "json", params = {"root", "pageData", "contentType", "text/html"})})
+    public String getUserByFilter() {
         try {
-            List<UserVO> voList = userService.getUserByFilter(vo);
-            MessageUtil.setMessage(message, ResultEnum.Success, HttpStatusEnum.Success, null, voList);
+            if (pageData == null) {
+                pageData = new PageData<UserVO>();
+            }
+            List<UserVO> userVOList = userService.getUserByFilter(userVO, pageData);
+            pageData.setDataList(userVOList);
+            pageData.setDataTotal(80);
         } catch (Exception e) {
-            MessageUtil.setMessage(message, ResultEnum.Fail, HttpStatusEnum.ServerError, null, null);
+            e.printStackTrace();
         }
-        return message;
+        return SUCCESS;
     }
 
     /**
@@ -48,20 +49,13 @@ public class UserAction extends BaseAction {
      * @param vo
      */
     @Action(value = "addUser", results = {@Result(type = "json", params = {"root", "returnData", "contentType", "text/html"})})
-    public Message addUser(UserVO vo) {
-        Message message = new Message();
-        if (vo == null) {
-            MessageUtil.setMessage(message, ResultEnum.Fail, HttpStatusEnum.Warn, "请求数据不能为空", null);
-            return message;
-        }
+    public String addUser(UserVO vo) {
         try {
             userService.addUser(vo);
-            MessageUtil.setMessage(message, ResultEnum.Success, HttpStatusEnum.Success, null, null);
         } catch (Exception e) {
             e.printStackTrace();
-            MessageUtil.setMessage(message, ResultEnum.Fail, HttpStatusEnum.ServerError, e.getMessage(), null);
         }
-        return message;
+        return SUCCESS;
     }
 
     /**
@@ -71,20 +65,13 @@ public class UserAction extends BaseAction {
      * @return
      */
     @Action(value = "modifyUser", results = {@Result(type = "json", params = {"root", "returnData", "contentType", "text/html"})})
-    public Message modifyUser(UserVO vo) {
-        Message message = new Message();
-        if (vo == null) {
-            MessageUtil.setMessage(message, ResultEnum.Fail, HttpStatusEnum.Warn, "请求数据不能为空", null);
-            return message;
-        }
+    public String modifyUser(UserVO vo) {
         try {
             userService.modifyUser(vo);
-            MessageUtil.setMessage(message, ResultEnum.Success, HttpStatusEnum.Success, null, null);
         } catch (Exception e) {
             e.printStackTrace();
-            MessageUtil.setMessage(message, ResultEnum.Fail, HttpStatusEnum.ServerError, e.getMessage(), null);
         }
-        return message;
+        return SUCCESS;
     }
 
     /**
@@ -94,22 +81,28 @@ public class UserAction extends BaseAction {
      * @return
      */
     @Action(value = "deleteUser", results = {@Result(type = "json", params = {"root", "returnData", "contentType", "text/html"})})
-    public Message deleteUser(UserVO userVO) {
-        Message message = new Message();
-        if (userVO == null || userVO.getUserId() == null) {
-            MessageUtil.setMessage(message, ResultEnum.Fail, HttpStatusEnum.Warn, "请求数据不能为空", null);
-            return message;
-        }
+    public String deleteUser(UserVO userVO) {
         try {
-            if (userService.deleteUser(userVO.getUserId()))
-                MessageUtil.setMessage(message, ResultEnum.Success, HttpStatusEnum.Success, null, null);
-            else
-                MessageUtil.setMessage(message, ResultEnum.Fail, HttpStatusEnum.ServerError, null, null);
+            userService.deleteUser(userVO.getUserId());
         } catch (Exception e) {
             e.printStackTrace();
-            MessageUtil.setMessage(message, ResultEnum.Fail, HttpStatusEnum.ServerError, e.getMessage(), null);
         }
-        return message;
+        return SUCCESS;
     }
 
+    public UserVO getUserVO() {
+        return userVO;
+    }
+
+    public void setUserVO(UserVO userVO) {
+        this.userVO = userVO;
+    }
+
+    public PageData<UserVO> getPageData() {
+        return pageData;
+    }
+
+    public void setPageData(PageData<UserVO> pageData) {
+        this.pageData = pageData;
+    }
 }
