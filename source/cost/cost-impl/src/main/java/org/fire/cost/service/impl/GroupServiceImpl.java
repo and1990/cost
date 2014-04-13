@@ -8,6 +8,7 @@ import org.fire.cost.service.GroupService;
 import org.fire.cost.service.UserService;
 import org.fire.cost.util.DateUtil;
 import org.fire.cost.vo.GroupVO;
+import org.fire.cost.vo.PageData;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -21,8 +22,7 @@ import java.util.List;
  * 时间：13-12-28 下午9:41
  */
 @Service
-public class GroupServiceImpl implements GroupService
-{
+public class GroupServiceImpl implements GroupService {
     @Resource
     private UserService userService;
 
@@ -35,26 +35,22 @@ public class GroupServiceImpl implements GroupService
     /**
      * 根据过滤条件查询“组”数据
      *
-     * @param vo 过滤条件数据
+     * @param vo       过滤条件数据
+     * @param pageData
      * @return
      */
     @Override
-    public List<GroupVO> getGroupByFilter(GroupVO vo)
-    {
-        try
-        {
-            List<Group> groupList = groupDao.getGroupByFilter(vo);
-            if (groupList != null && groupList.size() != 0)
-            {
+    public List<GroupVO> getGroupByFilter(GroupVO vo, PageData<GroupVO> pageData) {
+        try {
+            List<Group> groupList = groupDao.getGroupByFilter(vo, pageData);
+            if (groupList != null && groupList.size() != 0) {
                 List<GroupVO> voList = new ArrayList<GroupVO>();
-                for (Group group : groupList)
-                {
+                for (Group group : groupList) {
                     voList.add(makeGroup2VO(group));
                 }
                 return voList;
             }
-        } catch (Exception ex)
-        {
+        } catch (Exception ex) {
             ex.printStackTrace();
             throw new RuntimeException(ex);
         }
@@ -68,10 +64,8 @@ public class GroupServiceImpl implements GroupService
      * @return
      */
     @Override
-    public boolean addGroup(GroupVO vo)
-    {
-        try
-        {
+    public boolean addGroup(GroupVO vo) {
+        try {
             vo.setGroupStatus(UserStatusEnum.Enable.getCode());
             vo.setCreateUser(userService.getLoginUserName());
             vo.setCreateTime(DateUtil.makeDate2Str(new Date(), true));
@@ -80,8 +74,7 @@ public class GroupServiceImpl implements GroupService
             Group group = groupDao.save(makeVO2Group(vo, null));
             groupAccountService.addGroupAccount(group.getGroupId());
             return true;
-        } catch (Exception ex)
-        {
+        } catch (Exception ex) {
             ex.printStackTrace();
             throw new RuntimeException(ex);
         }
@@ -94,15 +87,12 @@ public class GroupServiceImpl implements GroupService
      * @return
      */
     @Override
-    public boolean updateGroup(GroupVO vo)
-    {
-        try
-        {
+    public boolean updateGroup(GroupVO vo) {
+        try {
             Long groupId = vo.getGroupId();
             groupDao.save(makeVO2Group(vo, groupDao.findOne(groupId)));
             return true;
-        } catch (Exception ex)
-        {
+        } catch (Exception ex) {
             ex.printStackTrace();
             throw new RuntimeException(ex);
         }
@@ -115,17 +105,25 @@ public class GroupServiceImpl implements GroupService
      * @return
      */
     @Override
-    public boolean deleteGroup(Long groupId)
-    {
-        try
-        {
+    public boolean deleteGroup(Long groupId) {
+        try {
             groupDao.delete(groupId);
             return true;
-        } catch (Exception ex)
-        {
+        } catch (Exception ex) {
             ex.printStackTrace();
             throw new RuntimeException(ex);
         }
+    }
+
+    /**
+     * 得到组数据总记录数
+     *
+     * @return
+     */
+    @Override
+    public int getGroupTotal() {
+        int total = groupDao.getGroupTotal();
+        return total;
     }
 
     /**
@@ -135,10 +133,8 @@ public class GroupServiceImpl implements GroupService
      * @param group po对象
      * @return
      */
-    private Group makeVO2Group(GroupVO vo, Group group) throws Exception
-    {
-        if (group == null)
-        {
+    private Group makeVO2Group(GroupVO vo, Group group) throws Exception {
+        if (group == null) {
             group = new Group();
         }
         group.setGroupId(vo.getGroupId());
@@ -159,8 +155,7 @@ public class GroupServiceImpl implements GroupService
      * @param group po对象
      * @return
      */
-    private GroupVO makeGroup2VO(Group group)
-    {
+    private GroupVO makeGroup2VO(Group group) {
         GroupVO vo = new GroupVO();
         vo.setGroupId(group.getGroupId());
         vo.setGroupName(group.getGroupName());

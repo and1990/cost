@@ -9,6 +9,7 @@ import org.fire.cost.service.GroupService;
 import org.fire.cost.util.MessageUtil;
 import org.fire.cost.vo.GroupVO;
 import org.fire.cost.vo.Message;
+import org.fire.cost.vo.PageData;
 import org.springframework.stereotype.Controller;
 
 import javax.annotation.Resource;
@@ -22,29 +23,42 @@ import java.util.List;
 @Namespace("/")
 @Controller
 public class GroupAction extends BaseAction {
+    //组service服务类
     @Resource
     private GroupService groupService;
+
+    // 分页对象
+    private PageData<GroupVO> pageData;
+
+    //组VO信息
+    private GroupVO groupVO;
+
+    //当前页数
+    private int page;
+    //每页显示条数
+    private int rows;
 
     /**
      * 根据过滤条件查询“组”数据
      *
-     * @param vo 客户端传递的过滤数据
      * @return
      */
-    @Action(value = "getGroupByFilter", results = {@Result(type = "json", params = {"root", "returnData", "contentType", "text/html"})})
-    public Message getGroupByFilter(GroupVO vo) {
-        Message message = new Message();
-        if (vo == null) {
-            MessageUtil.setMessage(message, ResultEnum.Fail, HttpStatusEnum.Warn, "请求数据不能为空", null);
-            return message;
-        }
+    @Action(value = "getGroupByFilter", results = {@Result(type = "json", params = {"root", "pageData", "contentType", "text/html"})})
+    public String getGroupByFilter() {
         try {
-            List<GroupVO> voList = groupService.getGroupByFilter(vo);
-            MessageUtil.setMessage(message, ResultEnum.Success, HttpStatusEnum.Success, "查询成功", voList);
+            if (pageData == null) {
+                pageData = new PageData<GroupVO>();
+            }
+            pageData.setPage(page);
+            pageData.setPageSize(rows);
+            List<GroupVO> voList = groupService.getGroupByFilter(groupVO, pageData);
+            int total = groupService.getGroupTotal();
+            pageData.setRows(voList);
+            pageData.setTotal(total);
         } catch (Exception e) {
-            MessageUtil.setMessage(message, ResultEnum.Fail, HttpStatusEnum.ServerError, e.getMessage(), null);
+            e.printStackTrace();
         }
-        return message;
+        return SUCCESS;
     }
 
     /**
@@ -123,4 +137,35 @@ public class GroupAction extends BaseAction {
         return message;
     }
 
+    public PageData<GroupVO> getPageData() {
+        return pageData;
+    }
+
+    public void setPageData(PageData<GroupVO> pageData) {
+        this.pageData = pageData;
+    }
+
+    public GroupVO getGroupVO() {
+        return groupVO;
+    }
+
+    public void setGroupVO(GroupVO groupVO) {
+        this.groupVO = groupVO;
+    }
+
+    public int getPage() {
+        return page;
+    }
+
+    public void setPage(int page) {
+        this.page = page;
+    }
+
+    public int getRows() {
+        return rows;
+    }
+
+    public void setRows(int rows) {
+        this.rows = rows;
+    }
 }
