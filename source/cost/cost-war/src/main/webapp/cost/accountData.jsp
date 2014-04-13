@@ -73,11 +73,6 @@
     </div>
 </div>
 
-<form>
-    <input type="hidden" id="page" name="page" value="${pageData.page}">
-    <input type="hidden" id="pageSize" name="pageSize" value="${pageData.pageSize}">
-</form>
-
 //文件上传对话框
 <div id="fileUploadDialog">
     <input type="file" name="file_upload" id="file_upload"/>
@@ -141,12 +136,7 @@
                         saveData('#account_data_table');
                     }
                 }
-            ]/*,
-            queryParams: {
-                'pageData.page': $("#page").val(),
-                'pageData.pageSize': $("#pageSize").val()
-            }*/
-
+            ]
         });
 
         $('#account_data_table').datagrid('getPager').pagination({
@@ -154,12 +144,7 @@
             pageList: [10, 20, 30, 40, 50],
             beforePageText: '第',
             afterPageText: '页    共 {pages} 页',
-            displayMsg: '当前显示 {from}-{to} 条记录   共 {total} 条记录'/*,
-            onSelectPage: function (page, pageSize) {
-                $("#page").val(page);
-                $("#pageSize").val(pageSize);
-                $('#account_data_table').datagrid('reload')
-            }*/
+            displayMsg: '当前显示 {from}-{to} 条记录   共 {total} 条记录'
         });
     });
 

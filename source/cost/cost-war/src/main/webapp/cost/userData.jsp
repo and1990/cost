@@ -1,5 +1,5 @@
 <%@page language="java" contentType="text/html; charset=utf8"
-         pageEncoding="utf8" %>
+        pageEncoding="utf8" %>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 <%
@@ -65,13 +65,6 @@
         <a href="#" class="easyui-linkbutton" iconCls="icon-search">查询</a>
     </div>
 </div>
-
-<form>
-    <input type="hidden" name="page" value="${pageData.page}">
-    <input type="hidden" name="pageSize" value="${pageData.pageSize}">
-    <input type="hidden" name="total" value="${pageData.total}">
-    <input type="hidden" name="pageTotal" value="${pageData.pages}">
-</form>
 
 <script type="text/javascript">
     $(function () {
