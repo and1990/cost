@@ -21,8 +21,13 @@ public class AccountDaoCustomImpl extends BaseJpaDaoSupport<Account, Long> imple
     public List<Account> getAccountByFilter(AccountVO vo, PageData<AccountVO> pageData) {
         String sql = "select * from cost_account order by create_time desc";
         Query query = entityManager.createNativeQuery(sql, Account.class);
-        query.setFirstResult(pageData.getPage());
-        query.setMaxResults(pageData.getPageSize());
+
+        int page = pageData.getPage() - 1;
+        int pageSize = pageData.getPageSize();
+        int start = page * pageSize;
+        query.setFirstResult(start);
+        query.setMaxResults(pageSize);
+
         List<Account> resultList = query.getResultList();
         return resultList;
     }

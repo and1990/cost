@@ -46,7 +46,7 @@
 						}"
                         >附件
                 </th>
-                <th data-options="field:'approveTime',width:120,align:'center'">审批时间</th>
+                <th data-options="field:'createTime',width:120,align:'center'">创建时间</th>
                 <th data-options="field:'accountRemark',width:120,align:'center',editor:'text'">备注</th>
             </tr>
             </thead>
