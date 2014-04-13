@@ -1,4 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=utf8"
+<%@page language="java" contentType="text/html; charset=utf8"
          pageEncoding="utf8" %>
 <div class="easyui-accordion" data-options="fit:true,border:false" id="main_left_accordion">
 	<!-- 用户信息 -->

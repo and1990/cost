@@ -13,9 +13,6 @@
     <context:property-placeholder location="classpath*:cost.properties"/>
 
     <context:component-scan base-package="org.fire.cost"/>
-    <!-- <context:component-scan base-package="org.open.cost"> <context:include-filter
-        type="regex" expression=".service.impl" /> <context:include-filter type="regex"
-        expression=".dao.impl" /> </context:component-scan> -->
 
     <bean id="cost_dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource"
           destroy-method="close">

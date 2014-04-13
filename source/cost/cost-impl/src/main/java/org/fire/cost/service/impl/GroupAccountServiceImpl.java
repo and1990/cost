@@ -20,8 +20,7 @@ import java.util.List;
  * 时间：14-2-19 下午9:01
  */
 @Service
-public class GroupAccountServiceImpl implements GroupAccountService
-{
+public class GroupAccountServiceImpl implements GroupAccountService {
 
     //@Resource
     private GroupAccountDao groupAccountDao;
@@ -39,8 +38,7 @@ public class GroupAccountServiceImpl implements GroupAccountService
      * @return
      */
     @Override
-    public List<GroupAccountVO> getGroupAccountByFilter(GroupAccountVO vo)
-    {
+    public List<GroupAccountVO> getGroupAccountByFilter(GroupAccountVO vo) {
         return null;
     }
 
@@ -50,8 +48,7 @@ public class GroupAccountServiceImpl implements GroupAccountService
      * @return
      */
     @Override
-    public boolean addGroupAccount(Long groupId)
-    {
+    public boolean addGroupAccount(Long groupId) {
         //TODO
         Group group = groupDao.findGroupByStatus();
         Date modifyTime = group.getModifyTime();
@@ -60,7 +57,7 @@ public class GroupAccountServiceImpl implements GroupAccountService
         AccountVO vo = new AccountVO();
         vo.setStartTime(startTime);
         vo.setEndTime(endTime);
-        accountDao.getAccountByFilter(vo);
+        accountDao.getAccountByFilter(vo, null);
         return false;
     }
 }

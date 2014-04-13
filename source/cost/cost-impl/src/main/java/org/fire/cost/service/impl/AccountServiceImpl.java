@@ -15,6 +15,7 @@ import org.fire.cost.service.UserService;
 import org.fire.cost.util.AuthenticationUtil;
 import org.fire.cost.util.DateUtil;
 import org.fire.cost.vo.AccountVO;
+import org.fire.cost.vo.PageData;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,8 +24,6 @@ import javax.persistence.RollbackException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
@@ -36,8 +35,7 @@ import java.util.List;
  * @author liutengfei
  */
 @Service
-public class AccountServiceImpl implements AccountService
-{
+public class AccountServiceImpl implements AccountService {
     @Resource
     private UserService userService;
 
@@ -50,39 +48,46 @@ public class AccountServiceImpl implements AccountService
     /**
      * 根据过滤条件查询账单信息
      */
-    public List<AccountVO> getAccountByFilter(AccountVO vo)
-    {
+    @Override
+    @Transactional(value = "transactionManager", rollbackFor = RollbackException.class)
+    public List<AccountVO> getAccountByFilter(AccountVO vo, PageData<AccountVO> pageData) {
         List<AccountVO> voList = new ArrayList<AccountVO>();
-        try
-        {
-            List<Account> accountList = accountDao.getAccountByFilter(vo);
-            for (Account account : accountList)
-            {
+        try {
+            List<Account> accountList = accountDao.getAccountByFilter(vo, pageData);
+            for (Account account : accountList) {
                 voList.add(makeAccount2VO(account));
             }
             return voList;
-        } catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
             throw new RollbackException();
         }
     }
 
     /**
+     * 得到账单数据总数
+     *
+     * @return
+     */
+    @Override
+    @Transactional(value = "transactionManager", rollbackFor = RollbackException.class)
+    public int getAccountTotal() {
+        int total = accountDao.getAccountTotal();
+        return total;
+    }
+
+    /**
      * 增加账单
      */
     @Transactional(value = "transactionManager", rollbackFor = RollbackException.class)
-    public boolean addAccount(AccountVO vo)
-    {
-        try
-        {
+    public boolean addAccount(AccountVO vo) {
+        try {
             vo.setIsApprove(Integer.valueOf(vo.getIsApproveName()));
             vo.setAccountType(Integer.valueOf(vo.getAccountTypeName()));
             Account account = makeVO2Account(vo, null);
             accountDao.save(account);
             return true;
-        } catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
             throw new RollbackException();
         }
@@ -92,17 +97,14 @@ public class AccountServiceImpl implements AccountService
      * 修改账单
      */
     @Transactional(value = "transactionManager", rollbackFor = RollbackException.class)
-    public boolean modifyAccount(AccountVO vo)
-    {
-        try
-        {
+    public boolean modifyAccount(AccountVO vo) {
+        try {
             Long accountId = vo.getAccountId();
             Account account = accountDao.findOne(accountId);
             makeVO2Account(vo, account);
             accountDao.save(account);
             return true;
-        } catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
             throw new RollbackException();
         }
@@ -112,14 +114,11 @@ public class AccountServiceImpl implements AccountService
      * 删除账单
      */
     @Transactional(value = "transactionManager", rollbackFor = RollbackException.class)
-    public boolean deleteAccount(Long accountId)
-    {
-        try
-        {
+    public boolean deleteAccount(Long accountId) {
+        try {
             accountDao.delete(accountId);
             return true;
-        } catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
             throw new RollbackException();
         }
@@ -133,20 +132,16 @@ public class AccountServiceImpl implements AccountService
      * @param response
      */
     @Override
-    public boolean fileUpload(HttpServletRequest request, HttpServletResponse response)
-    {
-        try
-        {
+    public boolean fileUpload(HttpServletRequest request, HttpServletResponse response) {
+        try {
             request.setCharacterEncoding("UTF-8");
             String path = request.getSession().getServletContext().getRealPath("") + File.separator + "image";
             String upLoadDirPath = getUpLoadDirPath(path);
             List<FileItem> itemList = getFileItemList(request, upLoadDirPath);
             long accountId = getAccountId(itemList);
             String accessoryValue = accountDao.findOne(accountId).getAccountAccessory();
-            for (FileItem item : itemList)
-            {
-                if (!item.isFormField())
-                {
+            for (FileItem item : itemList) {
+                if (!item.isFormField()) {
                     String itemName = item.getName();
                     String itemPrefix = itemName.substring(0, itemName.indexOf("."));
                     String itemPostfix = itemName.substring(itemName.indexOf("."), itemName.length());
@@ -159,12 +154,28 @@ public class AccountServiceImpl implements AccountService
             //更新数据库
             updateAccessory(accountId, accessoryValue);
             return true;
-        } catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
             throw new RollbackException();
         }
     }
+
+    /**
+     * 更新账单附件
+     *
+     * @param accountId
+     * @param accessoryValue
+     */
+    @Transactional(value = "transactionManager", rollbackFor = RollbackException.class)
+    private void updateAccessory(long accountId, String accessoryValue) {
+        if (accountId == 0) {
+            return;
+        }
+        Account account = accountDao.findOne(accountId);
+        account.setAccountAccessory(accessoryValue);
+        accountDao.save(account);
+    }
+
 
     /**
      * 生成文件上传到的文件夹
@@ -172,26 +183,21 @@ public class AccountServiceImpl implements AccountService
      * @param path
      * @return
      */
-    private String getUpLoadDirPath(String path)
-    {
+    private String getUpLoadDirPath(String path) {
         String fileUpLoadDirname = "FileUpload";
         File[] fileArr = new File(path).listFiles();
         boolean isFileUploadExist = false;
-        for (File f : fileArr)
-        {
-            if (f.isDirectory() && fileUpLoadDirname.equals(f.getName()))
-            {
+        for (File f : fileArr) {
+            if (f.isDirectory() && fileUpLoadDirname.equals(f.getName())) {
                 isFileUploadExist = true;
                 break;
             }
         }
-        if (!isFileUploadExist)
-        {
+        if (!isFileUploadExist) {
             new File(path + File.separator + fileUpLoadDirname).mkdir();
         }
         return path + File.separator + fileUpLoadDirname;
     }
-
 
     /**
      * 得到itemList
@@ -201,8 +207,7 @@ public class AccountServiceImpl implements AccountService
      * @return
      * @throws FileUploadException
      */
-    private List<FileItem> getFileItemList(HttpServletRequest request, String upLoadDirPath) throws FileUploadException
-    {
+    private List<FileItem> getFileItemList(HttpServletRequest request, String upLoadDirPath) throws FileUploadException {
         DiskFileItemFactory factory = new DiskFileItemFactory();
         factory.setRepository(new File(upLoadDirPath));
         factory.setSizeThreshold(1024 * 1024);
@@ -216,36 +221,15 @@ public class AccountServiceImpl implements AccountService
      * @param itemList
      * @return
      */
-    private long getAccountId(List<FileItem> itemList)
-    {
+    private long getAccountId(List<FileItem> itemList) {
         long accountId = 0;
-        for (FileItem item : itemList)
-        {
+        for (FileItem item : itemList) {
             String fieldName = item.getFieldName();
-            if (item.isFormField() && "accountId".equals(fieldName))
-            {
+            if (item.isFormField() && "accountId".equals(fieldName)) {
                 accountId = Long.valueOf(item.getString());
             }
         }
         return accountId;
-    }
-
-    /**
-     * 更新账单附件
-     *
-     * @param accountId
-     * @param accessoryValue
-     */
-    @Transactional(value = "transactionManager", rollbackFor = RollbackException.class)
-    private void updateAccessory(long accountId, String accessoryValue)
-    {
-        if (accountId == 0)
-        {
-            return;
-        }
-        Account account = accountDao.findOne(accountId);
-        account.setAccountAccessory(accessoryValue);
-        accountDao.save(account);
     }
 
 
@@ -257,10 +241,8 @@ public class AccountServiceImpl implements AccountService
      * @return
      * @throws ParseException
      */
-    private Account makeVO2Account(AccountVO vo, Account account) throws ParseException
-    {
-        if (account == null)
-        {
+    private Account makeVO2Account(AccountVO vo, Account account) throws ParseException {
+        if (account == null) {
             account = new Account();
             account.setCreateUser(userService.getLoginUserName());
             account.setCreateTime(new Date());
@@ -284,8 +266,7 @@ public class AccountServiceImpl implements AccountService
      * @param account
      * @return
      */
-    private AccountVO makeAccount2VO(Account account)
-    {
+    private AccountVO makeAccount2VO(Account account) {
         AccountVO vo = new AccountVO();
         vo.setAccountId(account.getAccountId());
         vo.setUserId(account.getUser().getUserId());

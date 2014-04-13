@@ -1,5 +1,5 @@
-<%@ page language="java" contentType="text/html; charset=utf8"
-         pageEncoding="utf8" %>
+<%@page language="java" contentType="text/html; charset=utf8"
+        pageEncoding="utf8" %>
 <%
     String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + request.getContextPath();
 %>
@@ -10,9 +10,8 @@
 <div id="account_data_layout" class="easyui-layout" data-options="fit:true">
     <div id="account_data_north"
          data-options="region:'north',border:0,fit:true">
-        <table id="account_data_table" class="easyui-datagrid"
-               data-options="rownumbers:true,singleSelect:true,pagination:true,fit:true,fitColumns:true,
-			toolbar:'#account_filter_bar',onClickRow:onClickRow,onClickCell:accessoryDo">
+        <table id="account_data_table"
+        <%--data-options="onClickCell:accessoryDo"--%>>
             <thead>
             <tr>
                 <th data-options="field:'userName',width:80,align:'center'">用户名</th>
@@ -55,7 +54,7 @@
     </div>
 </div>
 <div id="account_filter_bar" style="padding: 5px; height: auto">
-    <div style="margin-bottom: 5px">
+    <%--<div style="margin-bottom: 5px">
         <a href="javascript:void(0);" class="easyui-linkbutton" iconCls="icon-add" plain="true"
            onclick="addData('#account_data_table','<%=basePath%>/rest/account/addAccount');">增加</a>
         <a href="javascript:void(0);" class="easyui-linkbutton" iconCls="icon-edit" plain="true"
@@ -66,13 +65,18 @@
            onclick="undoData('#account_data_table');">撤销</a>
         <a href="javascript:void(0);" class="easyui-linkbutton" iconCls="icon-save" plain="true"
            onclick="saveData('#account_data_table');">保存</a>
-    </div>
+    </div>--%>
     <div>
         创建时间从: <input class="easyui-datebox" style="width: 80px">
         到: <input class="easyui-datebox" style="width: 80px">
         <a href="#" class="easyui-linkbutton" iconCls="icon-search">查询</a>
     </div>
 </div>
+
+<form>
+    <input type="hidden" id="page" name="page" value="${pageData.page}">
+    <input type="hidden" id="pageSize" name="pageSize" value="${pageData.pageSize}">
+</form>
 
 //文件上传对话框
 <div id="fileUploadDialog">
@@ -85,17 +89,80 @@
 <script type="text/javascript">
     //页面加载完成，加载数据
     $(function () {
-        $.ajax({
-            type: "POST",
-            data: '{}',
-            contentType: "application/json",
-            url: '<%=basePath%>/rest/account/getAccountByFilter',
-            dataType: 'json',
-            success: function (resultData) {
-                $('#account_data_table').datagrid('loadData', resultData.data);
-            }
+        $('#account_data_table').datagrid({
+            nowrap: false,
+            striped: true,
+            border: true,
+            collapsible: false,
+            loadMsg: '数据装载中......',
+            url: '<%=basePath%>/getAccountByFilter.do',
+            idField: 'accountId',
+            fit: true,
+            fitColumns: true,
+            singleSelect: true,
+            pagination: true,
+            toolbar: [
+                {
+                    text: '添加',
+                    iconCls: 'icon-add',
+                    handler: function () {
+                        addData('#account_data_table', '<%=basePath%>/addUser.do');
+                    }
+                },
+                '-',
+                {
+                    text: '修改',
+                    iconCls: 'icon-edit',
+                    handler: function () {
+                        editData('#account_data_table', '<%=basePath%>/modifyUser.do');
+                    }
+                },
+                '-',
+                {
+                    text: '删除',
+                    iconCls: 'icon-remove',
+                    handler: function () {
+                        removeData('#account_data_table', '<%=basePath%>/deleteUser.do');
+                    }
+                },
+                '-',
+                {
+                    text: '撤销',
+                    iconCls: 'icon-undo',
+                    handler: function () {
+                        undoData('#account_data_table');
+                    }
+                },
+                '-',
+                {
+                    text: '保存',
+                    iconCls: 'icon-save',
+                    handler: function () {
+                        saveData('#account_data_table');
+                    }
+                }
+            ]/*,
+            queryParams: {
+                'pageData.page': $("#page").val(),
+                'pageData.pageSize': $("#pageSize").val()
+            }*/
+
+        });
+
+        $('#account_data_table').datagrid('getPager').pagination({
+            pageSize: 10,
+            pageList: [10, 20, 30, 40, 50],
+            beforePageText: '第',
+            afterPageText: '页    共 {pages} 页',
+            displayMsg: '当前显示 {from}-{to} 条记录   共 {total} 条记录'/*,
+            onSelectPage: function (page, pageSize) {
+                $("#page").val(page);
+                $("#pageSize").val(pageSize);
+                $('#account_data_table').datagrid('reload')
+            }*/
         });
     });
+
     //点击“行”操作
     function onClickRow(index) {
         if (actionType != undefined) {

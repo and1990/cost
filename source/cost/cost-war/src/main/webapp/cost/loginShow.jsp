@@ -1,4 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=utf8"
+<%@page language="java" contentType="text/html; charset=utf8"
          pageEncoding="utf8" %>
 
 <!-- 基本信息界面 -->

@@ -13,9 +13,9 @@ public class PageData<T> {
     //每页显示条数
     private int pageSize = PageData.DEFAULT_PAGE_SIZE;
     //总页数
-    private int pageTotal;
+    private int pages;
     //总记录数
-    private int dataTotal;
+    private int total;
     //当前页数据
     private List<T> rows;
 
@@ -40,25 +40,20 @@ public class PageData<T> {
         this.pageSize = pageSize;
     }
 
-    public int getPageTotal() {
-        return pageTotal;
+    public int getPages() {
+        return pages;
     }
 
-    public void setPageTotal() {
-        if (dataTotal != 0) {
-            int page = dataTotal / pageSize;
-            this.pageTotal = dataTotal % pageSize == 0 ? page : page + 1;
-        } else {
-            this.pageTotal = 1;
-        }
+    public void setPages(int pages) {
+        this.pages = pages;
     }
 
-    public int getDataTotal() {
-        return dataTotal;
+    public int getTotal() {
+        return total;
     }
 
-    public void setDataTotal(int dataTotal) {
-        this.dataTotal = dataTotal;
+    public void setTotal(int total) {
+        this.total = total;
     }
 
     public List<T> getRows() {

@@ -36,7 +36,7 @@ public class UserAction extends BaseAction {
             }
             List<UserVO> userVOList = userService.getUserByFilter(userVO, pageData);
             pageData.setRows(userVOList);
-            pageData.setDataTotal(80);
+            pageData.setTotal(80);
         } catch (Exception e) {
             e.printStackTrace();
         }

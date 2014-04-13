@@ -1,4 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=utf8"
+<%@page language="java" contentType="text/html; charset=utf8"
 	pageEncoding="utf8"%>
 <div class="easyui-panel" title="公告"  
         data-options="closable:false,tools:'#main_notice_button',fit:true">
