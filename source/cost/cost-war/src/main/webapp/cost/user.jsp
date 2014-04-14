@@ -112,10 +112,10 @@
                 updateSelectRow();
             },
             onBeforeLoad: function () {
-                $("#dg").datagrid("clearSelections");
+                $("#user_data_table").datagrid("clearSelections");
             },
             onLoadSuccess: function (data) {
-                $("#dg").datagrid("clearSelections");
+                $("#user_data_table").datagrid("clearSelections");
             }
 
         });
@@ -134,7 +134,7 @@
     function updateSelectRow() {
         var rowCount = $('#dg').datagrid('getRows').length;
         for (var i = 0; i < rowCount; i++) {
-            $('#dg').datagrid('updateRow', {
+            $('#user_data_table').datagrid('updateRow', {
                 index: i,
                 row: {action: ''}
             });
@@ -156,7 +156,7 @@
             "status": $("#userStatus").combobox('getValue'),
             "level": $("#userLevel").combobox('getValue')
         };
-        $("#dg").datagrid({
+        $("#user_data_table").datagrid({
                     queryParams: queryData,
                     pageNumber: 1
                 }, 'load'
