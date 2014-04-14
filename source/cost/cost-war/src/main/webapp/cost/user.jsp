@@ -96,7 +96,7 @@
 </div>
 
 <div id="user_panel" class="easyui-dialog" title="增加用户"
-     style="width:500px;height:430px;padding:2px;" data-options="closed:true">
+     style="width:500px;height:430px;padding:2px;" data-options="closed:true,modal: true">
     <div class="easyui-panel" style="width:480px">
         <div style="padding:10px 10px 10px 30px">
             <form id="ff" method="post">
