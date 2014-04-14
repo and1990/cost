@@ -48,25 +48,39 @@
     </div>
 </div>
 
-<div id="user_filter_bar" style="padding: 5px; height: auto">
-    <%--<div style="margin-bottom: 5px">
-      <a href="javascript:void(0);" class="easyui-linkbutton" iconCls="icon-add" plain="true"
-         onclick="addData('#user_data_table', '<%=basePath%>/addUser.do');">增加</a>
-      <a href="javascript:void(0);" class="easyui-linkbutton" iconCls="icon-edit" plain="true"
-         onclick="editData('#user_data_table', '<%=basePath%>/modifyUser.do');">修改</a>
-      <a href="javascript:void(0);" class="easyui-linkbutton" iconCls="icon-remove" plain="true"
-         onclick="removeData('#user_data_table', '<%=basePath%>/deleteUser.do');">删除</a>
-      <a href="javascript:void(0);" class="easyui-linkbutton" iconCls="icon-undo" plain="true"
-         onclick="undoData('#user_data_table');">撤销</a>
-      <a href="javascript:void(0);" class="easyui-linkbutton" iconCls="icon-save" plain="true"
-         onclick="saveData('#user_data_table');">保存</a>
-      <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-search',plain:true"
-         onclick="getChanges('#user_data_table')">GetChanges</a>
-    </div>--%>
+<div id="user_tool_bar" style="padding: 5px; height: auto">
+    <div style="margin-bottom: 5px">
+        <a href="javascript:void(0);" class="easyui-linkbutton" iconCls="icon-add" plain="true"
+           onclick="addData('#user_data_table', '<%=basePath%>/addUser.do');">增加</a>
+        <a href="javascript:void(0);" class="easyui-linkbutton" iconCls="icon-edit" plain="true"
+           onclick="editData('#user_data_table', '<%=basePath%>/modifyUser.do');">修改</a>
+        <a href="javascript:void(0);" class="easyui-linkbutton" iconCls="icon-remove" plain="true"
+           onclick="removeData('#user_data_table', '<%=basePath%>/deleteUser.do');">删除</a>
+        <a href="javascript:void(0);" class="easyui-linkbutton" iconCls="icon-undo" plain="true"
+           onclick="undoData('#user_data_table');">撤销</a>
+        <a href="javascript:void(0);" class="easyui-linkbutton" iconCls="icon-save" plain="true"
+           onclick="saveData('#user_data_table');">保存</a>
+    </div>
     <div>
-        创建时间从: <input class="easyui-datebox" style="width: 80px">
-        到: <input class="easyui-datebox" style="width: 80px">
-        <a href="#" class="easyui-linkbutton" iconCls="icon-search">查询</a>
+        <table style="font-size: 12">
+            <tr>
+                <td>
+                    <span>用户名：</span><input class="textbox" style="width:100px;">
+                </td>
+                <td>
+                    <span>状态：</span>
+                    <select class="easyui-combobox" name="status" style="width:100px;">
+                        <option value="1">可用</option>
+                        <option value="2">禁用</option>
+                    </select>
+                </td>
+                <td>
+                    创建时间从: <input class="easyui-datebox" style="width: 80px">
+                    到: <input class="easyui-datebox" style="width: 80px">
+                    <a href="#" class="easyui-linkbutton" iconCls="icon-search">查询</a>
+                </td>
+            </tr>
+        </table>
     </div>
 </div>
 
@@ -84,47 +98,7 @@
             fitColumns: true,
             singleSelect: true,
             pagination: true,
-            toolbar: [
-                {
-                    text: '添加',
-                    iconCls: 'icon-add',
-                    handler: function () {
-                        addData('#user_data_table', '<%=basePath%>/addUser.do');
-                    }
-                },
-                '-',
-                {
-                    text: '修改',
-                    iconCls: 'icon-edit',
-                    handler: function () {
-                        editData('#user_data_table', '<%=basePath%>/modifyUser.do');
-                    }
-                },
-                '-',
-                {
-                    text: '删除',
-                    iconCls: 'icon-remove',
-                    handler: function () {
-                        removeData('#user_data_table', '<%=basePath%>/deleteUser.do');
-                    }
-                },
-                '-',
-                {
-                    text: '撤销',
-                    iconCls: 'icon-undo',
-                    handler: function () {
-                        undoData('#user_data_table');
-                    }
-                },
-                '-',
-                {
-                    text: '保存',
-                    iconCls: 'icon-save',
-                    handler: function () {
-                        saveData('#user_data_table');
-                    }
-                }
-            ],
+            toolbar: '#user_tool_bar',
             onBeforeEdit: function (index, row) {
                 row.editing = true;
                 updateSelectRow();
