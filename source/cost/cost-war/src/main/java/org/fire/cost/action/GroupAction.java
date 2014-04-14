@@ -22,21 +22,12 @@ import java.util.List;
  */
 @Namespace("/")
 @Controller
-public class GroupAction extends BaseAction {
+public class GroupAction extends BaseAction<GroupVO> {
     //组service服务类
     @Resource
     private GroupService groupService;
-
-    // 分页对象
-    private PageData<GroupVO> pageData;
-
     //组VO信息
     private GroupVO groupVO;
-
-    //当前页数
-    private int page;
-    //每页显示条数
-    private int rows;
 
     /**
      * 根据过滤条件查询“组”数据
@@ -137,35 +128,7 @@ public class GroupAction extends BaseAction {
         return message;
     }
 
-    public PageData<GroupVO> getPageData() {
-        return pageData;
-    }
-
-    public void setPageData(PageData<GroupVO> pageData) {
-        this.pageData = pageData;
-    }
-
     public GroupVO getGroupVO() {
         return groupVO;
-    }
-
-    public void setGroupVO(GroupVO groupVO) {
-        this.groupVO = groupVO;
-    }
-
-    public int getPage() {
-        return page;
-    }
-
-    public void setPage(int page) {
-        this.page = page;
-    }
-
-    public int getRows() {
-        return rows;
-    }
-
-    public void setRows(int rows) {
-        this.rows = rows;
     }
 }

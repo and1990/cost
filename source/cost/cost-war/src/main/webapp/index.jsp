@@ -7,6 +7,7 @@
 <head>
 </head>
 <body>
-hello world
+hello world<br>
+<a href="<%=basePath%>/getUserByFilter.do">A</a>
 </body>
 </html>

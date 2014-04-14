@@ -25,21 +25,14 @@ import java.util.List;
  */
 @Namespace("/")
 @Controller
-public class AccountAction extends BaseAction {
+public class AccountAction extends BaseAction<AccountVO> {
 
     @Resource
     private AccountService accountService;
 
-    //分页对象
-    private PageData<AccountVO> pageData;
-
     //账单信息VO
     private AccountVO accountVO;
 
-    //当前页数
-    private int page;
-    //每页显示条数
-    private int rows;
 
     /**
      * 根据过滤条件查询账单信息
@@ -159,35 +152,11 @@ public class AccountAction extends BaseAction {
         return message;
     }
 
-    public PageData<AccountVO> getPageData() {
-        return pageData;
-    }
-
-    public void setPageData(PageData<AccountVO> pageData) {
-        this.pageData = pageData;
-    }
-
     public AccountVO getAccountVO() {
         return accountVO;
     }
 
     public void setAccountVO(AccountVO accountVO) {
         this.accountVO = accountVO;
-    }
-
-    public int getRows() {
-        return rows;
-    }
-
-    public void setRows(int rows) {
-        this.rows = rows;
-    }
-
-    public int getPage() {
-        return page;
-    }
-
-    public void setPage(int page) {
-        this.page = page;
     }
 }

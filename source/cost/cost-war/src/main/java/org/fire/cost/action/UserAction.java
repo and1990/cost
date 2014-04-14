@@ -13,15 +13,12 @@ import java.util.List;
 
 @Namespace("/")
 @Controller
-public class UserAction extends BaseAction {
+public class UserAction extends BaseAction<UserVO> {
     @Resource
     private UserService userService;
 
     //用户vo对象
     private UserVO userVO;
-
-    //分页对象
-    private PageData<UserVO> pageData;
 
     /**
      * 根据过滤条件查询用户
@@ -98,11 +95,4 @@ public class UserAction extends BaseAction {
         this.userVO = userVO;
     }
 
-    public PageData<UserVO> getPageData() {
-        return pageData;
-    }
-
-    public void setPageData(PageData<UserVO> pageData) {
-        this.pageData = pageData;
-    }
 }
