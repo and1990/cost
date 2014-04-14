@@ -42,13 +42,11 @@ public class UserAction extends BaseAction<UserVO> {
 
     /**
      * 增加用户
-     *
-     * @param vo
      */
     @Action(value = "addUser", results = {@Result(type = "json", params = {"root", "returnData", "contentType", "text/html"})})
-    public String addUser(UserVO vo) {
+    public String addUser() {
         try {
-            userService.addUser(vo);
+            userService.addUser(userVO);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -58,13 +56,12 @@ public class UserAction extends BaseAction<UserVO> {
     /**
      * 修改用户
      *
-     * @param vo
      * @return
      */
     @Action(value = "modifyUser", results = {@Result(type = "json", params = {"root", "returnData", "contentType", "text/html"})})
-    public String modifyUser(UserVO vo) {
+    public String modifyUser() {
         try {
-            userService.modifyUser(vo);
+            userService.modifyUser(userVO);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -78,7 +75,7 @@ public class UserAction extends BaseAction<UserVO> {
      * @return
      */
     @Action(value = "deleteUser", results = {@Result(type = "json", params = {"root", "returnData", "contentType", "text/html"})})
-    public String deleteUser(UserVO userVO) {
+    public String deleteUser() {
         try {
             userService.deleteUser(userVO.getUserId());
         } catch (Exception e) {

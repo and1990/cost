@@ -50,8 +50,10 @@
 
 <div id="user_tool_bar" style="padding: 5px; height: auto">
     <div style="margin-bottom: 5px">
+        <%--<a href="javascript:void(0);" class="easyui-linkbutton" iconCls="icon-add" plain="true"
+           onclick="addData('#user_data_table', '<%=basePath%>/addUser.do');">增加</a>--%>
         <a href="javascript:void(0);" class="easyui-linkbutton" iconCls="icon-add" plain="true"
-           onclick="addData('#user_data_table', '<%=basePath%>/addUser.do');">增加</a>
+           onclick="addUser();">增加</a>
         <a href="javascript:void(0);" class="easyui-linkbutton" iconCls="icon-edit" plain="true"
            onclick="editData('#user_data_table', '<%=basePath%>/modifyUser.do');">修改</a>
         <a href="javascript:void(0);" class="easyui-linkbutton" iconCls="icon-remove" plain="true"
@@ -68,8 +70,17 @@
                     <span>用户名：</span><input class="textbox" style="width:100px;">
                 </td>
                 <td>
+                    <span>管理员：</span>
+                    <select class="easyui-combobox" name="status" style="width:100px;">
+                        <option value="0">全部</option>
+                        <option value="1">是</option>
+                        <option value="2">否</option>
+                    </select>
+                </td>
+                <td>
                     <span>状态：</span>
                     <select class="easyui-combobox" name="status" style="width:100px;">
+                        <option value="0">全部</option>
                         <option value="1">可用</option>
                         <option value="2">禁用</option>
                     </select>
@@ -81,6 +92,70 @@
                 </td>
             </tr>
         </table>
+    </div>
+</div>
+
+<div id="user_panel" class="easyui-dialog" title="增加用户"
+     style="width:500px;height:430px;padding:2px;" data-options="closed:true">
+    <div class="easyui-panel" style="width:480px">
+        <div style="padding:10px 10px 10px 30px">
+            <form id="ff" method="post">
+                <table cellpadding="5">
+                    <tr>
+                        <td>用户名：</td>
+                        <td>
+                            <input class="text" id="userName" name="userName"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>登录名:</td>
+                        <td>
+                            <input class="text" id="loginName" name="loginName"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>密码:</td>
+                        <td>
+                            <input class="text" id="password" name="password"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>确认密码:</td>
+                        <td>
+                            <input class="text" id="rePassword" name="password"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>年龄:</td>
+                        <td>
+                            <input class="text" id="age" name="age"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>地址:</td>
+                        <td>
+                            <input class="text" id="address" name="address"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>邮箱:</td>
+                        <td>
+                            <input class="text" id="email" name="email"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>备注:</td>
+                        <td>
+                            <input class="text" id="remark" name="remark"/>
+                        </td>
+                    </tr>
+                </table>
+            </form>
+            <div style="text-align:center;padding:5px">
+                <a href="javascript:void(0)" class="easyui-linkbutton" onclick="submitForm()">确定</a>
+                <a href="javascript:void(0)" class="easyui-linkbutton" onclick="clearForm()">取消</a>
+            </div>
+        </div>
     </div>
 </div>
 
@@ -99,18 +174,7 @@
             singleSelect: true,
             pagination: true,
             toolbar: '#user_tool_bar',
-            onBeforeEdit: function (index, row) {
-                row.editing = true;
-                updateSelectRow();
-            },
-            onAfterEdit: function (index, row) {
-                row.editing = false;
-                updateSelectRow();
-            },
-            onCancelEdit: function (index, row) {
-                row.editing = false;
-                updateSelectRow();
-            },
+
             onBeforeLoad: function () {
                 $("#user_data_table").datagrid("clearSelections");
             },
@@ -131,7 +195,7 @@
     ;
 
     //更新选中行
-    function updateSelectRow() {
+    function updateRow() {
         var rowCount = $('#dg').datagrid('getRows').length;
         for (var i = 0; i < rowCount; i++) {
             $('#user_data_table').datagrid('updateRow', {
@@ -162,6 +226,29 @@
                 }, 'load'
         );
     }
+
+    //增加用户
+    function addUser() {
+        $("#user_panel").dialog("open");
+
+        $("#userName").validatebox({
+            required: true,
+            missingMessage: "用户名不能为空"
+        });
+        $("#loginName").validatebox({
+            required: true,
+            missingMessage: "登录名不能为空"
+        });
+        $("#password").validatebox({
+            required: true,
+            missingMessage: "密码不能为空"
+        });
+        $("#rePassword").validatebox({
+            required: true,
+            missingMessage: "密码不能为空"
+        });
+    }
+
 </script>
 </body>
 </html>
