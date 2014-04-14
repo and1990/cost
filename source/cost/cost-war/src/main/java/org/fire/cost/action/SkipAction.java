@@ -45,5 +45,43 @@ public class SkipAction extends BaseAction {
         return SUCCESS;
     }
 
+    /**
+     * 跳转到用户
+     *
+     * @return
+     */
+    @Action(value = "user", results = {@Result(name = SUCCESS, location = "/cost/user.jsp")})
+    public String skipToUserData() {
+        return SUCCESS;
+    }
 
+    /**
+     * 跳转到组员信息
+     *
+     * @return
+     */
+    @Action(value = "group", results = {@Result(name = SUCCESS, location = "/cost/group.jsp")})
+    public String skipToGroupData() {
+        return SUCCESS;
+    }
+
+    /**
+     * 跳转到消费
+     *
+     * @return
+     */
+    @Action(value = "account", results = {@Result(name = SUCCESS, location = "/cost/account.jsp")})
+    public String skipToAccountData() {
+        return SUCCESS;
+    }
+
+    /**
+     * 跳转到组消费
+     *
+     * @return
+     */
+    @Action(value = "groupAccount", results = {@Result(name = SUCCESS, location = "/cost/groupAccount.jsp")})
+    public String skipToGroupAccountData() {
+        return SUCCESS;
+    }
 }

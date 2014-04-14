@@ -5,6 +5,10 @@
 <%
     String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + request.getContextPath();
 %>
+<html>
+<head>
+</head>
+<body>
 <div id="user_data_layout" class="easyui-layout" data-options="fit:true">
     <div id="user_data_north"
          data-options="region:'north',border:0,fit:true">
@@ -18,23 +22,23 @@
                 <th data-options="field:'userAddress',width:120,align:'center',editor:'text'">地址</th>
                 <th data-options="field:'userEmail',width:120,align:'center',editor:'text'">邮箱</th>
                 <th data-options="field:'isAdminName',width:120,align:'center',formatter:showIsAdminText,
-                  editor:{
-                      type:'combobox',
-                      options:{
-                          data:isAdminData,
-                          valueField:'value',
-                          textField:'name'
-                      }}"
+                          editor:{
+                              type:'combobox',
+                              options:{
+                                  data:isAdminData,
+                                  valueField:'value',
+                                  textField:'name'
+                              }}"
                         >是否管理员
                 </th>
                 <th data-options="field:'userStatusName',width:120,align:'center',formatter:showStatusText,
-                  editor:{
-                      type:'combobox',
-                      options:{
-                          data:statusData,
-                          valueField:'value',
-                          textField:'name'
-                      }}"
+                          editor:{
+                              type:'combobox',
+                              options:{
+                                  data:statusData,
+                                  valueField:'value',
+                                  textField:'name'
+                              }}"
                         >用户状态
                 </th>
                 <th data-options="field:'userRemark',width:120,align:'center',editor:'text'">备注</th>
@@ -120,7 +124,25 @@
                         saveData('#user_data_table');
                     }
                 }
-            ]
+            ],
+            onBeforeEdit: function (index, row) {
+                row.editing = true;
+                updateSelectRow();
+            },
+            onAfterEdit: function (index, row) {
+                row.editing = false;
+                updateSelectRow();
+            },
+            onCancelEdit: function (index, row) {
+                row.editing = false;
+                updateSelectRow();
+            },
+            onBeforeLoad: function () {
+                $("#dg").datagrid("clearSelections");
+            },
+            onLoadSuccess: function (data) {
+                $("#dg").datagrid("clearSelections");
+            }
 
         });
 
@@ -131,7 +153,19 @@
             afterPageText: '页    共 {pages} 页',
             displayMsg: '当前显示 {from}-{to} 条记录   共 {total} 条记录'
         });
-    });
+    })
+    ;
+
+    //更新选中行
+    function updateSelectRow() {
+        var rowCount = $('#dg').datagrid('getRows').length;
+        for (var i = 0; i < rowCount; i++) {
+            $('#dg').datagrid('updateRow', {
+                index: i,
+                row: {action: ''}
+            });
+        }
+    }
 
     function onClickRow(index) {
         if (actionType != undefined) {
@@ -140,4 +174,20 @@
             rowIndex = index;
         }
     }
+
+    //获取查询参数
+    function query() {
+        var queryData = {
+            "userName": $("#userName").val(),
+            "status": $("#userStatus").combobox('getValue'),
+            "level": $("#userLevel").combobox('getValue')
+        };
+        $("#dg").datagrid({
+                    queryParams: queryData,
+                    pageNumber: 1
+                }, 'load'
+        );
+    }
 </script>
+</body>
+</html>
