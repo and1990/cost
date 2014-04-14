@@ -3,7 +3,6 @@ package org.fire.cost.action;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.UsernamePasswordToken;
-import org.apache.shiro.authz.UnauthenticatedException;
 import org.apache.shiro.subject.Subject;
 import org.apache.struts2.ServletActionContext;
 import org.apache.struts2.convention.annotation.Action;
@@ -45,6 +44,8 @@ public class AuthenticationAction extends BaseAction {
     private String loginName;
     //密码
     private String password;
+    //返回信息
+    private Message message = new Message();
 
     /**
      * 用户登录
@@ -66,38 +67,27 @@ public class AuthenticationAction extends BaseAction {
             userService.changeUserLoginTime(userContext.getUserId());
             MessageUtil.setMessage(message, ResultEnum.Success, HttpStatusEnum.Success, null, null);
         } catch (AuthenticationException e) {
-            MessageUtil.setMessage(message, ResultEnum.Fail, HttpStatusEnum.ServerError, e.getMessage(), null);
-        } catch (UnauthenticatedException e) {
-            MessageUtil.setMessage(message, ResultEnum.Fail, HttpStatusEnum.ServerError, e.getMessage(), null);
+            String msg = e.getMessage();
+            if (msg.indexOf("COST") >= 0) {
+                msg = msg.substring("COST:".length(), msg.length());
+                MessageUtil.setMessage(message, ResultEnum.Success, HttpStatusEnum.Success, msg, null);
+            }
         }
         return SUCCESS;
     }
 
     /**
-     * 心跳检查
+     * 用户退出
      *
      * @return
      */
-    @Action(value = "palpitation", results = {@Result(type = "json", params = {"root", "returnData", "contentType", "text/html"})})
-    public Message palpitation() {
-        String sessionId = AuthenticationUtil.getSessionId();
-        String uuid = AuthenticationUtil.getUUId();
-
-        UserContext userContext = costContextService.getUserContext(sessionId);
-        Message message = new Message();
-        if (userContext != null) {
-            if (!userContext.getUuid().equals(uuid)) {
-                userContext = null;
-            }
-        }
-        message.setData(userContext);
-        return message;
-    }
-
     @Action(value = "loginOut", results = {@Result(type = "json", params = {"root", "returnData", "contentType", "text/html"})})
-    public Message loginOut() {
-        clear();
-        return new Message();
+    public String loginOut() {
+        String sessionId = AuthenticationUtil.getSessionId();
+        if (sessionId != null && sessionId.trim().length() > 0) {
+            costContextService.remove(sessionId);
+        }
+        return SUCCESS;
 
     }
 
@@ -137,18 +127,6 @@ public class AuthenticationAction extends BaseAction {
         }
     }
 
-    /**
-     * 清空缓存
-     */
-    private void clear() {
-        String sessionId = AuthenticationUtil.getSessionId();
-
-        if (sessionId != null && sessionId.trim().length() > 0) {
-            costContextService.remove(sessionId);
-        }
-
-    }
-
     public String getLoginName() {
         return loginName;
     }
@@ -163,5 +141,13 @@ public class AuthenticationAction extends BaseAction {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public Message getMessage() {
+        return message;
+    }
+
+    public void setMessage(Message message) {
+        this.message = message;
     }
 }

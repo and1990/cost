@@ -3,7 +3,6 @@ package org.fire.cost.service.impl;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.shiro.authc.*;
-import org.apache.shiro.authz.UnauthenticatedException;
 import org.apache.shiro.realm.AuthenticatingRealm;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.fire.cost.context.UserContext;
@@ -53,10 +52,10 @@ public class AuthenticationServiceImpl extends AuthenticatingRealm implements Au
             if (user.getUserStatus() == UserStatusEnum.Enable.getCode()) {
                 return new SimpleAuthenticationInfo(token.getPrincipal(), token.getPassword(), token.getUsername());
             } else {
-                throw new UnauthenticatedException("用户被禁用");
+                throw new AuthenticationException("COST:用户被禁用");
             }
         } else {
-            throw new AuthenticationException("用户名或密码错误");
+            throw new AuthenticationException("COST:用户名或密码错误");
         }
 
     }

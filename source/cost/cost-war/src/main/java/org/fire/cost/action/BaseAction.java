@@ -3,7 +3,6 @@ package org.fire.cost.action;
 import com.opensymphony.xwork2.ActionSupport;
 import org.apache.struts2.convention.annotation.Namespace;
 import org.apache.struts2.convention.annotation.ParentPackage;
-import org.fire.cost.vo.Message;
 import org.fire.cost.vo.PageData;
 import org.springframework.stereotype.Controller;
 
@@ -14,8 +13,6 @@ import org.springframework.stereotype.Controller;
 @Namespace("/")
 @Controller
 public abstract class BaseAction<T> extends ActionSupport {
-    //返回客户端信息
-    protected Message message = new Message();
     //分页对象
     protected PageData<T> pageData;
     //当前页

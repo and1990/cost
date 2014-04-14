@@ -1,5 +1,5 @@
 <%@page language="java" contentType="text/html; charset=utf8"
-         pageEncoding="utf8" %>
+        pageEncoding="utf8" %>
 <%
     String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + request.getContextPath();
 %>
@@ -26,6 +26,10 @@
         <form method="post" id="user_login_form">
             <br>
 
+            <div>
+                <span id="login_msg" style="color:red"></span>
+            </div>
+
             <div><span>用户名</span></div>
             <div><input type="text" name="loginName" id="loginName" class="input_text"/></div>
             <br>
@@ -36,7 +40,6 @@
 
             <div>
                 <input type="checkbox"/><span>记住密码</span> &nbsp;&nbsp;&nbsp;&nbsp;
-                <a>忘记密码？</a> &nbsp;&nbsp;&nbsp;&nbsp;
                 <a>快速注册</a>
             </div>
         </form>
@@ -47,16 +50,50 @@
 </div>
 </body>
 <script type="text/javascript">
+    //监听页面键盘按键  回车时开始登录
+    document.onkeydown = function (event) {
+        e = event ? event : (window.event ? window.event : null);
+        if (e.keyCode == 13) {
+            userLogin();
+        }
+    }
+
+    //用户登录
     function userLogin() {
+        var loginName = $("#loginName").val();
+        var password = $("#password").val();
+        if (checkInput(loginName, password)) {
+            sendRequest();
+        }
+    }
+
+    //输入校验
+    function checkInput(loginName, password) {
+        if (loginName == undefined || loginName == "") {
+            $("#login_msg").text("请输入用户名");
+            return false;
+        }
+        if (password == undefined || password == "") {
+            $("#login_msg").text("请输入密码");
+            return false;
+        }
+        return true;
+    }
+
+    //用户登录
+    function sendRequest() {
         $.ajax({
             type: "POST",
             url: "<%=basePath%>/userLogin.do?" + $('#user_login_form').serialize(),
-            success: function (message) {
-                var messageObj = JSON.parse(message);
-                if (messageObj.status == 200) {
-                    window.location.href = "<%=basePath%>/view.do";
-                } else {
-                    alert(messageObj.descMsg);
+            success: function (returnData) {
+                var message = JSON.parse(returnData);
+                if (message.status = 200) {
+                    if (message.result == 1) {
+                        if (message.descMsg == undefined)
+                            window.location.href = "<%=basePath%>/view.do";
+                        else
+                            $("#login_msg").text(message.descMsg);
+                    }
                 }
             },
             error: function (msg) {
