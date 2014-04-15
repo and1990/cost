@@ -19,12 +19,47 @@ public class UserDaoCustomImpl extends BaseJpaDaoSupport<User, Long> implements 
      * 根据过滤条件查询用户
      */
     public List<User> getUserByFilter(UserVO vo, PageData<UserVO> pageData) {
-        String sql = "select * from cost_user";
+        String sql = "select * from cost_user where 1=1";
+        String userName = vo.getUserName();
+        if (userName != null && userName.trim().length() != 0) {
+            sql += " and user_name like :userName";
+        }
+        Integer admin = vo.getIsAdmin();
+        if (admin != null && admin != 0) {
+            sql += " and is_admin=:isAdmin";
+        }
+        Integer userStatus = vo.getUserStatus();
+        if (userStatus != null && userStatus != 0) {
+            sql += " and user_status=:userStatus";
+        }
+        String startTime = vo.getStartTime();
+        if (startTime != null && startTime.trim().length() != 0) {
+            sql += " and create_time>=:startTime";
+        }
+        String endTime = vo.getEndTime();
+        if (endTime != null && endTime.trim().length() != 0) {
+            sql += " and create_time<=:endTime";
+        }
         Query query = entityManager.createNativeQuery(sql, User.class);
         if (query instanceof org.hibernate.ejb.QueryImpl) {
             ((QueryImpl<?>) query).getHibernateQuery().setCacheable(true);
         }
-        query.setFirstResult(pageData.getPage()-1);
+        if (userName != null && userName.trim().length() != 0) {
+            query.setParameter("userName", "%" + userName + "%");
+        }
+        if (admin != null && admin != 0) {
+            query.setParameter("isAdmin", admin);
+        }
+        if (userStatus != null && userStatus != 0) {
+            query.setParameter("userStatus", userStatus);
+        }
+        if (startTime != null && startTime.trim().length() != 0) {
+            query.setParameter("startTime", startTime);
+        }
+        if (endTime != null && endTime.trim().length() != 0) {
+            query.setParameter("endTime", endTime);
+        }
+        query.setFirstResult(pageData.getPage() - 1);
         query.setMaxResults(pageData.getPageSize());
         List<User> resultList = query.getResultList();
         return resultList;

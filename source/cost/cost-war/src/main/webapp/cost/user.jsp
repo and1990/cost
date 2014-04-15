@@ -64,34 +64,39 @@
            onclick="saveData('#user_data_table');">保存</a>
     </div>
     <div>
-        <table style="font-size: 12">
-            <tr>
-                <td>
-                    <span>用户名：</span><input class="textbox" style="width:100px;">
-                </td>
-                <td>
-                    <span>管理员：</span>
-                    <select class="easyui-combobox" name="status" style="width:100px;">
-                        <option value="0">全部</option>
-                        <option value="1">是</option>
-                        <option value="2">否</option>
-                    </select>
-                </td>
-                <td>
-                    <span>状态：</span>
-                    <select class="easyui-combobox" name="status" style="width:100px;">
-                        <option value="0">全部</option>
-                        <option value="1">可用</option>
-                        <option value="2">禁用</option>
-                    </select>
-                </td>
-                <td>
-                    创建时间从: <input class="easyui-datebox" style="width: 80px">
-                    到: <input class="easyui-datebox" style="width: 80px">
-                    <a href="#" class="easyui-linkbutton" iconCls="icon-search">查询</a>
-                </td>
-            </tr>
-        </table>
+        <form id="filter_form" method="post">
+            <table style="font-size: 12">
+                <tr>
+                    <td>
+                        <span>用户名：</span>
+                        <input class="text" name="userVO.userName" style="width:100px;"/>
+                    </td>
+                    <td>
+                        <span>管理员：</span>
+                        <select class="easyui-combobox" name="userVO.isAdmin" style="width:100px;">
+                            <option value="0">全部</option>
+                            <option value="1">是</option>
+                            <option value="2">否</option>
+                        </select>
+                    </td>
+                    <td>
+                        <span>状态：</span>
+                        <select class="easyui-combobox" name="userVO.userStatus" style="width:100px;">
+                            <option value="0">全部</option>
+                            <option value="1">可用</option>
+                            <option value="2">禁用</option>
+                        </select>
+                    </td>
+                    <td>
+                        创建时间从: <input class="Wdate" id="startTime" name="userVO.startTime" style="width: 100px"
+                                      onfocus="WdatePicker({dateFmt:'yyyy-MM-dd',maxDate:'#F{$dp.$D(\'endTime\');}'})">
+                        到: <input class="Wdate" id="endTime" name="userVO.endTime" style="width: 100px"
+                                  onfocus="WdatePicker({dateFmt:'yyyy-MM-dd',minDate:'#F{$dp.$D(\'startTime\');}'})">
+                        <a href="#" class="easyui-linkbutton" iconCls="icon-search" onclick="getUserByFilter();">查询</a>
+                    </td>
+                </tr>
+            </table>
+        </form>
     </div>
 </div>
 
@@ -213,18 +218,24 @@
     }
 
     //获取查询参数
-    function query() {
-        var queryData = {
-            "userName": $("#userName").val(),
-            "status": $("#userStatus").combobox('getValue'),
-            "level": $("#userLevel").combobox('getValue')
-        };
-        $("#user_data_table").datagrid({
+    function getUserByFilter() {
+        var queryData = $("#filter_form").serializeJson();
+        $("#user_data_table").datagrid(
+                {
                     queryParams: queryData,
                     pageNumber: 1
                 }, 'load'
         );
     }
+    (function ($) {
+        $.fn.serializeJson = function () {
+            var serializeObj = {};
+            $(this.serializeArray()).each(function () {
+                serializeObj[this.name] = this.value;
+            });
+            return serializeObj;
+        };
+    })(jQuery);
 
     //增加用户
     function addUser() {
@@ -270,6 +281,8 @@
                     },
                     success: function () {
                         $.messager.progress('close');
+                        $('#user_form').form('clear');
+                        $("#user_panel").dialog("close");
                     }
                 }
         );

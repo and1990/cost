@@ -14,6 +14,7 @@
           media="screen"/>
     <script type="text/javascript" src="<%=basePath%>/third/easy-ui/jquery.min.js"></script>
     <script type="text/javascript" src="<%=basePath%>/third/easy-ui/jquery.easyui.min.js"></script>
+    <script type="text/javascript" src="<%=basePath%>/third/My97DatePicker/WdatePicker.js"></script>
     <script type="text/javascript" src="<%=basePath%>/third/lightbox/js/jquery.lightbox-0.5.js"></script>
     <script type="text/javascript" src="<%=basePath%>/js/cost.js"></script>
     <script type="text/javascript" src="<%=basePath%>/js/account.js"></script>
@@ -35,9 +36,9 @@
     <div id="mainInfo" data-options="region:'center',title:'业务信息'">
         <div class="easyui-tabs"
              data-options="border:false,plain:true,fit:true" id="main_tabs">
-            <div title="用户信息" data-options="href:'<%=basePath %>/cost/user.jsp'" style="padding: 2px"></div>
-            <div title="账单信息" data-options="href:'<%=basePath %>/cost/account.jsp'" style="padding: 2px"></div>
-            <div title="组信息" data-options="href:'<%=basePath %>/cost/group.jsp'" style="padding: 2px"></div>
+            <div title="用户信息" data-options="href:'<%=basePath %>/cost/user.do'" style="padding: 2px"></div>
+            <div title="账单信息" data-options="href:'<%=basePath %>/cost/account.do'" style="padding: 2px"></div>
+            <div title="组信息" data-options="href:'<%=basePath %>/cost/group.do'" style="padding: 2px"></div>
         </div>
     </div>
 

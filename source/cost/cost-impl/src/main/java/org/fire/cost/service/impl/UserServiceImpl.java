@@ -3,7 +3,6 @@ package org.fire.cost.service.impl;
 import org.apache.log4j.Logger;
 import org.fire.cost.dao.UserDao;
 import org.fire.cost.entity.User;
-import org.fire.cost.enums.AddTypeEnum;
 import org.fire.cost.enums.UserStatusEnum;
 import org.fire.cost.enums.YesOrNoEnum;
 import org.fire.cost.service.UserService;
@@ -92,19 +91,8 @@ public class UserServiceImpl implements UserService {
     @Transactional(value = "transactionManager", rollbackFor = RollbackException.class)
     public boolean addUser(UserVO vo) {
         try {
-            Integer addType = vo.getAddType();
-            if (addType != null && addType == AddTypeEnum.UserAdd.getCode()) {
-                vo.setUserStatus(UserStatusEnum.Enable.getCode());
-                vo.setIsAdmin(YesOrNoEnum.No.getCode());
-                vo.setCreateUser(vo.getUserName());
-                vo.setModifyUser(vo.getUserName());
-            } else {
-                vo.setUserStatus(Integer.valueOf(vo.getUserStatusName()));//修改
-                vo.setIsAdmin(Integer.valueOf(vo.getIsAdminName()));
-                vo.setCreateUser(getLoginUserName());
-                vo.setModifyUser(getLoginUserName());
-                vo.setPassword("123");
-            }
+            vo.setUserStatus(UserStatusEnum.Enable.getCode());
+            vo.setIsAdmin(YesOrNoEnum.No.getCode());
             User user = makeVO2User(vo, null);
             userDao.save(user);
             return true;
@@ -214,8 +202,8 @@ public class UserServiceImpl implements UserService {
         if (user == null) {
             user = new User();
             user.setLoginTime(new Date());
+            user.setCreateUser(getLoginUserName());
             user.setCreateTime(new Date());
-            user.setModifyTime(new Date());
         } else {
             user.setUserId(vo.getUserId());
         }
@@ -228,9 +216,9 @@ public class UserServiceImpl implements UserService {
         user.setUserImage(vo.getUserImage());
         user.setUserStatus(vo.getUserStatus());
         user.setIsAdmin(vo.getIsAdmin());
-        user.setCreateUser(vo.getCreateUser());
-        user.setModifyUser(vo.getModifyUser());
         user.setUserRemark(vo.getUserRemark());
+        user.setModifyUser(vo.getModifyUser());
+        user.setModifyTime(new Date());
         return user;
     }
 
