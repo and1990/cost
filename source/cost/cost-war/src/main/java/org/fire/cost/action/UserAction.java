@@ -46,7 +46,9 @@ public class UserAction extends BaseAction<UserVO> {
     @Action(value = "addUser", results = {@Result(type = "json", params = {"root", "returnData", "contentType", "text/html"})})
     public String addUser() {
         try {
-            userService.addUser(userVO);
+            if (userVO != null) {
+                userService.addUser(userVO);
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }

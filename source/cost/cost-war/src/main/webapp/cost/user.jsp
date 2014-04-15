@@ -97,63 +97,63 @@
 
 <div id="user_panel" class="easyui-dialog" title="增加用户"
      style="width:500px;height:430px;padding:2px;" data-options="closed:true,modal: true">
-    <div class="easyui-panel" style="width:480px">
-        <div style="padding:10px 10px 10px 30px">
-            <form id="ff" method="post">
+    <div class="easyui-panel" style="width:480px;text-align:center">
+        <div style="padding:10px 10px 10px 100px">
+            <form id="user_form" method="post">
                 <table cellpadding="5">
                     <tr>
                         <td>用户名：</td>
                         <td>
-                            <input class="text" id="userName" name="userName"/>
+                            <input class="text" id="userName" name="userVO.userName"/>
                         </td>
                     </tr>
                     <tr>
                         <td>登录名:</td>
                         <td>
-                            <input class="text" id="loginName" name="loginName"/>
+                            <input class="text" id="loginName" name="userVO.loginName"/>
                         </td>
                     </tr>
                     <tr>
                         <td>密码:</td>
                         <td>
-                            <input class="text" id="password" name="password"/>
+                            <input class="password" id="password" name="userVO.password"/>
                         </td>
                     </tr>
                     <tr>
                         <td>确认密码:</td>
                         <td>
-                            <input class="text" id="rePassword" name="password"/>
+                            <input class="password" id="rePassword" name="userVO.password"/>
                         </td>
                     </tr>
                     <tr>
                         <td>年龄:</td>
                         <td>
-                            <input class="text" id="age" name="age"/>
+                            <input class="text" id="userAge" name="userVO.userAge"/>
                         </td>
                     </tr>
                     <tr>
                         <td>地址:</td>
                         <td>
-                            <input class="text" id="address" name="address"/>
+                            <input class="text" id="userAddress" name="userVO.userAddress"/>
                         </td>
                     </tr>
                     <tr>
                         <td>邮箱:</td>
                         <td>
-                            <input class="text" id="email" name="email"/>
+                            <input class="text" id="userEmail" name="userVO.userEmail"/>
                         </td>
                     </tr>
                     <tr>
                         <td>备注:</td>
                         <td>
-                            <input class="text" id="remark" name="remark"/>
+                            <input class="text" id="userRemark" name="userVO.userRemark"/>
                         </td>
                     </tr>
                 </table>
             </form>
             <div style="text-align:center;padding:5px">
                 <a href="javascript:void(0)" class="easyui-linkbutton" onclick="submitForm()">确定</a>
-                <a href="javascript:void(0)" class="easyui-linkbutton" onclick="clearForm()">取消</a>
+                <a href="javascript:void(0)" class="easyui-linkbutton" onclick="$('#user_form').form('clear');">取消</a>
             </div>
         </div>
     </div>
@@ -191,8 +191,7 @@
             afterPageText: '页    共 {pages} 页',
             displayMsg: '当前显示 {from}-{to} 条记录   共 {total} 条记录'
         });
-    })
-    ;
+    });
 
     //更新选中行
     function updateRow() {
@@ -245,8 +244,35 @@
         });
         $("#rePassword").validatebox({
             required: true,
-            missingMessage: "密码不能为空"
+            missingMessage: "确认密码不能为空"
         });
+    }
+
+    //提交表单
+    function submitForm() {
+        $.messager.progress();
+        $('#user_form').form('submit', {
+                    url: '<%=basePath%>/addUser.do',
+                    onSubmit: function () {
+                        var isValid = $(this).form('validate');
+                        if (!isValid) {
+                            $.messager.progress('close');
+                            return false;
+                        }
+                        var password = $("#password").val();
+                        var rePassword = $("#rePassword").val();
+                        var passwordSame = password === rePassword;
+                        if (!passwordSame) {
+                            $.messager.progress('close');
+                            return false;
+                        }
+                        return true;
+                    },
+                    success: function () {
+                        $.messager.progress('close');
+                    }
+                }
+        );
     }
 
 </script>
