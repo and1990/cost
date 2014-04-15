@@ -46,7 +46,7 @@ public class UserAction extends BaseAction<UserVO> {
     /**
      * 增加用户
      */
-    @Action(value = "addUser", results = {@Result(type = "json", params = {"root", "returnData", "contentType", "text/html"})})
+    @Action(value = "addUser", results = {@Result(type = "json", params = {"root", "pageData", "contentType", "text/html"})})
     public String addUser() {
         try {
             if (userVO != null) {
@@ -63,7 +63,7 @@ public class UserAction extends BaseAction<UserVO> {
      *
      * @return
      */
-    @Action(value = "modifyUser", results = {@Result(type = "json", params = {"root", "returnData", "contentType", "text/html"})})
+    @Action(value = "modifyUser", results = {@Result(type = "json", params = {"root", "pageData", "contentType", "text/html"})})
     public String modifyUser() {
         try {
             userService.modifyUser(userVO);
@@ -79,10 +79,12 @@ public class UserAction extends BaseAction<UserVO> {
      * @param
      * @return
      */
-    @Action(value = "deleteUser", results = {@Result(type = "json", params = {"root", "returnData", "contentType", "text/html"})})
+    @Action(value = "deleteUser", results = {@Result(type = "json", params = {"root", "pageData", "contentType", "text/html"})})
     public String deleteUser() {
         try {
-            userService.deleteUser(userVO.getUserId());
+            if (userVO != null && userVO.getUserId() != null) {
+                userService.deleteUser(userVO.getUserId());
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }

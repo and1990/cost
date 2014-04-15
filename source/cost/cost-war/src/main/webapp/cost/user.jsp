@@ -51,13 +51,15 @@
 <div id="user_tool_bar" style="padding: 5px; height: auto">
     <div style="margin-bottom: 5px">
         <%--<a href="javascript:void(0);" class="easyui-linkbutton" iconCls="icon-add" plain="true"
-           onclick="addData('#user_data_table', '<%=basePath%>/addUser.do');">增加</a>--%>
+           onclick="addData('#user_data_table', '<%=basePath%>/addData.do');">增加</a>
+        modifyData('#user_data_table', '<%=basePath%>/modifyUser.do')
+        --%>
         <a href="javascript:void(0);" class="easyui-linkbutton" iconCls="icon-add" plain="true"
-           onclick="addUser();">增加</a>
+           onclick="addData();">增加</a>
         <a href="javascript:void(0);" class="easyui-linkbutton" iconCls="icon-edit" plain="true"
-           onclick="editData('#user_data_table', '<%=basePath%>/modifyUser.do');">修改</a>
+           onclick="modifyData();">修改</a>
         <a href="javascript:void(0);" class="easyui-linkbutton" iconCls="icon-remove" plain="true"
-           onclick="removeData('#user_data_table', '<%=basePath%>/deleteUser.do');">删除</a>
+           onclick="deleteData();">删除</a>
         <a href="javascript:void(0);" class="easyui-linkbutton" iconCls="icon-undo" plain="true"
            onclick="undoData('#user_data_table');">撤销</a>
         <a href="javascript:void(0);" class="easyui-linkbutton" iconCls="icon-save" plain="true"
@@ -100,12 +102,17 @@
     </div>
 </div>
 
-<div id="user_panel" class="easyui-dialog" title="增加用户"
+<div id="user_dialog" class="easyui-dialog"
      style="width:500px;height:430px;padding:2px;" data-options="closed:true,modal: true">
     <div class="easyui-panel" style="width:480px;text-align:center">
         <div style="padding:10px 10px 10px 100px">
             <form id="user_form" method="post">
                 <table cellpadding="5">
+                    <tr>
+                        <input type="hidden" id="userId" name="userVO.userId"/>
+                        <input type="hidden" id="userStatus" name="userVO.userStatus"/>
+                        <input type="hidden" id="isAdmin" name="userVO.isAdmin"/>
+                    </tr>
                     <tr>
                         <td>用户名：</td>
                         <td>
@@ -118,16 +125,16 @@
                             <input class="text" id="loginName" name="userVO.loginName"/>
                         </td>
                     </tr>
-                    <tr>
+                    <tr id="tr_password">
                         <td>密码:</td>
                         <td>
                             <input class="password" id="password" name="userVO.password"/>
                         </td>
                     </tr>
-                    <tr>
+                    <tr id="tr_repassword">
                         <td>确认密码:</td>
                         <td>
-                            <input class="password" id="rePassword" name="userVO.password"/>
+                            <input class="password" id="repassword"/>
                         </td>
                     </tr>
                     <tr>
@@ -157,6 +164,8 @@
                 </table>
             </form>
             <div style="text-align:center;padding:5px">
+                <input type="hidden" id="action" name="action">
+                <input type="hidden" id="url" name="url">
                 <a href="javascript:void(0)" class="easyui-linkbutton" onclick="submitForm()">确定</a>
                 <a href="javascript:void(0)" class="easyui-linkbutton" onclick="$('#user_form').form('clear');">取消</a>
             </div>
@@ -186,7 +195,6 @@
             onLoadSuccess: function (data) {
                 $("#user_data_table").datagrid("clearSelections");
             }
-
         });
 
         $('#user_data_table').datagrid('getPager').pagination({
@@ -197,25 +205,6 @@
             displayMsg: '当前显示 {from}-{to} 条记录   共 {total} 条记录'
         });
     });
-
-    //更新选中行
-    function updateRow() {
-        var rowCount = $('#dg').datagrid('getRows').length;
-        for (var i = 0; i < rowCount; i++) {
-            $('#user_data_table').datagrid('updateRow', {
-                index: i,
-                row: {action: ''}
-            });
-        }
-    }
-
-    function onClickRow(index) {
-        if (actionType != undefined) {
-            $('#user_data_table').datagrid('selectRow', rowIndex);
-        } else {
-            rowIndex = index;
-        }
-    }
 
     //获取查询参数
     function getUserByFilter() {
@@ -238,8 +227,14 @@
     })(jQuery);
 
     //增加用户
-    function addUser() {
-        $("#user_panel").dialog("open");
+    function addData() {
+        //设置标题
+        $('#user_dialog').dialog({ title: '增加用户信息'});
+        //打开弹出框
+        $("#user_dialog").dialog("open");
+        //设置action、url值，1代表增加
+        $("#action").val(1);
+        $("#url").val('<%=basePath%>/addUser.do');
 
         $("#userName").validatebox({
             required: true,
@@ -253,41 +248,98 @@
             required: true,
             missingMessage: "密码不能为空"
         });
-        $("#rePassword").validatebox({
+        $("#repassword").validatebox({
             required: true,
             missingMessage: "确认密码不能为空"
         });
     }
 
+    //修改用户
+    function modifyData() {
+        var rowData = $("#user_data_table").datagrid("getSelected");
+        if (rowData == undefined) {
+            alert("请选择数据");
+            return;
+        }
+        //隐藏密码输入框
+        $("#tr_password").hide();
+        $("#tr_repassword").hide();
+
+        //设置标题
+        $('#user_dialog').dialog({ title: '修改用户信息'});
+        //打开弹出框
+        $("#user_dialog").dialog("open");
+        //设置action值，2代表修改
+        $("#action").val(2);
+        $("#url").val('<%=basePath%>/modifyUser.do');
+
+        //填充数据
+        $("#userId").val(rowData.userId);
+        $("#userStatus").val(rowData.userStatus);
+        $("#isAdmin").val(rowData.isAdmin);
+        $("#userName").val(rowData.userName);
+        $("#loginName").val(rowData.loginName);
+        $("#userAge").val(rowData.userAge);
+        $("#userAddress").val(rowData.userAddress);
+        $("#userEmail").val(rowData.userEmail);
+        $("#userRemark").val(rowData.userRemark);
+    }
+
+    //删除用户
+    function deleteData() {
+        if (window.confirm("确定删除？")) {
+            var rowData = $("#user_data_table").datagrid("getSelected");
+            var url = "<%=basePath%>/deleteUser.do?userVO.userId=" + rowData.userId;
+            $.ajax({
+                        type: "post",
+                        url: url,
+                        success: function (returnData) {
+                            $('#user_data_table').datagrid('reload');
+                        }
+                    }
+            );
+        }
+    }
+
     //提交表单
     function submitForm() {
+        //打开进度条
         $.messager.progress();
+
+        var action = $("#action").val();
+        var url = $("#url").val();
         $('#user_form').form('submit', {
-                    url: '<%=basePath%>/addUser.do',
+                    url: url,
                     onSubmit: function () {
-                        var isValid = $(this).form('validate');
-                        if (!isValid) {
-                            $.messager.progress('close');
-                            return false;
-                        }
-                        var password = $("#password").val();
-                        var rePassword = $("#rePassword").val();
-                        var passwordSame = password === rePassword;
-                        if (!passwordSame) {
-                            $.messager.progress('close');
-                            return false;
+                        if (action == 1) {
+                            var isValid = $(this).form('validate');
+                            if (!isValid) {
+                                $.messager.progress('close');
+                                return false;
+                            }
+                            var password = $("#password").val();
+                            var rePassword = $("#rePassword").val();
+                            var passwordSame = password === rePassword;
+                            if (!passwordSame) {
+                                $.messager.progress('close');
+                                return false;
+                            }
                         }
                         return true;
                     },
                     success: function () {
                         $.messager.progress('close');
                         $('#user_form').form('clear');
-                        $("#user_panel").dialog("close");
+                        $("#user_dialog").dialog("close");
+                        if (action == 2) {
+                            $("#password").show();
+                            $("#repassword").show();
+                            $('#user_data_table').datagrid('reload');
+                        }
                     }
                 }
         );
     }
-
 </script>
 </body>
 </html>

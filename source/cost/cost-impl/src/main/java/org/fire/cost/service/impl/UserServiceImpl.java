@@ -208,7 +208,6 @@ public class UserServiceImpl implements UserService {
             user.setUserId(vo.getUserId());
         }
         user.setUserName(vo.getUserName());
-        user.setPassword(vo.getPassword());
         user.setLoginName(vo.getLoginName());
         user.setUserAge(vo.getUserAge());
         user.setUserAddress(vo.getUserAddress());
