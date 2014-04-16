@@ -50,20 +50,14 @@
 
 <div id="user_tool_bar" style="padding: 5px; height: auto">
     <div style="margin-bottom: 5px">
-        <%--<a href="javascript:void(0);" class="easyui-linkbutton" iconCls="icon-add" plain="true"
-           onclick="addData('#user_data_table', '<%=basePath%>/addData.do');">增加</a>
-        modifyData('#user_data_table', '<%=basePath%>/modifyUser.do')
-        --%>
         <a href="javascript:void(0);" class="easyui-linkbutton" iconCls="icon-add" plain="true"
            onclick="addData();">增加</a>
         <a href="javascript:void(0);" class="easyui-linkbutton" iconCls="icon-edit" plain="true"
            onclick="modifyData();">修改</a>
         <a href="javascript:void(0);" class="easyui-linkbutton" iconCls="icon-remove" plain="true"
            onclick="deleteData();">删除</a>
-        <a href="javascript:void(0);" class="easyui-linkbutton" iconCls="icon-undo" plain="true"
-           onclick="undoData('#user_data_table');">撤销</a>
         <a href="javascript:void(0);" class="easyui-linkbutton" iconCls="icon-save" plain="true"
-           onclick="saveData('#user_data_table');">保存</a>
+           onclick="undoData('#user_data_table');">导出Excel</a>
     </div>
     <div>
         <form id="filter_form" method="post">
