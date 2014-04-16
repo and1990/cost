@@ -10,23 +10,20 @@
 <div id="account_data_layout" class="easyui-layout" data-options="fit:true">
     <div id="account_data_north"
          data-options="region:'north',border:0,fit:true">
-        <table id="account_data_table"
-        <thead>
-        <tr>
-            <th data-options="field:'userName',width:80,align:'center'">用户名</th>
-            <th data-options="field:'accountMoney',width:80,align:'center' ">金额
-            </th>
-            <th data-options="field:'accountTypeName',width:60,align:'center'">消费类型
-            </th>
-            <th data-options="field:'accountPartner',width:80,align:'center',editor:'text'">组员</th>
-            <th data-options="field:'accountTime',width:80,align:'center', editor:'datebox'">消费时间
-            </th>
-            <th data-options="field:'isApproveName',width:60,align:'center'">是否审批</th>
-            <th data-options="field:'accountAccessory',width:80,align:'center'">附件</th>
-            <th data-options="field:'createTime',width:120,align:'center'">创建时间</th>
-            <th data-options="field:'accountRemark',width:120,align:'center'">备注</th>
-        </tr>
-        </thead>
+        <table id="account_data_table">
+            <thead>
+            <tr>
+                <th data-options="field:'userName',width:80,align:'center'">用户名</th>
+                <th data-options="field:'accountMoney',width:80,align:'center' ">金额</th>
+                <th data-options="field:'accountTypeName',width:60,align:'center'">消费类型</th>
+                <th data-options="field:'accountPartner',width:80,align:'center',editor:'text'">组员</th>
+                <th data-options="field:'accountTime',width:80,align:'center', editor:'datebox'">消费时间</th>
+                <th data-options="field:'isApproveName',width:60,align:'center'">是否审批</th>
+                <th data-options="field:'accountAccessory',width:80,align:'center'">附件</th>
+                <th data-options="field:'createTime',width:120,align:'center'">创建时间</th>
+                <th data-options="field:'accountRemark',width:120,align:'center'">备注</th>
+            </tr>
+            </thead>
         </table>
     </div>
 </div>
@@ -38,9 +35,9 @@
            onclick="modifyData();">修改</a>
         <a href="javascript:void(0);" class="easyui-linkbutton" iconCls="icon-remove" plain="true"
            onclick="deleteData();">删除</a>
-        <a href="javascript:void(0);" class="easyui-linkbutton" iconCls="icon-do" plain="true"
+        <a href="javascript:void(0);" class="easyui-linkbutton" iconCls="icon-tag-blue" plain="true"
            onclick="undoData('#account_data_table');">审批</a>
-        <a href="javascript:void(0);" class="easyui-linkbutton" iconCls="icon-do" plain="true"
+        <a href="javascript:void(0);" class="easyui-linkbutton" iconCls="icon-tag-red" plain="true"
            onclick="undoData('#account_data_table');">结算</a>
         <a href="javascript:void(0);" class="easyui-linkbutton" iconCls="icon-print" plain="true"
            onclick="undoData('#account_data_table');">导出Excel</a>
@@ -169,7 +166,7 @@
     //获取查询参数
     function getUserByFilter() {
         var queryData = $("#filter_form").serializeJson();
-        $("#user_data_table").datagrid(
+        $("#account_data_table").datagrid(
                 {
                     queryParams: queryData,
                     pageNumber: 1

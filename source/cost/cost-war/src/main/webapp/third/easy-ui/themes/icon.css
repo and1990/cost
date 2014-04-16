@@ -83,6 +83,10 @@
 }
 
 /*自定义*/
-.icon-do {
-    background: url('icons/do.png') no-repeat center center;
+.icon-tag-blue {
+    background: url('icons/tag_blue.png') no-repeat center center;
+}
+
+.icon-tag-red {
+    background: url('icons/tag_red.png') no-repeat center center;
 }

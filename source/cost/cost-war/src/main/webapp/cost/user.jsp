@@ -231,23 +231,6 @@
         //设置action、url值，1代表增加
         $("#action").val(1);
         $("#url").val('<%=basePath%>/addUser.do');
-
-        /*$("#userName").validatebox({
-         required: true,
-         missingMessage: "用户名不能为空"
-         });
-         $("#loginName").validatebox({
-         required: true,
-         missingMessage: "登录名不能为空"
-         });
-         $("#password").validatebox({
-         required: true,
-         missingMessage: "密码不能为空"
-         });
-         $("#repassword").validatebox({
-         required: true,
-         missingMessage: "确认密码不能为空"
-         });*/
     }
 
     //修改用户
