@@ -42,7 +42,7 @@
            onclick="undoData('#user_data_table');">导出Excel</a>
     </div>
     <div>
-        <form id="filter_form" method="post">
+        <form id="user_filter_form" method="post">
             <table style="font-size: 12">
                 <tr>
                     <td>
@@ -204,7 +204,8 @@
 
     //获取查询参数
     function getUserByFilter() {
-        var queryData = $("#filter_form").serializeJson();
+        var queryData = $("#user_filter_form").serializeJson();
+        console.info(queryData);
         $("#user_data_table").datagrid(
                 {
                     queryParams: queryData,

@@ -47,7 +47,7 @@
            onclick="saveData('#account_data_table');">查看本月</a>
     </div>
     <div>
-        <form id="filter_form" method="post">
+        <form id="account_filter_form" method="post">
             <span>用户：</span>
             <input class="text" name="accountVO.accountName" style="width:100px;"/>
             <span>消费类型：</span>
@@ -165,7 +165,7 @@
 
     //获取查询参数
     function getUserByFilter() {
-        var queryData = $("#filter_form").serializeJson();
+        var queryData = $("#account_filter_form").serializeJson();
         $("#account_data_table").datagrid(
                 {
                     queryParams: queryData,
