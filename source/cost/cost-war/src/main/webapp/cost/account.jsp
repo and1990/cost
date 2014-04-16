@@ -4,8 +4,8 @@
     String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + request.getContextPath();
 %>
 
-<link rel="stylesheet" type="text/css" href="<%=basePath%>/js/uploadify/uploadify.css">
-<script type="text/javascript" src="<%=basePath%>/js/uploadify/jquery.uploadify.min.js"></script>
+<link rel="stylesheet" type="text/css" href="<%=basePath%>/third/uploadify/uploadify.css">
+<script type="text/javascript" src="<%=basePath%>/third/uploadify/jquery.uploadify.min.js"></script>
 
 <div id="account_data_layout" class="easyui-layout" data-options="fit:true">
     <div id="account_data_north"
