@@ -21,26 +21,8 @@
                 <th data-options="field:'userAge',width:80,align:'center',editor:'numberbox'">年龄</th>
                 <th data-options="field:'userAddress',width:120,align:'center',editor:'text'">地址</th>
                 <th data-options="field:'userEmail',width:120,align:'center',editor:'text'">邮箱</th>
-                <th data-options="field:'isAdminName',width:120,align:'center',formatter:showIsAdminText,
-                          editor:{
-                              type:'combobox',
-                              options:{
-                                  data:isAdminData,
-                                  valueField:'value',
-                                  textField:'name'
-                              }}"
-                        >是否管理员
-                </th>
-                <th data-options="field:'userStatusName',width:120,align:'center',formatter:showStatusText,
-                          editor:{
-                              type:'combobox',
-                              options:{
-                                  data:statusData,
-                                  valueField:'value',
-                                  textField:'name'
-                              }}"
-                        >用户状态
-                </th>
+                <th data-options="field:'isAdminName',width:120,align:'center'">是否管理员</th>
+                <th data-options="field:'userStatusName',width:120,align:'center'">用户状态</th>
                 <th data-options="field:'userRemark',width:120,align:'center',editor:'text'">备注</th>
             </tr>
             </thead>
@@ -110,37 +92,57 @@
                     <tr>
                         <td>用户名：</td>
                         <td>
-                            <input class="text" id="userName" name="userVO.userName"/>
+                            <input class="text easyui-validatebox" id="userName"
+                                   name="userVO.userName" value="用户名为中文"
+                                   style="color: gray;" data-options="required:true"
+                                   onfocus="if(this.value=='用户名为中文') {this.value='';}"
+                                   onblur="if(this.value=='') {this.value='用户名为中文';}"/>
                         </td>
                     </tr>
                     <tr>
                         <td>登录名:</td>
                         <td>
-                            <input class="text" id="loginName" name="userVO.loginName"/>
+                            <input class="text easyui-validatebox" id="loginName"
+                                   name="userVO.loginName" value="数字和字母组合"
+                                   style="color: gray;" data-options="required:true"
+                                   onfocus="if(this.value=='数字和字母组合') {this.value='';}"
+                                   onblur="if(this.value=='') {this.value='数字和字母组合';}"
+                                    />
                         </td>
                     </tr>
                     <tr id="tr_password">
                         <td>密码:</td>
                         <td>
-                            <input class="password" id="password" name="userVO.password"/>
+                            <input class="easyui-validatebox" id="password"
+                                   name="userVO.password" value="数字和字母组合"
+                                   style="color: gray;" data-options="required:true"
+                                   onfocus="if(this.value=='数字和字母组合') {this.value='';}"
+                                   onblur="if(this.value=='') {this.value='数字和字母组合';}"/>
                         </td>
                     </tr>
                     <tr id="tr_repassword">
                         <td>确认密码:</td>
                         <td>
-                            <input class="password" id="repassword"/>
+                            <input class="easyui-validatebox" id="repassword" value="密码必须一致"
+                                   style="color: gray;" data-options="required:true"
+                                   onfocus="if(this.value=='密码必须一致') {this.value='';}"
+                                   onblur="if(this.value=='') {this.value='密码必须一致';}"/>
                         </td>
                     </tr>
                     <tr>
                         <td>年龄:</td>
                         <td>
-                            <input class="text" id="userAge" name="userVO.userAge"/>
+                            <input class="text" id="userAge" name="userVO.userAge" style="color: gray;"
+                                   onfocus="if(this.value=='输入数字') {this.value='';}"
+                                   onblur="if(this.value=='') {this.value='输入数字';}"/>
                         </td>
                     </tr>
                     <tr>
                         <td>地址:</td>
                         <td>
-                            <input class="text" id="userAddress" name="userVO.userAddress"/>
+                            <input class="text" id="userAddress" name="userVO.userAddress"
+                                   onfocus="if(this.value=='输入有效地址') {this.value='';}"
+                                   onblur="if(this.value=='') {this.value='输入有效地址';}"/>
                         </td>
                     </tr>
                     <tr>
@@ -230,22 +232,22 @@
         $("#action").val(1);
         $("#url").val('<%=basePath%>/addUser.do');
 
-        $("#userName").validatebox({
-            required: true,
-            missingMessage: "用户名不能为空"
-        });
-        $("#loginName").validatebox({
-            required: true,
-            missingMessage: "登录名不能为空"
-        });
-        $("#password").validatebox({
-            required: true,
-            missingMessage: "密码不能为空"
-        });
-        $("#repassword").validatebox({
-            required: true,
-            missingMessage: "确认密码不能为空"
-        });
+        /*$("#userName").validatebox({
+         required: true,
+         missingMessage: "用户名不能为空"
+         });
+         $("#loginName").validatebox({
+         required: true,
+         missingMessage: "登录名不能为空"
+         });
+         $("#password").validatebox({
+         required: true,
+         missingMessage: "密码不能为空"
+         });
+         $("#repassword").validatebox({
+         required: true,
+         missingMessage: "确认密码不能为空"
+         });*/
     }
 
     //修改用户
@@ -297,6 +299,7 @@
 
     //提交表单
     function submitForm() {
+        $(".easyui-validatebox").validatebox("validate");
         //打开进度条
         $.messager.progress();
 
