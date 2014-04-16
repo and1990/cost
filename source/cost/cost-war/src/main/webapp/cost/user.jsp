@@ -38,7 +38,7 @@
            onclick="modifyData();">修改</a>
         <a href="javascript:void(0);" class="easyui-linkbutton" iconCls="icon-remove" plain="true"
            onclick="deleteData();">删除</a>
-        <a href="javascript:void(0);" class="easyui-linkbutton" iconCls="icon-save" plain="true"
+        <a href="javascript:void(0);" class="easyui-linkbutton" iconCls="icon-print" plain="true"
            onclick="undoData('#user_data_table');">导出Excel</a>
     </div>
     <div>
