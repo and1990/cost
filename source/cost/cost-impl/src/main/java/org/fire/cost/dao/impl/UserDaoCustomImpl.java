@@ -73,7 +73,7 @@ public class UserDaoCustomImpl extends BaseJpaDaoSupport<User, Long> implements 
     public int getUserDataTotal() {
         String sql = "select count(*) from cost_user";
         Query query = entityManager.createNativeQuery(sql);
-        int total = query.getFirstResult();
+        int total = Integer.valueOf(query.getSingleResult().toString());
         return total;
     }
 

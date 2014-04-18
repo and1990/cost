@@ -33,11 +33,11 @@
 <div id="user_tool_bar" style="padding: 5px; height: auto">
     <div style="margin-bottom: 5px">
         <a href="javascript:void(0);" class="easyui-linkbutton" iconCls="icon-add" plain="true"
-           onclick="addData();">增加</a>
+           onclick="addUser();">增加</a>
         <a href="javascript:void(0);" class="easyui-linkbutton" iconCls="icon-edit" plain="true"
-           onclick="modifyData();">修改</a>
+           onclick="modifyUser();">修改</a>
         <a href="javascript:void(0);" class="easyui-linkbutton" iconCls="icon-remove" plain="true"
-           onclick="deleteData();">删除</a>
+           onclick="deleteUser();">删除</a>
         <a href="javascript:void(0);" class="easyui-linkbutton" iconCls="icon-print" plain="true"
            onclick="undoData('#user_data_table');">导出Excel</a>
     </div>
@@ -224,7 +224,7 @@
     })(jQuery);
 
     //增加用户
-    function addData() {
+    function addUser() {
         //设置标题
         $('#user_dialog').dialog({ title: '增加用户信息'});
         //打开弹出框
@@ -235,7 +235,7 @@
     }
 
     //修改用户
-    function modifyData() {
+    function modifyUser() {
         var rowData = $("#user_data_table").datagrid("getSelected");
         if (rowData == undefined) {
             alert("请选择数据");
@@ -266,7 +266,7 @@
     }
 
     //删除用户
-    function deleteData() {
+    function deleteUser() {
         if (window.confirm("确定删除？")) {
             var rowData = $("#user_data_table").datagrid("getSelected");
             var url = "<%=basePath%>/deleteUser.do?userVO.userId=" + rowData.userId;

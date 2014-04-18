@@ -31,15 +31,15 @@
 <div id="account_tool_bar" style="padding: 5px; height: auto">
     <div style="margin-bottom: 5px">
         <a href="#" class="easyui-linkbutton" iconCls="icon-add" plain="true"
-           onclick="addData();">增加</a>
+           onclick="addAccount();">增加</a>
         <a href="#" class="easyui-linkbutton" iconCls="icon-edit" plain="true"
-           onclick="modifyData();">修改</a>
+           onclick="modifyAccount();">修改</a>
         <a href="#" class="easyui-linkbutton" iconCls="icon-remove" plain="true"
-           onclick="deleteData();">删除</a>
+           onclick="deleteAccount();">删除</a>
         <a href="#" class="easyui-linkbutton" iconCls="icon-tag-blue" plain="true"
-           onclick="approveData();">审批</a>
+           onclick="approveAccount();">审批</a>
         <a href="#" class="easyui-linkbutton" iconCls="icon-tag-red" plain="true"
-           onclick="clearData();">结算</a>
+           onclick="clearAccount();">结算</a>
         <a href="#" class="easyui-linkbutton" iconCls="icon-print" plain="true"
            onclick="exportExcel();">导出Excel</a>
         <a href="#" class="easyui-linkbutton" iconCls="icon-search" plain="true"
@@ -200,7 +200,7 @@
     })(jQuery);
 
     //增加账单
-    function addData() {
+    function addAccount() {
         //设置标题
         $('#account_dialog').dialog({ title: '增加账单信息'});
         //打开弹出框
@@ -211,7 +211,7 @@
     }
 
     //修改账单
-    function modifyData() {
+    function modifyAccount() {
         var rowData = $("#account_data_table").datagrid("getSelected");
         if (rowData == undefined) {
             alert("请选择数据");
@@ -240,7 +240,7 @@
     }
 
     //删除账单
-    function deleteData() {
+    function deleteAccount() {
         var rowData = $("#account_data_table").datagrid("getSelected");
         if (rowData == undefined) {
             alert("请选择数据");
@@ -260,7 +260,7 @@
     }
 
     //审批
-    function approveData() {
+    function approveAccount() {
         var rowData = $("#account_data_table").datagrid("getSelected");
         if (rowData == undefined) {
             alert("请选择数据");
@@ -278,7 +278,7 @@
     }
 
     //结算
-    function clearData() {
+    function clearAccount() {
         var rowData = $("#account_data_table").datagrid("getSelected");
         if (rowData == undefined) {
             alert("请选择数据");
