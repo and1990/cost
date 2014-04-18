@@ -161,6 +161,38 @@ public class AccountServiceImpl implements AccountService {
     }
 
     /**
+     * 审批账单
+     *
+     * @return
+     */
+    @Override
+    @Transactional(value = "transactionManager", rollbackFor = RollbackException.class)
+    public void approveAccount() {
+        try {
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new RollbackException();
+        }
+    }
+
+    /**
+     * 结算账单
+     *
+     * @return
+     */
+    @Override
+    @Transactional(value = "transactionManager", rollbackFor = RollbackException.class)
+    public void clearAccount() {
+        try {
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new RollbackException();
+        }
+    }
+
+    /**
      * 得到账单类型
      *
      * @return

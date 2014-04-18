@@ -65,6 +65,20 @@ public interface AccountService {
     boolean fileUpload(HttpServletRequest request, HttpServletResponse response) throws IOException;
 
     /**
+     * 结算账单
+     *
+     * @return
+     */
+    void approveAccount();
+
+    /**
+     * 得到账单类型
+     *
+     * @return
+     */
+    void clearAccount();
+
+    /**
      * 得到账单类型
      *
      * @return

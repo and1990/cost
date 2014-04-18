@@ -129,6 +129,36 @@ public class AccountAction extends BaseAction<AccountVO> {
     }
 
     /**
+     * 审批账单
+     *
+     * @return
+     */
+    @Action(value = "approveAccount", results = {@Result(type = "json", params = {"root", "typeList", "contentType", "text/html"})})
+    public String approveAccount() {
+        try {
+            accountService.approveAccount();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return SUCCESS;
+    }
+
+    /**
+     * 结算账单
+     *
+     * @return
+     */
+    @Action(value = "clearAccount", results = {@Result(type = "json", params = {"root", "typeList", "contentType", "text/html"})})
+    public String clearAccount() {
+        try {
+            accountService.clearAccount();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return SUCCESS;
+    }
+
+    /**
      * 得到账单类型
      *
      * @return

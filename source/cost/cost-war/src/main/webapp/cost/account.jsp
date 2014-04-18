@@ -30,22 +30,22 @@
 <!-- 工具栏 -->
 <div id="account_tool_bar" style="padding: 5px; height: auto">
     <div style="margin-bottom: 5px">
-        <a href="javascript:void(0);" class="easyui-linkbutton" iconCls="icon-add" plain="true"
+        <a href="#" class="easyui-linkbutton" iconCls="icon-add" plain="true"
            onclick="addData();">增加</a>
-        <a href="javascript:void(0);" class="easyui-linkbutton" iconCls="icon-edit" plain="true"
+        <a href="#" class="easyui-linkbutton" iconCls="icon-edit" plain="true"
            onclick="modifyData();">修改</a>
-        <a href="javascript:void(0);" class="easyui-linkbutton" iconCls="icon-remove" plain="true"
+        <a href="#" class="easyui-linkbutton" iconCls="icon-remove" plain="true"
            onclick="deleteData();">删除</a>
-        <a href="javascript:void(0);" class="easyui-linkbutton" iconCls="icon-tag-blue" plain="true"
-           onclick="undoData('#account_data_table');">审批</a>
-        <a href="javascript:void(0);" class="easyui-linkbutton" iconCls="icon-tag-red" plain="true"
-           onclick="undoData('#account_data_table');">结算</a>
-        <a href="javascript:void(0);" class="easyui-linkbutton" iconCls="icon-print" plain="true"
-           onclick="undoData('#account_data_table');">导出Excel</a>
-        <a href="javascript:void(0);" class="easyui-linkbutton" iconCls="icon-search" plain="true"
-           onclick="saveData('#account_data_table');">查看本周</a>
-        <a href="javascript:void(0);" class="easyui-linkbutton" iconCls="icon-search" plain="true"
-           onclick="saveData('#account_data_table');">查看本月</a>
+        <a href="#" class="easyui-linkbutton" iconCls="icon-tag-blue" plain="true"
+           onclick="approveData();">审批</a>
+        <a href="#" class="easyui-linkbutton" iconCls="icon-tag-red" plain="true"
+           onclick="clearData();">结算</a>
+        <a href="#" class="easyui-linkbutton" iconCls="icon-print" plain="true"
+           onclick="exportExcel();">导出Excel</a>
+        <a href="#" class="easyui-linkbutton" iconCls="icon-search" plain="true"
+           onclick="queryThisWeek();">查看本周</a>
+        <a href="#" class="easyui-linkbutton" iconCls="icon-search" plain="true"
+           onclick="queryThisMonth();">查看本月</a>
     </div>
     <div>
         <form id="account_filter_form" method="post">
@@ -241,8 +241,12 @@
 
     //删除账单
     function deleteData() {
+        var rowData = $("#account_data_table").datagrid("getSelected");
+        if (rowData == undefined) {
+            alert("请选择数据");
+            return;
+        }
         if (window.confirm("确定删除？")) {
-            var rowData = $("#account_data_table").datagrid("getSelected");
             var url = "<%=basePath%>/deleteAccount.do?accountVO.accountId=" + rowData.accountId;
             $.ajax({
                         type: "post",
@@ -253,6 +257,57 @@
                     }
             );
         }
+    }
+
+    //审批
+    function approveData() {
+        var rowData = $("#account_data_table").datagrid("getSelected");
+        if (rowData == undefined) {
+            alert("请选择数据");
+            return;
+        }
+        var url = "<%=basePath%>/approveAccount.do?accountVO.accountId=" + rowData.accountId;
+        $.ajax({
+                    type: "post",
+                    url: url,
+                    success: function (returnData) {
+                        $('#account_data_table').datagrid('reload');
+                    }
+                }
+        );
+    }
+
+    //结算
+    function clearData() {
+        var rowData = $("#account_data_table").datagrid("getSelected");
+        if (rowData == undefined) {
+            alert("请选择数据");
+            return;
+        }
+        var url = "<%=basePath%>/clearAccount.do?accountVO.accountId=" + rowData.accountId;
+        $.ajax({
+                    type: "post",
+                    url: url,
+                    success: function (returnData) {
+                        $('#account_data_table').datagrid('reload');
+                    }
+                }
+        );
+    }
+
+    //导出Excel
+    function exportExcel() {
+
+    }
+
+    //查询本周
+    function queryThisWeek() {
+
+    }
+
+    //查询本月
+    function queryThisMonth() {
+
     }
 
     //提交表单
@@ -276,9 +331,7 @@
                         $.messager.progress('close');
                         $('#account_form').form('clear');
                         $("#account_dialog").dialog("close");
-                        if (action == 2) {
-                            $('#account_data_table').datagrid('reload');
-                        }
+                        $('#account_data_table').datagrid('reload');
                     }
                 }
         );
