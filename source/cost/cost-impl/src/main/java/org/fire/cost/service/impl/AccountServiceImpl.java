@@ -13,6 +13,7 @@ import org.fire.cost.enums.AccountTypeEnum;
 import org.fire.cost.enums.ApproveEnum;
 import org.fire.cost.service.AccountService;
 import org.fire.cost.service.UserService;
+import org.fire.cost.util.AuthenticationUtil;
 import org.fire.cost.util.DateUtil;
 import org.fire.cost.vo.AccountVO;
 import org.fire.cost.vo.PageData;
@@ -297,8 +298,7 @@ public class AccountServiceImpl implements AccountService {
             account.setCreateUser(userService.getLoginUserName());
             account.setCreateTime(new Date());
         }
-        //User user = userDao.findOne(AuthenticationUtil.getLoginUserId());
-        User user = userDao.findOne(1L);
+        User user = userDao.findOne(AuthenticationUtil.getLoginUserId());
         account.setUser(user);
         account.setAccountMoney(vo.getAccountMoney());
         account.setAccountTime(DateUtil.makeStr2Date(vo.getAccountTime(), false));

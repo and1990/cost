@@ -84,7 +84,7 @@
     function sendRequest() {
         $.ajax({
             type: "POST",
-            url: "<%=basePath%>/userLogin.do?" + $('#user_login_form').serialize(),
+            url: "<%=basePath%>/login.do?" + $('#user_login_form').serialize(),
             success: function (returnData) {
                 var message = JSON.parse(returnData);
                 if (message.status = 200) {

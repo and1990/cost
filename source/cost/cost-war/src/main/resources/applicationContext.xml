@@ -95,9 +95,6 @@
     <!-- shiro -->
     <bean id="shiroFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">
         <property name="securityManager" ref="securityManager"/>
-        <!--<property name="loginUrl" value="/index.jsp" /> -->
-        <!--<property name="successUrl" value="/success.jsp" /> -->
-        <!--<property name="unauthorizedUrl" value="/401.jsp" /> -->
         <property name="filters">
             <map>
                 <entry key="auth">
@@ -111,8 +108,9 @@
                 /css/** = anon
                 /image/** = anon
                 /third/** = anon
+                /welcome.do = anon
                 /login.do = anon
-                /** = anon
+                /** = auth
             </value>
         </property>
     </bean>

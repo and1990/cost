@@ -89,6 +89,7 @@ public class AuthenticationServiceImpl extends AuthenticatingRealm implements Au
         User user = userDao.findByLoginName(loginName);
         Long userId = user.getUserId();
         userContext.setUserId(userId);
+        userContext.setUserName(user.getUserName());
         userContext.setUuid(UUID.randomUUID().toString());
         userContext.setTimeStamp(String.valueOf(System.currentTimeMillis()));
         StringBuffer sessionId = new StringBuffer();

@@ -21,8 +21,8 @@ import org.springframework.stereotype.Controller;
 
 import javax.annotation.Resource;
 import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 @Namespace("/")
 @Controller
@@ -50,7 +50,7 @@ public class AuthenticationAction extends BaseAction {
     /**
      * 用户登录
      */
-    @Action(value = "userLogin", results = {@Result(type = "json", params = {"root", "message", "contentType", "text/html"})})
+    @Action(value = "login", results = {@Result(type = "json", params = {"root", "message", "contentType", "text/html"})})
     public String userLogin() {
         try {
             UsernamePasswordToken token = new UsernamePasswordToken();
@@ -64,7 +64,12 @@ public class AuthenticationAction extends BaseAction {
             UserContext userContext = authenticationService.buildUserContext(loginName);
             //创建cookie
             setCookie(userContext);
+            //更新登录时间
             userService.changeUserLoginTime(userContext.getUserId());
+            //设置用户名
+            HttpSession session = ServletActionContext.getRequest().getSession();
+            session.setAttribute("userName", userContext.getUserName());
+            //设置返回信息
             MessageUtil.setMessage(message, ResultEnum.Success, HttpStatusEnum.Success, null, null);
         } catch (AuthenticationException e) {
             String msg = e.getMessage();
@@ -81,7 +86,7 @@ public class AuthenticationAction extends BaseAction {
      *
      * @return
      */
-    @Action(value = "loginOut", results = {@Result(type = "json", params = {"root", "returnData", "contentType", "text/html"})})
+    @Action(value = "loginOut", results = {@Result(name = SUCCESS, location = "/cost/login.jsp")})
     public String loginOut() {
         String sessionId = AuthenticationUtil.getSessionId();
         if (sessionId != null && sessionId.trim().length() > 0) {
@@ -97,34 +102,10 @@ public class AuthenticationAction extends BaseAction {
      * @param userContext
      */
     private void setCookie(UserContext userContext) {
-        HttpServletRequest request = ServletActionContext.getRequest();
         HttpServletResponse response = ServletActionContext.getResponse();
-        Cookie[] cookieArr = request.getCookies();
-        if (cookieArr == null || cookieArr.length <= 2) {
-            Cookie userIdCookie = new Cookie("userId", String.valueOf(userContext.getUserId()));
-            userIdCookie.setPath("/");
-            Cookie sessionIdCookie = new Cookie("sessionId", userContext.getSessionId());
-            sessionIdCookie.setPath("/");
-            Cookie uuidCookie = new Cookie("uuid", userContext.getUuid());
-            uuidCookie.setPath("/");
-            response.addCookie(userIdCookie);
-            response.addCookie(sessionIdCookie);
-            response.addCookie(uuidCookie);
-        } else {
-            for (Cookie cookie : cookieArr) {
-                String name = cookie.getName();
-                if ("userId".equals(name) || "sessionId".equals(name) || "uuid".equals(name)) {
-                    if ("userId".equals(name))
-                        cookie.setValue(String.valueOf(userContext.getUserId()));
-                    else if ("sessionId".equals(name))
-                        cookie.setValue(userContext.getSessionId());
-                    else if ("uuid".equals(name))
-                        cookie.setValue(userContext.getUuid());
-                    cookie.setPath("/");
-                    response.addCookie(cookie);
-                }
-            }
-        }
+        Cookie sessionIDCookie = new Cookie("sessionId", userContext.getSessionId());
+        sessionIDCookie.setPath("/");
+        response.addCookie(sessionIDCookie);
     }
 
     public String getLoginName() {

@@ -20,7 +20,7 @@ public class SkipAction extends BaseAction {
      *
      * @return
      */
-    @Action(value = "login", results = {@Result(name = SUCCESS, location = "/cost/login.jsp")})
+    @Action(value = "welcome", results = {@Result(name = SUCCESS, location = "/cost/login.jsp")})
     public String skipToLogin() {
         return SUCCESS;
     }
