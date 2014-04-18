@@ -16,10 +16,9 @@
                 <th data-options="field:'userName',width:80,align:'center'">用户名</th>
                 <th data-options="field:'accountMoney',width:80,align:'center' ">金额</th>
                 <th data-options="field:'accountTypeName',width:60,align:'center'">消费类型</th>
-                <th data-options="field:'accountPartner',width:80,align:'center',editor:'text'">组员</th>
-                <th data-options="field:'accountTime',width:80,align:'center', editor:'datebox'">消费时间</th>
-                <th data-options="field:'isApproveName',width:60,align:'center'">是否审批</th>
-                <th data-options="field:'accountAccessory',width:80,align:'center'">附件</th>
+                <th data-options="field:'accountTime',width:80,align:'center'">消费时间</th>
+                <th data-options="field:'accountStatusName',width:60,align:'center'">是否审批</th>
+                <th data-options="field:'accountFile',width:80,align:'center'">附件</th>
                 <th data-options="field:'createTime',width:120,align:'center'">创建时间</th>
                 <th data-options="field:'accountRemark',width:120,align:'center'">备注</th>
             </tr>
@@ -48,7 +47,7 @@
     </div>
     <div>
         <form id="account_filter_form" method="post">
-            <span>用户：</span>
+            <span>账单：</span>
             <input class="text" name="accountVO.accountName" style="width:100px;"/>
             <span>消费类型：</span>
             <select class="easyui-combobox" name="accountVO.isAdmin" style="width:100px;">
@@ -74,8 +73,9 @@
     </div>
 </div>
 
+<!-- 添加、修改账单对话框 -->
 <div id="account_dialog" class="easyui-dialog"
-     style="width:500px;height:430px;padding:2px;" data-options="closed:true,modal: true">
+     style="width:500px;height:300px;padding:2px;border:1px" data-options="closed:true,modal: true">
     <div class="easyui-panel" style="width:480px;text-align:center">
         <div style="padding:10px 10px 10px 100px">
             <form id="account_form" method="post">
@@ -88,25 +88,29 @@
                     <tr>
                         <td>金额：</td>
                         <td>
-                            <input class="text" id="accountMoney" name="accountVO.accountMoney"/>
+                            <input class="easyui-numberbox easyui-validatebox"
+                                   id="accountMoney" name="accountVO.accountMoney"
+                                   data-options="min:0,precision:2,required:true"/>
                         </td>
                     </tr>
                     <tr>
                         <td>消费类型:</td>
                         <td>
-                            <input class="text" id="accountType" name="accountVO.accountType"/>
+                            <input class="easyui-combobox easyui-validatebox"
+                                   id="accountType" name="accountVO.accountType"/>
                         </td>
                     </tr>
                     <tr id="tr_password">
                         <td>消费时间:</td>
                         <td>
-                            <input class="text" id="accountTime" name="accountVO.accountTime"/>
+                            <input class="Wdate easyui-validatebox" id="accountTime" name="accountVO.accountTime"
+                                   onfocus="WdatePicker({minDate:'%y-%M-{%d-7}',maxDate:'%y-%M-%d'})"/>
                         </td>
                     </tr>
                     <tr id="tr_repassword">
                         <td>备注:</td>
                         <td>
-                            <input class="password" id="accountRemark" name="accountVO.accountRemark"/>
+                            <input class="text" id="accountRemark" name="accountVO.accountRemark"/>
                         </td>
                     </tr>
                     <tr>
@@ -164,7 +168,7 @@
     });
 
     //获取查询参数
-    function getUserByFilter() {
+    function getAccountByFilter() {
         var queryData = $("#account_filter_form").serializeJson();
         $("#account_data_table").datagrid(
                 {
@@ -186,29 +190,12 @@
     //增加账单
     function addData() {
         //设置标题
-        $('#account_dialog').dialog({ title: '增加用户信息'});
+        $('#account_dialog').dialog({ title: '增加账单信息'});
         //打开弹出框
         $("#account_dialog").dialog("open");
         //设置action、url值，1代表增加
         $("#action").val(1);
         $("#url").val('<%=basePath%>/addAccount.do');
-
-        $("#accountName").validatebox({
-            required: true,
-            missingMessage: "用户名不能为空"
-        });
-        $("#loginName").validatebox({
-            required: true,
-            missingMessage: "登录名不能为空"
-        });
-        $("#password").validatebox({
-            required: true,
-            missingMessage: "密码不能为空"
-        });
-        $("#repassword").validatebox({
-            required: true,
-            missingMessage: "确认密码不能为空"
-        });
     }
 
     //修改账单
@@ -223,7 +210,7 @@
         $("#tr_repassword").hide();
 
         //设置标题
-        $('#account_dialog').dialog({ title: '修改用户信息'});
+        $('#account_dialog').dialog({ title: '修改账单信息'});
         //打开弹出框
         $("#account_dialog").dialog("open");
         //设置action值，2代表修改
@@ -232,17 +219,15 @@
 
         //填充数据
         $("#userId").val(rowData.userId);
-        $("#userStatus").val(rowData.userStatus);
-        $("#isAdmin").val(rowData.isAdmin);
         $("#userName").val(rowData.userName);
-        $("#loginName").val(rowData.loginName);
-        $("#userAge").val(rowData.userAge);
-        $("#userAddress").val(rowData.userAddress);
-        $("#userEmail").val(rowData.userEmail);
-        $("#userRemark").val(rowData.userRemark);
+        $("#accountId").val(rowData.accountId);
+        $("#accountMoney").val(rowData.accountMoney);
+        $("#accountType").val(rowData.accountType);
+        $("#accountTime").val(rowData.accountTime);
+        $("#accountRemark").val(rowData.accountRemark);
     }
 
-    //删除用户
+    //删除账单
     function deleteData() {
         if (window.confirm("确定删除？")) {
             var rowData = $("#account_data_table").datagrid("getSelected");
@@ -262,7 +247,6 @@
     function submitForm() {
         //打开进度条
         $.messager.progress();
-
         var action = $("#action").val();
         var url = $("#url").val();
         $('#account_form').form('submit', {
@@ -272,25 +256,15 @@
                             var isValid = $(this).form('validate');
                             if (!isValid) {
                                 $.messager.progress('close');
-                                return false;
-                            }
-                            var password = $("#password").val();
-                            var rePassword = $("#rePassword").val();
-                            var passwordSame = password === rePassword;
-                            if (!passwordSame) {
-                                $.messager.progress('close');
-                                return false;
                             }
                         }
-                        return true;
+                        return isValid;
                     },
                     success: function () {
                         $.messager.progress('close');
                         $('#account_form').form('clear');
                         $("#account_dialog").dialog("close");
                         if (action == 2) {
-                            $("#password").show();
-                            $("#repassword").show();
                             $('#account_data_table').datagrid('reload');
                         }
                     }

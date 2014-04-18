@@ -15,201 +15,160 @@ import javax.persistence.Table;
 
 /**
  * 账单实体类
- * 
+ *
  * @author liutengfei
- * 
  */
 @Entity
 @Table(name = "cost_account")
-public class Account implements Serializable
-{
+public class Account implements Serializable {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	@Id
-	@Column(name = "account_id")
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	private Long accountId;
+    @Id
+    @Column(name = "account_id")
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long accountId;
 
-	@Column(name = "account_money")
-	private Double accountMoney;
+    @Column(name = "account_money")
+    private Double accountMoney;
 
-	@Column(name = "account_time")
-	private Date accountTime;
+    @Column(name = "account_time")
+    private Date accountTime;
 
-	@Column(name = "account_type")
-	private Integer accountType;
+    @Column(name = "account_type")
+    private Integer accountType;
 
-	@Column(name = "approve_time")
-	private Date approveTime;
+    @Column(name = "approve_time")
+    private Date approveTime;
 
-	@Column(name = "is_approve")
-	private Integer isApprove;
+    @Column(name = "account_status")
+    private Integer accountStatus;
 
-	@Column(name = "account_partner")
-	private String accountPartner;
+    @Column(name = "account_file")
+    private String accountFile;
 
-	@Column(name = "account_accessory")
-	private String accountAccessory;
+    @Column(name = "create_user")
+    private String createUser;
 
-	@Column(name = "create_user")
-	private String createUser;
+    @Column(name = "create_time")
+    private Date createTime;
 
-	@Column(name = "create_time")
-	private Date createTime;
+    @Column(name = "modify_User")
+    private String modifyUser;
 
-	@Column(name = "modify_User")
-	private String modifyUser;
+    @Column(name = "modify_time")
+    private Date modifyTime;
 
-	@Column(name = "modify_time")
-	private Date modifyTime;
+    @Column(name = "account_remark")
+    private String accountRemark;
 
-	@Column(name = "account_remark")
-	private String accountRemark;
+    //与user关联
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    private User user;
 
-	//与user关联
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "user_id")
-	private User user;
+    public Long getAccountId() {
+        return accountId;
+    }
 
-	public Long getAccountId()
-	{
-		return accountId;
-	}
+    public void setAccountId(Long accountId) {
+        this.accountId = accountId;
+    }
 
-	public void setAccountId(Long accountId)
-	{
-		this.accountId = accountId;
-	}
+    public Double getAccountMoney() {
+        return accountMoney;
+    }
 
-	public Double getAccountMoney()
-	{
-		return accountMoney;
-	}
+    public void setAccountMoney(Double accountMoney) {
+        this.accountMoney = accountMoney;
+    }
 
-	public void setAccountMoney(Double accountMoney)
-	{
-		this.accountMoney = accountMoney;
-	}
+    public Date getAccountTime() {
+        return accountTime;
+    }
 
-	public Date getAccountTime()
-	{
-		return accountTime;
-	}
+    public void setAccountTime(Date accountTime) {
+        this.accountTime = accountTime;
+    }
 
-	public void setAccountTime(Date accountTime)
-	{
-		this.accountTime = accountTime;
-	}
+    public Integer getAccountType() {
+        return accountType;
+    }
 
-	public Integer getAccountType()
-	{
-		return accountType;
-	}
+    public void setAccountType(Integer accountType) {
+        this.accountType = accountType;
+    }
 
-	public void setAccountType(Integer accountType)
-	{
-		this.accountType = accountType;
-	}
+    public Date getApproveTime() {
+        return approveTime;
+    }
 
-	public Date getApproveTime()
-	{
-		return approveTime;
-	}
+    public void setApproveTime(Date approveTime) {
+        this.approveTime = approveTime;
+    }
 
-	public void setApproveTime(Date approveTime)
-	{
-		this.approveTime = approveTime;
-	}
+    public Integer getAccountStatus() {
+        return accountStatus;
+    }
 
-	public Integer getIsApprove()
-	{
-		return isApprove;
-	}
+    public void setAccountStatus(Integer isApprove) {
+        this.accountStatus = isApprove;
+    }
 
-	public void setIsApprove(Integer isApprove)
-	{
-		this.isApprove = isApprove;
-	}
+    public String getAccountFile() {
+        return accountFile;
+    }
 
-	public String getAccountPartner()
-	{
-		return accountPartner;
-	}
+    public void setAccountFile(String accountAccessory) {
+        this.accountFile = accountAccessory;
+    }
 
-	public void setAccountPartner(String accountPartner)
-	{
-		this.accountPartner = accountPartner;
-	}
+    public String getCreateUser() {
+        return createUser;
+    }
 
-	public String getAccountAccessory()
-	{
-		return accountAccessory;
-	}
+    public void setCreateUser(String createUser) {
+        this.createUser = createUser;
+    }
 
-	public void setAccountAccessory(String accountAccessory)
-	{
-		this.accountAccessory = accountAccessory;
-	}
+    public Date getCreateTime() {
+        return createTime;
+    }
 
-	public String getCreateUser()
-	{
-		return createUser;
-	}
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
+    }
 
-	public void setCreateUser(String createUser)
-	{
-		this.createUser = createUser;
-	}
+    public String getModifyUser() {
+        return modifyUser;
+    }
 
-	public Date getCreateTime()
-	{
-		return createTime;
-	}
+    public void setModifyUser(String modifyUser) {
+        this.modifyUser = modifyUser;
+    }
 
-	public void setCreateTime(Date createTime)
-	{
-		this.createTime = createTime;
-	}
+    public Date getModifyTime() {
+        return modifyTime;
+    }
 
-	public String getModifyUser()
-	{
-		return modifyUser;
-	}
+    public void setModifyTime(Date modifyTime) {
+        this.modifyTime = modifyTime;
+    }
 
-	public void setModifyUser(String modifyUser)
-	{
-		this.modifyUser = modifyUser;
-	}
+    public String getAccountRemark() {
+        return accountRemark;
+    }
 
-	public Date getModifyTime()
-	{
-		return modifyTime;
-	}
+    public void setAccountRemark(String accountRemark) {
+        this.accountRemark = accountRemark;
+    }
 
-	public void setModifyTime(Date modifyTime)
-	{
-		this.modifyTime = modifyTime;
-	}
+    public User getUser() {
+        return user;
+    }
 
-	public String getAccountRemark()
-	{
-		return accountRemark;
-	}
-
-	public void setAccountRemark(String accountRemark)
-	{
-		this.accountRemark = accountRemark;
-	}
-
-	public User getUser()
-	{
-		return user;
-	}
-
-	public void setUser(User user)
-	{
-		this.user = user;
-	}
+    public void setUser(User user) {
+        this.user = user;
+    }
 
 }

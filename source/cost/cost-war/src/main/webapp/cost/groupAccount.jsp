@@ -32,15 +32,15 @@
                 <th data-options="field:'accountTime',width:80,align:'center',
 					editor:'datebox'">消费时间
                 </th>
-                <th data-options="field:'isApproveName',width:60,align:'center',formatter:showIsApproveText,
+                <th data-options="field:'accountStatusName',width:60,align:'center',formatter:showIsApproveText,
 						editor:{
                             	type:'combobox',
                             	options:{data:isApproveData,valueField:'value',textField:'name'}
                         }"
                         >是否审批
                 </th>
-                <%--<th data-options="field:'isApproveName',width:60,align:'center',editor:'combobox',loader:getApproveText,mode:'remote'">是否审批</th>--%>
-                <th data-options="field:'accountAccessory',width:80,align:'center',formatter:showAccessoryText,
+                <%--<th data-options="field:'accountStatusName',width:60,align:'center',editor:'combobox',loader:getApproveText,mode:'remote'">是否审批</th>--%>
+                <th data-options="field:'accountFile',width:80,align:'center',formatter:showAccessoryText,
 					    editor:{
 							options:{data:isApproveData,valueField:'value',textField:'name'}
 						}"

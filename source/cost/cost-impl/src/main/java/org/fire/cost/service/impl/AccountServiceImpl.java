@@ -8,6 +8,7 @@ import org.fire.cost.dao.AccountDao;
 import org.fire.cost.dao.UserDao;
 import org.fire.cost.entity.Account;
 import org.fire.cost.entity.User;
+import org.fire.cost.enums.AccountStatusEnum;
 import org.fire.cost.enums.AccountTypeEnum;
 import org.fire.cost.enums.ApproveEnum;
 import org.fire.cost.service.AccountService;
@@ -82,8 +83,7 @@ public class AccountServiceImpl implements AccountService {
     @Transactional(value = "transactionManager", rollbackFor = RollbackException.class)
     public boolean addAccount(AccountVO vo) {
         try {
-            vo.setIsApprove(Integer.valueOf(vo.getIsApproveName()));
-            vo.setAccountType(Integer.valueOf(vo.getAccountTypeName()));
+            vo.setAccountStatus(AccountStatusEnum.Not_Approve.getCode());
             Account account = makeVO2Account(vo, null);
             accountDao.save(account);
             return true;
@@ -139,7 +139,7 @@ public class AccountServiceImpl implements AccountService {
             String upLoadDirPath = getUpLoadDirPath(path);
             List<FileItem> itemList = getFileItemList(request, upLoadDirPath);
             long accountId = getAccountId(itemList);
-            String accessoryValue = accountDao.findOne(accountId).getAccountAccessory();
+            String accessoryValue = accountDao.findOne(accountId).getAccountFile();
             for (FileItem item : itemList) {
                 if (!item.isFormField()) {
                     String itemName = item.getName();
@@ -172,7 +172,7 @@ public class AccountServiceImpl implements AccountService {
             return;
         }
         Account account = accountDao.findOne(accountId);
-        account.setAccountAccessory(accessoryValue);
+        account.setAccountFile(accessoryValue);
         accountDao.save(account);
     }
 
@@ -251,9 +251,9 @@ public class AccountServiceImpl implements AccountService {
         account.setUser(user);
         account.setAccountMoney(vo.getAccountMoney());
         account.setAccountTime(DateUtil.makeStr2Date(vo.getAccountTime(), false));
-        account.setIsApprove(vo.getIsApprove());
+        account.setAccountStatus(vo.getAccountStatus());
         account.setAccountType(vo.getAccountType());
-        account.setAccountAccessory(vo.getAccountAccessory());
+        account.setAccountFile(vo.getAccountFile());
         account.setModifyUser(userService.getLoginUserName());
         account.setModifyTime(new Date());
         account.setAccountRemark(vo.getAccountRemark());
@@ -276,11 +276,11 @@ public class AccountServiceImpl implements AccountService {
         Date approveTime = account.getApproveTime();
         if (approveTime != null)
             vo.setApproveTime(DateUtil.makeDate2Str(approveTime, true));
-        vo.setIsApprove(account.getIsApprove());
-        vo.setIsApproveName(ApproveEnum.getName(account.getIsApprove()));
+        vo.setAccountStatus(account.getAccountStatus());
+        vo.setAccountStatusName(ApproveEnum.getName(account.getAccountStatus()));
         vo.setAccountType(account.getAccountType());
         vo.setAccountTypeName(AccountTypeEnum.getName(account.getAccountType()));
-        vo.setAccountAccessory(account.getAccountAccessory());
+        vo.setAccountFile(account.getAccountFile());
         vo.setCreateUser(account.getCreateUser());
         vo.setCreateTime(DateUtil.makeDate2Str(account.getCreateTime(), true));
         vo.setModifyUser(account.getModifyUser());

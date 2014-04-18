@@ -31,13 +31,13 @@ public class AccountVO implements Serializable
 
     private String approveTime;
 
-    private Integer isApprove;
+    private Integer accountStatus;
 
-    private String isApproveName;
+    private String accountStatusName;
 
     private String accountPartner;
 
-    private String accountAccessory;
+    private String accountFile;
 
     private String createUser;
 
@@ -134,24 +134,24 @@ public class AccountVO implements Serializable
         this.approveTime = approveTime;
     }
 
-    public Integer getIsApprove()
+    public Integer getAccountStatus()
     {
-        return isApprove;
+        return accountStatus;
     }
 
-    public void setIsApprove(Integer isApprove)
+    public void setAccountStatus(Integer accountStatus)
     {
-        this.isApprove = isApprove;
+        this.accountStatus = accountStatus;
     }
 
-    public String getIsApproveName()
+    public String getAccountStatusName()
     {
-        return isApproveName;
+        return accountStatusName;
     }
 
-    public void setIsApproveName(String isApproveName)
+    public void setAccountStatusName(String accountStatusName)
     {
-        this.isApproveName = isApproveName;
+        this.accountStatusName = accountStatusName;
     }
 
     public String getAccountPartner()
@@ -164,14 +164,14 @@ public class AccountVO implements Serializable
         this.accountPartner = accountPartner;
     }
 
-    public String getAccountAccessory()
+    public String getAccountFile()
     {
-        return accountAccessory;
+        return accountFile;
     }
 
-    public void setAccountAccessory(String accountAccessory)
+    public void setAccountFile(String accountFile)
     {
-        this.accountAccessory = accountAccessory;
+        this.accountFile = accountFile;
     }
 
     public String getCreateUser()

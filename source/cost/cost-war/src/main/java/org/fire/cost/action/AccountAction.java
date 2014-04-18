@@ -63,22 +63,14 @@ public class AccountAction extends BaseAction<AccountVO> {
      * @param vo
      * @return
      */
-    @Action(value = "addAccount", results = {@Result(type = "json", params = {"root", "returnData", "contentType", "text/html"})})
-    public Message addAccount(AccountVO vo) {
-        Message message = new Message();
-        if (vo == null) {
-            MessageUtil.setMessage(message, ResultEnum.Fail, HttpStatusEnum.Warn, "请求数据不能为空", null);
-            return message;
-        }
+    @Action(value = "addAccount", results = {@Result(type = "json", params = {"root", "pageData", "contentType", "text/html"})})
+    public String addAccount(AccountVO vo) {
         try {
-            if (accountService.addAccount(vo)) {
-                MessageUtil.setMessage(message, ResultEnum.Success, HttpStatusEnum.Success, null, null);
-            }
+            accountService.addAccount(vo);
         } catch (Exception e) {
             e.printStackTrace();
-            MessageUtil.setMessage(message, ResultEnum.Fail, HttpStatusEnum.ServerError, e.getMessage(), null);
         }
-        return message;
+        return SUCCESS;
     }
 
     /**
@@ -87,22 +79,14 @@ public class AccountAction extends BaseAction<AccountVO> {
      * @param vo
      * @return
      */
-    @Action(value = "modifyAccount", results = {@Result(type = "json", params = {"root", "returnData", "contentType", "text/html"})})
-    public Message modifyAccount(AccountVO vo) {
-        Message message = new Message();
-        if (vo == null) {
-            MessageUtil.setMessage(message, ResultEnum.Fail, HttpStatusEnum.Warn, "请求数据不能为空", null);
-            return message;
-        }
+    @Action(value = "modifyAccount", results = {@Result(type = "json", params = {"root", "pageData", "contentType", "text/html"})})
+    public String modifyAccount(AccountVO vo) {
         try {
-            if (accountService.modifyAccount(vo)) {
-                MessageUtil.setMessage(message, ResultEnum.Success, HttpStatusEnum.Success, null, null);
-            }
+            accountService.modifyAccount(vo);
         } catch (Exception e) {
             e.printStackTrace();
-            MessageUtil.setMessage(message, ResultEnum.Fail, HttpStatusEnum.ServerError, e.getMessage(), null);
         }
-        return message;
+        return SUCCESS;
     }
 
     /**
@@ -111,22 +95,14 @@ public class AccountAction extends BaseAction<AccountVO> {
      * @param vo
      * @return
      */
-    @Action(value = "deleteAccount", results = {@Result(type = "json", params = {"root", "returnData", "contentType", "text/html"})})
-    public Message deleteAccount(AccountVO vo) {
-        Message message = new Message();
-        if (vo == null) {
-            MessageUtil.setMessage(message, ResultEnum.Fail, HttpStatusEnum.Warn, "请求数据不能为空", null);
-            return message;
-        }
+    @Action(value = "deleteAccount", results = {@Result(type = "json", params = {"root", "pageData", "contentType", "text/html"})})
+    public String deleteAccount(AccountVO vo) {
         try {
-            if (accountService.deleteAccount(vo.getAccountId())) {
-                MessageUtil.setMessage(message, ResultEnum.Success, HttpStatusEnum.Success, null, null);
-            }
+            accountService.deleteAccount(vo.getAccountId());
         } catch (Exception e) {
             e.printStackTrace();
-            MessageUtil.setMessage(message, ResultEnum.Fail, HttpStatusEnum.ServerError, e.getMessage(), null);
         }
-        return message;
+        return SUCCESS;
     }
 
     /**
@@ -134,7 +110,7 @@ public class AccountAction extends BaseAction<AccountVO> {
      *
      * @return
      */
-    @Action(value = "fileUpload", results = {@Result(type = "json", params = {"root", "returnData", "contentType", "text/html"})})
+    @Action(value = "fileUpload", results = {@Result(type = "json", params = {"root", "pageData", "contentType", "text/html"})})
     public Message fileUpload() {
         Message message = new Message();
         try {

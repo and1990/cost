@@ -38,7 +38,7 @@
                 <th data-options="field:'accountPartner',width:80,align:'center'">消费人</th>
                 <th data-options="field:'accountTime',width:80,align:'center'">消费时间</th>
                 <th data-options="field:'approveTime',width:80,align:'center'">审批时间</th>
-                <th data-options="field:'isApproveName',width:80,align:'center'">审批通过</th>
+                <th data-options="field:'accountStatusName',width:80,align:'center'">审批通过</th>
                 <th data-options="field:'accountRemark',width:120,align:'center'">备注</th>
                 <th data-options="field:'modifyUser',width:120,align:'center'">修改人</th>
                 <th data-options="field:'modifyTime',width:120,align:'center'">修改时间</th>
