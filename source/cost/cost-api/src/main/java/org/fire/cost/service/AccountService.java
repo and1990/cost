@@ -2,6 +2,7 @@ package org.fire.cost.service;
 
 import org.fire.cost.vo.AccountVO;
 import org.fire.cost.vo.PageData;
+import org.fire.cost.vo.TypeVo;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -62,4 +63,11 @@ public interface AccountService {
      * @return
      */
     boolean fileUpload(HttpServletRequest request, HttpServletResponse response) throws IOException;
+
+    /**
+     * 得到账单类型
+     *
+     * @return
+     */
+    List<TypeVo> getAccountType();
 }

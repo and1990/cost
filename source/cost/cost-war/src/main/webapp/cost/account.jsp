@@ -17,7 +17,7 @@
                 <th data-options="field:'accountMoney',width:80,align:'center' ">金额</th>
                 <th data-options="field:'accountTypeName',width:60,align:'center'">消费类型</th>
                 <th data-options="field:'accountTime',width:80,align:'center'">消费时间</th>
-                <th data-options="field:'accountStatusName',width:60,align:'center'">是否审批</th>
+                <th data-options="field:'accountStatusName',width:60,align:'center'">状态</th>
                 <th data-options="field:'accountFile',width:80,align:'center'">附件</th>
                 <th data-options="field:'createTime',width:120,align:'center'">创建时间</th>
                 <th data-options="field:'accountRemark',width:120,align:'center'">备注</th>
@@ -26,6 +26,8 @@
         </table>
     </div>
 </div>
+
+<!-- 工具栏 -->
 <div id="account_tool_bar" style="padding: 5px; height: auto">
     <div style="margin-bottom: 5px">
         <a href="javascript:void(0);" class="easyui-linkbutton" iconCls="icon-add" plain="true"
@@ -49,20 +51,18 @@
         <form id="account_filter_form" method="post">
             <span>账单：</span>
             <input class="text" name="accountVO.accountName" style="width:100px;"/>
+
             <span>消费类型：</span>
-            <select class="easyui-combobox" name="accountVO.isAdmin" style="width:100px;">
-                <option value="0">全部</option>
-                <option value="1">是</option>
-                <option value="2">否</option>
-            </select>
+            <input id="accountType" class="accountType easyui-combobox" name="accountVO.accountType"
+                   style="width:100px;" editable="false"/>
 
             <span>状态：</span>
-            <select class="easyui-combobox" name="accountVO.accountStatus" style="width:100px;">
-                <option value="0">全部</option>
+            <select class="easyui-combobox" name="accountVO.accountStatus" style="width:100px;" editable="false">
                 <option value="1">未审批</option>
                 <option value="2">已审批</option>
                 <option value="3">已结算</option>
             </select>
+
             消费时间从: <input class="Wdate" id="accountStartTime" name="accountVO.startTime" style="width: 100px"
                           onfocus="WdatePicker({dateFmt:'yyyy-MM-dd',maxDate:'#F{$dp.$D(\'accountEndTime\');}'})">
 
@@ -83,31 +83,31 @@
                     <tr>
                         <input type="hidden" id="accountId" name="accountVO.accountId"/>
                         <input type="hidden" id="accountStatus" name="accountVO.accountStatus"/>
-                        <input type="hidden" id="isAdmin" name="accountVO.isAdmin"/>
                     </tr>
                     <tr>
                         <td>金额：</td>
                         <td>
-                            <input class="easyui-numberbox easyui-validatebox"
-                                   id="accountMoney" name="accountVO.accountMoney"
-                                   data-options="min:0,precision:2,required:true"/>
+                            <input class="easyui-numberbox easyui-validatebox" id="accountMoney"
+                                   name="accountVO.accountMoney"
+                                   data-options="min:0,precision:2,required:true,prefix:'￥'"/>
                         </td>
                     </tr>
                     <tr>
                         <td>消费类型:</td>
                         <td>
-                            <input class="easyui-combobox easyui-validatebox"
-                                   id="accountType" name="accountVO.accountType"/>
+                            <select class="accountType easyui-combobox" name="accountVO.accountType"
+                                    style="width:150px;">
+                            </select>
                         </td>
                     </tr>
-                    <tr id="tr_password">
+                    <tr>
                         <td>消费时间:</td>
                         <td>
                             <input class="Wdate easyui-validatebox" id="accountTime" name="accountVO.accountTime"
                                    onfocus="WdatePicker({minDate:'%y-%M-{%d-7}',maxDate:'%y-%M-%d'})"/>
                         </td>
                     </tr>
-                    <tr id="tr_repassword">
+                    <tr>
                         <td>备注:</td>
                         <td>
                             <input class="text" id="accountRemark" name="accountVO.accountRemark"/>
@@ -116,7 +116,7 @@
                     <tr>
                         <td>上传附件:</td>
                         <td>
-                            <input class="text" id="accountAge" name="accountVO.accountAge"/>
+                            <input class="text" id="accountFile" name="accountVO.accountFile"/>
                         </td>
                     </tr>
                 </table>
@@ -124,9 +124,8 @@
             <div style="text-align:center;padding:5px">
                 <input type="hidden" id="action" name="action">
                 <input type="hidden" id="url" name="url">
-                <a href="javascript:void(0)" class="easyui-linkbutton" onclick="submitForm()">确定</a>
-                <a href="javascript:void(0)" class="easyui-linkbutton"
-                   onclick="$('#account_form').form('clear');">取消</a>
+                <a href="#" class="easyui-linkbutton" onclick="submitForm()">确定</a>
+                <a href="#" class="easyui-linkbutton" onclick="$('#account_form').form('clear');">取消</a>
             </div>
         </div>
     </div>
@@ -158,12 +157,25 @@
             toolbar: "#account_tool_bar"
         });
 
+        //设置分页
         $('#account_data_table').datagrid('getPager').pagination({
             pageSize: 10,
             pageList: [10, 20, 30, 40, 50],
             beforePageText: '第',
             afterPageText: '页    共 {pages} 页',
             displayMsg: '当前显示 {from}-{to} 条记录   共 {total} 条记录'
+        });
+
+        //加载账单类型
+        $('.accountType').combobox({
+            url: '<%=request.getContextPath()%>/getAccountType.do',
+            valueField: 'code',
+            textField: 'name',
+            onLoadSuccess: function (data) {
+                $('.accountType').combobox('setValue',
+                                data[0].code).combobox('setText',
+                                data[0].name);
+            }
         });
     });
 
@@ -218,13 +230,13 @@
         $("#url").val('<%=basePath%>/modifyAccount.do');
 
         //填充数据
-        $("#userId").val(rowData.userId);
-        $("#userName").val(rowData.userName);
         $("#accountId").val(rowData.accountId);
-        $("#accountMoney").val(rowData.accountMoney);
-        $("#accountType").val(rowData.accountType);
+        $("#accountMoney").numberbox({value: rowData.accountMoney});
+        $('#accountType').combobox('setValue', rowData.accountType);
         $("#accountTime").val(rowData.accountTime);
         $("#accountRemark").val(rowData.accountRemark);
+        $("#accountId").val(rowData.accountId);
+        $("#accountStatus").val(rowData.accountStatus);
     }
 
     //删除账单

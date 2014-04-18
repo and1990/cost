@@ -13,10 +13,10 @@ import org.fire.cost.enums.AccountTypeEnum;
 import org.fire.cost.enums.ApproveEnum;
 import org.fire.cost.service.AccountService;
 import org.fire.cost.service.UserService;
-import org.fire.cost.util.AuthenticationUtil;
 import org.fire.cost.util.DateUtil;
 import org.fire.cost.vo.AccountVO;
 import org.fire.cost.vo.PageData;
+import org.fire.cost.vo.TypeVo;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -152,12 +152,30 @@ public class AccountServiceImpl implements AccountService {
                 }
             }
             //更新数据库
-            updateAccessory(accountId, accessoryValue);
+            updateAccountFile(accountId, accessoryValue);
             return true;
         } catch (Exception e) {
             e.printStackTrace();
             throw new RollbackException();
         }
+    }
+
+    /**
+     * 得到账单类型
+     *
+     * @return
+     */
+    @Override
+    @Transactional(value = "transactionManager", rollbackFor = RollbackException.class)
+    public List<TypeVo> getAccountType() {
+        List<TypeVo> typeList = new ArrayList<TypeVo>();
+        for (int i = 0; i < 5; i++) {
+            TypeVo vo = new TypeVo();
+            vo.setCode(i);
+            vo.setName("V" + i);
+            typeList.add(vo);
+        }
+        return typeList;
     }
 
     /**
@@ -167,7 +185,7 @@ public class AccountServiceImpl implements AccountService {
      * @param accessoryValue
      */
     @Transactional(value = "transactionManager", rollbackFor = RollbackException.class)
-    private void updateAccessory(long accountId, String accessoryValue) {
+    private void updateAccountFile(long accountId, String accessoryValue) {
         if (accountId == 0) {
             return;
         }
@@ -247,7 +265,8 @@ public class AccountServiceImpl implements AccountService {
             account.setCreateUser(userService.getLoginUserName());
             account.setCreateTime(new Date());
         }
-        User user = userDao.findOne(AuthenticationUtil.getLoginUserId());
+        //User user = userDao.findOne(AuthenticationUtil.getLoginUserId());
+        User user = userDao.findOne(1L);
         account.setUser(user);
         account.setAccountMoney(vo.getAccountMoney());
         account.setAccountTime(DateUtil.makeStr2Date(vo.getAccountTime(), false));

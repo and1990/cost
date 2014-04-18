@@ -11,6 +11,7 @@ import org.fire.cost.util.MessageUtil;
 import org.fire.cost.vo.AccountVO;
 import org.fire.cost.vo.Message;
 import org.fire.cost.vo.PageData;
+import org.fire.cost.vo.TypeVo;
 import org.springframework.stereotype.Controller;
 
 import javax.annotation.Resource;
@@ -32,6 +33,8 @@ public class AccountAction extends BaseAction<AccountVO> {
 
     //账单信息VO
     private AccountVO accountVO;
+
+    private List<TypeVo> typeList;
 
 
     /**
@@ -60,13 +63,12 @@ public class AccountAction extends BaseAction<AccountVO> {
     /**
      * 增加账单
      *
-     * @param vo
      * @return
      */
     @Action(value = "addAccount", results = {@Result(type = "json", params = {"root", "pageData", "contentType", "text/html"})})
-    public String addAccount(AccountVO vo) {
+    public String addAccount() {
         try {
-            accountService.addAccount(vo);
+            accountService.addAccount(accountVO);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -76,13 +78,12 @@ public class AccountAction extends BaseAction<AccountVO> {
     /**
      * 修改账单信息
      *
-     * @param vo
      * @return
      */
     @Action(value = "modifyAccount", results = {@Result(type = "json", params = {"root", "pageData", "contentType", "text/html"})})
-    public String modifyAccount(AccountVO vo) {
+    public String modifyAccount() {
         try {
-            accountService.modifyAccount(vo);
+            accountService.modifyAccount(accountVO);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -92,13 +93,12 @@ public class AccountAction extends BaseAction<AccountVO> {
     /**
      * 删除账单信息
      *
-     * @param vo
      * @return
      */
     @Action(value = "deleteAccount", results = {@Result(type = "json", params = {"root", "pageData", "contentType", "text/html"})})
-    public String deleteAccount(AccountVO vo) {
+    public String deleteAccount() {
         try {
-            accountService.deleteAccount(vo.getAccountId());
+            accountService.deleteAccount(accountVO.getAccountId());
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -128,11 +128,35 @@ public class AccountAction extends BaseAction<AccountVO> {
         return message;
     }
 
+    /**
+     * 得到账单类型
+     *
+     * @return
+     */
+    @Action(value = "getAccountType", results = {@Result(type = "json", params = {"root", "typeList", "contentType", "text/html"})})
+    public String getAccountType() {
+        try {
+            typeList = accountService.getAccountType();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return SUCCESS;
+    }
+
+
     public AccountVO getAccountVO() {
         return accountVO;
     }
 
     public void setAccountVO(AccountVO accountVO) {
         this.accountVO = accountVO;
+    }
+
+    public List<TypeVo> getTypeList() {
+        return typeList;
+    }
+
+    public void setTypeList(List<TypeVo> typeList) {
+        this.typeList = typeList;
     }
 }
