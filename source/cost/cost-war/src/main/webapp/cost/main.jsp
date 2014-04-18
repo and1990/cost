@@ -24,8 +24,14 @@
 <body>
 <div id="main_layout" class="easyui-layout" data-options="fit:true">
     <!--头信息-->
-    <div id="headInfo" data-options="region:'north',split:true" style="height: 40px;background:#E7F0FF">
-        欢迎你，刘腾飞 <a href="#">退出</a>
+    <div id="headInfo" data-options="region:'north',split:true" style="height: 35px;background:#E7F0FF">
+        <div style="font-family: Microsoft YaHei;font-size: 15px;">
+            <span>欢迎你，${sessionScope.userName}</span>
+            <span>|</span>
+            <span><a href="<%=basePath%>/modifyPassword.do" style="text-decoration: none">修改密码</a></span>
+            <span>|</span>
+            <span><a href="<%=basePath%>/logOut.do" style="text-decoration: none">退出系统</a></span>
+        </div>
     </div>
 
     <!--系统菜单信息-->
