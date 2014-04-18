@@ -22,7 +22,7 @@
     <script type="text/javascript" src="<%=basePath%>/js/group.js"></script>
 </head>
 <body>
-<div class="easyui-layout" data-options="fit:true">
+<div id="main_layout" class="easyui-layout" data-options="fit:true">
     <!--头信息-->
     <div id="headInfo" data-options="region:'north',split:true" style="height: 40px;background:#E7F0FF">
         欢迎你，刘腾飞 <a href="#">退出</a>
@@ -45,10 +45,16 @@
 
     <!--公告信息-->
     <div id="noticeInfo"
-         data-options="region:'east',title:'公告信息',split:true,href:'<%=basePath %>/cost/notice.jsp'"
+         data-options="region:'east',title:'公告信息',split:true,href:'<%=basePath %>/cost/notice.do'"
          style="width: 205px; padding: 2px">
     </div>
 </div>
+
+<script type="text/javascript">
+    $(function () {
+        $('#main_layout').layout('collapse', 'east');
+    });
+</script>
 
 </body>
 </html>

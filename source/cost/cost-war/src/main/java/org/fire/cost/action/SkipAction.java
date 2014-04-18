@@ -84,4 +84,14 @@ public class SkipAction extends BaseAction {
     public String skipToGroupAccountData() {
         return SUCCESS;
     }
+
+    /**
+     * 跳转到公告
+     *
+     * @return
+     */
+    @Action(value = "notice", results = {@Result(name = SUCCESS, location = "/cost/notice.jsp")})
+    public String skipToNotice() {
+        return SUCCESS;
+    }
 }
