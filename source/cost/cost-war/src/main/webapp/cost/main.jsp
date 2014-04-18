@@ -24,7 +24,7 @@
 <body>
 <div class="easyui-layout" data-options="fit:true">
     <!--头信息-->
-    <div id="headInfo" data-options="region:'north',split:true" style="height: 35px;background:#E7F0FF">
+    <div id="headInfo" data-options="region:'north',split:true" style="height: 40px;background:#E7F0FF">
         欢迎你，刘腾飞 <a href="#">退出</a>
     </div>
 
