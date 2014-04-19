@@ -111,7 +111,6 @@ public class CostContextServiceImpl implements CostContextService {
      */
     public void remove(String key) {
         try {
-
             memcachedClient.delete(key);
         } catch (TimeoutException e) {
             e.printStackTrace();

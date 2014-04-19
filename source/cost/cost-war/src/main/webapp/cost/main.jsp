@@ -30,7 +30,7 @@
             <span>|</span>
             <span><a href="<%=basePath%>/modifyPassword.do" style="text-decoration: none">修改密码</a></span>
             <span>|</span>
-            <span><a href="<%=basePath%>/logOut.do" style="text-decoration: none">退出系统</a></span>
+            <span><a href="<%=basePath%>/loginOut.do" style="text-decoration: none">退出系统</a></span>
         </div>
     </div>
 
