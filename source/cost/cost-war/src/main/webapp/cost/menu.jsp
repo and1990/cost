@@ -26,6 +26,7 @@
         <li data-options="id:null">
             <span>数据分析</span>
             <ul>
+                <li data-options="id:'line '">线性图</li>
                 <li data-options="id:'column '">柱状图</li>
                 <li data-options="id:'pie'">饼状图</li>
             </ul>

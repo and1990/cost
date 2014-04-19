@@ -21,7 +21,10 @@
             按消费类型查看：<input type="radio" name="type" value="1"/>
             &nbsp;
             按用户查看：<input type="radio" name="type" value="2"/>
-            &nbsp;&nbsp;
+            &nbsp;
+            按月份查看：<input type="radio" name="type" value="3"/>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <br>
             消费时间从: <input class="Wdate" id="accountStartTime" name="accountVO.startTime" style="width: 150px"
                           onfocus="WdatePicker({dateFmt:'yyyy-MM-dd',maxDate:'#F{$dp.$D(\'accountEndTime\');}'})">
             &nbsp;
@@ -136,6 +139,10 @@
 
         if (startNotNull && endNotNull) {
             title = startTime + "至" + endTime + "个人消费占比";
+        }
+
+        if (startIsNull && endIsNull) {
+            title = "个人消费占比";
         }
         var chart = $('#container').highcharts();
         chart.setTitle({text: title, style: {fontFamily: 'Microsoft YaHei', fontSize: 16}});
