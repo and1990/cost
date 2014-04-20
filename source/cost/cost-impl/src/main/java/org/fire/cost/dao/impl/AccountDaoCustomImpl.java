@@ -2,10 +2,13 @@ package org.fire.cost.dao.impl;
 
 import org.fire.cost.dao.custom.AccountDaoCustom;
 import org.fire.cost.entity.Account;
+import org.fire.cost.util.DateUtil;
 import org.fire.cost.vo.AccountVO;
 import org.fire.cost.vo.PageData;
 
 import javax.persistence.Query;
+import java.text.ParseException;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -28,7 +31,11 @@ public class AccountDaoCustomImpl extends BaseJpaDaoSupport<Account, Long> imple
         sql += " order by create_time desc";
 
         Query query = entityManager.createNativeQuery(sql, Account.class);
-        setAliasValue(vo, query);
+        try {
+            setAliasValue(vo, query);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
 
         int page = pageData.getPage() - 1;
         int pageSize = pageData.getPageSize();
@@ -55,7 +62,11 @@ public class AccountDaoCustomImpl extends BaseJpaDaoSupport<Account, Long> imple
         }
 
         Query query = entityManager.createNativeQuery(sql);
-        setAliasValue(vo, query);
+        try {
+            setAliasValue(vo, query);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
 
         int total = Integer.valueOf(query.getSingleResult().toString());
         return total;
@@ -103,7 +114,7 @@ public class AccountDaoCustomImpl extends BaseJpaDaoSupport<Account, Long> imple
      * @param vo
      * @param query
      */
-    private void setAliasValue(AccountVO vo, Query query) {
+    private void setAliasValue(AccountVO vo, Query query) throws ParseException {
         String userName = vo.getUserName();
         boolean userNameNotNull = userName != null && userName.length() != 0;
         if (userNameNotNull) {
@@ -127,6 +138,8 @@ public class AccountDaoCustomImpl extends BaseJpaDaoSupport<Account, Long> imple
         String accountEndTime = vo.getAccountEndTime();
         boolean accountEndTimeNotNull = accountEndTime != null && accountEndTime.trim().length() != 0;
         if (accountEndTimeNotNull) {
+            Date date = DateUtil.makeStr2Date(accountEndTime, false);
+            accountEndTime = DateUtil.makeDate2Str(DateUtil.addDays(date, 1), false);
             query.setParameter("accountEndTime", accountEndTime);
         }
     }

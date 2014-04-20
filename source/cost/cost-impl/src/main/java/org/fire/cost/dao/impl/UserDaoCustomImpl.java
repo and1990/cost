@@ -2,11 +2,14 @@ package org.fire.cost.dao.impl;
 
 import org.fire.cost.dao.custom.UserDaoCustom;
 import org.fire.cost.entity.User;
+import org.fire.cost.util.DateUtil;
 import org.fire.cost.vo.PageData;
 import org.fire.cost.vo.UserVO;
 import org.hibernate.ejb.QueryImpl;
 
 import javax.persistence.Query;
+import java.text.ParseException;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -20,44 +23,18 @@ public class UserDaoCustomImpl extends BaseJpaDaoSupport<User, Long> implements 
      */
     public List<User> getUserByFilter(UserVO vo, PageData<UserVO> pageData) {
         String sql = "select * from cost_user where 1=1";
-        String userName = vo.getUserName();
-        if (userName != null && userName.trim().length() != 0) {
-            sql += " and user_name like :userName";
-        }
-        Integer admin = vo.getIsAdmin();
-        if (admin != null && admin != 0) {
-            sql += " and is_admin=:isAdmin";
-        }
-        Integer userStatus = vo.getUserStatus();
-        if (userStatus != null && userStatus != 0) {
-            sql += " and user_status=:userStatus";
-        }
-        String startTime = vo.getStartTime();
-        if (startTime != null && startTime.trim().length() != 0) {
-            sql += " and create_time>=:startTime";
-        }
-        String endTime = vo.getEndTime();
-        if (endTime != null && endTime.trim().length() != 0) {
-            sql += " and create_time<=:endTime";
+        String filterSQL = getFilterSQL(vo);
+        if (filterSQL != null && filterSQL.trim().length() != 0) {
+            sql += filterSQL;
         }
         Query query = entityManager.createNativeQuery(sql, User.class);
         if (query instanceof org.hibernate.ejb.QueryImpl) {
             ((QueryImpl<?>) query).getHibernateQuery().setCacheable(true);
         }
-        if (userName != null && userName.trim().length() != 0) {
-            query.setParameter("userName", "%" + userName + "%");
-        }
-        if (admin != null && admin != 0) {
-            query.setParameter("isAdmin", admin);
-        }
-        if (userStatus != null && userStatus != 0) {
-            query.setParameter("userStatus", userStatus);
-        }
-        if (startTime != null && startTime.trim().length() != 0) {
-            query.setParameter("startTime", startTime);
-        }
-        if (endTime != null && endTime.trim().length() != 0) {
-            query.setParameter("endTime", endTime);
+        try {
+            setAliasValue(vo, query);
+        } catch (ParseException e) {
+            e.printStackTrace();
         }
         query.setFirstResult(pageData.getPage() - 1);
         query.setMaxResults(pageData.getPageSize());
@@ -70,9 +47,18 @@ public class UserDaoCustomImpl extends BaseJpaDaoSupport<User, Long> implements 
      *
      * @return
      */
-    public int getUserDataTotal() {
-        String sql = "select count(*) from cost_user";
+    public int getUserDataTotal(UserVO vo) {
+        String sql = "select count(*) from cost_user where 1=1";
+        String filterSQL = getFilterSQL(vo);
+        if (filterSQL != null && filterSQL.trim().length() != 0) {
+            sql += filterSQL;
+        }
         Query query = entityManager.createNativeQuery(sql);
+        try {
+            setAliasValue(vo, query);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
         int total = Integer.valueOf(query.getSingleResult().toString());
         return total;
     }
@@ -92,6 +78,65 @@ public class UserDaoCustomImpl extends BaseJpaDaoSupport<User, Long> implements 
         }
         List<User> resultList = query.getResultList();
         return resultList;
+    }
+
+    /**
+     * 得到过滤条件
+     *
+     * @param vo
+     * @return
+     */
+    private String getFilterSQL(UserVO vo) {
+        String filterSQL = "";
+        String userName = vo.getUserName();
+        if (userName != null && userName.trim().length() != 0) {
+            filterSQL += " and user_name like :userName";
+        }
+        Integer admin = vo.getIsAdmin();
+        if (admin != null && admin != 0) {
+            filterSQL += " and is_admin=:isAdmin";
+        }
+        Integer userStatus = vo.getUserStatus();
+        if (userStatus != null && userStatus != 0) {
+            filterSQL += " and user_status=:userStatus";
+        }
+        String startTime = vo.getStartTime();
+        if (startTime != null && startTime.trim().length() != 0) {
+            filterSQL += " and create_time>=:startTime";
+        }
+        String endTime = vo.getEndTime();
+        if (endTime != null && endTime.trim().length() != 0) {
+            filterSQL += " and create_time<:endTime";
+        }
+        return filterSQL;
+    }
+
+    /**
+     * 设置别名值
+     */
+    private void setAliasValue(UserVO vo, Query query) throws ParseException {
+        String userName = vo.getUserName();
+        if (userName != null && userName.trim().length() != 0) {
+            query.setParameter("userName", "%" + userName + "%");
+        }
+        Integer admin = vo.getIsAdmin();
+        if (admin != null && admin != 0) {
+            query.setParameter("isAdmin", admin);
+        }
+        Integer userStatus = vo.getUserStatus();
+        if (userStatus != null && userStatus != 0) {
+            query.setParameter("userStatus", userStatus);
+        }
+        String startTime = vo.getStartTime();
+        if (startTime != null && startTime.trim().length() != 0) {
+            query.setParameter("startTime", startTime);
+        }
+        String endTime = vo.getEndTime();
+        if (endTime != null && endTime.trim().length() != 0) {
+            Date date = DateUtil.makeStr2Date(endTime, false);
+            endTime = DateUtil.makeDate2Str(DateUtil.addDays(date, 1), false);
+            query.setParameter("endTime", endTime);
+        }
     }
 
 }

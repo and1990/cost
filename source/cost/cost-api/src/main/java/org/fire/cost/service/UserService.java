@@ -42,7 +42,7 @@ public interface UserService {
      *
      * @return
      */
-    int getUserDataTotal();
+    int getUserDataTotal(UserVO vo);
 
     /**
      * 增加用户

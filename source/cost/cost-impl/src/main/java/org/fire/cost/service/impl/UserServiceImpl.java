@@ -80,8 +80,8 @@ public class UserServiceImpl implements UserService {
      * @return
      */
     @Override
-    public int getUserDataTotal() {
-        int total = userDao.getUserDataTotal();
+    public int getUserDataTotal(UserVO vo) {
+        int total = userDao.getUserDataTotal(vo);
         return total;
     }
 

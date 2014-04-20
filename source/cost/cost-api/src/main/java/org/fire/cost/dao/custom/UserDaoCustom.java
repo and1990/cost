@@ -34,5 +34,5 @@ public interface UserDaoCustom {
      *
      * @return
      */
-    int getUserDataTotal();
+    int getUserDataTotal(UserVO vo);
 }
