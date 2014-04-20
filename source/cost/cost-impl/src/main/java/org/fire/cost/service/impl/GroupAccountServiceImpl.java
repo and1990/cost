@@ -55,8 +55,8 @@ public class GroupAccountServiceImpl implements GroupAccountService {
         String startTime = DateUtil.makeDate2Str(modifyTime, false);
         String endTime = null;
         AccountVO vo = new AccountVO();
-        vo.setStartTime(startTime);
-        vo.setEndTime(endTime);
+        /*vo.setStartTime(startTime);
+        vo.setEndTime(endTime);*/
         accountDao.getAccountByFilter(vo, null);
         return false;
     }

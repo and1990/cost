@@ -32,7 +32,7 @@ public class AccountAction extends BaseAction<AccountVO> {
     private AccountService accountService;
 
     //账单信息VO
-    private AccountVO accountVO;
+    private AccountVO accountVO = new AccountVO();
 
     private List<TypeVo> typeList;
 
@@ -51,7 +51,7 @@ public class AccountAction extends BaseAction<AccountVO> {
             pageData.setPage(page);
             pageData.setPageSize(rows);
             List<AccountVO> voList = accountService.getAccountByFilter(accountVO, pageData);
-            int total = accountService.getAccountTotal();
+            int total = accountService.getAccountTotal(accountVO);
             pageData.setRows(voList);
             pageData.setTotal(total);
         } catch (Exception e) {

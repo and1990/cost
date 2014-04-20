@@ -14,5 +14,5 @@ import java.util.List;
 public interface AccountDaoCustom {
     List<Account> getAccountByFilter(AccountVO vo, PageData<AccountVO> pageData);
 
-    int getAccountTotal();
+    int getAccountTotal(AccountVO vo);
 }

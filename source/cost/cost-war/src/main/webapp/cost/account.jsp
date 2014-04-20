@@ -49,8 +49,8 @@
     </div>
     <div>
         <form id="account_filter_form" method="post">
-            <span>账单：</span>
-            <input class="text" name="accountVO.accountName" style="width:100px;"/>
+            <span>用户名：</span>
+            <input class="text" name="accountVO.userName" style="width:100px;"/>
 
             <span>消费类型：</span>
             <input id="accountType" class="accountType easyui-combobox" name="accountVO.accountType"
@@ -58,15 +58,16 @@
 
             <span>状态：</span>
             <select class="easyui-combobox" name="accountVO.accountStatus" style="width:100px;" editable="false">
+                <option value="0">全部</option>
                 <option value="1">未审批</option>
                 <option value="2">已审批</option>
                 <option value="3">已结算</option>
             </select>
 
-            消费时间从: <input class="Wdate" id="accountStartTime" name="accountVO.startTime" style="width: 100px"
+            消费时间从: <input class="Wdate" id="accountStartTime" name="accountVO.accountStartTime" style="width: 100px"
                           onfocus="WdatePicker({dateFmt:'yyyy-MM-dd',maxDate:'#F{$dp.$D(\'accountEndTime\');}'})">
 
-            到: <input class="Wdate" id="accountEndTime" name="accountVO.endTime" style="width: 100px"
+            到: <input class="Wdate" id="accountEndTime" name="accountVO.accountEndTime" style="width: 100px"
                       onfocus="WdatePicker({dateFmt:'yyyy-MM-dd',minDate:'#F{$dp.$D(\'accountStartTime\');}'})">
             <a href="#" class="easyui-linkbutton" iconCls="icon-search" onclick="getAccountByFilter();">查询</a>
         </form>

@@ -73,8 +73,8 @@ public class AccountServiceImpl implements AccountService {
      */
     @Override
     @Transactional(value = "transactionManager", rollbackFor = RollbackException.class)
-    public int getAccountTotal() {
-        int total = accountDao.getAccountTotal();
+    public int getAccountTotal(AccountVO vo) {
+        int total = accountDao.getAccountTotal(vo);
         return total;
     }
 

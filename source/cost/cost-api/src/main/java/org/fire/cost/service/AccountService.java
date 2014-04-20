@@ -29,7 +29,7 @@ public interface AccountService {
      *
      * @return
      */
-    int getAccountTotal();
+    int getAccountTotal(AccountVO vo);
 
     /**
      * 增加账单

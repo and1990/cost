@@ -7,8 +7,7 @@ import java.io.Serializable;
  *
  * @author liutengfei
  */
-public class AccountVO implements Serializable
-{
+public class AccountVO implements Serializable {
 
     /**
      *
@@ -49,198 +48,163 @@ public class AccountVO implements Serializable
 
     private String accountRemark;
 
-    private String startTime;
+    //消费时间【开始时间】
+    private String accountStartTime;
+    //消费时间【结束时间】
+    private String accountEndTime;
 
-    private String endTime;
 
-
-    public Long getAccountId()
-    {
+    public Long getAccountId() {
         return accountId;
     }
 
-    public void setAccountId(Long accountId)
-    {
+    public void setAccountId(Long accountId) {
         this.accountId = accountId;
     }
 
-    public Long getUserId()
-    {
+    public Long getUserId() {
         return userId;
     }
 
-    public void setUserId(Long userId)
-    {
+    public void setUserId(Long userId) {
         this.userId = userId;
     }
 
-    public String getUserName()
-    {
+    public String getUserName() {
         return userName;
     }
 
-    public void setUserName(String userName)
-    {
+    public void setUserName(String userName) {
         this.userName = userName;
     }
 
-    public Double getAccountMoney()
-    {
+    public Double getAccountMoney() {
         return accountMoney;
     }
 
-    public void setAccountMoney(Double accountMoney)
-    {
+    public void setAccountMoney(Double accountMoney) {
         this.accountMoney = accountMoney;
     }
 
-    public String getAccountTime()
-    {
+    public String getAccountTime() {
         return accountTime;
     }
 
-    public void setAccountTime(String accountTime)
-    {
+    public void setAccountTime(String accountTime) {
         this.accountTime = accountTime;
     }
 
-    public int getAccountType()
-    {
+    public Integer getAccountType() {
         return accountType;
     }
 
-    public void setAccountType(Integer accountType)
-    {
+    public void setAccountType(Integer accountType) {
         this.accountType = accountType;
     }
 
-    public String getAccountTypeName()
-    {
+    public String getAccountTypeName() {
         return accountTypeName;
     }
 
-    public void setAccountTypeName(String accountTypeName)
-    {
+    public void setAccountTypeName(String accountTypeName) {
         this.accountTypeName = accountTypeName;
     }
 
-    public String getApproveTime()
-    {
+    public String getApproveTime() {
         return approveTime;
     }
 
-    public void setApproveTime(String approveTime)
-    {
+    public void setApproveTime(String approveTime) {
         this.approveTime = approveTime;
     }
 
-    public Integer getAccountStatus()
-    {
+    public Integer getAccountStatus() {
         return accountStatus;
     }
 
-    public void setAccountStatus(Integer accountStatus)
-    {
+    public void setAccountStatus(Integer accountStatus) {
         this.accountStatus = accountStatus;
     }
 
-    public String getAccountStatusName()
-    {
+    public String getAccountStatusName() {
         return accountStatusName;
     }
 
-    public void setAccountStatusName(String accountStatusName)
-    {
+    public void setAccountStatusName(String accountStatusName) {
         this.accountStatusName = accountStatusName;
     }
 
-    public String getAccountPartner()
-    {
+    public String getAccountPartner() {
         return accountPartner;
     }
 
-    public void setAccountPartner(String accountPartner)
-    {
+    public void setAccountPartner(String accountPartner) {
         this.accountPartner = accountPartner;
     }
 
-    public String getAccountFile()
-    {
+    public String getAccountFile() {
         return accountFile;
     }
 
-    public void setAccountFile(String accountFile)
-    {
+    public void setAccountFile(String accountFile) {
         this.accountFile = accountFile;
     }
 
-    public String getCreateUser()
-    {
+    public String getCreateUser() {
         return createUser;
     }
 
-    public void setCreateUser(String createUser)
-    {
+    public void setCreateUser(String createUser) {
         this.createUser = createUser;
     }
 
-    public String getCreateTime()
-    {
+    public String getAccountStartTime() {
+        return accountStartTime;
+    }
+
+    public void setAccountStartTime(String accountStartTime) {
+        this.accountStartTime = accountStartTime;
+    }
+
+    public String getAccountEndTime() {
+        return accountEndTime;
+    }
+
+    public void setAccountEndTime(String accountEndTime) {
+        this.accountEndTime = accountEndTime;
+    }
+
+    public String getCreateTime() {
         return createTime;
     }
 
-    public void setCreateTime(String createTime)
-    {
+    public void setCreateTime(String createTime) {
         this.createTime = createTime;
     }
 
-    public String getModifyUser()
-    {
+    public String getModifyUser() {
         return modifyUser;
     }
 
-    public void setModifyUser(String modifyUser)
-    {
+    public void setModifyUser(String modifyUser) {
         this.modifyUser = modifyUser;
     }
 
-    public String getModifyTime()
-    {
+    public String getModifyTime() {
         return modifyTime;
     }
 
-    public void setModifyTime(String modifyTime)
-    {
+    public void setModifyTime(String modifyTime) {
         this.modifyTime = modifyTime;
     }
 
-    public String getAccountRemark()
-    {
+    public String getAccountRemark() {
         return accountRemark;
     }
 
-    public void setAccountRemark(String accountRemark)
-    {
+    public void setAccountRemark(String accountRemark) {
         this.accountRemark = accountRemark;
     }
 
-    public String getStartTime()
-    {
-        return startTime;
-    }
 
-    public void setStartTime(String startTime)
-    {
-        this.startTime = startTime;
-    }
-
-    public String getEndTime()
-    {
-        return endTime;
-    }
-
-    public void setEndTime(String endTime)
-    {
-        this.endTime = endTime;
-    }
 }
