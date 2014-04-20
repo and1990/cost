@@ -17,9 +17,6 @@
     <script type="text/javascript" src="<%=basePath%>/third/easy-ui/locale/easyui-lang-zh_CN.js"></script>
     <script type="text/javascript" src="<%=basePath%>/third/My97DatePicker/WdatePicker.js"></script>
     <script type="text/javascript" src="<%=basePath%>/third/lightbox/js/jquery.lightbox-0.5.js"></script>
-    <script type="text/javascript" src="<%=basePath%>/js/cost.js"></script>
-    <script type="text/javascript" src="<%=basePath%>/js/account.js"></script>
-    <script type="text/javascript" src="<%=basePath%>/js/group.js"></script>
 </head>
 <body>
 <div id="main_layout" class="easyui-layout" data-options="fit:true">

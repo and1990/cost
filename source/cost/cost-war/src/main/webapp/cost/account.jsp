@@ -13,6 +13,7 @@
         <table id="account_data_table">
             <thead>
             <tr>
+                <th field="ck" checkbox="true"></th>
                 <th data-options="field:'userName',width:80,align:'center'">用户名</th>
                 <th data-options="field:'accountMoney',width:80,align:'center' ">金额</th>
                 <th data-options="field:'accountTypeName',width:60,align:'center'">消费类型</th>
@@ -61,7 +62,8 @@
                 <option value="0">全部</option>
                 <option value="1">未审批</option>
                 <option value="2">已审批</option>
-                <option value="3">已结算</option>
+                <option value="3">审批未通过</option>
+                <option value="4">已结算</option>
             </select>
 
             消费时间从: <input class="Wdate" id="accountStartTime" name="accountVO.accountStartTime" style="width: 100px"
@@ -141,133 +143,124 @@
 <div id="lightbox"></div>
 
 <script type="text/javascript">
-    //页面加载完成，加载数据
-    $(function () {
-        $('#account_data_table').datagrid({
-            nowrap: false,
-            striped: true,
-            border: true,
-            collapsible: false,
-            loadMsg: '数据装载中......',
-            url: '<%=basePath%>/getAccountByFilter.do',
-            idField: 'accountId',
-            fit: true,
-            fitColumns: true,
-            singleSelect: true,
-            pagination: true,
-            toolbar: "#account_tool_bar"
-        });
-
-        //设置分页
-        $('#account_data_table').datagrid('getPager').pagination({
-            pageSize: 10,
-            pageList: [10, 20, 30, 40, 50],
-            beforePageText: '第',
-            afterPageText: '页    共 {pages} 页',
-            displayMsg: '当前显示 {from}-{to} 条记录   共 {total} 条记录'
-        });
-
-        //加载账单类型
-        $('.accountType').combobox({
-            url: '<%=request.getContextPath()%>/getAccountType.do',
-            valueField: 'code',
-            textField: 'name',
-            onLoadSuccess: function (data) {
-                $('.accountType').combobox('setValue',
-                                data[0].code).combobox('setText',
-                                data[0].name);
-            }
-        });
+//页面加载完成，加载数据
+$(function () {
+    $('#account_data_table').datagrid({
+        nowrap: false,
+        striped: true,
+        border: true,
+        collapsible: false,
+        loadMsg: '数据装载中......',
+        url: '<%=basePath%>/getAccountByFilter.do',
+        idField: 'accountId',
+        fit: true,
+        fitColumns: true,
+        singleSelect: false,
+        selectOnCheck: true,
+        checkOnSelect: true,
+        pagination: true,
+        toolbar: "#account_tool_bar"
     });
 
-    //获取查询参数
-    function getAccountByFilter() {
-        var queryData = $("#account_filter_form").serializeJson();
-        $("#account_data_table").datagrid(
-                {
-                    queryParams: queryData,
-                    pageNumber: 1
-                }, 'load'
-        );
-    }
-    (function ($) {
-        $.fn.serializeJson = function () {
-            var serializeObj = {};
-            $(this.serializeArray()).each(function () {
-                serializeObj[this.name] = this.value;
-            });
-            return serializeObj;
-        };
-    })(jQuery);
+    //设置分页
+    $('#account_data_table').datagrid('getPager').pagination({
+        pageSize: 10,
+        pageList: [10, 20, 30, 40, 50],
+        beforePageText: '第',
+        afterPageText: '页    共 {pages} 页',
+        displayMsg: '当前显示 {from}-{to} 条记录   共 {total} 条记录'
+    });
 
-    //增加账单
-    function addAccount() {
-        //设置标题
-        $('#account_dialog').dialog({ title: '增加账单信息'});
-        //打开弹出框
-        $("#account_dialog").dialog("open");
-        //设置action、url值，1代表增加
-        $("#action").val(1);
-        $("#url").val('<%=basePath%>/addAccount.do');
-    }
-
-    //修改账单
-    function modifyAccount() {
-        var rowData = $("#account_data_table").datagrid("getSelected");
-        if (rowData == undefined) {
-            alert("请选择数据");
-            return;
+    //加载账单类型
+    $('.accountType').combobox({
+        url: '<%=request.getContextPath()%>/getAccountType.do',
+        valueField: 'code',
+        textField: 'name',
+        onLoadSuccess: function (data) {
+            $('.accountType').combobox('setValue',
+                            data[0].code).combobox('setText',
+                            data[0].name);
         }
-        //隐藏密码输入框
-        $("#tr_password").hide();
-        $("#tr_repassword").hide();
+    });
+});
 
-        //设置标题
-        $('#account_dialog').dialog({ title: '修改账单信息'});
-        //打开弹出框
-        $("#account_dialog").dialog("open");
-        //设置action值，2代表修改
-        $("#action").val(2);
-        $("#url").val('<%=basePath%>/modifyAccount.do');
+//获取查询参数
+function getAccountByFilter() {
+    var queryData = $("#account_filter_form").serializeJson();
+    $("#account_data_table").datagrid(
+            {
+                queryParams: queryData,
+                pageNumber: 1
+            }, 'load'
+    );
+}
+(function ($) {
+    $.fn.serializeJson = function () {
+        var serializeObj = {};
+        $(this.serializeArray()).each(function () {
+            serializeObj[this.name] = this.value;
+        });
+        return serializeObj;
+    };
+})(jQuery);
 
-        //填充数据
-        $("#accountId").val(rowData.accountId);
-        $("#accountMoney").numberbox({value: rowData.accountMoney});
-        $('#accountType').combobox('setValue', rowData.accountType);
-        $("#accountTime").val(rowData.accountTime);
-        $("#accountRemark").val(rowData.accountRemark);
-        $("#accountId").val(rowData.accountId);
-        $("#accountStatus").val(rowData.accountStatus);
+//增加账单
+function addAccount() {
+    //设置标题
+    $('#account_dialog').dialog({ title: '增加账单信息'});
+    //打开弹出框
+    $("#account_dialog").dialog("open");
+    //设置action、url值，1代表增加
+    $("#action").val(1);
+    $("#url").val('<%=basePath%>/addAccount.do');
+}
+
+//修改账单
+function modifyAccount() {
+    var rowDataArr = $("#account_data_table").datagrid("getChecked");
+    if (rowDataArr == undefined) {
+        alert("请选择数据");
+        return;
     }
-
-    //删除账单
-    function deleteAccount() {
-        var rowData = $("#account_data_table").datagrid("getSelected");
-        if (rowData == undefined) {
-            alert("请选择数据");
-            return;
-        }
-        if (window.confirm("确定删除？")) {
-            var url = "<%=basePath%>/deleteAccount.do?accountVO.accountId=" + rowData.accountId;
-            $.ajax({
-                        type: "post",
-                        url: url,
-                        success: function (returnData) {
-                            $('#account_data_table').datagrid('reload');
-                        }
-                    }
-            );
-        }
+    if (rowDataArr.length > 1) {
+        alert("请选择一条数据");
+        return;
     }
 
-    //审批
-    function approveAccount() {
-        var rowData = $("#account_data_table").datagrid("getSelected");
-        if (rowData == undefined) {
-            alert("请选择数据");
-            return;
-        }
-        var url = "<%=basePath%>/approveAccount.do?accountVO.accountId=" + rowData.accountId;
+    //设置标题
+    $('#account_dialog').dialog({ title: '修改账单信息'});
+    //打开弹出框
+    $("#account_dialog").dialog("open");
+    //设置action值，2代表修改
+    $("#action").val(2);
+    $("#url").val('<%=basePath%>/modifyAccount.do');
+
+    //填充数据
+    var rowData = rowDataArr[0];
+    $("#accountId").val(rowData.accountId);
+    $("#accountMoney").numberbox({value: rowData.accountMoney});
+    $('#accountType').combobox('setValue', rowData.accountType);
+    $("#accountTime").val(rowData.accountTime);
+    $("#accountRemark").val(rowData.accountRemark);
+    $("#accountId").val(rowData.accountId);
+    $("#accountStatus").val(rowData.accountStatus);
+}
+
+//删除账单
+function deleteAccount() {
+    var rowDataArr = $("#account_data_table").datagrid("getChecked");
+    if (rowDataArr == undefined) {
+        alert("请选择数据");
+        return;
+    }
+    if (rowDataArr.length > 1) {
+        alert("请选择一条数据");
+        return;
+    }
+
+    var rowData = rowDataArr[0];
+    if (window.confirm("确定删除？")) {
+        var url = "<%=basePath%>/deleteAccount.do?accountVO.accountId=" + rowData.accountId;
         $.ajax({
                     type: "post",
                     url: url,
@@ -277,64 +270,83 @@
                 }
         );
     }
+}
 
-    //结算
-    function clearAccount() {
-        var rowData = $("#account_data_table").datagrid("getSelected");
-        if (rowData == undefined) {
-            alert("请选择数据");
-            return;
-        }
-        var url = "<%=basePath%>/clearAccount.do?accountVO.accountId=" + rowData.accountId;
-        $.ajax({
-                    type: "post",
-                    url: url,
-                    success: function (returnData) {
-                        $('#account_data_table').datagrid('reload');
-                    }
+//审批
+function approveAccount() {
+    var rowData = $("#account_data_table").datagrid("getChecked");
+    if (rowData == undefined) {
+        alert("请选择数据");
+        return;
+    }
+    var url = "<%=basePath%>/approveAccount.do?accountVO.accountId=" + rowData.accountId;
+    $.ajax({
+                type: "post",
+                url: url,
+                success: function (returnData) {
+                    $('#account_data_table').datagrid('reload');
                 }
-        );
+            }
+    );
+}
+
+//结算
+function clearAccount() {
+    var rowData = $("#account_data_table").datagrid("getSelected");
+    if (rowData == undefined) {
+        alert("请选择数据");
+        return;
     }
+    var url = "<%=basePath%>/clearAccount.do?accountVO.accountId=" + rowData.accountId;
+    $.ajax({
+                type: "post",
+                url: url,
+                success: function (returnData) {
+                    $('#account_data_table').datagrid('reload');
+                }
+            }
+    );
+}
 
-    //导出Excel
-    function exportExcel() {
+//导出Excel
+function exportExcel() {
 
-    }
+}
 
-    //查询本周
-    function queryThisWeek() {
+//查询本周
+function queryThisWeek() {
 
-    }
+}
 
-    //查询本月
-    function queryThisMonth() {
+//查询本月
+function queryThisMonth() {
 
-    }
+}
 
-    //提交表单
-    function submitForm() {
-        //打开进度条
-        $.messager.progress();
-        var action = $("#action").val();
-        var url = $("#url").val();
-        $('#account_form').form('submit', {
-                    url: url,
-                    onSubmit: function () {
-                        if (action == 1) {
-                            var isValid = $(this).form('validate');
-                            if (!isValid) {
-                                $.messager.progress('close');
-                            }
+//提交表单
+function submitForm() {
+    //打开进度条
+    $.messager.progress();
+    var action = $("#action").val();
+    var url = $("#url").val();
+    $('#account_form').form('submit', {
+                url: url,
+                onSubmit: function () {
+                    if (action == 1) {
+                        var isValid = $(this).form('validate');
+                        if (!isValid) {
+                            $.messager.progress('close');
                         }
-                        return isValid;
-                    },
-                    success: function () {
-                        $.messager.progress('close');
-                        $('#account_form').form('clear');
-                        $("#account_dialog").dialog("close");
-                        $('#account_data_table').datagrid('reload');
                     }
+                    return isValid;
+                },
+                success: function () {
+                    $.messager.progress('close');
+                    $('#account_form').form('clear');
+                    $("#account_dialog").dialog("close");
+                    $('#account_data_table').datagrid('reload');
                 }
-        );
-    }
+            }
+    );
+}
 </script>
