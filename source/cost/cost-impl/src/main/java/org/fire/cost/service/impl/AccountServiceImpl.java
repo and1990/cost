@@ -211,6 +211,20 @@ public class AccountServiceImpl implements AccountService {
     }
 
     /**
+     * 查找用户对应的账单数据
+     *
+     * @param accountStartTime 消费开始时间
+     * @param accountEndTime   消费结束时间
+     * @return
+     */
+    @Override
+    public List<AccountVO> getAccountGroupByUser(String accountStartTime, String accountEndTime) {
+        accountDao.getAccountGroupByUser(accountStartTime, accountEndTime);
+        List<AccountVO> accountVOList = null;
+        return accountVOList;
+    }
+
+    /**
      * 更新账单附件
      *
      * @param accountId

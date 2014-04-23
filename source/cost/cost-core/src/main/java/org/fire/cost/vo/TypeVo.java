@@ -7,16 +7,8 @@ package org.fire.cost.vo;
  */
 public class TypeVo {
 
-    private String name;
     private int code;
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
+    private String name;
 
     public int getCode() {
         return code;
@@ -24,6 +16,14 @@ public class TypeVo {
 
     public void setCode(int code) {
         this.code = code;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
 }

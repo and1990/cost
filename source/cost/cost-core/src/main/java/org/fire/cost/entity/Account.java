@@ -1,6 +1,7 @@
 package org.fire.cost.entity;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -30,7 +31,7 @@ public class Account implements Serializable {
     private Long accountId;
 
     @Column(name = "account_money")
-    private Double accountMoney;
+    private BigDecimal accountMoney;
 
     @Column(name = "account_time")
     private Date accountTime;
@@ -75,11 +76,11 @@ public class Account implements Serializable {
         this.accountId = accountId;
     }
 
-    public Double getAccountMoney() {
+    public BigDecimal getAccountMoney() {
         return accountMoney;
     }
 
-    public void setAccountMoney(Double accountMoney) {
+    public void setAccountMoney(BigDecimal accountMoney) {
         this.accountMoney = accountMoney;
     }
 

@@ -15,4 +15,6 @@ public interface AccountDaoCustom {
     List<Account> getAccountByFilter(AccountVO vo, PageData<AccountVO> pageData);
 
     int getAccountTotal(AccountVO vo);
+
+    List<AccountVO> getAccountGroupByUser(String accountStartTime, String accountEndTime);
 }

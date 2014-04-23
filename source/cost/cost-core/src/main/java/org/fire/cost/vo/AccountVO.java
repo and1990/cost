@@ -1,6 +1,7 @@
 package org.fire.cost.vo;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 
 /**
  * costvo对象，用于向客户端展示数据
@@ -20,7 +21,7 @@ public class AccountVO implements Serializable {
 
     private String userName;
 
-    private Double accountMoney;
+    private BigDecimal accountMoney;
 
     private String accountTime;
 
@@ -78,11 +79,11 @@ public class AccountVO implements Serializable {
         this.userName = userName;
     }
 
-    public Double getAccountMoney() {
+    public BigDecimal getAccountMoney() {
         return accountMoney;
     }
 
-    public void setAccountMoney(Double accountMoney) {
+    public void setAccountMoney(BigDecimal accountMoney) {
         this.accountMoney = accountMoney;
     }
 

@@ -31,9 +31,18 @@ public class AccountAction extends BaseAction<AccountVO> {
     @Resource
     private AccountService accountService;
 
-    //账单信息VO
+    /**
+     * 账单信息VO
+     */
     private AccountVO accountVO = new AccountVO();
+    /**
+     * 账单VO
+     */
+    private List<AccountVO> accountVOList;
 
+    /**
+     * 枚举类型VO
+     */
     private List<TypeVo> typeList;
 
 
@@ -174,12 +183,36 @@ public class AccountAction extends BaseAction<AccountVO> {
     }
 
 
+    /**
+     * 查找用户对应的账单数据
+     *
+     * @return
+     */
+    @Action(value = "getAccountGroupByUser", results = {@Result(type = "json", params = {"root", "accountVOList", "contentType", "text/html"})})
+    public String getAccountGroupByUser() {
+        try {
+            accountVOList = accountService.getAccountGroupByUser(accountVO.getAccountStartTime(), accountVO.getAccountEndTime());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return SUCCESS;
+    }
+
+
     public AccountVO getAccountVO() {
         return accountVO;
     }
 
     public void setAccountVO(AccountVO accountVO) {
         this.accountVO = accountVO;
+    }
+
+    public List<AccountVO> getAccountVOList() {
+        return accountVOList;
+    }
+
+    public void setAccountVOList(List<AccountVO> accountVOList) {
+        this.accountVOList = accountVOList;
     }
 
     public List<TypeVo> getTypeList() {

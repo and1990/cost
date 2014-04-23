@@ -18,20 +18,22 @@
 
     <div style="text-align: center;margin-top: 50px;">
         <div style="font-family: Microsoft YaHei;font-size: 16px;">
-            按消费类型查看：<input type="radio" name="type" value="1"/>
-            &nbsp;
-            按用户查看：<input type="radio" name="type" value="2"/>
-            &nbsp;
-            按月份查看：<input type="radio" name="type" value="3"/>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            <br>
-            消费时间从: <input class="Wdate" id="accountStartTime" name="accountVO.startTime" style="width: 150px"
-                          onfocus="WdatePicker({dateFmt:'yyyy-MM-dd',maxDate:'#F{$dp.$D(\'accountEndTime\');}'})">
-            &nbsp;
-            到: <input class="Wdate" id="accountEndTime" name="accountVO.endTime" style="width: 150px"
-                      onfocus="WdatePicker({dateFmt:'yyyy-MM-dd',minDate:'#F{$dp.$D(\'accountStartTime\');}',maxDate:'%y-%M-%d'})">
-            &nbsp;&nbsp;
-            <a href="#" style="text-decoration: none" iconCls="icon-search" onclick="pieChartShow();">查看</a>
+            <form id="pie_form">
+                按消费类型查看：<input type="radio" name="type" value="1"/>
+                &nbsp;
+                按用户查看：<input type="radio" name="type" value="2"/>
+                &nbsp;
+                按月份查看：<input type="radio" name="type" value="3"/>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <br>
+                消费时间从: <input class="Wdate" id="accountStartTime" name="accountVO.startTime" style="width: 150px"
+                              onfocus="WdatePicker({dateFmt:'yyyy-MM-dd',maxDate:'#F{$dp.$D(\'accountEndTime\');}'})">
+                &nbsp;
+                到: <input class="Wdate" id="accountEndTime" name="accountVO.endTime" style="width: 150px"
+                          onfocus="WdatePicker({dateFmt:'yyyy-MM-dd',minDate:'#F{$dp.$D(\'accountStartTime\');}',maxDate:'%y-%M-%d'})">
+                &nbsp;&nbsp;
+                <a href="#" style="text-decoration: none" iconCls="icon-search" onclick="showChart();">查看</a>
+            </form>
         </div>
     </div>
 </div>
@@ -40,31 +42,16 @@
     $(function () {
         $.ajax({
             type: 'post',
-            url: '<%=basePath%>/getAccountByType.do',
+            url: '<%=basePath%>/getAccountGroupByUser.do',
             success: function (returnData) {
                 var accountArr = getAccountData(returnData);
                 if (accountArr != undefined && accountArr.length != 0) {
-                    setChart(accountArr);
+                    initChart(accountArr);
                 }
             }
         });
     });
 
-    //得到账单数据
-    function getAccountData(returnData) {
-        var accountArr = new Array();
-        if (returnData == undefined) {
-            return;
-        }
-        var rows = JSON.parse(returnData);
-        for (var i = 0; i < rows.length; i++) {
-            var arr = new Array();
-            arr[0] = rows[i].name;
-            arr[1] = rows[i].code;
-            accountArr.push(arr);
-        }
-        return accountArr;
-    }
 
     Highcharts.setOptions({
         lang: {
@@ -78,7 +65,7 @@
     });
 
     //初始化图表
-    function setChart(accountArr) {
+    function initChart(accountArr) {
         $('#container').highcharts({
             chart: {
                 plotBackgroundColor: null,
@@ -89,7 +76,7 @@
                 text: ''
             },
             title: {
-                text: '个人消费占比',
+                text: "个人消费占比[消费类型]",
                 style: {fontFamily: 'Microsoft YaHei', fontSize: 16}
             },
             tooltip: {
@@ -119,33 +106,96 @@
     }
 
     //显示图表
-    function pieChartShow() {
+    function showChart() {
         var startTime = $("#accountStartTime").val();
         var endTime = $("#accountEndTime").val();
+        var showType = $(":radio").val();
+        setChartStyle(startTime, endTime, showType);
+        loadData(startTime, endTime, showType);
+    }
+
+    //设置图表格式
+    function setChartStyle(startTime, endTime, showType) {
+        var typeText = "消费类型";
+        if (showType == 2) {
+            typeText = "用户";
+        } else if (showType == 3) {
+            typeText = "月份";
+        }
 
         var title = undefined;
-
         var startNotNull = startTime != undefined && startTime != '';
         var endIsNull = endTime == undefined || endTime == '';
         if (startNotNull && endIsNull) {
-            title = startTime + "以后个人消费占比";
+            title = startTime + "以后个人消费占比[" + typeText + "]";
         }
 
         var startIsNull = startTime == undefined || startTime == '';
         var endNotNull = endTime != undefined && endTime != '';
         if (startIsNull && endNotNull) {
-            title = endTime + "之前个人消费占比";
+            title = endTime + "之前个人消费占比[" + typeText + "]";
         }
 
         if (startNotNull && endNotNull) {
-            title = startTime + "至" + endTime + "个人消费占比";
+            title = startTime + "至" + endTime + "个人消费占比[" + typeText + "]";
         }
 
         if (startIsNull && endIsNull) {
-            title = "个人消费占比";
+            title = "个人消费占比[" + typeText + "]";
         }
         var chart = $('#container').highcharts();
         chart.setTitle({text: title, style: {fontFamily: 'Microsoft YaHei', fontSize: 16}});
+    }
+
+    //加载数据
+    function loadData(startTime, endTime, showType) {
+        var url = "<%=basePath%>/getAccountGroupByType.do";
+        if (showType == 2) {
+            url = "<%=basePath%>/getAccountGroupByUser.do";
+        } else if (showType == 3) {
+            url = "<%=basePath%>/getAccountGroupByMonth.do";
+        }
+
+        if (startTime == undefined) {
+            startTime = "";
+        }
+        if (endTime == undefined) {
+            endTime = "";
+        }
+        var data = {"accountVO.startTime": startTime, "accountVO.endTime": endTime};
+        $.ajax({
+            type: 'post',
+            url: url,
+            data: data,
+            success: function (returnData) {
+                var accountArr = getAccountData(returnData);
+                if (accountArr != undefined && accountArr.length != 0) {
+                    $('#container').highcharts({
+                        series: [
+                            {
+                                data: accountArr
+                            }
+                        ]
+                    });
+                }
+            }
+        });
+    }
+
+    //得到账单数据
+    function getAccountData(returnData) {
+        var accountArr = new Array();
+        if (returnData == undefined) {
+            return;
+        }
+        var rows = JSON.parse(returnData);
+        for (var i = 0; i < rows.length; i++) {
+            var arr = new Array();
+            arr[0] = rows[i].userName;
+            arr[1] = rows[i].accountMoney;
+            accountArr.push(arr);
+        }
+        return accountArr;
     }
 </script>
 </body>

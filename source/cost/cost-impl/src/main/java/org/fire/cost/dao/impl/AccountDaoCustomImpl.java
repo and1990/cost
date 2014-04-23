@@ -5,6 +5,8 @@ import org.fire.cost.entity.Account;
 import org.fire.cost.util.DateUtil;
 import org.fire.cost.vo.AccountVO;
 import org.fire.cost.vo.PageData;
+import org.hibernate.SQLQuery;
+import org.hibernate.transform.Transformers;
 
 import javax.persistence.Query;
 import java.text.ParseException;
@@ -70,6 +72,44 @@ public class AccountDaoCustomImpl extends BaseJpaDaoSupport<Account, Long> imple
 
         int total = Integer.valueOf(query.getSingleResult().toString());
         return total;
+    }
+
+    /**
+     * 查找用户对应的账单数据
+     *
+     * @param accountStartTime 消费开始时间
+     * @param accountEndTime   消费结束时间
+     * @return
+     */
+    @Override
+    public List<AccountVO> getAccountGroupByUser(String accountStartTime, String accountEndTime) {
+        String sql = "select u.user_name as userName,a.accountMoney as accountMoney  " +
+                "from cost_user u inner join " +
+                "(" +
+                "  select u.user_id,sum(a.account_money) as accountMoney " +
+                "  from cost_account a inner join cost_user u on a.user_id=u.user_id" +
+                "  where 1=1 ";
+        boolean accountStartTimeNotNull = accountStartTime != null && accountStartTime.trim().length() != 0;
+        if (accountStartTimeNotNull) {
+            sql += "and a.account_time>=:startTime";
+        }
+        boolean accountEndTimeNotNull = accountEndTime != null && accountEndTime.trim().length() != 0;
+        if (accountEndTimeNotNull) {
+            sql += "and a.account_time<:endTime";
+        }
+        sql += "  group by u.user_id" +
+                ") a on u.user_id=a.user_id";
+        Query query = entityManager.createNativeQuery(sql);
+        if (accountStartTimeNotNull) {
+            query.setParameter("startTime", accountStartTime);
+        }
+        if (accountEndTimeNotNull) {
+            query.setParameter("endTime", accountEndTime);
+        }
+        query.unwrap(SQLQuery.class).setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP);
+        List resultList = query.getResultList();
+
+        return null;
     }
 
     /**
