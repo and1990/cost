@@ -29,7 +29,7 @@
                           onfocus="WdatePicker({dateFmt:'yyyy-MM-dd',maxDate:'#F{$dp.$D(\'accountEndTime\');}'})">
             &nbsp;
             到: <input class="Wdate" id="accountEndTime" name="accountVO.endTime" style="width: 150px"
-                      onfocus="WdatePicker({dateFmt:'yyyy-MM-dd',minDate:'#F{$dp.$D(\'accountStartTime\');}'})">
+                      onfocus="WdatePicker({dateFmt:'yyyy-MM-dd',minDate:'#F{$dp.$D(\'accountStartTime\');}',maxDate:'%y-%M-%d'})">
             &nbsp;&nbsp;
             <a href="#" style="text-decoration: none" iconCls="icon-search" onclick="pieChartShow();">查看</a>
         </div>
