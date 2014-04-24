@@ -13,13 +13,15 @@
     <script type="text/javascript" src="<%=basePath%>/third/Highcharts/modules/exporting.js"></script>
 </head>
 <body>
-<div>
+<div style="font-family: 'Microsoft YaHei';font-size:16px">
     <div id="container" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
-
+    <div style="text-align: center;margin-bottom: 50px">
+        <span id="null_data" style="color: #FF2F2F"></span>
+    </div>
     <div style="text-align: center;margin-top: 50px;">
-        <div style="font-family: Microsoft YaHei;font-size: 16px;">
+        <div>
             <form id="pie_form">
-                按消费类型查看：<input type="radio" name="type" value="1"/>
+                按消费类型查看：<input type="radio" name="type" value="1" checked="checked"/>
                 &nbsp;
                 按用户查看：<input type="radio" name="type" value="2"/>
                 &nbsp;
@@ -180,7 +182,7 @@
             data: data,
             success: function (returnData) {
                 if (returnData == undefined) {
-                    alert("未加载到数据");
+                    $('#null_data').html("未加载到数据...");
                     return;
                 }
                 var accountArr = new Array();
@@ -194,7 +196,9 @@
                 var chart = $('#container').highcharts();
                 chart.series[0].setData(accountArr);
                 if (accountArr == undefined || accountArr.length == 0) {
-                    alert("未加载到数据");
+                    $('#null_data').html("未加载到数据...");
+                } else {
+                    $('#null_data').html("");
                 }
             }
         });
