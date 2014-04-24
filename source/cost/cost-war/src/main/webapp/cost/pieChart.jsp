@@ -86,7 +86,7 @@
                         text: ''
                     },
                     title: {
-                        text: "个人消费占比[消费类型]"
+                        text: "消费占比[消费类型]"
                     },
                     tooltip: {
                         enabled: true,
@@ -150,7 +150,7 @@
         }
 
         if (startNotNull && endNotNull) {
-            title = startTime + "至" + endTime + "个人消费占比[" + typeText + "]";
+            title = startTime + "至" + endTime + "消费占比[" + typeText + "]";
         }
 
         if (startIsNull && endIsNull) {
