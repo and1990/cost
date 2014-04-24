@@ -182,6 +182,22 @@ public class AccountAction extends BaseAction<AccountVO> {
         return SUCCESS;
     }
 
+    /**
+     * 查找消费类型对应的账单数据
+     *
+     * @return
+     */
+    @Action(value = "getAccountGroupByAccountType", results = {@Result(type = "json", params = {"root", "accountVOList", "contentType", "text/html"})})
+    public String getAccountGroupByAccountType() {
+        try {
+            String startTime = accountVO.getAccountStartTime();
+            String endTime = accountVO.getAccountEndTime();
+            accountVOList = accountService.getAccountGroupByAccountType(startTime, endTime);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return SUCCESS;
+    }
 
     /**
      * 查找用户对应的账单数据
@@ -191,7 +207,9 @@ public class AccountAction extends BaseAction<AccountVO> {
     @Action(value = "getAccountGroupByUser", results = {@Result(type = "json", params = {"root", "accountVOList", "contentType", "text/html"})})
     public String getAccountGroupByUser() {
         try {
-            accountVOList = accountService.getAccountGroupByUser(accountVO.getAccountStartTime(), accountVO.getAccountEndTime());
+            String startTime = accountVO.getAccountStartTime();
+            String endTime = accountVO.getAccountEndTime();
+            accountVOList = accountService.getAccountGroupByUser(startTime, endTime);
         } catch (Exception e) {
             e.printStackTrace();
         }

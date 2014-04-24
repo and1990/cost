@@ -23,13 +23,10 @@
                 &nbsp;
                 按用户查看：<input type="radio" name="type" value="2"/>
                 &nbsp;
-                按月份查看：<input type="radio" name="type" value="3"/>
-                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                <br>
-                消费时间从: <input class="Wdate" id="accountStartTime" name="accountVO.startTime" style="width: 150px"
+                消费时间从: <input class="Wdate" id="accountStartTime" name="accountVO.accountStartTime" style="width: 150px"
                               onfocus="WdatePicker({dateFmt:'yyyy-MM-dd',maxDate:'#F{$dp.$D(\'accountEndTime\');}'})">
                 &nbsp;
-                到: <input class="Wdate" id="accountEndTime" name="accountVO.endTime" style="width: 150px"
+                到: <input class="Wdate" id="accountEndTime" name="accountVO.accountEndTime" style="width: 150px"
                           onfocus="WdatePicker({dateFmt:'yyyy-MM-dd',minDate:'#F{$dp.$D(\'accountStartTime\');}',maxDate:'%y-%M-%d'})">
                 &nbsp;&nbsp;
                 <a href="#" style="text-decoration: none" iconCls="icon-search" onclick="showChart();">查看</a>
@@ -44,7 +41,17 @@
             type: 'post',
             url: '<%=basePath%>/getAccountGroupByUser.do',
             success: function (returnData) {
-                var accountArr = getAccountData(returnData);
+                var accountArr = new Array();
+                if (returnData == undefined) {
+                    return;
+                }
+                var rows = JSON.parse(returnData);
+                for (var i = 0; i < rows.length; i++) {
+                    var arr = new Array();
+                    arr[0] = rows[i].userName;
+                    arr[1] = rows[i].accountMoney;
+                    accountArr.push(arr);
+                }
                 if (accountArr != undefined && accountArr.length != 0) {
                     initChart(accountArr);
                 }
@@ -67,42 +74,48 @@
     //初始化图表
     function initChart(accountArr) {
         $('#container').highcharts({
-            chart: {
-                plotBackgroundColor: null,
-                plotBorderWidth: null,
-                plotShadow: false
-            },
-            credits: {
-                text: ''
-            },
-            title: {
-                text: "个人消费占比[消费类型]",
-                style: {fontFamily: 'Microsoft YaHei', fontSize: 16}
-            },
-            tooltip: {
-                enabled: true,
-                pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
-            },
-            plotOptions: {
-                pie: {
-                    allowPointSelect: true,
-                    cursor: 'pointer',
-                    dataLabels: {
+                    chart: {
+                        style: {
+                            fontFamily: 'Microsoft YaHei',
+                            fontSize: '16px'
+                        }
+                    },
+                    credits: {
+                        text: ''
+                    },
+                    title: {
+                        text: "个人消费占比[消费类型]"
+                    },
+                    tooltip: {
                         enabled: true,
-                        color: '#000000',
-                        connectorColor: '#000000',
-                        format: '<b>{point.name}</b>:1 {point.percentage:.1f} %'
-                    }
+                        pointFormat: '{series.name}: {point.percentage:.2f}%',
+                        style: {
+                            fontFamily: 'Microsoft YaHei', fontSize: '12px'
+                        }
+                    },
+                    plotOptions: {
+                        pie: {
+                            allowPointSelect: true,
+                            cursor: 'pointer',
+                            dataLabels: {
+                                enabled: true,
+                                color: '#000000',
+                                connectorColor: '#000000',
+                                format: '{point.name} : {point.percentage:.2f} %',
+                                style: {fontFamily: 'Microsoft YaHei', fontSize: '12px'}
+                            }
+                        }
+                    },
+                    series: [
+                        {
+                            type: 'pie',
+                            name: '比例',
+                            data: accountArr
+                        }
+                    ]
                 }
-            },
-            series: [
-                {
-                    type: 'pie',
-                    name: '比例',
-                    data: accountArr
-                }
-            ]
-        });
+        )
+        ;
     }
 
     //显示图表
@@ -110,30 +123,28 @@
         var startTime = $("#accountStartTime").val();
         var endTime = $("#accountEndTime").val();
         var showType = $(":radio").val();
-        setChartStyle(startTime, endTime, showType);
         loadData(startTime, endTime, showType);
+        setChartTitle(startTime, endTime, showType);
     }
 
     //设置图表格式
-    function setChartStyle(startTime, endTime, showType) {
+    function setChartTitle(startTime, endTime, showType) {
         var typeText = "消费类型";
         if (showType == 2) {
             typeText = "用户";
-        } else if (showType == 3) {
-            typeText = "月份";
         }
 
         var title = undefined;
         var startNotNull = startTime != undefined && startTime != '';
         var endIsNull = endTime == undefined || endTime == '';
         if (startNotNull && endIsNull) {
-            title = startTime + "以后个人消费占比[" + typeText + "]";
+            title = startTime + "以后消费占比[" + typeText + "]";
         }
 
         var startIsNull = startTime == undefined || startTime == '';
         var endNotNull = endTime != undefined && endTime != '';
         if (startIsNull && endNotNull) {
-            title = endTime + "之前个人消费占比[" + typeText + "]";
+            title = endTime + "之前消费占比[" + typeText + "]";
         }
 
         if (startNotNull && endNotNull) {
@@ -141,15 +152,15 @@
         }
 
         if (startIsNull && endIsNull) {
-            title = "个人消费占比[" + typeText + "]";
+            title = "消费占比[" + typeText + "]";
         }
         var chart = $('#container').highcharts();
-        chart.setTitle({text: title, style: {fontFamily: 'Microsoft YaHei', fontSize: 16}});
+        chart.setTitle({text: title});
     }
 
     //加载数据
     function loadData(startTime, endTime, showType) {
-        var url = "<%=basePath%>/getAccountGroupByType.do";
+        var url = "<%=basePath%>/getAccountGroupByAccountType.do";
         if (showType == 2) {
             url = "<%=basePath%>/getAccountGroupByUser.do";
         } else if (showType == 3) {
@@ -162,21 +173,28 @@
         if (endTime == undefined) {
             endTime = "";
         }
-        var data = {"accountVO.startTime": startTime, "accountVO.endTime": endTime};
+        var data = {"accountVO.accountStartTime": startTime, "accountVO.accountEndTime": endTime};
         $.ajax({
             type: 'post',
             url: url,
             data: data,
             success: function (returnData) {
-                var accountArr = getAccountData(returnData);
-                if (accountArr != undefined && accountArr.length != 0) {
-                    $('#container').highcharts({
-                        series: [
-                            {
-                                data: accountArr
-                            }
-                        ]
-                    });
+                if (returnData == undefined) {
+                    alert("未加载到数据");
+                    return;
+                }
+                var accountArr = new Array();
+                var rows = JSON.parse(returnData);
+                for (var i = 0; i < rows.length; i++) {
+                    var arr = new Array();
+                    arr[0] = rows[i].accountTypeName;
+                    arr[1] = rows[i].accountMoney;
+                    accountArr.push(arr);
+                }
+                var chart = $('#container').highcharts();
+                chart.series[0].setData(accountArr);
+                if (accountArr == undefined || accountArr.length == 0) {
+                    alert("未加载到数据");
                 }
             }
         });

@@ -86,6 +86,15 @@ public interface AccountService {
     List<TypeVo> getAccountType();
 
     /**
+     * 查找消费类型对应的账单数据
+     *
+     * @param accountStartTime 消费开始时间
+     * @param accountEndTime   消费结束时间
+     * @return
+     */
+    List<AccountVO> getAccountGroupByAccountType(String accountStartTime, String accountEndTime);
+
+    /**
      * 查找用户对应的账单数据
      *
      * @param accountStartTime 消费开始时间

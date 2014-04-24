@@ -2,6 +2,7 @@ package org.fire.cost.dao.impl;
 
 import org.fire.cost.dao.custom.AccountDaoCustom;
 import org.fire.cost.entity.Account;
+import org.fire.cost.enums.AccountTypeEnum;
 import org.fire.cost.util.DateUtil;
 import org.fire.cost.vo.AccountVO;
 import org.fire.cost.vo.PageData;
@@ -9,9 +10,12 @@ import org.hibernate.SQLQuery;
 import org.hibernate.transform.Transformers;
 
 import javax.persistence.Query;
+import java.math.BigDecimal;
 import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 账单扩展实现类
@@ -75,30 +79,27 @@ public class AccountDaoCustomImpl extends BaseJpaDaoSupport<Account, Long> imple
     }
 
     /**
-     * 查找用户对应的账单数据
+     * 查找消费类型对应的账单数据
      *
      * @param accountStartTime 消费开始时间
      * @param accountEndTime   消费结束时间
      * @return
      */
     @Override
-    public List<AccountVO> getAccountGroupByUser(String accountStartTime, String accountEndTime) {
-        String sql = "select u.user_name as userName,a.accountMoney as accountMoney  " +
-                "from cost_user u inner join " +
-                "(" +
-                "  select u.user_id,sum(a.account_money) as accountMoney " +
-                "  from cost_account a inner join cost_user u on a.user_id=u.user_id" +
-                "  where 1=1 ";
+    public List<AccountVO> getAccountGroupByAccountType(String accountStartTime, String accountEndTime) {
+
+        String sql = "select account_type,sum(account_money) as account_money " +
+                "from cost_account WHERE 1=1 ";
         boolean accountStartTimeNotNull = accountStartTime != null && accountStartTime.trim().length() != 0;
         if (accountStartTimeNotNull) {
-            sql += "and a.account_time>=:startTime";
+            sql += "and account_time>=:startTime ";
         }
         boolean accountEndTimeNotNull = accountEndTime != null && accountEndTime.trim().length() != 0;
         if (accountEndTimeNotNull) {
-            sql += "and a.account_time<:endTime";
+            sql += "and account_time<:endTime ";
         }
-        sql += "  group by u.user_id" +
-                ") a on u.user_id=a.user_id";
+        sql += "group by account_type ";
+
         Query query = entityManager.createNativeQuery(sql);
         if (accountStartTimeNotNull) {
             query.setParameter("startTime", accountStartTime);
@@ -107,9 +108,67 @@ public class AccountDaoCustomImpl extends BaseJpaDaoSupport<Account, Long> imple
             query.setParameter("endTime", accountEndTime);
         }
         query.unwrap(SQLQuery.class).setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP);
-        List resultList = query.getResultList();
+        List<Map> resultList = query.getResultList();
+        List<AccountVO> accountVOList = new ArrayList<AccountVO>();
+        boolean resultDataNotNull = resultList != null && resultList.size() != 0;
+        if (resultDataNotNull) {
+            for (Map map : resultList) {
+                AccountVO accountVO = new AccountVO();
+                Integer accountType = Integer.valueOf(map.get("account_type").toString());
+                accountVO.setAccountType(accountType);
+                accountVO.setAccountTypeName(AccountTypeEnum.getName(accountType));
+                accountVO.setAccountMoney(new BigDecimal(map.get("account_money").toString()));
+                accountVOList.add(accountVO);
+            }
+        }
+        return accountVOList;
+    }
 
-        return null;
+
+    /**
+     * 查找用户对应的账单数据
+     *
+     * @param accountStartTime 消费开始时间
+     * @param accountEndTime   消费结束时间
+     * @return
+     */
+    @Override
+    public List<AccountVO> getAccountGroupByUser(String accountStartTime, String accountEndTime) {
+        String sql = "SELECT " +
+                "  CONCAT(u.user_name, '_', u.user_id) AS userName, " +
+                "  SUM(a.account_money) AS accountMoney " +
+                "FROM " +
+                "  cost_user u " +
+                "INNER JOIN cost_account a ON u.user_id = a.user_id WHERE 1=1 ";
+        boolean accountStartTimeNotNull = accountStartTime != null && accountStartTime.trim().length() != 0;
+        if (accountStartTimeNotNull) {
+            sql += "and a.account_time>=:startTime ";
+        }
+        boolean accountEndTimeNotNull = accountEndTime != null && accountEndTime.trim().length() != 0;
+        if (accountEndTimeNotNull) {
+            sql += "and a.account_time<:endTime ";
+        }
+        sql += "GROUP BY u.user_id, u.user_name";
+        Query query = entityManager.createNativeQuery(sql);
+        if (accountStartTimeNotNull) {
+            query.setParameter("startTime", accountStartTime);
+        }
+        if (accountEndTimeNotNull) {
+            query.setParameter("endTime", accountEndTime);
+        }
+        query.unwrap(SQLQuery.class).setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP);
+        List<Map> resultList = query.getResultList();
+        List<AccountVO> accountVOList = new ArrayList<AccountVO>();
+        boolean resultDataNotNull = resultList != null && resultList.size() != 0;
+        if (resultDataNotNull) {
+            for (Map map : resultList) {
+                AccountVO accountVO = new AccountVO();
+                accountVO.setUserName(map.get("userName").toString());
+                accountVO.setAccountMoney(new BigDecimal(map.get("accountMoney").toString()));
+                accountVOList.add(accountVO);
+            }
+        }
+        return accountVOList;
     }
 
     /**
@@ -182,6 +241,26 @@ public class AccountDaoCustomImpl extends BaseJpaDaoSupport<Account, Long> imple
             accountEndTime = DateUtil.makeDate2Str(DateUtil.addDays(date, 1), false);
             query.setParameter("accountEndTime", accountEndTime);
         }
+    }
+
+    /**
+     * 得到账单VO
+     *
+     * @param resultList
+     * @return
+     */
+    private List<AccountVO> getAccountVOList(List<Map> resultList) {
+        List<AccountVO> accountVOList = new ArrayList<AccountVO>();
+        boolean resultDataNotNull = resultList != null && resultList.size() != 0;
+        if (resultDataNotNull) {
+            for (Map map : resultList) {
+                AccountVO accountVO = new AccountVO();
+                accountVO.setUserName(map.get("userName").toString());
+                accountVO.setAccountMoney(new BigDecimal(map.get("accountMoney").toString()));
+                accountVOList.add(accountVO);
+            }
+        }
+        return accountVOList;
     }
 
 }

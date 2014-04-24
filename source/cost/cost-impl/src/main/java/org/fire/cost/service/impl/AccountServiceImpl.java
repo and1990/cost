@@ -200,14 +200,28 @@ public class AccountServiceImpl implements AccountService {
     @Override
     @Transactional(value = "transactionManager", rollbackFor = RollbackException.class)
     public List<TypeVo> getAccountType() {
+        AccountTypeEnum[] typeEnums = AccountTypeEnum.values();
         List<TypeVo> typeList = new ArrayList<TypeVo>();
-        for (int i = 0; i < 5; i++) {
+        for (AccountTypeEnum typeEnum : typeEnums) {
             TypeVo vo = new TypeVo();
-            vo.setCode(i);
-            vo.setName("V" + i);
+            vo.setCode(typeEnum.getCode());
+            vo.setName(typeEnum.getName());
             typeList.add(vo);
         }
         return typeList;
+    }
+
+    /**
+     * 查找消费类型对应的账单数据
+     *
+     * @param accountStartTime 消费开始时间
+     * @param accountEndTime   消费结束时间
+     * @return
+     */
+    @Override
+    public List<AccountVO> getAccountGroupByAccountType(String accountStartTime, String accountEndTime) {
+        List<AccountVO> accountVOList = accountDao.getAccountGroupByAccountType(accountStartTime, accountEndTime);
+        return accountVOList;
     }
 
     /**
@@ -219,8 +233,7 @@ public class AccountServiceImpl implements AccountService {
      */
     @Override
     public List<AccountVO> getAccountGroupByUser(String accountStartTime, String accountEndTime) {
-        accountDao.getAccountGroupByUser(accountStartTime, accountEndTime);
-        List<AccountVO> accountVOList = null;
+        List<AccountVO> accountVOList = accountDao.getAccountGroupByUser(accountStartTime, accountEndTime);
         return accountVOList;
     }
 
@@ -248,7 +261,7 @@ public class AccountServiceImpl implements AccountService {
      * @return
      */
     private String getUpLoadDirPath(String path) {
-        String fileUpLoadDirname = "FileUpload";
+        final String fileUpLoadDirname = "FileUpload";
         File[] fileArr = new File(path).listFiles();
         boolean isFileUploadExist = false;
         for (File f : fileArr) {
