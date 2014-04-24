@@ -20,6 +20,9 @@ public class UserAction extends BaseAction<UserVO> {
     //用户vo对象
     private UserVO userVO;
 
+    //用户ID
+    private String userIds;
+
     /**
      * 根据过滤条件查询用户
      *
@@ -91,6 +94,17 @@ public class UserAction extends BaseAction<UserVO> {
         return SUCCESS;
     }
 
+    /**
+     * 禁用用户
+     *
+     * @return
+     */
+    @Action(value = "disableUser", results = {@Result(type = "json", params = {"root", "pageData", "contentType", "text/html"})})
+    public String disableUser() {
+
+        return SUCCESS;
+    }
+
     public UserVO getUserVO() {
         return userVO;
     }
@@ -99,4 +113,11 @@ public class UserAction extends BaseAction<UserVO> {
         this.userVO = userVO;
     }
 
+    public String getUserIds() {
+        return userIds;
+    }
+
+    public void setUserIds(String userIds) {
+        this.userIds = userIds;
+    }
 }

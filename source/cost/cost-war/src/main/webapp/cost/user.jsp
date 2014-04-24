@@ -15,6 +15,7 @@
         <table id="user_data_table">
             <thead>
             <tr>
+                <th field="ck" checkbox="true"></th>
                 <th data-options="field:'userName',width:80,align:'center',editor:'text'">用户名</th>
                 <th data-options="field:'loginName',width:80,align:'center',editor:'text'">登录名</th>
                 <th data-options="field:'password',width:80,align:'center',editor:'text'">密码</th>
@@ -32,13 +33,15 @@
 
 <div id="user_tool_bar" style="padding: 5px; height: auto">
     <div style="margin-bottom: 5px">
-        <a href="javascript:void(0);" class="easyui-linkbutton" iconCls="icon-add" plain="true"
+        <a href="#" class="easyui-linkbutton" iconCls="icon-add" plain="true"
            onclick="addUser();">增加</a>
-        <a href="javascript:void(0);" class="easyui-linkbutton" iconCls="icon-edit" plain="true"
+        <a href="#" class="easyui-linkbutton" iconCls="icon-edit" plain="true"
            onclick="modifyUser();">修改</a>
-        <a href="javascript:void(0);" class="easyui-linkbutton" iconCls="icon-remove" plain="true"
+        <a href="#" class="easyui-linkbutton" iconCls="icon-remove" plain="true"
            onclick="deleteUser();">删除</a>
-        <a href="javascript:void(0);" class="easyui-linkbutton" iconCls="icon-print" plain="true"
+        <a href="#" class="easyui-linkbutton" iconCls="icon-tag-blue" plain="true"
+           onclick="disableUser();">禁用</a>
+        <a href="#" class="easyui-linkbutton" iconCls="icon-print" plain="true"
            onclick="undoData('#user_data_table');">导出Excel</a>
     </div>
     <div>
@@ -181,7 +184,9 @@
             idField: 'userId',
             fit: true,
             fitColumns: true,
-            singleSelect: true,
+            singleSelect: false,
+            selectOnCheck: true,
+            checkOnSelect: true,
             pagination: true,
             toolbar: '#user_tool_bar',
 
@@ -281,6 +286,27 @@
         }
     }
 
+    //禁用用户
+    function disableUser() {
+        var rowData = $("#user_data_table").datagrid("getChecked");
+        if (rowData == undefined || rowData.length == 0) {
+            alert("请勾选数据");
+            return;
+        }
+        if (window.confirm("确定禁用选择的用户？")) {
+            var userIds = getCheckedUserIds();
+            var url = "<%=basePath%>/disableUser.do?userIds=" + userIds;
+            $.ajax({
+                        type: "post",
+                        url: url,
+                        success: function (returnData) {
+                            $('#user_data_table').datagrid('reload');
+                        }
+                    }
+            );
+        }
+    }
+
     //提交表单
     function submitForm() {
         $(".easyui-validatebox").validatebox("validate");
@@ -320,6 +346,17 @@
                     }
                 }
         );
+    }
+
+    //获取选择的用户ID
+    function getCheckedUserIds() {
+        var userIds = undefined;
+        var rowData = $("#user_data_table").datagrid("getChecked");
+        for (var i = 0; i < rowData.length; i++) {
+            var userId = rowData[i].userId;
+            userIds = userIds == undefined ? userId : userIds + "," + userId;
+        }
+        return userIds;
     }
 </script>
 </body>
