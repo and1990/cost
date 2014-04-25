@@ -13,18 +13,28 @@
     <script type="text/javascript" src="<%=basePath%>/third/Highcharts/modules/exporting.js"></script>
 </head>
 <body>
-<div>
+
+
+<div style="font-family: 'Microsoft YaHei';font-size:16px">
     <div id="container" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
 
+    <div style="text-align: center;margin-bottom: 50px">
+        <span id="null_data" style="color: #FF2F2F"></span>
+    </div>
+
     <div style="text-align: center;margin-top: 50px;">
-        <div style="font-family: Microsoft YaHei;font-size: 16px;">
-            消费时间从: <input class="Wdate" id="accountStartTime" name="accountVO.startTime" style="width: 150px"
+        <div>
+            按用户查看：<input type="radio" name="accountType" value="1" checked="true"/>
+            &nbsp;
+            按消费类型查看：<input type="radio" name="accountType" value="2"/>
+            &nbsp;
+            消费时间从: <input class="Wdate" id="accountStartTime" name="accountVO.accountStartTime" style="width: 150px"
                           onfocus="WdatePicker({dateFmt:'yyyy-MM-dd',maxDate:'#F{$dp.$D(\'accountEndTime\');}'})">
             &nbsp;
-            到: <input class="Wdate" id="accountEndTime" name="accountVO.endTime" style="width: 150px"
-                      onfocus="WdatePicker({dateFmt:'yyyy-MM-dd',minDate:'#F{$dp.$D(\'accountStartTime\');}'})">
+            到: <input class="Wdate" id="accountEndTime" name="accountVO.accountEndTime" style="width: 150px"
+                      onfocus="WdatePicker({dateFmt:'yyyy-MM-dd',minDate:'#F{$dp.$D(\'accountStartTime\');}',maxDate:'%y-%M-%d'})">
             &nbsp;&nbsp;
-            <a href="#" style="text-decoration: none" iconCls="icon-search" onclick="pieChartShow();">查看</a>
+            <a href="#" style="text-decoration: none" iconCls="icon-search" onclick="showChart();">查看</a>
         </div>
     </div>
 </div>
@@ -33,7 +43,7 @@
     $(function () {
         $.ajax({
             type: 'post',
-            url: '<%=basePath%>/getAccountByType.do',
+            url: '<%=basePath%>/getAccountGroupByUser.do',
             success: function (returnData) {
                 if (returnData == undefined) {
                     return;
@@ -46,14 +56,14 @@
                     valueArr.push(rows[i].code)
                 }
                 if (nameArr.length != 0 && valueArr.length != 0) {
-                    setChart(nameArr, valueArr);
+                    initChart(nameArr, valueArr);
                 }
             }
         });
     });
 
     //初始化图表
-    function setChart(nameArr, valueArr) {
+    function initChart(nameArr, valueArr) {
         $('#container').highcharts({
             title: {
                 text: '线性图分析',

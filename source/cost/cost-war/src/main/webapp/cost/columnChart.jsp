@@ -13,13 +13,13 @@
     <script type="text/javascript" src="<%=basePath%>/third/Highcharts/modules/exporting.js"></script>
 </head>
 <body>
+<div style="font-family: 'Microsoft YaHei';font-size:16px">
+    <div id="container" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
 
-<div id="container" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
-
-<div style="text-align: center;margin-top: 50px;">
     <div style="text-align: center;margin-bottom: 50px">
         <span id="null_data" style="color: #FF2F2F"></span>
     </div>
+
     <div style="text-align: center;margin-top: 50px;">
         <div>
             按用户查看：<input type="radio" name="accountType" value="1" checked="true"/>
