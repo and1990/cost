@@ -24,10 +24,6 @@
 
     <div style="text-align: center;margin-top: 50px;">
         <div>
-            按用户查看：<input type="radio" name="accountType" value="1" checked="true"/>
-            &nbsp;
-            按消费类型查看：<input type="radio" name="accountType" value="2"/>
-            &nbsp;
             消费时间从: <input class="Wdate" id="accountStartTime" name="accountVO.accountStartTime" style="width: 150px"
                           onfocus="WdatePicker({dateFmt:'yyyy-MM-dd',maxDate:'#F{$dp.$D(\'accountEndTime\');}'})">
             &nbsp;
@@ -48,32 +44,20 @@
                 if (returnData == undefined) {
                     return;
                 }
-                var rows = JSON.parse(returnData);
-                var dataObjArr = new Array();
-                for (var i = 0; i < rows.length; i++) {
-                    var valueArr = new Array();
-                    var typeName = row.accountTypeName;
-                    for (var j = 0; j < rows[i].length; j++) {
-                        valueArr.push(row[j].accountMoney);
-                    }
-                    var dataObj = new (typeName, valueArr);
-                    dataObjArr.push(dataObj);
-                }
-                if (nameArr.length != 0 && valueArr.length != 0) {
+                var dataObjArr = getData(returnData);
+                if (dataObjArr != undefined && dataObjArr.length != 0) {
                     initChart(dataObjArr);
                 }
             }
         });
     });
 
-    function dataObj(name, dataArr) {
-        this.name = name;
-        this.dataArr = dataArr;
-    }
-
     //初始化图表
     function initChart(dataObjArr) {
         $('#container').highcharts({
+            credits: {
+                text: ''
+            },
             title: {
                 text: '线性图分析',
                 x: -20
@@ -82,7 +66,7 @@
                 x: -20
             },
             xAxis: {
-                categories: [11, 22, 33, 44, 55]
+                categories: ["刘腾飞", "史庆杰", "贾文龙", "吴建涛", "石亚飞", "段飒莎"]
             },
             yAxis: {
                 title: {
@@ -108,7 +92,87 @@
             series: dataObjArr
         });
     }
+    //显示图表
+    function showChart() {
+        var startTime = $("#accountStartTime").val();
+        var endTime = $("#accountEndTime").val();
+        loadData(startTime, endTime);
+        setChartTitle(startTime, endTime);
+    }
 
+    //设置图表格式
+    function setChartTitle(startTime, endTime) {
+        var title = undefined;
+        var startNotNull = startTime != undefined && startTime != '';
+        var endIsNull = endTime == undefined || endTime == '';
+        if (startNotNull && endIsNull) {
+            title = startTime + "以后消费线性分析";
+        }
+
+        var startIsNull = startTime == undefined || startTime == '';
+        var endNotNull = endTime != undefined && endTime != '';
+        if (startIsNull && endNotNull) {
+            title = endTime + "之前消费线性分析";
+        }
+
+        if (startNotNull && endNotNull) {
+            title = startTime + "至" + endTime + "消费线性分析";
+        }
+
+        if (startIsNull && endIsNull) {
+            title = "消费线性分析";
+        }
+        var chart = $('#container').highcharts();
+        chart.setTitle({text: title});
+    }
+
+    //加载数据
+    function loadData(startTime, endTime) {
+        if (startTime == undefined) {
+            startTime = "";
+        }
+        if (endTime == undefined) {
+            endTime = "";
+        }
+        var data = {"accountVO.accountStartTime": startTime, "accountVO.accountEndTime": endTime};
+        $.ajax({
+            type: 'post',
+            url: '<%=basePath%>/getAccountGroupByTypeAndUser.do',
+            data: data,
+            success: function (returnData) {
+                if (returnData == undefined) {
+                    $('#null_data').html("未加载到数据...");
+                    return;
+                }
+                var dataObjArr = getData(returnData);
+                var chart = $('#container').highcharts();
+                chart.series[0].setData(dataObjArr);
+                if (dataObjArr == undefined || dataObjArr.length == 0) {
+                    $('#null_data').html("未加载到数据...");
+                } else {
+                    $('#null_data').html("");
+                }
+            }
+        });
+    }
+
+    //获取数据
+    function getData(returnData) {
+        var dataObjArr = new Array();
+        var rows = $.parseJSON(returnData);
+        for (var key in rows) {
+            var valueArr = new Array();
+            var objArr = rows[key];
+            for (var index = 0; index < objArr.length; index++) {
+                valueArr.push(objArr[index].accountMoney);
+            }
+            var dataObj = new Object();
+            dataObj.name = key;
+            dataObj.data = valueArr;
+            dataObjArr.push(dataObj);
+        }
+        return dataObjArr;
+    }
 </script>
 </body>
 </html>

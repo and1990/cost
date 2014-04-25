@@ -88,8 +88,7 @@ public class AccountDaoCustomImpl extends BaseJpaDaoSupport<Account, Long> imple
     @Override
     public List<AccountVO> getAccountGroupByAccountType(String accountStartTime, String accountEndTime) {
 
-        String sql = "select account_type,sum(account_money) as account_money " +
-                "from cost_account WHERE 1=1 ";
+        String sql = "select account_type,sum(account_money) as account_money from cost_account WHERE 1=1 ";
         boolean accountStartTimeNotNull = accountStartTime != null && accountStartTime.trim().length() != 0;
         if (accountStartTimeNotNull) {
             sql += "and account_time>=:startTime ";
@@ -136,7 +135,7 @@ public class AccountDaoCustomImpl extends BaseJpaDaoSupport<Account, Long> imple
     public List<AccountVO> getAccountGroupByUser(String accountStartTime, String accountEndTime) {
         String sql = "SELECT  CONCAT(u.user_name, '_', u.user_id) AS userName, " +
                 "  SUM(a.account_money) AS accountMoney  FROM  cost_user u " +
-                "INNER JOIN cost_account a ON u.user_id = a.user_id WHERE 1=1 ";
+                "LEFT JOIN cost_account a ON u.user_id = a.user_id WHERE 1=1 ";
         boolean accountStartTimeNotNull = accountStartTime != null && accountStartTime.trim().length() != 0;
         if (accountStartTimeNotNull) {
             sql += "and a.account_time>=:startTime ";
@@ -161,7 +160,11 @@ public class AccountDaoCustomImpl extends BaseJpaDaoSupport<Account, Long> imple
             for (Map map : resultList) {
                 AccountVO accountVO = new AccountVO();
                 accountVO.setUserName(map.get("userName").toString());
-                accountVO.setAccountMoney(new BigDecimal(map.get("accountMoney").toString()));
+                BigDecimal accountMoney = BigDecimal.ZERO;
+                if (map.get("accountMoney") != null) {
+                    accountMoney = new BigDecimal(map.get("accountMoney").toString());
+                }
+                accountVO.setAccountMoney(accountMoney);
                 accountVOList.add(accountVO);
             }
         }
@@ -187,8 +190,7 @@ public class AccountDaoCustomImpl extends BaseJpaDaoSupport<Account, Long> imple
         if (accountEndTimeNotNull) {
             sql += "and a.account_time<:endTime ";
         }
-        sql += "  GROUP BY  a.account_type, a.user_id " +
-                " ) a INNER JOIN cost_user u ON a.user_id = u.user_id";
+        sql += "  GROUP BY  a.account_type, a.user_id ) a RIGHT JOIN cost_user u ON a.user_id = u.user_id";
         Query query = entityManager.createNativeQuery(sql);
         if (accountStartTimeNotNull) {
             query.setParameter("startTime", startTime);
@@ -203,9 +205,18 @@ public class AccountDaoCustomImpl extends BaseJpaDaoSupport<Account, Long> imple
         if (resultDataNotNull) {
             for (Map map : resultList) {
                 AccountVO accountVO = new AccountVO();
-                accountVO.setAccountType(Integer.valueOf(map.get("account_type").toString()));
+                Integer accountType = 4;
+                if (map.get("account_type") != null) {
+                    accountType = Integer.valueOf(map.get("account_type").toString());
+                }
+                accountVO.setAccountType(accountType);
+
+                BigDecimal accountMoney = BigDecimal.ZERO;
+                if (map.get("account_money") != null) {
+                    accountMoney = new BigDecimal(map.get("account_money").toString());
+                }
+                accountVO.setAccountMoney(accountMoney);
                 accountVO.setUserName(map.get("user_name").toString());
-                accountVO.setAccountMoney(new BigDecimal(map.get("account_money").toString()));
                 accountVOList.add(accountVO);
             }
         }
@@ -283,25 +294,4 @@ public class AccountDaoCustomImpl extends BaseJpaDaoSupport<Account, Long> imple
             query.setParameter("accountEndTime", accountEndTime);
         }
     }
-
-    /**
-     * 得到账单VO
-     *
-     * @param resultList
-     * @return
-     */
-    private List<AccountVO> getAccountVOList(List<Map> resultList) {
-        List<AccountVO> accountVOList = new ArrayList<AccountVO>();
-        boolean resultDataNotNull = resultList != null && resultList.size() != 0;
-        if (resultDataNotNull) {
-            for (Map map : resultList) {
-                AccountVO accountVO = new AccountVO();
-                accountVO.setUserName(map.get("userName").toString());
-                accountVO.setAccountMoney(new BigDecimal(map.get("accountMoney").toString()));
-                accountVOList.add(accountVO);
-            }
-        }
-        return accountVOList;
-    }
-
 }
