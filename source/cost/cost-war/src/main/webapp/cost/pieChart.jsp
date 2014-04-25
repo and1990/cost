@@ -20,19 +20,17 @@
     </div>
     <div style="text-align: center;margin-top: 50px;">
         <div>
-            <form id="pie_form">
-                按消费类型查看：<input type="radio" name="type" value="1" checked="checked"/>
-                &nbsp;
-                按用户查看：<input type="radio" name="type" value="2"/>
-                &nbsp;
-                消费时间从: <input class="Wdate" id="accountStartTime" name="accountVO.accountStartTime" style="width: 150px"
-                              onfocus="WdatePicker({dateFmt:'yyyy-MM-dd',maxDate:'#F{$dp.$D(\'accountEndTime\');}'})">
-                &nbsp;
-                到: <input class="Wdate" id="accountEndTime" name="accountVO.accountEndTime" style="width: 150px"
-                          onfocus="WdatePicker({dateFmt:'yyyy-MM-dd',minDate:'#F{$dp.$D(\'accountStartTime\');}',maxDate:'%y-%M-%d'})">
-                &nbsp;&nbsp;
-                <a href="#" style="text-decoration: none" iconCls="icon-search" onclick="showChart();">查看</a>
-            </form>
+            按用户查看：<input type="radio" name="accountType" value="1" checked="true"/>
+            &nbsp;
+            按消费类型查看：<input type="radio" name="accountType" value="2"/>
+            &nbsp;
+            消费时间从: <input class="Wdate" id="accountStartTime" name="accountVO.accountStartTime" style="width: 150px"
+                          onfocus="WdatePicker({dateFmt:'yyyy-MM-dd',maxDate:'#F{$dp.$D(\'accountEndTime\');}'})">
+            &nbsp;
+            到: <input class="Wdate" id="accountEndTime" name="accountVO.accountEndTime" style="width: 150px"
+                      onfocus="WdatePicker({dateFmt:'yyyy-MM-dd',minDate:'#F{$dp.$D(\'accountStartTime\');}',maxDate:'%y-%M-%d'})">
+            &nbsp;&nbsp;
+            <a href="#" style="text-decoration: none" iconCls="icon-search" onclick="showChart();">查看</a>
         </div>
     </div>
 </div>
@@ -43,19 +41,13 @@
             type: 'post',
             url: '<%=basePath%>/getAccountGroupByUser.do',
             success: function (returnData) {
-                var accountArr = new Array();
-                if (returnData == undefined) {
-                    return;
-                }
-                var rows = JSON.parse(returnData);
-                for (var i = 0; i < rows.length; i++) {
-                    var arr = new Array();
-                    arr[0] = rows[i].userName;
-                    arr[1] = rows[i].accountMoney;
-                    accountArr.push(arr);
-                }
-                if (accountArr != undefined && accountArr.length != 0) {
-                    initChart(accountArr);
+                if (returnData != undefined) {
+                    var accountArr = getAccountDataByUser(returnData);
+                    if (accountArr != undefined && accountArr.length != 0) {
+                        initChart(accountArr);
+                    }
+                } else {
+                    $('#null_data').html("未加载到数据...");
                 }
             }
         });
@@ -78,8 +70,7 @@
         $('#container').highcharts({
                     chart: {
                         style: {
-                            fontFamily: 'Microsoft YaHei',
-                            fontSize: '16px'
+                            fontFamily: 'Microsoft YaHei', fontSize: '16px'
                         }
                     },
                     credits: {
@@ -124,16 +115,16 @@
     function showChart() {
         var startTime = $("#accountStartTime").val();
         var endTime = $("#accountEndTime").val();
-        var showType = $(":radio").val();
+        var showType = $("input[name='accountType']:checked").val()
         loadData(startTime, endTime, showType);
         setChartTitle(startTime, endTime, showType);
     }
 
     //设置图表格式
     function setChartTitle(startTime, endTime, showType) {
-        var typeText = "消费类型";
+        var typeText = "用户";
         if (showType == 2) {
-            typeText = "用户";
+            typeText = "消费类型";
         }
 
         var title = undefined;
@@ -162,11 +153,9 @@
 
     //加载数据
     function loadData(startTime, endTime, showType) {
-        var url = "<%=basePath%>/getAccountGroupByAccountType.do";
+        var url = "<%=basePath%>/getAccountGroupByUser.do";
         if (showType == 2) {
-            url = "<%=basePath%>/getAccountGroupByUser.do";
-        } else if (showType == 3) {
-            url = "<%=basePath%>/getAccountGroupByMonth.do";
+            url = "<%=basePath%>/getAccountGroupByAccountType.do";
         }
 
         if (startTime == undefined) {
@@ -185,13 +174,9 @@
                     $('#null_data').html("未加载到数据...");
                     return;
                 }
-                var accountArr = new Array();
-                var rows = JSON.parse(returnData);
-                for (var i = 0; i < rows.length; i++) {
-                    var arr = new Array();
-                    arr[0] = rows[i].accountTypeName;
-                    arr[1] = rows[i].accountMoney;
-                    accountArr.push(arr);
+                var accountArr = getAccountDataByUser(returnData);
+                if (showType == 2) {
+                    accountArr = getAccountDataByAccountType(returnData);
                 }
                 var chart = $('#container').highcharts();
                 chart.series[0].setData(accountArr);
@@ -204,8 +189,8 @@
         });
     }
 
-    //得到账单数据
-    function getAccountData(returnData) {
+    //得到用户对应的账单数据
+    function getAccountDataByUser(returnData) {
         var accountArr = new Array();
         if (returnData == undefined) {
             return;
@@ -214,6 +199,21 @@
         for (var i = 0; i < rows.length; i++) {
             var arr = new Array();
             arr[0] = rows[i].userName;
+            arr[1] = rows[i].accountMoney;
+            accountArr.push(arr);
+        }
+        return accountArr;
+    }
+
+    /**
+     *获取消费类型对应的账单数据
+     */
+    function getAccountDataByAccountType(returnData) {
+        var accountArr = new Array();
+        var rows = JSON.parse(returnData);
+        for (var i = 0; i < rows.length; i++) {
+            var arr = new Array();
+            arr[0] = rows[i].accountTypeName;
             arr[1] = rows[i].accountMoney;
             accountArr.push(arr);
         }

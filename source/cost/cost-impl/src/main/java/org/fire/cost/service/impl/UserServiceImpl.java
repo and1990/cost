@@ -4,6 +4,7 @@ import org.apache.log4j.Logger;
 import org.fire.cost.dao.UserDao;
 import org.fire.cost.domain.User;
 import org.fire.cost.enums.UserStatusEnum;
+import org.fire.cost.enums.UserTypeEnum;
 import org.fire.cost.enums.YesOrNoEnum;
 import org.fire.cost.service.UserService;
 import org.fire.cost.util.AuthenticationUtil;
@@ -241,7 +242,7 @@ public class UserServiceImpl implements UserService {
         vo.setUserStatus(user.getUserStatus());
         vo.setUserStatusName(UserStatusEnum.getName(user.getUserStatus()));
         vo.setUserType(user.getUserType());
-        vo.setUserTypeName(YesOrNoEnum.getName(user.getUserType()));
+        vo.setUserTypeName(UserTypeEnum.getName(user.getUserType()));
         vo.setCreateUser(user.getCreateUser());
         vo.setCreateTime(DateUtil.makeDate2Str(user.getCreateTime(), true));
         vo.setModifyUser(user.getModifyUser());

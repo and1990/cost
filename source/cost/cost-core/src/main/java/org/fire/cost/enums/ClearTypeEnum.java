@@ -1,17 +1,17 @@
 package org.fire.cost.enums;
 
 /**
- * 消费类型枚举
+ * 结算方式枚举
  *
  * @author liutengfei
  */
-public enum AccountTypeEnum {
-    Food(1, "食物"), Fun(2, "娱乐"), Traffic(3, "交通"), Other(4, "其他");
+public enum ClearTypeEnum {
+    All(1, "全部分摊"), Part(2, "部分分摊"), Single(3, "个人消费");
 
     private int code;
     private String name;
 
-    private AccountTypeEnum(int code, String name) {
+    private ClearTypeEnum(int code, String name) {
         this.code = code;
         this.name = name;
     }
@@ -23,7 +23,7 @@ public enum AccountTypeEnum {
      * @return
      */
     public static int getCode(String name) {
-        for (AccountTypeEnum enumType : AccountTypeEnum.values()) {
+        for (ClearTypeEnum enumType : ClearTypeEnum.values()) {
             if (name != null && name.equals(enumType.getName())) {
                 return enumType.getCode();
             }
@@ -38,7 +38,7 @@ public enum AccountTypeEnum {
      * @return
      */
     public static String getName(int code) {
-        for (AccountTypeEnum enumType : AccountTypeEnum.values()) {
+        for (ClearTypeEnum enumType : ClearTypeEnum.values()) {
             if (code == enumType.getCode()) {
                 return enumType.getName();
             }

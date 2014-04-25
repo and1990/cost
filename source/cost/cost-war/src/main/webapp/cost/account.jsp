@@ -177,9 +177,7 @@ $(function () {
         valueField: 'code',
         textField: 'name',
         onLoadSuccess: function (data) {
-            $('.accountType').combobox('setValue',
-                            data[0].code).combobox('setText',
-                            data[0].name);
+            $('.accountType').combobox('setValue', data[0].code).combobox('setText', data[0].name);
         }
     });
 });

@@ -22,7 +22,7 @@
                 <th data-options="field:'userAge',width:80,align:'center',editor:'numberbox'">年龄</th>
                 <th data-options="field:'userAddress',width:120,align:'center',editor:'text'">地址</th>
                 <th data-options="field:'userEmail',width:120,align:'center',editor:'text'">邮箱</th>
-                <th data-options="field:'userTypeName',width:120,align:'center'">是否管理员</th>
+                <th data-options="field:'userTypeName',width:120,align:'center'">用户类型</th>
                 <th data-options="field:'userStatusName',width:120,align:'center'">用户状态</th>
                 <th data-options="field:'userRemark',width:120,align:'center',editor:'text'">备注</th>
             </tr>

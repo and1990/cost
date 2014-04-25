@@ -10,6 +10,7 @@ import org.fire.cost.domain.Account;
 import org.fire.cost.domain.User;
 import org.fire.cost.enums.AccountStatusEnum;
 import org.fire.cost.enums.AccountTypeEnum;
+import org.fire.cost.enums.ClearTypeEnum;
 import org.fire.cost.service.AccountService;
 import org.fire.cost.service.UserService;
 import org.fire.cost.util.AuthenticationUtil;
@@ -330,6 +331,7 @@ public class AccountServiceImpl implements AccountService {
         account.setAccountTime(DateUtil.makeStr2Date(vo.getAccountTime(), false));
         account.setAccountStatus(vo.getAccountStatus());
         account.setAccountType(vo.getAccountType());
+        account.setClearType(vo.getClearType());
         account.setAccountFile(vo.getAccountFile());
         account.setModifyUser(userService.getLoginUserName());
         account.setModifyTime(new Date());
@@ -354,6 +356,8 @@ public class AccountServiceImpl implements AccountService {
         vo.setAccountStatusName(AccountStatusEnum.getName(account.getAccountStatus()));
         vo.setAccountType(account.getAccountType());
         vo.setAccountTypeName(AccountTypeEnum.getName(account.getAccountType()));
+        vo.setClearType(account.getClearType());
+        vo.setClearTypeName(ClearTypeEnum.getName(account.getClearType()));
         vo.setAccountFile(account.getAccountFile());
         vo.setCreateUser(account.getCreateUser());
         vo.setCreateTime(DateUtil.makeDate2Str(account.getCreateTime(), true));
