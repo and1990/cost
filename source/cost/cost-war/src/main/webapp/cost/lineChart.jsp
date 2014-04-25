@@ -43,27 +43,36 @@
     $(function () {
         $.ajax({
             type: 'post',
-            url: '<%=basePath%>/getAccountGroupByUser.do',
+            url: '<%=basePath%>/getAccountGroupByTypeAndUser.do',
             success: function (returnData) {
                 if (returnData == undefined) {
                     return;
                 }
-                var nameArr = new Array();
-                var valueArr = new Array();
                 var rows = JSON.parse(returnData);
+                var dataObjArr = new Array();
                 for (var i = 0; i < rows.length; i++) {
-                    nameArr.push(rows[i].name);
-                    valueArr.push(rows[i].code)
+                    var valueArr = new Array();
+                    var typeName = row.accountTypeName;
+                    for (var j = 0; j < rows[i].length; j++) {
+                        valueArr.push(row[j].accountMoney);
+                    }
+                    var dataObj = new (typeName, valueArr);
+                    dataObjArr.push(dataObj);
                 }
                 if (nameArr.length != 0 && valueArr.length != 0) {
-                    initChart(nameArr, valueArr);
+                    initChart(dataObjArr);
                 }
             }
         });
     });
 
+    function dataObj(name, dataArr) {
+        this.name = name;
+        this.dataArr = dataArr;
+    }
+
     //初始化图表
-    function initChart(nameArr, valueArr) {
+    function initChart(dataObjArr) {
         $('#container').highcharts({
             title: {
                 text: '线性图分析',
@@ -73,7 +82,7 @@
                 x: -20
             },
             xAxis: {
-                categories: nameArr
+                categories: [11, 22, 33, 44, 55]
             },
             yAxis: {
                 title: {
@@ -96,24 +105,7 @@
                 verticalAlign: 'middle',
                 borderWidth: 0
             },
-            series: [
-                {
-                    name: 'Tokyo',
-                    data: [7.0, 6.9, 9.5, 14.5, 18.2]
-                },
-                {
-                    name: 'New York',
-                    data: [-0.2, 0.8, 5.7, 11.3, 17.0]
-                },
-                {
-                    name: 'Berlin',
-                    data: [-0.9, 0.6, 3.5, 8.4, 13.5]
-                },
-                {
-                    name: 'London',
-                    data: [3.9, 4.2, 5.7, 8.5, 11.9]
-                }
-            ]
+            series: dataObjArr
         });
     }
 

@@ -18,6 +18,7 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 账单信息表
@@ -39,6 +40,12 @@ public class AccountAction extends BaseAction<AccountVO> {
      * 账单VO
      */
     private List<AccountVO> accountVOList;
+
+    /**
+     * key：消费类型
+     * value：用户消费金额
+     */
+    private Map<String, List<AccountVO>> accountVoListMap;
 
     /**
      * 枚举类型VO
@@ -221,9 +228,11 @@ public class AccountAction extends BaseAction<AccountVO> {
      *
      * @return
      */
-    @Action(value = "getAccountGroupByTypeAndUser", results = {@Result(type = "json", params = {"root", "accountVOList", "contentType", "text/html"})})
+    @Action(value = "getAccountGroupByTypeAndUser", results = {@Result(type = "json", params = {"root", "accountVoListMap", "contentType", "text/html"})})
     public String getAccountGroupByTypeAndUser() {
-        //TODO
+        String startTime = accountVO.getAccountStartTime();
+        String endTime = accountVO.getAccountEndTime();
+        accountVoListMap = accountService.getAccountGroupByTypeAndUser(startTime, endTime);
         return SUCCESS;
     }
 
@@ -242,6 +251,14 @@ public class AccountAction extends BaseAction<AccountVO> {
 
     public void setAccountVOList(List<AccountVO> accountVOList) {
         this.accountVOList = accountVOList;
+    }
+
+    public Map<String, List<AccountVO>> getAccountVoListMap() {
+        return accountVoListMap;
+    }
+
+    public void setAccountVoListMap(Map<String, List<AccountVO>> accountVoListMap) {
+        this.accountVoListMap = accountVoListMap;
     }
 
     public List<TypeVo> getTypeList() {

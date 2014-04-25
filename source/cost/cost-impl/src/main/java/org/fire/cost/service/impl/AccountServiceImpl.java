@@ -27,9 +27,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 /**
  * 账单service实现类
@@ -236,6 +234,30 @@ public class AccountServiceImpl implements AccountService {
     public List<AccountVO> getAccountGroupByUser(String accountStartTime, String accountEndTime) {
         List<AccountVO> accountVOList = accountDao.getAccountGroupByUser(accountStartTime, accountEndTime);
         return accountVOList;
+    }
+
+    /**
+     * 获取用户每种消费类型消费金额
+     *
+     * @return
+     */
+    @Override
+    public Map<String, List<AccountVO>> getAccountGroupByTypeAndUser(String startTime, String endTime) {
+        List<AccountVO> accountVOList = accountDao.getAccountGroupByTypeAndUser(startTime, endTime);
+        Map<String, List<AccountVO>> accountVoListMap = new HashMap<String, List<AccountVO>>();
+        AccountTypeEnum[] typeEnums = AccountTypeEnum.values();
+        for (AccountTypeEnum typeEnum : typeEnums) {
+            List<AccountVO> voList = new ArrayList<AccountVO>();
+            int code = typeEnum.getCode();
+            for (AccountVO accountVO : accountVOList) {
+                Integer type = accountVO.getAccountType();
+                if (type != null && code == type) {
+                    voList.add(accountVO);
+                }
+            }
+            accountVoListMap.put(AccountTypeEnum.getName(code), voList);
+        }
+        return accountVoListMap;
     }
 
     /**

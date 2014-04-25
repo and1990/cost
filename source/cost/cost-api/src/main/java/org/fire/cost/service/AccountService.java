@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 账单service接口
@@ -102,4 +103,12 @@ public interface AccountService {
      * @return
      */
     List<AccountVO> getAccountGroupByUser(String accountStartTime, String accountEndTime);
+
+
+    /**
+     * 获取用户每种消费类型消费金额
+     *
+     * @return
+     */
+    Map<String, List<AccountVO>> getAccountGroupByTypeAndUser(String startTime, String endTime);
 }

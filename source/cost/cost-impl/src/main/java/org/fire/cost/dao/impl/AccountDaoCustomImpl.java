@@ -134,11 +134,8 @@ public class AccountDaoCustomImpl extends BaseJpaDaoSupport<Account, Long> imple
      */
     @Override
     public List<AccountVO> getAccountGroupByUser(String accountStartTime, String accountEndTime) {
-        String sql = "SELECT " +
-                "  CONCAT(u.user_name, '_', u.user_id) AS userName, " +
-                "  SUM(a.account_money) AS accountMoney " +
-                "FROM " +
-                "  cost_user u " +
+        String sql = "SELECT  CONCAT(u.user_name, '_', u.user_id) AS userName, " +
+                "  SUM(a.account_money) AS accountMoney  FROM  cost_user u " +
                 "INNER JOIN cost_account a ON u.user_id = a.user_id WHERE 1=1 ";
         boolean accountStartTimeNotNull = accountStartTime != null && accountStartTime.trim().length() != 0;
         if (accountStartTimeNotNull) {
@@ -165,6 +162,50 @@ public class AccountDaoCustomImpl extends BaseJpaDaoSupport<Account, Long> imple
                 AccountVO accountVO = new AccountVO();
                 accountVO.setUserName(map.get("userName").toString());
                 accountVO.setAccountMoney(new BigDecimal(map.get("accountMoney").toString()));
+                accountVOList.add(accountVO);
+            }
+        }
+        return accountVOList;
+    }
+
+    /**
+     * 获取用户每种消费类型消费金额
+     *
+     * @return
+     */
+    @Override
+    public List<AccountVO> getAccountGroupByTypeAndUser(String startTime, String endTime) {
+        String sql = "SELECT a.account_type, u.user_name, a.account_money " +
+                "FROM (SELECT  a.account_type,  a.user_id, " +
+                "  sum(a.account_money) AS account_money " +
+                "  FROM cost_account a WHERE 1 = 1 ";
+        boolean accountStartTimeNotNull = startTime != null && startTime.trim().length() != 0;
+        if (accountStartTimeNotNull) {
+            sql += "and a.account_time>=:startTime ";
+        }
+        boolean accountEndTimeNotNull = endTime != null && endTime.trim().length() != 0;
+        if (accountEndTimeNotNull) {
+            sql += "and a.account_time<:endTime ";
+        }
+        sql += "  GROUP BY  a.account_type, a.user_id " +
+                " ) a INNER JOIN cost_user u ON a.user_id = u.user_id";
+        Query query = entityManager.createNativeQuery(sql);
+        if (accountStartTimeNotNull) {
+            query.setParameter("startTime", startTime);
+        }
+        if (accountEndTimeNotNull) {
+            query.setParameter("endTime", endTime);
+        }
+        query.unwrap(SQLQuery.class).setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP);
+        List<Map> resultList = query.getResultList();
+        List<AccountVO> accountVOList = new ArrayList<AccountVO>();
+        boolean resultDataNotNull = resultList != null && resultList.size() != 0;
+        if (resultDataNotNull) {
+            for (Map map : resultList) {
+                AccountVO accountVO = new AccountVO();
+                accountVO.setAccountType(Integer.valueOf(map.get("account_type").toString()));
+                accountVO.setUserName(map.get("user_name").toString());
+                accountVO.setAccountMoney(new BigDecimal(map.get("account_money").toString()));
                 accountVOList.add(accountVO);
             }
         }
