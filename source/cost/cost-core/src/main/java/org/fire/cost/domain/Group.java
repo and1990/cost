@@ -32,6 +32,7 @@ public class Group implements java.io.Serializable {
     private String modifyUser;
     private Date modifyTime;
     private String groupRemark;
+    private List<Account> accountList = new ArrayList<Account>();
     private List<GroupAccount> groupAccountList = new ArrayList<GroupAccount>();
 
 
@@ -44,7 +45,7 @@ public class Group implements java.io.Serializable {
     }
 
     public Group(String groupName, Integer groupStatus, String createUser, Date createTime, String modifyUser, Date modifyTime,
-                 String groupRemark, List<GroupAccount> groupAccountList) {
+                 String groupRemark, List<Account> accountList, List<GroupAccount> groupAccountList) {
         this.groupName = groupName;
         this.groupStatus = groupStatus;
         this.createUser = createUser;
@@ -52,6 +53,7 @@ public class Group implements java.io.Serializable {
         this.modifyUser = modifyUser;
         this.modifyTime = modifyTime;
         this.groupRemark = groupRemark;
+        this.accountList = accountList;
         this.groupAccountList = groupAccountList;
     }
 
@@ -127,6 +129,15 @@ public class Group implements java.io.Serializable {
 
     public void setGroupRemark(String groupRemark) {
         this.groupRemark = groupRemark;
+    }
+
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "group")
+    public List<Account> getAccountList() {
+        return accountList;
+    }
+
+    public void setAccountList(List<Account> accountList) {
+        this.accountList = accountList;
     }
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "group")

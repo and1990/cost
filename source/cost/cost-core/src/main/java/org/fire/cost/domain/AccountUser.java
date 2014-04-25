@@ -18,18 +18,18 @@ import javax.persistence.Table;
 public class AccountUser implements java.io.Serializable {
 
     private Long accountUserId;
-    private User costUser;
-    private Account costAccount;
+    private User user;
+    private Account account;
 
 
     public AccountUser() {
     }
 
 
-    public AccountUser(Long accountUserId, User costUser, Account costAccount) {
+    public AccountUser(Long accountUserId, User user, Account account) {
         this.accountUserId = accountUserId;
-        this.costUser = costUser;
-        this.costAccount = costAccount;
+        this.user = user;
+        this.account = account;
     }
 
     @Id
@@ -44,22 +44,22 @@ public class AccountUser implements java.io.Serializable {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
-    public User getCostUser() {
-        return this.costUser;
+    public User getUser() {
+        return this.user;
     }
 
-    public void setCostUser(User costUser) {
-        this.costUser = costUser;
+    public void setUser(User costUser) {
+        this.user = costUser;
     }
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "account_id", nullable = false)
-    public Account getCostAccount() {
-        return this.costAccount;
+    public Account getAccount() {
+        return this.account;
     }
 
-    public void setCostAccount(Account costAccount) {
-        this.costAccount = costAccount;
+    public void setAccount(Account costAccount) {
+        this.account = costAccount;
     }
 
 }

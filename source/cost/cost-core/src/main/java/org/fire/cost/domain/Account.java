@@ -19,7 +19,7 @@ public class Account implements java.io.Serializable {
 
     private Long accountId;
     private User user;
-    private Long groupId;
+    private Group group;
     private BigDecimal accountMoney;
     private Date accountTime;
     private Integer accountType;
@@ -38,10 +38,10 @@ public class Account implements java.io.Serializable {
     }
 
 
-    public Account(User user, Long groupId, BigDecimal accountMoney, Date accountTime, Integer accountType, Integer accountStatus,
+    public Account(User user, Group group, BigDecimal accountMoney, Date accountTime, Integer accountType, Integer accountStatus,
                    Integer clearType) {
         this.user = user;
-        this.groupId = groupId;
+        this.group = group;
         this.accountMoney = accountMoney;
         this.accountTime = accountTime;
         this.accountType = accountType;
@@ -49,11 +49,11 @@ public class Account implements java.io.Serializable {
         this.clearType = clearType;
     }
 
-    public Account(User user, Long groupId, BigDecimal accountMoney, Date accountTime, Integer accountType, Integer accountStatus,
+    public Account(User user, Group group, BigDecimal accountMoney, Date accountTime, Integer accountType, Integer accountStatus,
                    Integer clearType, String accountFile, String createUser, Date createTime, String modifyUser, Date modifyTime,
                    String accountRemark, List<AccountUser> accountUserList) {
         this.user = user;
-        this.groupId = groupId;
+        this.group = group;
         this.accountMoney = accountMoney;
         this.accountTime = accountTime;
         this.accountType = accountType;
@@ -68,7 +68,6 @@ public class Account implements java.io.Serializable {
         this.accountUserList = accountUserList;
     }
 
-    // Property accessors
     @Id
     @GeneratedValue(strategy = IDENTITY)
     @Column(name = "account_id", unique = true, nullable = false)
@@ -90,13 +89,14 @@ public class Account implements java.io.Serializable {
         this.user = costUser;
     }
 
-    @Column(name = "group_id", nullable = false)
-    public Long getGroupId() {
-        return this.groupId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "group_id", nullable = false)
+    public Group getGroup() {
+        return this.group;
     }
 
-    public void setGroupId(Long groupId) {
-        this.groupId = groupId;
+    public void setGroup(Group group) {
+        this.group = group;
     }
 
     @Column(name = "account_money", nullable = false, precision = 10, scale = 0)
@@ -199,7 +199,7 @@ public class Account implements java.io.Serializable {
         this.accountRemark = accountRemark;
     }
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "costAccount")
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "account")
     public List<AccountUser> getAccountUserList() {
         return this.accountUserList;
     }

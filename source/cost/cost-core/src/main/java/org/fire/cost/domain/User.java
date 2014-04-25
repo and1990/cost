@@ -1,8 +1,6 @@
 package org.fire.cost.domain;
 
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -40,8 +38,8 @@ public class User implements java.io.Serializable {
     private String modifyUser;
     private Date modifyTime;
     private String userRemark;
-    private Set<Account> accountList = new HashSet<Account>(0);
-    private Set<AccountUser> accountUserList = new HashSet<AccountUser>(0);
+    private List<Account> accountList = new ArrayList<Account>();
+    private List<AccountUser> accountUserList = new ArrayList<AccountUser>(0);
 
 
     public User() {
@@ -60,7 +58,7 @@ public class User implements java.io.Serializable {
 
     public User(String userName, String password, String loginName, Integer userAge, String userAddress, String userEmail, Integer userStatus,
                 Integer userType, Date loginTime, String userImage, String createUser, Date createTime, String modifyUser, Date modifyTime,
-                String userRemark, Set<Account> accountList, Set<AccountUser> accountUserList) {
+                String userRemark, List<Account> accountList, List<AccountUser> accountUserList) {
         this.userName = userName;
         this.password = password;
         this.loginName = loginName;
@@ -227,20 +225,20 @@ public class User implements java.io.Serializable {
     }
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "user")
-    public Set<Account> getAccountList() {
+    public List<Account> getAccountList() {
         return this.accountList;
     }
 
-    public void setAccountList(Set<Account> Accounts) {
+    public void setAccountList(List<Account> Accounts) {
         this.accountList = Accounts;
     }
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "costUser")
-    public Set<AccountUser> getAccountUserList() {
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "user")
+    public List<AccountUser> getAccountUserList() {
         return this.accountUserList;
     }
 
-    public void setAccountUserList(Set<AccountUser> AccountUsers) {
+    public void setAccountUserList(List<AccountUser> AccountUsers) {
         this.accountUserList = AccountUsers;
     }
 

@@ -237,15 +237,15 @@ public class UserServiceImpl implements UserService {
         vo.setUserAddress(user.getUserAddress());
         vo.setUserEmail(user.getUserEmail());
         vo.setUserImage(user.getUserImage());
-        vo.setLoginTime(DateUtil.makeDate2Str((user.getLoginTime())));
+        vo.setLoginTime(DateUtil.makeDate2Str(user.getLoginTime(), true));
         vo.setUserStatus(user.getUserStatus());
         vo.setUserStatusName(UserStatusEnum.getName(user.getUserStatus()));
         vo.setUserType(user.getUserType());
         vo.setUserTypeName(YesOrNoEnum.getName(user.getUserType()));
         vo.setCreateUser(user.getCreateUser());
-        vo.setCreateTime(DateUtil.makeDate2Str(user.getCreateTime()));
+        vo.setCreateTime(DateUtil.makeDate2Str(user.getCreateTime(), true));
         vo.setModifyUser(user.getModifyUser());
-        vo.setModifyTime(DateUtil.makeDate2Str(user.getModifyTime()));
+        vo.setModifyTime(DateUtil.makeDate2Str(user.getModifyTime(), true));
         vo.setUserRemark(user.getUserRemark());
         return vo;
     }
