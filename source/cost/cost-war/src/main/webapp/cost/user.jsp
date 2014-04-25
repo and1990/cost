@@ -22,7 +22,7 @@
                 <th data-options="field:'userAge',width:80,align:'center',editor:'numberbox'">年龄</th>
                 <th data-options="field:'userAddress',width:120,align:'center',editor:'text'">地址</th>
                 <th data-options="field:'userEmail',width:120,align:'center',editor:'text'">邮箱</th>
-                <th data-options="field:'isAdminName',width:120,align:'center'">是否管理员</th>
+                <th data-options="field:'userTypeName',width:120,align:'center'">是否管理员</th>
                 <th data-options="field:'userStatusName',width:120,align:'center'">用户状态</th>
                 <th data-options="field:'userRemark',width:120,align:'center',editor:'text'">备注</th>
             </tr>
@@ -54,7 +54,7 @@
                     </td>
                     <td>
                         <span>管理员：</span>
-                        <select class="easyui-combobox" name="userVO.isAdmin" style="width:100px;">
+                        <select class="easyui-combobox" name="userVO.userType" style="width:100px;">
                             <option value="0">全部</option>
                             <option value="1">是</option>
                             <option value="2">否</option>
@@ -90,7 +90,7 @@
                     <tr>
                         <input type="hidden" id="userId" name="userVO.userId"/>
                         <input type="hidden" id="userStatus" name="userVO.userStatus"/>
-                        <input type="hidden" id="isAdmin" name="userVO.isAdmin"/>
+                        <input type="hidden" id="userType" name="userVO.userType"/>
                     </tr>
                     <tr>
                         <td>用户名：</td>
@@ -261,7 +261,7 @@
         //填充数据
         $("#userId").val(rowData.userId);
         $("#userStatus").val(rowData.userStatus);
-        $("#isAdmin").val(rowData.isAdmin);
+        $("#userType").val(rowData.userType);
         $("#userName").val(rowData.userName);
         $("#loginName").val(rowData.loginName);
         $("#userAge").val(rowData.userAge);

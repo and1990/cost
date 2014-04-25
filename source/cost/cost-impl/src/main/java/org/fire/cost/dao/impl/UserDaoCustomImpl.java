@@ -1,7 +1,7 @@
 package org.fire.cost.dao.impl;
 
 import org.fire.cost.dao.custom.UserDaoCustom;
-import org.fire.cost.entity.User;
+import org.fire.cost.domain.User;
 import org.fire.cost.util.DateUtil;
 import org.fire.cost.vo.PageData;
 import org.fire.cost.vo.UserVO;
@@ -92,7 +92,7 @@ public class UserDaoCustomImpl extends BaseJpaDaoSupport<User, Long> implements 
         if (userName != null && userName.trim().length() != 0) {
             filterSQL += " and user_name like :userName";
         }
-        Integer admin = vo.getIsAdmin();
+        Integer admin = vo.getUserType();
         if (admin != null && admin != 0) {
             filterSQL += " and is_admin=:isAdmin";
         }
@@ -119,7 +119,7 @@ public class UserDaoCustomImpl extends BaseJpaDaoSupport<User, Long> implements 
         if (userName != null && userName.trim().length() != 0) {
             query.setParameter("userName", "%" + userName + "%");
         }
-        Integer admin = vo.getIsAdmin();
+        Integer admin = vo.getUserType();
         if (admin != null && admin != 0) {
             query.setParameter("isAdmin", admin);
         }

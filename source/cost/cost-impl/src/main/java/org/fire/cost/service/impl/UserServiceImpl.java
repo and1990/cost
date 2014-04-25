@@ -2,7 +2,7 @@ package org.fire.cost.service.impl;
 
 import org.apache.log4j.Logger;
 import org.fire.cost.dao.UserDao;
-import org.fire.cost.entity.User;
+import org.fire.cost.domain.User;
 import org.fire.cost.enums.UserStatusEnum;
 import org.fire.cost.enums.YesOrNoEnum;
 import org.fire.cost.service.UserService;
@@ -92,7 +92,7 @@ public class UserServiceImpl implements UserService {
     public boolean addUser(UserVO vo) {
         try {
             vo.setUserStatus(UserStatusEnum.Enable.getCode());
-            vo.setIsAdmin(YesOrNoEnum.No.getCode());
+            vo.setUserType(YesOrNoEnum.No.getCode());
             User user = makeVO2User(vo, null);
             userDao.save(user);
             return true;
@@ -214,7 +214,7 @@ public class UserServiceImpl implements UserService {
         user.setUserEmail(vo.getUserEmail());
         user.setUserImage(vo.getUserImage());
         user.setUserStatus(vo.getUserStatus());
-        user.setIsAdmin(vo.getIsAdmin());
+        user.setUserType(vo.getUserType());
         user.setUserRemark(vo.getUserRemark());
         user.setModifyUser(vo.getModifyUser());
         user.setModifyTime(new Date());
@@ -240,8 +240,8 @@ public class UserServiceImpl implements UserService {
         vo.setLoginTime(DateUtil.makeDate2Str((user.getLoginTime())));
         vo.setUserStatus(user.getUserStatus());
         vo.setUserStatusName(UserStatusEnum.getName(user.getUserStatus()));
-        vo.setIsAdmin(user.getIsAdmin());
-        vo.setIsAdminName(YesOrNoEnum.getName(user.getIsAdmin()));
+        vo.setUserType(user.getUserType());
+        vo.setUserTypeName(YesOrNoEnum.getName(user.getUserType()));
         vo.setCreateUser(user.getCreateUser());
         vo.setCreateTime(DateUtil.makeDate2Str(user.getCreateTime()));
         vo.setModifyUser(user.getModifyUser());

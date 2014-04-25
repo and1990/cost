@@ -1,6 +1,6 @@
 package org.fire.cost.dao.custom;
 
-import org.fire.cost.entity.Group;
+import org.fire.cost.domain.Group;
 import org.fire.cost.vo.GroupVO;
 import org.fire.cost.vo.PageData;
 

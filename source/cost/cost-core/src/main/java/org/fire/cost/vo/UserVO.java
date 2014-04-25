@@ -32,11 +32,9 @@ public class UserVO implements Serializable {
 
     private String userStatusName;
 
-    private Integer isAdmin;
+    private Integer userType;
 
-    private String isAdminName;
-
-    private Integer addType;
+    private String userTypeName;
 
     private String createUser;
 
@@ -141,28 +139,20 @@ public class UserVO implements Serializable {
         this.userStatusName = userStatusName;
     }
 
-    public Integer getIsAdmin() {
-        return isAdmin;
+    public Integer getUserType() {
+        return userType;
     }
 
-    public void setIsAdmin(Integer isAdmin) {
-        this.isAdmin = isAdmin;
+    public void setUserType(Integer userType) {
+        this.userType = userType;
     }
 
-    public String getIsAdminName() {
-        return isAdminName;
+    public String getUserTypeName() {
+        return userTypeName;
     }
 
-    public void setIsAdminName(String isAdminName) {
-        this.isAdminName = isAdminName;
-    }
-
-    public Integer getAddType() {
-        return addType;
-    }
-
-    public void setAddType(Integer addType) {
-        this.addType = addType;
+    public void setUserTypeName(String userTypeName) {
+        this.userTypeName = userTypeName;
     }
 
     public String getCreateUser() {

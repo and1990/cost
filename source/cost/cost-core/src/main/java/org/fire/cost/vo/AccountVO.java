@@ -10,9 +10,6 @@ import java.math.BigDecimal;
  */
 public class AccountVO implements Serializable {
 
-    /**
-     *
-     */
     private static final long serialVersionUID = 1L;
 
     private Long accountId;
@@ -20,6 +17,10 @@ public class AccountVO implements Serializable {
     private Long userId;
 
     private String userName;
+
+    private Long groupId;
+
+    private String groupName;
 
     private BigDecimal accountMoney;
 
@@ -29,13 +30,13 @@ public class AccountVO implements Serializable {
 
     private String accountTypeName;
 
-    private String approveTime;
-
     private Integer accountStatus;
 
     private String accountStatusName;
 
-    private String accountPartner;
+    private Integer clearType;
+
+    private String clearTypeName;
 
     private String accountFile;
 
@@ -48,12 +49,10 @@ public class AccountVO implements Serializable {
     private String modifyTime;
 
     private String accountRemark;
-
     //消费时间【开始时间】
     private String accountStartTime;
     //消费时间【结束时间】
     private String accountEndTime;
-
 
     public Long getAccountId() {
         return accountId;
@@ -77,6 +76,22 @@ public class AccountVO implements Serializable {
 
     public void setUserName(String userName) {
         this.userName = userName;
+    }
+
+    public Long getGroupId() {
+        return groupId;
+    }
+
+    public void setGroupId(Long groupId) {
+        this.groupId = groupId;
+    }
+
+    public String getGroupName() {
+        return groupName;
+    }
+
+    public void setGroupName(String groupName) {
+        this.groupName = groupName;
     }
 
     public BigDecimal getAccountMoney() {
@@ -111,14 +126,6 @@ public class AccountVO implements Serializable {
         this.accountTypeName = accountTypeName;
     }
 
-    public String getApproveTime() {
-        return approveTime;
-    }
-
-    public void setApproveTime(String approveTime) {
-        this.approveTime = approveTime;
-    }
-
     public Integer getAccountStatus() {
         return accountStatus;
     }
@@ -135,12 +142,20 @@ public class AccountVO implements Serializable {
         this.accountStatusName = accountStatusName;
     }
 
-    public String getAccountPartner() {
-        return accountPartner;
+    public Integer getClearType() {
+        return clearType;
     }
 
-    public void setAccountPartner(String accountPartner) {
-        this.accountPartner = accountPartner;
+    public void setClearType(Integer clearType) {
+        this.clearType = clearType;
+    }
+
+    public String getClearTypeName() {
+        return clearTypeName;
+    }
+
+    public void setClearTypeName(String clearTypeName) {
+        this.clearTypeName = clearTypeName;
     }
 
     public String getAccountFile() {
@@ -157,22 +172,6 @@ public class AccountVO implements Serializable {
 
     public void setCreateUser(String createUser) {
         this.createUser = createUser;
-    }
-
-    public String getAccountStartTime() {
-        return accountStartTime;
-    }
-
-    public void setAccountStartTime(String accountStartTime) {
-        this.accountStartTime = accountStartTime;
-    }
-
-    public String getAccountEndTime() {
-        return accountEndTime;
-    }
-
-    public void setAccountEndTime(String accountEndTime) {
-        this.accountEndTime = accountEndTime;
     }
 
     public String getCreateTime() {
@@ -207,5 +206,19 @@ public class AccountVO implements Serializable {
         this.accountRemark = accountRemark;
     }
 
+    public String getAccountStartTime() {
+        return accountStartTime;
+    }
 
+    public void setAccountStartTime(String accountStartTime) {
+        this.accountStartTime = accountStartTime;
+    }
+
+    public String getAccountEndTime() {
+        return accountEndTime;
+    }
+
+    public void setAccountEndTime(String accountEndTime) {
+        this.accountEndTime = accountEndTime;
+    }
 }

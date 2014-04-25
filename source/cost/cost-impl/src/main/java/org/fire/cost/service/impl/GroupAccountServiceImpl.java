@@ -3,7 +3,7 @@ package org.fire.cost.service.impl;
 import org.fire.cost.dao.AccountDao;
 import org.fire.cost.dao.GroupAccountDao;
 import org.fire.cost.dao.GroupDao;
-import org.fire.cost.entity.Group;
+import org.fire.cost.domain.Group;
 import org.fire.cost.service.GroupAccountService;
 import org.fire.cost.util.DateUtil;
 import org.fire.cost.vo.AccountVO;

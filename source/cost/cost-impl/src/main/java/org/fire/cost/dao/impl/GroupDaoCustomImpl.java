@@ -1,7 +1,7 @@
 package org.fire.cost.dao.impl;
 
 import org.fire.cost.dao.custom.GroupDaoCustom;
-import org.fire.cost.entity.Group;
+import org.fire.cost.domain.Group;
 import org.fire.cost.vo.GroupVO;
 import org.fire.cost.vo.PageData;
 import org.hibernate.ejb.QueryImpl;

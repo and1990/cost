@@ -7,7 +7,7 @@ import org.apache.shiro.realm.AuthenticatingRealm;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.fire.cost.context.UserContext;
 import org.fire.cost.dao.UserDao;
-import org.fire.cost.entity.User;
+import org.fire.cost.domain.User;
 import org.fire.cost.enums.UserStatusEnum;
 import org.fire.cost.service.AuthenticationService;
 import org.fire.cost.service.CostContextService;

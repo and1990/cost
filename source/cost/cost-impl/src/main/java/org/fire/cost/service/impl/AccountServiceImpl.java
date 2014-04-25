@@ -6,8 +6,8 @@ import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.fire.cost.dao.AccountDao;
 import org.fire.cost.dao.UserDao;
-import org.fire.cost.entity.Account;
-import org.fire.cost.entity.User;
+import org.fire.cost.domain.Account;
+import org.fire.cost.domain.User;
 import org.fire.cost.enums.AccountStatusEnum;
 import org.fire.cost.enums.AccountTypeEnum;
 import org.fire.cost.service.AccountService;
@@ -350,9 +350,6 @@ public class AccountServiceImpl implements AccountService {
         vo.setUserName(account.getUser().getUserName());
         vo.setAccountMoney(account.getAccountMoney());
         vo.setAccountTime(DateUtil.makeDate2Str(account.getAccountTime(), false));
-        Date approveTime = account.getApproveTime();
-        if (approveTime != null)
-            vo.setApproveTime(DateUtil.makeDate2Str(approveTime, true));
         vo.setAccountStatus(account.getAccountStatus());
         vo.setAccountStatusName(AccountStatusEnum.getName(account.getAccountStatus()));
         vo.setAccountType(account.getAccountType());

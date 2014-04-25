@@ -1,7 +1,7 @@
 package org.fire.cost.dao.impl;
 
 import org.fire.cost.dao.custom.AccountDaoCustom;
-import org.fire.cost.entity.Account;
+import org.fire.cost.domain.Account;
 import org.fire.cost.enums.AccountTypeEnum;
 import org.fire.cost.util.DateUtil;
 import org.fire.cost.vo.AccountVO;

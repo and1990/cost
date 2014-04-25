@@ -1,6 +1,6 @@
 package org.fire.cost.dao.custom;
 
-import org.fire.cost.entity.User;
+import org.fire.cost.domain.User;
 import org.fire.cost.vo.PageData;
 import org.fire.cost.vo.UserVO;
 
