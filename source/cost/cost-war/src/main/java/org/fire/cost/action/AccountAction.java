@@ -216,6 +216,17 @@ public class AccountAction extends BaseAction<AccountVO> {
         return SUCCESS;
     }
 
+    /**
+     * 获取用户每种消费类型消费金额
+     *
+     * @return
+     */
+    @Action(value = "getAccountGroupByTypeAndUser", results = {@Result(type = "json", params = {"root", "accountVOList", "contentType", "text/html"})})
+    public String getAccountGroupByTypeAndUser() {
+        //TODO
+        return SUCCESS;
+    }
+
 
     public AccountVO getAccountVO() {
         return accountVO;
