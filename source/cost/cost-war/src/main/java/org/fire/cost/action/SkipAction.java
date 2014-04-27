@@ -94,4 +94,34 @@ public class SkipAction extends BaseAction {
     public String skipToNotice() {
         return SUCCESS;
     }
+
+    /**
+     * 跳转到饼状图
+     *
+     * @return
+     */
+    @Action(value = "pie", results = {@Result(name = SUCCESS, location = "/cost/pieChart.jsp")})
+    public String skipToPieChart() {
+        return SUCCESS;
+    }
+
+    /**
+     * 跳转到柱状图
+     *
+     * @return
+     */
+    @Action(value = "column", results = {@Result(name = SUCCESS, location = "/cost/columnChart.jsp")})
+    public String skipToColumnChart() {
+        return SUCCESS;
+    }
+
+    /**
+     * 跳转到线形图
+     *
+     * @return
+     */
+    @Action(value = "line", results = {@Result(name = SUCCESS, location = "/cost/lineChart.jsp")})
+    public String skipToLineChart() {
+        return SUCCESS;
+    }
 }
