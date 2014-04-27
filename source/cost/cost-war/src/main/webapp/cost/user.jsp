@@ -53,11 +53,11 @@
                         <input class="text" name="userVO.userName" style="width:100px;"/>
                     </td>
                     <td>
-                        <span>管理员：</span>
+                        <span>用户类型：</span>
                         <select class="easyui-combobox" name="userVO.userType" style="width:100px;">
                             <option value="0">全部</option>
-                            <option value="1">是</option>
-                            <option value="2">否</option>
+                            <option value="2">普通用户</option>
+                            <option value="1">管理员</option>
                         </select>
                     </td>
                     <td>

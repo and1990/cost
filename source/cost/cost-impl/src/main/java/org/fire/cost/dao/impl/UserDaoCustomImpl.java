@@ -94,7 +94,7 @@ public class UserDaoCustomImpl extends BaseJpaDaoSupport<User, Long> implements 
         }
         Integer admin = vo.getUserType();
         if (admin != null && admin != 0) {
-            filterSQL += " and is_admin=:isAdmin";
+            filterSQL += " and user_type=:userType";
         }
         Integer userStatus = vo.getUserStatus();
         if (userStatus != null && userStatus != 0) {
@@ -119,9 +119,9 @@ public class UserDaoCustomImpl extends BaseJpaDaoSupport<User, Long> implements 
         if (userName != null && userName.trim().length() != 0) {
             query.setParameter("userName", "%" + userName + "%");
         }
-        Integer admin = vo.getUserType();
-        if (admin != null && admin != 0) {
-            query.setParameter("isAdmin", admin);
+        Integer userType = vo.getUserType();
+        if (userType != null && userType != 0) {
+            query.setParameter("userType", userType);
         }
         Integer userStatus = vo.getUserStatus();
         if (userStatus != null && userStatus != 0) {
