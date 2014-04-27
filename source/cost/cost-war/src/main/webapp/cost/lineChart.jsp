@@ -38,6 +38,8 @@
 <script type="text/javascript">
     var typeData = undefined;
     $(function () {
+        $("#accountStartTime").val("");
+        $("#accountEndTime").val("");
         $.ajax({
             type: 'post',
             url: '<%=basePath%>/getAccountType.do',

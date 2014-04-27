@@ -39,6 +39,8 @@
 
 <script type="text/javascript">
     $(function () {
+        $("#accountStartTime").val("");
+        $("#accountEndTime").val("");
         $.ajax({
             type: 'post',
             url: '<%=basePath%>/getAccountGroupByUser.do',
