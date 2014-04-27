@@ -36,25 +36,42 @@
 </div>
 
 <script type="text/javascript">
+    var typeData = undefined;
     $(function () {
         $.ajax({
             type: 'post',
-            url: '<%=basePath%>/getAccountGroupByTypeAndUser.do',
+            url: '<%=basePath%>/getAccountType.do',
             success: function (returnData) {
                 if (returnData == undefined) {
+                    $('#null_data').html("未加载到数据...");
                     return;
                 }
-                var dataObjArr = getData(returnData);
-                if (dataObjArr != undefined && dataObjArr.length != 0) {
-                    initChart(dataObjArr);
-                }
+                typeData = returnData;
+                $.ajax({
+                    type: 'post',
+                    url: '<%=basePath%>/getAccountGroupByTypeAndUser.do',
+                    success: function (returnData) {
+                        if (returnData == undefined) {
+                            return;
+                        }
+                        var dataObjArr = getData(returnData);
+                        if (dataObjArr != undefined && dataObjArr.length != 0) {
+                            var userArr = getUserData(returnData);
+                            initChart(userArr, dataObjArr);
+                        }
+                    }
+                });
             }
         });
+
     });
 
     //初始化图表
-    function initChart(dataObjArr) {
+    function initChart(userArr, dataObjArr) {
         $('#container').highcharts({
+            chart: {
+                style: {fontFamily: 'Microsoft YaHei', fontSize: '16px'}
+            },
             credits: {
                 text: ''
             },
@@ -66,7 +83,7 @@
                 x: -20
             },
             xAxis: {
-                categories: ["刘腾飞", "史庆杰", "贾文龙", "吴建涛", "石亚飞", "段飒莎"]
+                categories: userArr
             },
             yAxis: {
                 title: {
@@ -106,17 +123,17 @@
         var startNotNull = startTime != undefined && startTime != '';
         var endIsNull = endTime == undefined || endTime == '';
         if (startNotNull && endIsNull) {
-            title = startTime + "以后消费线性分析";
+            title = startTime + " 以后消费线性分析";
         }
 
         var startIsNull = startTime == undefined || startTime == '';
         var endNotNull = endTime != undefined && endTime != '';
         if (startIsNull && endNotNull) {
-            title = endTime + "之前消费线性分析";
+            title = endTime + " 之前消费线性分析";
         }
 
         if (startNotNull && endNotNull) {
-            title = startTime + "至" + endTime + "消费线性分析";
+            title = startTime + " 至 " + endTime + " 消费线性分析";
         }
 
         if (startIsNull && endIsNull) {
@@ -145,13 +162,15 @@
                     return;
                 }
                 var dataObjArr = getData(returnData);
-                var chart = $('#container').highcharts();
-                chart.series[0].setData(dataObjArr);
                 if (dataObjArr == undefined || dataObjArr.length == 0) {
                     $('#null_data').html("未加载到数据...");
-                } else {
-                    $('#null_data').html("");
+                    return;
                 }
+                var chart = $('#container').highcharts();
+                for (var index = 0; index < dataObjArr.length; index++) {
+                    chart.series[index].setData(dataObjArr[index].data);
+                }
+                $('#null_data').html("");
             }
         });
     }
@@ -159,19 +178,38 @@
     //获取数据
     function getData(returnData) {
         var dataObjArr = new Array();
+        var typeArr = $.parseJSON(typeData);
         var rows = $.parseJSON(returnData);
-        for (var key in rows) {
+        for (var typeIndex = 0; typeIndex < typeArr.length; typeIndex++) {
             var valueArr = new Array();
-            var objArr = rows[key];
-            for (var index = 0; index < objArr.length; index++) {
-                valueArr.push(objArr[index].accountMoney);
+            var code = typeArr[typeIndex].code;
+            for (var key in rows) {
+                var dataArr = rows[key];
+                for (var dataIndex = 0; dataIndex < dataArr.length; dataIndex++) {
+                    var data = dataArr[dataIndex];
+                    if (code == data.accountType) {
+                        valueArr.push(data.accountMoney);
+                    }
+                }
+
             }
             var dataObj = new Object();
-            dataObj.name = key;
+            dataObj.name = typeArr[typeIndex].name;
             dataObj.data = valueArr;
             dataObjArr.push(dataObj);
         }
+
         return dataObjArr;
+    }
+
+    //获取用户名称
+    function getUserData(returnData) {
+        var userArr = new Array();
+        var rows = $.parseJSON(returnData);
+        for (var key in rows) {
+            userArr.push(key);
+        }
+        return userArr;
     }
 </script>
 </body>

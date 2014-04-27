@@ -26,6 +26,7 @@ import javax.persistence.RollbackException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;
+import java.math.BigDecimal;
 import java.text.ParseException;
 import java.util.*;
 
@@ -245,19 +246,18 @@ public class AccountServiceImpl implements AccountService {
     public Map<String, List<AccountVO>> getAccountGroupByTypeAndUser(String startTime, String endTime) {
         List<AccountVO> accountVOList = accountDao.getAccountGroupByTypeAndUser(startTime, endTime);
         Map<String, List<AccountVO>> accountVoListMap = new LinkedHashMap<String, List<AccountVO>>();
-       /* AccountTypeEnum[] typeEnums = AccountTypeEnum.values();
-        for (AccountTypeEnum typeEnum : typeEnums) {
-            int code = typeEnum.getCode();
-            List<AccountVO> voList = new ArrayList<AccountVO>();
-            for (AccountVO accountVO : accountVOList) {
-                Integer type = accountVO.getAccountType();
-                if (type != null && code == type) {
-                    voList.add(accountVO);
-                }
-            }
+        setAccountDataGroupByTypeAndUser(accountVOList, accountVoListMap);
+        setAccountDataIfTypeIsNull(accountVoListMap);
+        return accountVoListMap;
+    }
 
-            accountVoListMap.put(AccountTypeEnum.getName(code), voList);
-        }*/
+    /**
+     * 设置账单数据
+     *
+     * @param accountVOList
+     * @param accountVoListMap
+     */
+    private void setAccountDataGroupByTypeAndUser(List<AccountVO> accountVOList, Map<String, List<AccountVO>> accountVoListMap) {
         AccountTypeEnum[] typeEnums = AccountTypeEnum.values();
         for (AccountVO accountVO : accountVOList) {
             List<AccountVO> voList = new ArrayList<AccountVO>();
@@ -274,7 +274,41 @@ public class AccountServiceImpl implements AccountService {
             }
             accountVoListMap.put(userName, voList);
         }
-        return accountVoListMap;
+    }
+
+    /**
+     * 如果用户对应的消费类型不存在，需把对应的消费类型金额设置为0
+     *
+     * @param accountVoListMap
+     */
+    private void setAccountDataIfTypeIsNull(Map<String, List<AccountVO>> accountVoListMap) {
+        AccountTypeEnum[] typeEnums = AccountTypeEnum.values();
+        Set<String> userNameSet = accountVoListMap.keySet();
+        for (String userName : userNameSet) {
+            List<AccountVO> voList = accountVoListMap.get(userName);
+            for (AccountTypeEnum typeEnum : typeEnums) {
+                int code = typeEnum.getCode();
+                boolean isContain = false;
+                for (AccountVO accountVO : voList) {
+                    Integer accountType = accountVO.getAccountType();
+                    if (accountType != null && accountType == code) {
+                        isContain = true;
+                    }
+                }
+                if (!isContain) {
+                    AccountVO accountVO = new AccountVO();
+                    accountVO.setAccountType(code);
+                    accountVO.setAccountMoney(BigDecimal.ZERO);
+                    voList.add(accountVO);
+                }
+                Collections.sort(voList, new Comparator<AccountVO>() {
+                    @Override
+                    public int compare(AccountVO o1, AccountVO o2) {
+                        return o1.getAccountType() - o2.getAccountType();
+                    }
+                });
+            }
+        }
     }
 
     /**
