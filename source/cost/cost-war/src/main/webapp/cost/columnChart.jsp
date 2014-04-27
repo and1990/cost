@@ -14,7 +14,7 @@
 </head>
 <body>
 <div style="font-family: 'Microsoft YaHei';font-size:16px">
-    <div id="container" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+    <div id="column_container" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
 
     <div style="text-align: center;margin-bottom: 50px">
         <span id="null_data" style="color: #FF2F2F"></span>
@@ -26,10 +26,10 @@
             &nbsp;
             按消费类型查看：<input type="radio" name="accountType" value="2"/>
             &nbsp;
-            消费时间从: <input class="Wdate" id="accountStartTime" name="accountVO.accountStartTime" style="width: 150px"
+            消费时间从: <input class="Wdate" id="column_startTime" name="accountVO.accountStartTime" style="width: 150px"
                           onfocus="WdatePicker({dateFmt:'yyyy-MM-dd',maxDate:'#F{$dp.$D(\'accountEndTime\');}'})">
             &nbsp;
-            到: <input class="Wdate" id="accountEndTime" name="accountVO.accountEndTime" style="width: 150px"
+            到: <input class="Wdate" id="column_endTime" name="accountVO.accountEndTime" style="width: 150px"
                       onfocus="WdatePicker({dateFmt:'yyyy-MM-dd',minDate:'#F{$dp.$D(\'accountStartTime\');}',maxDate:'%y-%M-%d'})">
             &nbsp;&nbsp;
             <a href="#" style="text-decoration: none" iconCls="icon-search" onclick="showChart();">查看</a>
@@ -39,8 +39,8 @@
 
 <script type="text/javascript">
     $(function () {
-        $("#accountStartTime").val("");
-        $("#accountEndTime").val("");
+        $("#column_startTime").val("");
+        $("#column_endTime").val("");
         $.ajax({
             type: 'post',
             url: '<%=basePath%>/getAccountGroupByUser.do',
@@ -60,7 +60,7 @@
 
     //初始化图表
     function initChart(nameArr, valueArr) {
-        $('#container').highcharts({
+        $('#column_container').highcharts({
             chart: {
                 type: 'column',
                 margin: [ 50, 50, 100, 80],
@@ -123,8 +123,8 @@
 
     //显示图表
     function showChart() {
-        var startTime = $("#accountStartTime").val();
-        var endTime = $("#accountEndTime").val();
+        var startTime = $("#column_startTime").val();
+        var endTime = $("#column_endTime").val();
         var showType = $("input[name='accountType']:checked").val()
         loadData(startTime, endTime, showType);
         setChartTitle(startTime, endTime, showType);
@@ -157,7 +157,7 @@
         if (startIsNull && endIsNull) {
             title = "消费金额[" + typeText + "]";
         }
-        var chart = $('#container').highcharts();
+        var chart = $('#column_container').highcharts();
         chart.setTitle({text: title});
     }
 
@@ -191,7 +191,7 @@
                 } else {
                     setAccountDataByAccountType(nameArr, valueArr, returnData);
                 }
-                var chart = $('#container').highcharts();
+                var chart = $('#column_container').highcharts();
                 chart.xAxis[0].setCategories(nameArr);
                 chart.series[0].setData(valueArr);
                 if (valueArr == undefined || valueArr.length == 0) {

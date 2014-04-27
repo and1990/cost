@@ -16,7 +16,7 @@
 
 
 <div style="font-family: 'Microsoft YaHei';font-size:16px">
-    <div id="container" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+    <div id="line_container" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
 
     <div style="text-align: center;margin-bottom: 50px">
         <span id="null_data" style="color: #FF2F2F"></span>
@@ -24,11 +24,11 @@
 
     <div style="text-align: center;margin-top: 50px;">
         <div>
-            消费时间从: <input class="Wdate" id="accountStartTime" name="accountVO.accountStartTime" style="width: 150px"
+            消费时间从: <input class="Wdate" id="line_startTime" name="accountVO.accountStartTime" style="width: 150px"
                           onfocus="WdatePicker({dateFmt:'yyyy-MM-dd',maxDate:'#F{$dp.$D(\'accountEndTime\');}'})">
             &nbsp;
-            到: <input class="Wdate" id="accountEndTime" name="accountVO.accountEndTime" style="width: 150px"
-                      onfocus="WdatePicker({dateFmt:'yyyy-MM-dd',minDate:'#F{$dp.$D(\'accountStartTime\');}',maxDate:'%y-%M-%d'})">
+            到: <input class="Wdate" id="line_endTime" name="accountVO.accountEndTime" style="width: 150px"
+                      onfocus="WdatePicker({dateFmt:'yyyy-MM-dd',minDate:'#F{$dp.$D(\'line_startTime\');}',maxDate:'%y-%M-%d'})">
             &nbsp;&nbsp;
             <a href="#" style="text-decoration: none" iconCls="icon-search" onclick="showChart();">查看</a>
         </div>
@@ -38,8 +38,8 @@
 <script type="text/javascript">
     var typeData = undefined;
     $(function () {
-        $("#accountStartTime").val("");
-        $("#accountEndTime").val("");
+        $("#line_startTime").val("");
+        $("#line_endTime").val("");
         $.ajax({
             type: 'post',
             url: '<%=basePath%>/getAccountType.do',
@@ -70,7 +70,7 @@
 
     //初始化图表
     function initChart(userArr, dataObjArr) {
-        $('#container').highcharts({
+        $('#line_container').highcharts({
             chart: {
                 style: {fontFamily: 'Microsoft YaHei', fontSize: '16px'}
             },
@@ -113,8 +113,8 @@
     }
     //显示图表
     function showChart() {
-        var startTime = $("#accountStartTime").val();
-        var endTime = $("#accountEndTime").val();
+        var startTime = $("#line_startTime").val();
+        var endTime = $("#line_endTime").val();
         loadData(startTime, endTime);
         setChartTitle(startTime, endTime);
     }
@@ -141,7 +141,7 @@
         if (startIsNull && endIsNull) {
             title = "消费线性分析";
         }
-        var chart = $('#container').highcharts();
+        var chart = $('#line_container').highcharts();
         chart.setTitle({text: title});
     }
 
@@ -168,7 +168,7 @@
                     $('#null_data').html("未加载到数据...");
                     return;
                 }
-                var chart = $('#container').highcharts();
+                var chart = $('#line_container').highcharts();
                 for (var index = 0; index < dataObjArr.length; index++) {
                     chart.series[index].setData(dataObjArr[index].data);
                 }
