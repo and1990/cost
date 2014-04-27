@@ -40,7 +40,9 @@
         <a href="#" class="easyui-linkbutton" iconCls="icon-remove" plain="true"
            onclick="deleteUser();">删除</a>
         <a href="#" class="easyui-linkbutton" iconCls="icon-tag-blue" plain="true"
-           onclick="disableUser();">禁用</a>
+           onclick="modifyUserStatus(2);">启用</a>
+        <a href="#" class="easyui-linkbutton" iconCls="icon-tag-red" plain="true"
+           onclick="modifyUserStatus(1);">禁用</a>
         <a href="#" class="easyui-linkbutton" iconCls="icon-print" plain="true"
            onclick="undoData('#user_data_table');">导出Excel</a>
     </div>
@@ -286,16 +288,17 @@
         }
     }
 
-    //禁用用户
-    function disableUser() {
+    //更新用户状态
+    function modifyUserStatus(userStatus) {
         var rowData = $("#user_data_table").datagrid("getChecked");
         if (rowData == undefined || rowData.length == 0) {
             alert("请勾选数据");
             return;
         }
-        if (window.confirm("确定禁用选择的用户？")) {
+        var promotion = userStatus == 1 ? "确定启用选择的用户？" : "确定禁用选择的用户？";
+        if (window.confirm(promotion)) {
             var userIds = getCheckedUserIds();
-            var url = "<%=basePath%>/disableUser.do?userIds=" + userIds;
+            var url = "<%=basePath%>/modifyUserStatus.do?userIds=" + userIds + "&userVO.userStatus=" + userStatus;
             $.ajax({
                         type: "post",
                         url: url,

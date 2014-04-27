@@ -194,6 +194,22 @@ public class UserServiceImpl implements UserService {
     }
 
     /**
+     * 禁用用户
+     *
+     * @param userIds
+     * @param userStatus
+     */
+    @Override
+    public void modifyUserStatus(String userIds, Integer userStatus) {
+        String[] userIdArr = userIds.trim().split(",");
+        for (String userId : userIdArr) {
+            User user = userDao.findOne(Long.valueOf(userId));
+            user.setUserStatus(userStatus);
+            userDao.save(user);
+        }
+    }
+
+    /**
      * 将UserVO转换成User对象
      *
      * @param vo

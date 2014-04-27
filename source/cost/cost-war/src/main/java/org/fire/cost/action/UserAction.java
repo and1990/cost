@@ -95,13 +95,20 @@ public class UserAction extends BaseAction<UserVO> {
     }
 
     /**
-     * 禁用用户
+     * 禁用、启用用户
      *
      * @return
      */
-    @Action(value = "disableUser", results = {@Result(type = "json", params = {"root", "pageData", "contentType", "text/html"})})
-    public String disableUser() {
-
+    @Action(value = "modifyUserStatus", results = {@Result(type = "json", params = {"root", "pageData", "contentType", "text/html"})})
+    public String modifyUserStatus() {
+        try {
+            if (userIds == null || userIds.trim().length() == 0) {
+                return SUCCESS;
+            }
+            userService.modifyUserStatus(userIds, userVO.getUserStatus());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         return SUCCESS;
     }
 

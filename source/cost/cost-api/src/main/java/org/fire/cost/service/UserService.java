@@ -35,7 +35,7 @@ public interface UserService {
      *
      * @param vo
      */
-    List<UserVO> getUserByFilter(UserVO vo,PageData<UserVO> pageData);
+    List<UserVO> getUserByFilter(UserVO vo, PageData<UserVO> pageData);
 
     /**
      * 获取总用户记录数
@@ -83,4 +83,12 @@ public interface UserService {
      * @return
      */
     String getUserNamesByUserIds(String userIds);
+
+    /**
+     * 禁用用户
+     *
+     * @param userIds
+     * @param userStatus
+     */
+    void modifyUserStatus(String userIds, Integer userStatus);
 }
