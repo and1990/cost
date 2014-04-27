@@ -245,7 +245,7 @@ public class AccountServiceImpl implements AccountService {
     public Map<String, List<AccountVO>> getAccountGroupByTypeAndUser(String startTime, String endTime) {
         List<AccountVO> accountVOList = accountDao.getAccountGroupByTypeAndUser(startTime, endTime);
         Map<String, List<AccountVO>> accountVoListMap = new LinkedHashMap<String, List<AccountVO>>();
-        AccountTypeEnum[] typeEnums = AccountTypeEnum.values();
+       /* AccountTypeEnum[] typeEnums = AccountTypeEnum.values();
         for (AccountTypeEnum typeEnum : typeEnums) {
             int code = typeEnum.getCode();
             List<AccountVO> voList = new ArrayList<AccountVO>();
@@ -257,6 +257,22 @@ public class AccountServiceImpl implements AccountService {
             }
 
             accountVoListMap.put(AccountTypeEnum.getName(code), voList);
+        }*/
+        AccountTypeEnum[] typeEnums = AccountTypeEnum.values();
+        for (AccountVO accountVO : accountVOList) {
+            List<AccountVO> voList = new ArrayList<AccountVO>();
+            String userName = accountVO.getUserName();
+            if (accountVoListMap.containsKey(userName)) {
+                voList = accountVoListMap.get(userName);
+            }
+            Integer accountType = accountVO.getAccountType();
+            for (AccountTypeEnum typeEnum : typeEnums) {
+                int code = typeEnum.getCode();
+                if (accountType != null && accountType == code) {
+                    voList.add(accountVO);
+                }
+            }
+            accountVoListMap.put(userName, voList);
         }
         return accountVoListMap;
     }

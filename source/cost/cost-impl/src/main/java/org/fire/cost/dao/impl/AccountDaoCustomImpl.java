@@ -178,10 +178,11 @@ public class AccountDaoCustomImpl extends BaseJpaDaoSupport<Account, Long> imple
      */
     @Override
     public List<AccountVO> getAccountGroupByTypeAndUser(String startTime, String endTime) {
-        String sql = "SELECT a.account_type, u.user_name, a.account_money " +
-                "FROM (SELECT  a.account_type,  a.user_id, " +
-                "  sum(a.account_money) AS account_money " +
+        String sql = "SELECT u.user_name,a.account_type, a.account_money " +
+                "FROM cost_user u LEFT JOIN  " +
+                "(SELECT a.account_type, a.user_id, sum(a.account_money) AS account_money " +
                 "  FROM cost_account a WHERE 1 = 1 ";
+
         boolean accountStartTimeNotNull = startTime != null && startTime.trim().length() != 0;
         if (accountStartTimeNotNull) {
             sql += "and a.account_time>=:startTime ";
@@ -190,7 +191,9 @@ public class AccountDaoCustomImpl extends BaseJpaDaoSupport<Account, Long> imple
         if (accountEndTimeNotNull) {
             sql += "and a.account_time<:endTime ";
         }
-        sql += "  GROUP BY  a.account_type, a.user_id ) a RIGHT JOIN cost_user u ON a.user_id = u.user_id";
+        sql += "  GROUP BY a.user_id,a.account_type " +
+                ") a  " +
+                "ON a.user_id = u.user_id";
         Query query = entityManager.createNativeQuery(sql);
         if (accountStartTimeNotNull) {
             query.setParameter("startTime", startTime);
