@@ -30,7 +30,7 @@
             到: <input class="Wdate" id="line_endTime" name="accountVO.accountEndTime" style="width: 150px"
                       onfocus="WdatePicker({dateFmt:'yyyy-MM-dd',minDate:'#F{$dp.$D(\'line_startTime\');}',maxDate:'%y-%M-%d'})">
             &nbsp;&nbsp;
-            <a href="#" style="text-decoration: none" iconCls="icon-search" onclick="showChart();">查看</a>
+            <a href="#" style="text-decoration: none" iconCls="icon-search" onclick="showLineChart();">查看</a>
         </div>
     </div>
 </div>
@@ -112,7 +112,7 @@
         });
     }
     //显示图表
-    function showChart() {
+    function showLineChart() {
         var startTime = $("#line_startTime").val();
         var endTime = $("#line_endTime").val();
         loadData(startTime, endTime);

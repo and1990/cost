@@ -30,7 +30,7 @@
             到: <input class="Wdate" id="pie_endTime" name="accountVO.accountEndTime" style="width: 150px"
                       onfocus="WdatePicker({dateFmt:'yyyy-MM-dd',minDate:'#F{$dp.$D(\'accountStartTime\');}',maxDate:'%y-%M-%d'})">
             &nbsp;&nbsp;
-            <a href="#" style="text-decoration: none" iconCls="icon-search" onclick="showChart();">查看</a>
+            <a href="#" style="text-decoration: none" iconCls="icon-search" onclick="showPieChart();">查看</a>
         </div>
     </div>
 </div>
@@ -114,7 +114,7 @@
     }
 
     //显示图表
-    function showChart() {
+    function showPieChart() {
         var startTime = $("#pie_startTime").val();
         var endTime = $("#pie_endTime").val();
         var showType = $("input[name='accountType']:checked").val()
