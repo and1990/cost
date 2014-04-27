@@ -61,7 +61,8 @@
         $('#container').highcharts({
             chart: {
                 type: 'column',
-                margin: [ 50, 50, 100, 80]
+                margin: [ 50, 50, 100, 80],
+                style: {fontFamily: 'Microsoft YaHei', fontSize: '16px'}
             },
             plotOptions: {
                 series: {
