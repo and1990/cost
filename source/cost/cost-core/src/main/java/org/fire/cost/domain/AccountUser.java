@@ -14,32 +14,32 @@ import javax.persistence.Table;
  * 作者：刘腾飞
  */
 @Entity
-@Table(name = "cost_account_user", catalog = "cost")
+@Table(name = "cost_group_user", catalog = "cost")
 public class AccountUser implements java.io.Serializable {
 
-    private Long accountUserId;
+    private Long groupUserId;
     private User user;
-    private Account account;
+    private Group group;
 
 
     public AccountUser() {
     }
 
 
-    public AccountUser(Long accountUserId, User user, Account account) {
-        this.accountUserId = accountUserId;
+    public AccountUser(Long groupUserId, User user, Group group) {
+        this.groupUserId = groupUserId;
         this.user = user;
-        this.account = account;
+        this.group = group;
     }
 
     @Id
     @Column(name = "account_user_id", unique = true, nullable = false)
-    public Long getAccountUserId() {
-        return this.accountUserId;
+    public Long getGroupUserId() {
+        return this.groupUserId;
     }
 
-    public void setAccountUserId(Long accountUserId) {
-        this.accountUserId = accountUserId;
+    public void setGroupUserId(Long accountUserId) {
+        this.groupUserId = accountUserId;
     }
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -53,13 +53,13 @@ public class AccountUser implements java.io.Serializable {
     }
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "account_id", nullable = false)
-    public Account getAccount() {
-        return this.account;
+    @JoinColumn(name = "group_id", nullable = false)
+    public Group getAccount() {
+        return this.group;
     }
 
-    public void setAccount(Account costAccount) {
-        this.account = costAccount;
+    public void setAccount(Group group) {
+        this.group = group;
     }
 
 }

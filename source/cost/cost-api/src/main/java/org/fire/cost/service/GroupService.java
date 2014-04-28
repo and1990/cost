@@ -15,7 +15,7 @@ public interface GroupService {
 
     boolean addGroup(GroupVO vo);
 
-    boolean updateGroup(GroupVO vo);
+    boolean modifyGroup(GroupVO vo);
 
     boolean deleteGroup(Long groupId);
 

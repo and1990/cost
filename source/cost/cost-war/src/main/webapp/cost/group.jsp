@@ -4,6 +4,18 @@
     String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + request.getContextPath();
 %>
 
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf8">
+    <link rel="shortcut icon" href="<%=basePath%>/image/ico.jpg" type="image/x-icon"/>
+    <link rel="stylesheet" type="text/css" href="<%=basePath %>/third/easy-ui/themes/default/easyui.css">
+    <link rel="stylesheet" type="text/css" href="<%=basePath %>/third/easy-ui/themes/icon.css">
+
+    <script type="text/javascript" src="<%=basePath%>/third/easy-ui/jquery.min.js"></script>
+    <script type="text/javascript" src="<%=basePath%>/third/easy-ui/jquery.easyui.min.js"></script>
+    <script type="text/javascript" src="<%=basePath%>/third/easy-ui/locale/easyui-lang-zh_CN.js"></script>
+</head>
+<body>
 <!--显示已创建的组信息-->
 <div id="group_data_layout" class="easyui-layout" data-options="fit:true">
     <div id="group_data_north" data-options="region:'north',border:0,fit:true" style="height: 280px">
@@ -155,10 +167,11 @@
         }
         $('#group_data_table').datagrid('acceptChanges');
         $('#group_data_table').datagrid("selectRow", rowIndex);
-        var sendData = $('#group_data_table').datagrid('getSelected')
-        sendData.userIds = getSelectUserIds();
-        var jsonData = JSON.stringify(sendData);
-        console.info(jsonData);
+        var rowData = $('#group_data_table').datagrid('getSelected')
+        rowData.userIds = getSelectUserIds();
+        var data = {"groupVO.groupId": rowData.groupId, "groupVO.groupName": rowData.groupName,
+            "groupVO.userIds": rowData.userIds, "groupVO.groupStatus": rowData.groupStatus, "groupVO.groupRemark": rowData.groupRemark};
+        console.info(data);
         var url = "<%=basePath%>/addGroup.do";
         if (action == 2) {
             url = "<%=basePath%>/modifyGroup.do";
@@ -167,7 +180,7 @@
         }
         $.ajax({
             type: "POST",
-            data: jsonData,
+            data: data,
             url: url,
             success: function (data) {
                 $('#group_data_table').datagrid('load');
@@ -281,3 +294,5 @@
         return userNames;
     }
 </script>
+</body>
+</html>

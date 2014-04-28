@@ -23,11 +23,7 @@ public class GroupAction extends BaseAction<GroupVO> {
     @Resource
     private GroupService groupService;
 
-    private Long groupId;
-    private String groupName;
-    private String userIds;
-    private int groupStatus;
-    private String groupRemark;
+    private GroupVO groupVO;
 
     /**
      * 根据过滤条件查询“组”数据
@@ -60,7 +56,6 @@ public class GroupAction extends BaseAction<GroupVO> {
     @Action(value = "addGroup", results = {@Result(type = "json", params = {"root", "returnData", "contentType", "text/html"})})
     public String addGroup() {
         try {
-            GroupVO groupVO = new GroupVO(groupId, groupName, userIds, groupStatus, groupRemark);
             groupService.addGroup(groupVO);
         } catch (Exception e) {
             e.printStackTrace();
@@ -76,8 +71,7 @@ public class GroupAction extends BaseAction<GroupVO> {
     @Action(value = "modifyGroup", results = {@Result(type = "json", params = {"root", "returnData", "contentType", "text/html"})})
     public String modifyGroup() {
         try {
-            GroupVO groupVO = new GroupVO(groupId, groupName, userIds, groupStatus, groupRemark);
-            groupService.updateGroup(groupVO);
+            groupService.modifyGroup(groupVO);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -92,51 +86,19 @@ public class GroupAction extends BaseAction<GroupVO> {
     @Action(value = "deleteGroup", results = {@Result(type = "json", params = {"root", "returnData", "contentType", "text/html"})})
     public String deleteGroup() {
         try {
-            groupService.deleteGroup(groupId);
+            groupService.deleteGroup(groupVO.getGroupId());
         } catch (Exception e) {
             e.printStackTrace();
         }
         return SUCCESS;
     }
 
-    public Long getGroupId() {
-        return groupId;
+    public GroupVO getGroupVO() {
+        return groupVO;
     }
 
-    public void setGroupId(Long groupId) {
-        this.groupId = groupId;
-    }
-
-    public String getGroupName() {
-        return groupName;
-    }
-
-    public void setGroupName(String groupName) {
-        this.groupName = groupName;
-    }
-
-    public String getUserIds() {
-        return userIds;
-    }
-
-    public void setUserIds(String userIds) {
-        this.userIds = userIds;
-    }
-
-    public int getGroupStatus() {
-        return groupStatus;
-    }
-
-    public void setGroupStatus(int groupStatus) {
-        this.groupStatus = groupStatus;
-    }
-
-    public String getGroupRemark() {
-        return groupRemark;
-    }
-
-    public void setGroupRemark(String groupRemark) {
-        this.groupRemark = groupRemark;
+    public void setGroupVO(GroupVO groupVO) {
+        this.groupVO = groupVO;
     }
 
 }

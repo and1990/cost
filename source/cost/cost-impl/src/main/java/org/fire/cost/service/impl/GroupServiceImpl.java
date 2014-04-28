@@ -3,9 +3,7 @@ package org.fire.cost.service.impl;
 import org.fire.cost.dao.GroupDao;
 import org.fire.cost.domain.Group;
 import org.fire.cost.enums.UserStatusEnum;
-import org.fire.cost.service.GroupAccountService;
 import org.fire.cost.service.GroupService;
-import org.fire.cost.service.UserService;
 import org.fire.cost.util.AuthenticationUtil;
 import org.fire.cost.util.DateUtil;
 import org.fire.cost.vo.GroupVO;
@@ -24,15 +22,11 @@ import java.util.List;
  */
 @Service
 public class GroupServiceImpl implements GroupService {
-    @Resource
-    private UserService userService;
-
-    @Resource
-    private GroupAccountService groupAccountService;
 
     @Resource
     private GroupDao groupDao;
 
+    //private
     /**
      * 根据过滤条件查询“组”数据
      *
@@ -67,12 +61,7 @@ public class GroupServiceImpl implements GroupService {
     public boolean addGroup(GroupVO vo) {
         try {
             vo.setGroupStatus(UserStatusEnum.Enable.getCode());
-            vo.setCreateUser(AuthenticationUtil.getUserName());
-            vo.setCreateTime(DateUtil.makeDate2Str(new Date(), true));
-            vo.setModifyUser(userService.getLoginUserName());
-            vo.setModifyTime(DateUtil.makeDate2Str(new Date(), true));
-            Group group = groupDao.save(makeVO2Group(vo, null));
-            groupAccountService.addGroupAccount(group.getGroupId());
+            groupDao.save(makeVO2Group(vo, null));
             return true;
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -87,7 +76,7 @@ public class GroupServiceImpl implements GroupService {
      * @return
      */
     @Override
-    public boolean updateGroup(GroupVO vo) {
+    public boolean modifyGroup(GroupVO vo) {
         try {
             Long groupId = vo.getGroupId();
             groupDao.save(makeVO2Group(vo, groupDao.findOne(groupId)));
@@ -122,8 +111,13 @@ public class GroupServiceImpl implements GroupService {
      */
     @Override
     public int getGroupTotal() {
-        int total = groupDao.getGroupTotal();
-        return total;
+        try {
+            int total = groupDao.getGroupTotal();
+            return total;
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            throw new RuntimeException(ex);
+        }
     }
 
     /**
@@ -136,14 +130,15 @@ public class GroupServiceImpl implements GroupService {
     private Group makeVO2Group(GroupVO vo, Group group) throws Exception {
         if (group == null) {
             group = new Group();
+            group.setCreateUser(AuthenticationUtil.getUserName());
+            group.setCreateTime(new Date());
+        } else {
+            group.setGroupId(vo.getGroupId());
         }
-        group.setGroupId(vo.getGroupId());
         group.setGroupName(vo.getGroupName());
         group.setGroupStatus(vo.getGroupStatus());
-        group.setCreateUser(vo.getCreateUser());
-        group.setCreateTime(DateUtil.makeStr2Date(vo.getCreateTime(), true));
-        group.setModifyUser(vo.getModifyUser());
-        group.setModifyTime(DateUtil.makeStr2Date(vo.getModifyTime(), true));
+        group.setModifyUser(AuthenticationUtil.getUserName());
+        group.setModifyTime(new Date());
         group.setGroupRemark(vo.getGroupRemark());
         return group;
     }

@@ -31,15 +31,13 @@ public class Account implements java.io.Serializable {
     private String modifyUser;
     private Date modifyTime;
     private String accountRemark;
-    private List<AccountUser> accountUserList = new ArrayList<AccountUser>();
 
 
     public Account() {
     }
 
 
-    public Account(User user, Group group, BigDecimal accountMoney, Date accountTime, Integer accountType, Integer accountStatus,
-                   Integer clearType) {
+    public Account(User user, Group group, BigDecimal accountMoney, Date accountTime, Integer accountType, Integer accountStatus, Integer clearType) {
         this.user = user;
         this.group = group;
         this.accountMoney = accountMoney;
@@ -49,9 +47,7 @@ public class Account implements java.io.Serializable {
         this.clearType = clearType;
     }
 
-    public Account(User user, Group group, BigDecimal accountMoney, Date accountTime, Integer accountType, Integer accountStatus,
-                   Integer clearType, String accountFile, String createUser, Date createTime, String modifyUser, Date modifyTime,
-                   String accountRemark, List<AccountUser> accountUserList) {
+    public Account(User user, Group group, BigDecimal accountMoney, Date accountTime, Integer accountType, Integer accountStatus, Integer clearType, String accountFile, String createUser, Date createTime, String modifyUser, Date modifyTime, String accountRemark) {
         this.user = user;
         this.group = group;
         this.accountMoney = accountMoney;
@@ -65,7 +61,6 @@ public class Account implements java.io.Serializable {
         this.modifyUser = modifyUser;
         this.modifyTime = modifyTime;
         this.accountRemark = accountRemark;
-        this.accountUserList = accountUserList;
     }
 
     @Id
@@ -199,13 +194,5 @@ public class Account implements java.io.Serializable {
         this.accountRemark = accountRemark;
     }
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "account")
-    public List<AccountUser> getAccountUserList() {
-        return this.accountUserList;
-    }
-
-    public void setAccountUserList(List<AccountUser> costAccountUsers) {
-        this.accountUserList = costAccountUsers;
-    }
 
 }
