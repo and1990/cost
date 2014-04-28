@@ -9,7 +9,7 @@
         <class>org.fire.cost.domain.Account</class>
         <class>org.fire.cost.domain.Group</class>
         <class>org.fire.cost.domain.GroupAccount</class>
-        <class>org.fire.cost.domain.AccountUser</class>
+        <class>org.fire.cost.domain.GroupUser</class>
 
         <properties>
             <property name="hibernate.dialect" value="org.hibernate.dialect.MySQLDialect"/>

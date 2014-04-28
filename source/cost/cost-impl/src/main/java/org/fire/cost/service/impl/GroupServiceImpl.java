@@ -1,7 +1,11 @@
 package org.fire.cost.service.impl;
 
 import org.fire.cost.dao.GroupDao;
+import org.fire.cost.dao.GroupUserDao;
+import org.fire.cost.dao.UserDao;
 import org.fire.cost.domain.Group;
+import org.fire.cost.domain.GroupUser;
+import org.fire.cost.domain.User;
 import org.fire.cost.enums.UserStatusEnum;
 import org.fire.cost.service.GroupService;
 import org.fire.cost.util.AuthenticationUtil;
@@ -9,6 +13,7 @@ import org.fire.cost.util.DateUtil;
 import org.fire.cost.vo.GroupVO;
 import org.fire.cost.vo.PageData;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
@@ -26,7 +31,12 @@ public class GroupServiceImpl implements GroupService {
     @Resource
     private GroupDao groupDao;
 
-    //private
+    @Resource
+    private GroupUserDao groupUserDao;
+
+    @Resource
+    private UserDao userDao;
+
     /**
      * 根据过滤条件查询“组”数据
      *
@@ -58,10 +68,19 @@ public class GroupServiceImpl implements GroupService {
      * @return
      */
     @Override
+    @Transactional(value = "transactionManager")
     public boolean addGroup(GroupVO vo) {
         try {
             vo.setGroupStatus(UserStatusEnum.Enable.getCode());
-            groupDao.save(makeVO2Group(vo, null));
+            Group group = groupDao.save(makeVO2Group(vo, null));
+            String[] userIdArr = vo.getUserIds().split(",");
+            for (String userId : userIdArr) {
+                User user = userDao.findOne(Long.valueOf(userId));
+                GroupUser groupUser = new GroupUser();
+                groupUser.setUser(user);
+                groupUser.setGroup(group);
+                groupUserDao.save(groupUser);
+            }
             return true;
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -76,10 +95,23 @@ public class GroupServiceImpl implements GroupService {
      * @return
      */
     @Override
+    @Transactional(value = "transactionManager")
     public boolean modifyGroup(GroupVO vo) {
         try {
             Long groupId = vo.getGroupId();
-            groupDao.save(makeVO2Group(vo, groupDao.findOne(groupId)));
+            Group group = groupDao.findOne(groupId);
+            List<GroupUser> groupUserList = groupUserDao.findByGroupId(groupId);
+            groupUserDao.deleteInBatch(groupUserList);
+
+            Group entity = groupDao.save(makeVO2Group(vo, group));
+            String[] userIdArr = vo.getUserIds().split(",");
+            for (String userId : userIdArr) {
+                User user = userDao.findOne(Long.valueOf(userId));
+                GroupUser groupUser = new GroupUser();
+                groupUser.setUser(user);
+                groupUser.setGroup(entity);
+                groupUserDao.save(groupUser);
+            }
             return true;
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -94,8 +126,11 @@ public class GroupServiceImpl implements GroupService {
      * @return
      */
     @Override
+    @Transactional(value = "transactionManager")
     public boolean deleteGroup(Long groupId) {
         try {
+            List<GroupUser> groupUserList = groupUserDao.findByGroupId(groupId);
+            groupUserDao.deleteInBatch(groupUserList);
             groupDao.delete(groupId);
             return true;
         } catch (Exception ex) {

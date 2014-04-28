@@ -39,7 +39,7 @@ public class User implements java.io.Serializable {
     private Date modifyTime;
     private String userRemark;
     private List<Account> accountList = new ArrayList<Account>();
-    private List<AccountUser> accountUserList = new ArrayList<AccountUser>(0);
+    private List<GroupUser> groupUserList = new ArrayList<GroupUser>(0);
 
 
     public User() {
@@ -58,7 +58,7 @@ public class User implements java.io.Serializable {
 
     public User(String userName, String password, String loginName, Integer userAge, String userAddress, String userEmail, Integer userStatus,
                 Integer userType, Date loginTime, String userImage, String createUser, Date createTime, String modifyUser, Date modifyTime,
-                String userRemark, List<Account> accountList, List<AccountUser> accountUserList) {
+                String userRemark, List<Account> accountList, List<GroupUser> groupUserList) {
         this.userName = userName;
         this.password = password;
         this.loginName = loginName;
@@ -75,7 +75,7 @@ public class User implements java.io.Serializable {
         this.modifyTime = modifyTime;
         this.userRemark = userRemark;
         this.accountList = accountList;
-        this.accountUserList = accountUserList;
+        this.groupUserList = groupUserList;
     }
 
     @Id
@@ -234,12 +234,12 @@ public class User implements java.io.Serializable {
     }
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "user")
-    public List<AccountUser> getAccountUserList() {
-        return this.accountUserList;
+    public List<GroupUser> getGroupUserList() {
+        return this.groupUserList;
     }
 
-    public void setAccountUserList(List<AccountUser> AccountUsers) {
-        this.accountUserList = AccountUsers;
+    public void setGroupUserList(List<GroupUser> groupUsers) {
+        this.groupUserList = groupUsers;
     }
 
 }
