@@ -11,10 +11,11 @@
             <thead>
             <tr>
                 <th data-options="field:'groupName',width:80,align:'center',editor:'text'">组名</th>
-                <th data-options="field:'userIds',width:80,align:'center',editor:'text',hidden:true">组员ID</th>
+                <th data-options="field:'userIds',width:80,align:'center',editor:'text',hidden:true"/>
                 <th data-options="field:'userNames',width:120,align:'center',
                     editor:{type:'combobox', options:{ editable:false, onShowPanel:openUserDialog}}">组员
                 </th>
+                <th data-options="field:'groupStatus',width:60,align:'center',hidden:true"/>
                 <th data-options="field:'groupStatusName',width:60,align:'center'">状态</th>
                 <th data-options="field:'groupRemark',width:120,align:'center',editor:'text'">备注</th>
                 <th data-options="field:'createUser',width:120,align:'center'">创建人</th>
@@ -128,7 +129,7 @@
     var action = undefined;
     //增加组
     function addGroup() {
-        $("#group_data_table").datagrid('appendRow', {"groupStatusName": "可用"});
+        $("#group_data_table").datagrid('appendRow', {"groupStatus": "1", "groupStatusName": "可用"});
         rowIndex = $("#group_data_table").datagrid('getRows').length - 1;
         $("#group_data_table").datagrid('selectRow', rowIndex).datagrid('beginEdit', rowIndex);
         action = 1;
@@ -166,7 +167,7 @@
         }
         $.ajax({
             type: "POST",
-            data: {"groupStatus": "12", "groupName": "1212", "groupRemark": "121212"},
+            data: jsonData,
             url: url,
             success: function (data) {
                 $('#group_data_table').datagrid('load');
