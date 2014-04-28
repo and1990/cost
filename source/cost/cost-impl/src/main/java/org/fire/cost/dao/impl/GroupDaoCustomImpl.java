@@ -39,7 +39,7 @@ public class GroupDaoCustomImpl extends BaseJpaDaoSupport<Group, Long> implement
     }
 
     /**
-     * 得打组数据总记录数
+     * 得到组数据总记录数
      *
      * @return
      */

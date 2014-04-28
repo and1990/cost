@@ -6,6 +6,7 @@ import org.fire.cost.enums.UserStatusEnum;
 import org.fire.cost.service.GroupAccountService;
 import org.fire.cost.service.GroupService;
 import org.fire.cost.service.UserService;
+import org.fire.cost.util.AuthenticationUtil;
 import org.fire.cost.util.DateUtil;
 import org.fire.cost.vo.GroupVO;
 import org.fire.cost.vo.PageData;
@@ -41,20 +42,19 @@ public class GroupServiceImpl implements GroupService {
      */
     @Override
     public List<GroupVO> getGroupByFilter(GroupVO vo, PageData<GroupVO> pageData) {
+        List<GroupVO> voList = new ArrayList<GroupVO>();
         try {
             List<Group> groupList = groupDao.getGroupByFilter(vo, pageData);
             if (groupList != null && groupList.size() != 0) {
-                List<GroupVO> voList = new ArrayList<GroupVO>();
                 for (Group group : groupList) {
                     voList.add(makeGroup2VO(group));
                 }
-                return voList;
             }
         } catch (Exception ex) {
             ex.printStackTrace();
             throw new RuntimeException(ex);
         }
-        return null;
+        return voList;
     }
 
     /**
@@ -67,7 +67,7 @@ public class GroupServiceImpl implements GroupService {
     public boolean addGroup(GroupVO vo) {
         try {
             vo.setGroupStatus(UserStatusEnum.Enable.getCode());
-            vo.setCreateUser(userService.getLoginUserName());
+            vo.setCreateUser(AuthenticationUtil.getUserName());
             vo.setCreateTime(DateUtil.makeDate2Str(new Date(), true));
             vo.setModifyUser(userService.getLoginUserName());
             vo.setModifyTime(DateUtil.makeDate2Str(new Date(), true));

@@ -42,9 +42,9 @@
     <div id="mainInfo" data-options="region:'center',title:'业务信息'">
         <div class="easyui-tabs"
              data-options="border:false,plain:true,fit:true" id="main_tabs">
+            <div title="组信息" data-options="href:'<%=basePath %>/cost/group.do'" style="padding: 2px"></div>
             <div title="账单信息" data-options="href:'<%=basePath %>/cost/account.do'" style="padding: 2px"></div>
             <div title="用户信息" data-options="href:'<%=basePath %>/cost/user.do'" style="padding: 2px"></div>
-            <div title="组信息" data-options="href:'<%=basePath %>/cost/group.do'" style="padding: 2px"></div>
         </div>
     </div>
 

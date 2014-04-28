@@ -12,6 +12,10 @@ public class GroupVO implements Serializable {
 
     private String groupName;
 
+    private String userIds;
+
+    private String userNames;
+
     private Integer groupStatus;
 
     private String groupStatusName;
@@ -25,6 +29,18 @@ public class GroupVO implements Serializable {
     private String modifyTime;
 
     private String groupRemark;
+
+    public GroupVO() {
+
+    }
+
+    public GroupVO(Long groupId, String groupName, String userIds, int groupStatus, String groupRemark) {
+        this.groupId = groupId;
+        this.groupName = groupName;
+        this.userIds = userIds;
+        this.groupStatus = groupStatus;
+        this.groupRemark = groupRemark;
+    }
 
     public Long getGroupId() {
         return groupId;
@@ -40,6 +56,22 @@ public class GroupVO implements Serializable {
 
     public void setGroupName(String groupName) {
         this.groupName = groupName;
+    }
+
+    public String getUserIds() {
+        return userIds;
+    }
+
+    public void setUserIds(String userIds) {
+        this.userIds = userIds;
+    }
+
+    public String getUserNames() {
+        return userNames;
+    }
+
+    public void setUserNames(String userNames) {
+        this.userNames = userNames;
     }
 
     public Integer getGroupStatus() {
