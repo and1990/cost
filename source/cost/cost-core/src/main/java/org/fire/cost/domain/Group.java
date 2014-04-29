@@ -150,7 +150,7 @@ public class Group implements java.io.Serializable {
     }
 
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "account")
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "group")
     public List<GroupUser> getGroupUserList() {
         return this.groupUserList;
     }
