@@ -1,12 +1,8 @@
 package org.fire.cost.domain;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
+
+import static javax.persistence.GenerationType.IDENTITY;
 
 /**
  * 注释：组、用户关系实体
@@ -33,7 +29,8 @@ public class GroupUser implements java.io.Serializable {
     }
 
     @Id
-    @Column(name = "account_user_id", unique = true, nullable = false)
+    @GeneratedValue(strategy = IDENTITY)
+    @Column(name = "group_user_id", unique = true, nullable = false)
     public Long getGroupUserId() {
         return this.groupUserId;
     }

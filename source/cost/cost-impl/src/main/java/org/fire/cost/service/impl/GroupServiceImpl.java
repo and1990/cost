@@ -45,13 +45,27 @@ public class GroupServiceImpl implements GroupService {
      * @return
      */
     @Override
+    @Transactional(value = "transactionManager")
     public List<GroupVO> getGroupByFilter(GroupVO vo, PageData<GroupVO> pageData) {
         List<GroupVO> voList = new ArrayList<GroupVO>();
         try {
             List<Group> groupList = groupDao.getGroupByFilter(vo, pageData);
             if (groupList != null && groupList.size() != 0) {
                 for (Group group : groupList) {
-                    voList.add(makeGroup2VO(group));
+                    String userIds = null;
+                    String userNames = null;
+                    List<GroupUser> groupUserList = group.getGroupUserList();
+                    for (GroupUser groupUser : groupUserList) {
+                        User user = groupUser.getUser();
+                        String userId = user.getUserId().toString();
+                        userIds = userIds == null ? userId : userIds + "," + userId;
+                        String userName = user.getUserName();
+                        userNames = userNames == null ? userName : userNames + "," + userName;
+                    }
+                    GroupVO groupVO = makeGroup2VO(group);
+                    groupVO.setUserIds(userIds);
+                    groupVO.setUserNames(userNames);
+                    voList.add(groupVO);
                 }
             }
         } catch (Exception ex) {
@@ -74,13 +88,15 @@ public class GroupServiceImpl implements GroupService {
             vo.setGroupStatus(UserStatusEnum.Enable.getCode());
             Group group = groupDao.save(makeVO2Group(vo, null));
             String[] userIdArr = vo.getUserIds().split(",");
+            List<GroupUser> groupUserList = new ArrayList<GroupUser>();
             for (String userId : userIdArr) {
                 User user = userDao.findOne(Long.valueOf(userId));
                 GroupUser groupUser = new GroupUser();
                 groupUser.setUser(user);
                 groupUser.setGroup(group);
-                groupUserDao.save(groupUser);
+                groupUserList.add(groupUser);
             }
+            groupUserDao.save(groupUserList);
             return true;
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -100,7 +116,7 @@ public class GroupServiceImpl implements GroupService {
         try {
             Long groupId = vo.getGroupId();
             Group group = groupDao.findOne(groupId);
-            List<GroupUser> groupUserList = groupUserDao.findByGroupId(groupId);
+            List<GroupUser> groupUserList = group.getGroupUserList();
             groupUserDao.deleteInBatch(groupUserList);
 
             Group entity = groupDao.save(makeVO2Group(vo, group));
@@ -129,7 +145,8 @@ public class GroupServiceImpl implements GroupService {
     @Transactional(value = "transactionManager")
     public boolean deleteGroup(Long groupId) {
         try {
-            List<GroupUser> groupUserList = groupUserDao.findByGroupId(groupId);
+            Group group = groupDao.findOne(groupId);
+            List<GroupUser> groupUserList = group.getGroupUserList();
             groupUserDao.deleteInBatch(groupUserList);
             groupDao.delete(groupId);
             return true;

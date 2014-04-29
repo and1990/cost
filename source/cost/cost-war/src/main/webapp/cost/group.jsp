@@ -22,6 +22,7 @@
         <table id="group_data_table">
             <thead>
             <tr>
+                <th field="ck" checkbox="true"></th>
                 <th data-options="field:'groupName',width:80,align:'center',editor:'text'">组名</th>
                 <th data-options="field:'userIds',width:80,align:'center',editor:'text',hidden:true"/>
                 <th data-options="field:'userNames',width:120,align:'center',
@@ -97,202 +98,218 @@
 </div>
 
 <script>
-    //初始化
-    $(function () {
-        $('#group_data_table').datagrid({
-            nowrap: false,
-            striped: true,
-            border: true,
-            collapsible: false,
-            loadMsg: '数据装载中......',
-            url: '<%=basePath%>/getGroupByFilter.do',
-            idField: 'accountId',
-            fit: true,
-            fitColumns: true,
-            singleSelect: true,
-            selectOnCheck: true,
-            checkOnSelect: true,
-            pagination: true,
-            toolbar: "#group_filter_bar"
-        });
-
-        //设置分页
-        $('#group_data_table').datagrid('getPager').pagination({
-            pageSize: 10,
-            pageList: [10, 20, 30, 40, 50],
-            beforePageText: '第',
-            afterPageText: '页    共 {pages} 页',
-            displayMsg: '当前显示 {from}-{to} 条记录   共 {total} 条记录'
-        });
-
-        //获取用户数据
-        $.ajax({
-            type: "POST",
-            contentType: "application/json",
-            url: "<%=basePath%>/getUserByFilter.do",
-            dataType: 'json',
-            success: function (resultData) {
-                $('#user_data_dialog_left').datagrid('loadData', resultData.rows);
-            }
-        });
+//初始化
+$(function () {
+    $('#group_data_table').datagrid({
+        nowrap: false,
+        striped: true,
+        border: true,
+        collapsible: false,
+        loadMsg: '数据装载中......',
+        url: '<%=basePath%>/getGroupByFilter.do',
+        idField: 'accountId',
+        fit: true,
+        fitColumns: true,
+        singleSelect: true,
+        selectOnCheck: true,
+        checkOnSelect: true,
+        pagination: true,
+        toolbar: "#group_filter_bar"
     });
 
-    var rowIndex = undefined;
-    var action = undefined;
-    //增加组
-    function addGroup() {
-        $("#group_data_table").datagrid('appendRow', {"groupStatus": "1", "groupStatusName": "可用"});
-        rowIndex = $("#group_data_table").datagrid('getRows').length - 1;
-        $("#group_data_table").datagrid('selectRow', rowIndex).datagrid('beginEdit', rowIndex);
-        action = 1;
-    }
-    // 修改组
-    function modifyGroup() {
-        $("#group_data_table").datagrid('selectRow', rowIndex).datagrid('beginEdit', rowIndex);
-        action = 2;
-    }
-    // 删除组
-    function deleteGroup() {
-        if (window.confirm("确定删除？")) {
-            var jsonData = JSON.stringify(sendData);
-            sendRequest(jsonData, url);
-            $("#group_data_table").datagrid('cancelEdit', rowIndex).datagrid('deleteRow', rowIndex);
-            action = 3;
-        }
-    }
-    //保存组
-    function saveGroup() {
-        if (action == undefined) {
-            return;
-        }
-        $('#group_data_table').datagrid('acceptChanges');
-        $('#group_data_table').datagrid("selectRow", rowIndex);
-        var rowData = $('#group_data_table').datagrid('getSelected')
-        rowData.userIds = getSelectUserIds();
-        var data = {"groupVO.groupId": rowData.groupId, "groupVO.groupName": rowData.groupName,
-            "groupVO.userIds": rowData.userIds, "groupVO.groupStatus": rowData.groupStatus, "groupVO.groupRemark": rowData.groupRemark};
-        console.info(data);
-        var url = "<%=basePath%>/addGroup.do";
-        if (action == 2) {
-            url = "<%=basePath%>/modifyGroup.do";
-        } else if (action == 3) {
-            url = "<%=basePath%>/deleteGroup.do";
-        }
-        $.ajax({
-            type: "POST",
-            data: data,
-            url: url,
-            success: function (data) {
-                $('#group_data_table').datagrid('load');
-            },
-            error: function (data) {
-                alert("系统错误，请联系管理员");
-            }
-        });
-    }
-    //弹出选择用户对话框
-    function openUserDialog(index, field, value) {
-        $('.combobox-f').combo('hidePanel');
-        $('.combobox-f').attr('id', 'select-user_combo');
-        $('#user_data_div').dialog('open');
-        if (action == 2) {
-            editGroup();
-        }
-    }
-    //组修改操作
-    function editGroup() {
-        var leftUserRowArr = new Array();
-        var rightUserRowArr = new Array();
-        var selectRow = $('#group_data_table').datagrid('getSelected');
-        var userIdArr = selectRow.userIds.split(",");
-        var allUserRows = $("#user_data_dialog_left").datagrid("getRows");
-        for (var i = 0; i < allUserRows.length; i++) {
-            var isContain = false;
-            for (var j = 0; j < userIdArr.length; j++) {
-                if (allUserRows[i].userId == userIdArr[j]) {
-                    isContain = true;
-                    rightUserRowArr.push(allUserRows[i]);
-                }
-            }
-            if (!isContain) {
-                leftUserRowArr.push(allUserRows[i]);
-            }
-        }
-        $('#user_data_dialog_left').datagrid('loadData', { total: 0, rows: [] });
-        for (var i = 0; i < leftUserRowArr.length; i++) {
-            var row = leftUserRowArr[i];
-            $("#user_data_dialog_left").datagrid("appendRow", {'userName': row.userName, 'userId': row.userId});
-        }
-        for (var i = 0; i < rightUserRowArr.length; i++) {
-            var row = rightUserRowArr[i];
-            $("#user_data_dialog_right").datagrid("appendRow", {'userName': row.userName, 'userId': row.userId});
-        }
-    }
+    //设置分页
+    $('#group_data_table').datagrid('getPager').pagination({
+        pageSize: 10,
+        pageList: [10, 20, 30, 40, 50],
+        beforePageText: '第',
+        afterPageText: '页    共 {pages} 页',
+        displayMsg: '当前显示 {from}-{to} 条记录   共 {total} 条记录'
+    });
 
-    //点击“>>”按钮操作
-    function appendToGroup() {
-        appendOrDelete("#user_data_dialog_left", "#user_data_dialog_right");
-    }
-    //点击“<<”按钮操作
-    function deleteFromGroup() {
-        appendOrDelete("#user_data_dialog_right", "#user_data_dialog_left");
-    }
-    //点击”确定“按钮操作
-    function groupConfirm() {
-        var allRows = $("#user_data_dialog_right").datagrid("getRows");
-        if (allRows.length <= 0) {
-            alert("请添加用户");
-            return;
+    //获取用户数据
+    $.ajax({
+        type: "POST",
+        contentType: "application/json",
+        url: "<%=basePath%>/getUserByFilter.do",
+        dataType: 'json',
+        success: function (resultData) {
+            $('#user_data_dialog_left').datagrid('loadData', resultData.rows);
         }
-        var selectUserNames = getSelectUserNames();
-        $('#select-user_combo').combo('setText', selectUserNames);
-        $('#user_data_div').dialog('close');
+    });
+});
+
+var action = undefined;
+//增加组
+function addGroup() {
+    $("#group_data_table").datagrid('appendRow', {"groupStatus": "1", "groupStatusName": "可用"});
+    var rowIndex = $("#group_data_table").datagrid('getRows').length - 1;
+    $("#group_data_table").datagrid('selectRow', rowIndex).datagrid('beginEdit', rowIndex);
+    action = 1;
+}
+// 修改组
+function modifyGroup() {
+    var rowDataArr = $("#group_data_table").datagrid("getChecked");
+    var rowIndex = $("#group_data_table").datagrid("getRowIndex", rowDataArr[0]);
+    $("#group_data_table").datagrid('selectRow', rowIndex).datagrid('beginEdit', rowIndex);
+    action = 2;
+}
+// 删除组
+function deleteGroup() {
+    var rowDataArr = $("#group_data_table").datagrid("getChecked");
+    if (rowDataArr == undefined) {
+        alert("请选择数据");
+        return;
     }
-    //点击“取消”按钮操作
-    function groupCancel() {
-        $('#user_data_div').dialog('close');
-        actionType = undefined;
+    var rowData = rowDataArr[0];
+    if (window.confirm("确定删除？")) {
+        var url = "<%=basePath%>/deleteGroup.do?groupVO.groupId=" + rowData.groupId;
+        $.ajax({
+                    type: "post",
+                    url: url,
+                    success: function (returnData) {
+                        $('#group_data_table').datagrid('reload').datagrid('uncheckAll');
+                    }
+                }
+        );
     }
-    //组操作
-    function appendOrDelete(from, to) {
-        var selectRows = $(from).datagrid("getSelections");
-        for (var i = 0; i < selectRows.length; i++) {
-            var row = selectRows[i];
-            $(to).datagrid("appendRow", {'userName': row.userName, 'userId': row.userId});
-            var rowIndex = $(from).datagrid("getRowIndex", row);
-            $(from).datagrid("deleteRow", rowIndex);
+}
+//保存组
+function saveGroup() {
+    if (action == undefined) {
+        return;
+    }
+    var rowDataArr = $('#group_data_table').datagrid('getChecked');
+    if (rowDataArr == undefined) {
+        alert("请选择数据");
+        return;
+    }
+    $('#group_data_table').datagrid('acceptChanges');
+    var rowIndex = $('#group_data_table').datagrid('getRowIndex', rowDataArr[0]);
+    $('#group_data_table').datagrid("selectRow", rowIndex);
+    var rowData = $('#group_data_table').datagrid('getSelected')
+
+    var userIds = getSelectUserIds();
+    var data = {"groupVO.groupId": rowData.groupId, "groupVO.groupName": rowData.groupName, "groupVO.userIds": userIds,
+        "groupVO.groupStatus": rowData.groupStatus, "groupVO.groupRemark": rowData.groupRemark};
+    var url = "<%=basePath%>/addGroup.do";
+    if (action == 2) {
+        url = "<%=basePath%>/modifyGroup.do";
+    }
+    $.ajax({
+        type: "POST",
+        data: data,
+        url: url,
+        success: function (data) {
+            $('#group_data_table').datagrid('reload').datagrid('uncheckAll');
+        },
+        error: function (data) {
+            alert("系统错误，请联系管理员");
+        }
+    });
+}
+//弹出选择用户对话框
+function openUserDialog(index, field, value) {
+    $('.combobox-f').combo('hidePanel');
+    $('.combobox-f').attr('id', 'select-user_combo');
+    $('#user_data_div').dialog('open');
+    if (action == 2) {
+        editGroup();
+    }
+}
+//组修改操作
+function editGroup() {
+    var leftUserRowArr = new Array();
+    var rightUserRowArr = new Array();
+    var selectRow = $('#group_data_table').datagrid('getSelected');
+    var userIdArr = selectRow.userIds.split(",");
+    var allUserRows = $("#user_data_dialog_left").datagrid("getRows");
+    for (var i = 0; i < allUserRows.length; i++) {
+        var isContain = false;
+        for (var j = 0; j < userIdArr.length; j++) {
+            if (allUserRows[i].userId == userIdArr[j]) {
+                isContain = true;
+                rightUserRowArr.push(allUserRows[i]);
+            }
+        }
+        if (!isContain) {
+            leftUserRowArr.push(allUserRows[i]);
         }
     }
-    //得到选择的用户ID
-    function getSelectUserIds() {
-        var userIds = undefined;
-        var allRows = $("#user_data_dialog_right").datagrid("getRows");
-        for (var index = 0; index < allRows.length; index++) {
-            var row = allRows[index];
-            if (userIds == undefined) {
-                userIds = row.userId;
-            }
-            else {
-                userIds += "," + row.userId;
-            }
-        }
-        return userIds;
+    $('#user_data_dialog_left').datagrid('loadData', { total: 0, rows: [] });
+    for (var i = 0; i < leftUserRowArr.length; i++) {
+        var row = leftUserRowArr[i];
+        $("#user_data_dialog_left").datagrid("appendRow", {'userName': row.userName, 'userId': row.userId});
     }
-    //得到选择的用户名称
-    function getSelectUserNames() {
-        var userNames = undefined;
-        var allRows = $("#user_data_dialog_right").datagrid("getRows");
-        for (var index = 0; index < allRows.length; index++) {
-            var row = allRows[index];
-            if (userNames == undefined) {
-                userNames = row.userName;
-            }
-            else {
-                userNames += "," + row.userName;
-            }
-        }
-        return userNames;
+    for (var i = 0; i < rightUserRowArr.length; i++) {
+        var row = rightUserRowArr[i];
+        $("#user_data_dialog_right").datagrid("appendRow", {'userName': row.userName, 'userId': row.userId});
     }
+}
+
+//点击“>>”按钮操作
+function appendToGroup() {
+    appendOrDelete("#user_data_dialog_left", "#user_data_dialog_right");
+}
+//点击“<<”按钮操作
+function deleteFromGroup() {
+    appendOrDelete("#user_data_dialog_right", "#user_data_dialog_left");
+}
+//点击”确定“按钮操作
+function groupConfirm() {
+    var allRows = $("#user_data_dialog_right").datagrid("getRows");
+    if (allRows.length <= 0) {
+        alert("请添加用户");
+        return;
+    }
+    var selectUserNames = getSelectUserNames();
+    $('#select-user_combo').combo('setText', selectUserNames);
+    $('#user_data_div').dialog('close');
+}
+//点击“取消”按钮操作
+function groupCancel() {
+    $('#user_data_div').dialog('close');
+    actionType = undefined;
+}
+//组操作
+function appendOrDelete(from, to) {
+    var selectRows = $(from).datagrid("getSelections");
+    for (var i = 0; i < selectRows.length; i++) {
+        var row = selectRows[i];
+        $(to).datagrid("appendRow", {'userName': row.userName, 'userId': row.userId});
+        var rowIndex = $(from).datagrid("getRowIndex", row);
+        $(from).datagrid("deleteRow", rowIndex);
+    }
+}
+//得到选择的用户ID
+function getSelectUserIds() {
+    var userIds = undefined;
+    var allRows = $("#user_data_dialog_right").datagrid("getRows");
+    for (var index = 0; index < allRows.length; index++) {
+        var row = allRows[index];
+        if (userIds == undefined) {
+            userIds = row.userId;
+        }
+        else {
+            userIds += "," + row.userId;
+        }
+    }
+    return userIds;
+}
+//得到选择的用户名称
+function getSelectUserNames() {
+    var userNames = undefined;
+    var allRows = $("#user_data_dialog_right").datagrid("getRows");
+    for (var index = 0; index < allRows.length; index++) {
+        var row = allRows[index];
+        if (userNames == undefined) {
+            userNames = row.userName;
+        }
+        else {
+            userNames += "," + row.userName;
+        }
+    }
+    return userNames;
+}
 </script>
 </body>
 </html>

@@ -1,5 +1,6 @@
 package org.fire.cost.dao;
 
+import org.fire.cost.domain.Group;
 import org.fire.cost.domain.GroupUser;
 import org.springframework.data.jpa.repository.JpaRepository;
 
@@ -12,10 +13,10 @@ import java.util.List;
  */
 public interface GroupUserDao extends JpaRepository<GroupUser, Long> {
     /**
-     * 根据组id查找
+     * 根据组查找
      *
-     * @param groupId
+     * @param group
      * @return
      */
-    List<GroupUser> findByGroupId(Long groupId);
+    List<GroupUser> findByGroup(Group group);
 }
