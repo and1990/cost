@@ -6,7 +6,7 @@ package org.fire.cost.enums;
  * @author liutengfei
  */
 public enum ClearTypeEnum {
-    All(1, "全部分摊"), Part(2, "部分分摊"), Single(3, "个人消费");
+    All(1, "平均分摊"), Part(2, "部分分摊"), Single(3, "个人消费");
 
     private int code;
     private String name;
