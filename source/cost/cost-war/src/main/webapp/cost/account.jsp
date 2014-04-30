@@ -175,7 +175,7 @@
     </div>
 
     <div style="text-align:center;padding:5px;margin-top: 20px">
-        <a href="#" class="easyui-linkbutton" onclick="confirm();">确定</a>
+        <a href="#" class="easyui-linkbutton" onclick="approveConfirm();">确定</a>
     </div>
 </div>
 
@@ -222,7 +222,6 @@ $(function () {
         valueField: 'code',
         textField: 'name',
         onLoadSuccess: function (data) {
-            console.info(data);
             $('.accountType').combobox('setValue', data[0].code).combobox('setText', data[0].name);
         }
     });
@@ -346,9 +345,8 @@ function deleteAccount() {
         alert("请选择一条数据");
         return;
     }
-
-    var rowData = rowDataArr[0];
     if (window.confirm("确定删除？")) {
+        var rowData = rowDataArr[0];
         var url = "<%=basePath%>/deleteAccount.do?accountVO.accountId=" + rowData.accountId;
         $.ajax({
                     type: "post",
@@ -371,13 +369,12 @@ function approveAccount() {
     $("#approve_dialog").dialog("open");
 }
 //确认审批
-function confirm() {
+function approveConfirm() {
     var accountIds = getCheckedAccountIds();
     var status = $('#approve_dialog_select').combobox('getValue');
-    var url = "<%=basePath%>/approveAccount.do?accountIds=" + accountIds + "&accountVO.accountStatus=" + status;
     $.ajax({
                 type: "post",
-                url: url,
+                url: "<%=basePath%>/approveAccount.do?accountIds=" + accountIds + "&accountVO.accountStatus=" + status,
                 success: function (returnData) {
                     $("#approve_dialog").dialog("close");
                     $('#account_data_table').datagrid('reload').datagrid('uncheckAll');

@@ -160,12 +160,12 @@ function deleteGroup() {
         alert("请选择数据");
         return;
     }
-    var rowData = rowDataArr[0];
     if (window.confirm("确定删除？")) {
-        var url = "<%=basePath%>/deleteGroup.do?groupVO.groupId=" + rowData.groupId;
+        var rowData = rowDataArr[0];
+        console.info(url);
         $.ajax({
                     type: "post",
-                    url: url,
+                    url: "<%=basePath%>/deleteGroup.do?groupVO.groupId=" + rowData.groupId,
                     success: function (returnData) {
                         $('#group_data_table').datagrid('reload').datagrid('uncheckAll');
                     }
