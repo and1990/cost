@@ -360,7 +360,6 @@ function approveAccount() {
 //确认审批
 function confirm() {
     var accountIds = getCheckedAccountIds();
-    //var status = $("#approve_dialog_select").val();
     var status = $('#approve_dialog_select').combobox('getValue');
     var url = "<%=basePath%>/approveAccount.do?accountIds=" + accountIds + "&accountVO.accountStatus=" + status;
     $.ajax({
