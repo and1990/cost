@@ -65,19 +65,12 @@
             <input class="text" name="accountVO.userName" style="width:100px;"/>
 
             <span>消费类型：</span>
-            <input id="accountType" class="accountType easyui-combobox" name="accountVO.accountType"
+            <input class="accountType easyui-combobox" name="accountVO.accountType"
                    style="width:100px;" editable="false"/>
 
             <span>状态：</span>
             <input class="accountStatus easyui-combobox" name="accountVO.accountStatus"
                    style="width:100px;" editable="false"/>
-            <%-- <select class="easyui-combobox" name="accountVO.accountStatus" style="width:100px;" editable="false">
-                 <option value="0">全部</option>
-                 <option value="1">未审批</option>
-                 <option value="2">已审批</option>
-                 <option value="3">审批未通过</option>
-                 <option value="4">已结算</option>
-             </select>--%>
 
             消费时间从: <input class="Wdate" id="accountStartTime" name="accountVO.accountStartTime" style="width: 100px"
                           onfocus="WdatePicker({dateFmt:'yyyy-MM-dd',maxDate:'#F{$dp.$D(\'accountEndTime\');}'})">
@@ -111,23 +104,23 @@
                     <tr>
                         <td>消费类型:</td>
                         <td>
-                            <select class="accountType easyui-combobox" name="accountVO.accountType"
-                                    style="width:150px;">
+                            <select class="accountType easyui-combobox" id="accountType"
+                                    name="accountVO.accountType" style="width:150px;">
                             </select>
                         </td>
                     </tr>
                     <tr>
                         <td>结算方式:</td>
                         <td>
-                            <select class="clearType easyui-combobox" name="accountVO.clearType"
-                                    style="width:150px;">
+                            <select class="clearType easyui-combobox" id="clearType"
+                                    name="accountVO.clearType" style="width:150px;">
                             </select>
                         </td>
                     </tr>
                     <tr>
                         <td>消费组:</td>
                         <td>
-                            <select class="groupName easyui-combobox" name="accountVO.groupName"
+                            <select class="groupId easyui-combobox" name="accountVO.groupId"
                                     style="width:150px;">
                             </select>
                         </td>
@@ -247,15 +240,15 @@ $(function () {
         onSelect: function (data) {
             console.info(data);
             if (data.code == 3) {
-                $(".groupName").combobox("clear").combo({disabled: true});
+                $(".groupId").combobox("clear").combo({disabled: true});
             } else {
-                $(".groupName").combo({disabled: false});
+                $(".groupId").combo({disabled: false});
             }
         }
     });
 
     //加载组信息
-    $('.groupName').combobox({
+    $('.groupId').combobox({
         url: '<%=basePath%>/getAllGroupData.do',
         valueField: 'groupId',
         textField: 'groupName',
@@ -266,7 +259,7 @@ $(function () {
             }
             for (var i = 0; i < rows.length; i++) {
                 var groupVO = rows[i];
-                $('.groupName').combobox('setValue', groupVO.groupId).combobox('setText', groupVO.groupName);
+                $('.groupId').combobox('setValue', groupVO.groupId).combobox('setText', groupVO.groupName);
             }
         }
     });
@@ -328,6 +321,9 @@ function modifyAccount() {
     $("#accountId").val(rowData.accountId);
     $("#accountMoney").numberbox({value: rowData.accountMoney});
     $('#accountType').combobox('setValue', rowData.accountType);
+    $('#clearType').combobox('setValue', rowData.clearType);
+    console.info(rowData.groupId);
+    $('#groupId').combobox('setValue', rowData.groupId);
     $("#accountTime").val(rowData.accountTime);
     $("#accountRemark").val(rowData.accountRemark);
     $("#accountId").val(rowData.accountId);

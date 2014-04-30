@@ -50,7 +50,7 @@
 </div>
 
 <!--点击增加、修改按钮时，显示界面-->
-<div id="user_data_div" class="easyui-dialog" title="选择用户" style="width:600px;height:400px"
+<div id="user-data-div" class="easyui-dialog" title="选择用户" style="width:600px;height:400px"
      data-options="closed: true,modal:true">
     <div id="user_data_dialog" class="easyui-layout" data-options="fit:true">
         <div id="user_data_dialog_north" style="height: 30px" data-options="region:'north',border:0"></div>
@@ -162,7 +162,6 @@ function deleteGroup() {
     }
     if (window.confirm("确定删除？")) {
         var rowData = rowDataArr[0];
-        console.info(url);
         $.ajax({
                     type: "post",
                     url: "<%=basePath%>/deleteGroup.do?groupVO.groupId=" + rowData.groupId,
@@ -212,10 +211,10 @@ function saveGroup() {
     });
 }
 //弹出选择用户对话框
-function openUserDialog(index, field, value) {
-    $('.combobox-f').combo('hidePanel');
-    $('.combobox-f').attr('id', 'select-user_combo');
-    $('#user_data_div').dialog('open');
+function openUserDialog() {
+    $(this).combo('hidePanel');
+    $(this).attr('id', 'select-user-combo');
+    $('#user-data-div').dialog('open');
     if (action == 2) {
         editGroup();
     }
@@ -266,13 +265,12 @@ function groupConfirm() {
         return;
     }
     var selectUserNames = getSelectUserNames();
-    $('#select-user_combo').combo('setText', selectUserNames);
-    $('#user_data_div').dialog('close');
+    $('#select-user-combo').combo('setText', selectUserNames);
+    $('#user-data-div').dialog('close');
 }
 //点击“取消”按钮操作
 function groupCancel() {
-    $('#user_data_div').dialog('close');
-    actionType = undefined;
+    $('#user-data-div').dialog('close');
 }
 //组操作
 function appendOrDelete(from, to) {
