@@ -189,6 +189,10 @@ function saveGroup() {
     var rowData = $('#group_data_table').datagrid('getSelected')
 
     var userIds = getSelectUserIds();
+    if (userIds == undefined) {
+        var rowDataArr = $("#group_data_table").datagrid("getChecked");
+        userIds = rowDataArr[0].userIds;
+    }
     var data = {"groupVO.groupId": rowData.groupId, "groupVO.groupName": rowData.groupName, "groupVO.userIds": userIds,
         "groupVO.groupStatus": rowData.groupStatus, "groupVO.groupRemark": rowData.groupRemark};
     var url = "<%=basePath%>/addGroup.do";
