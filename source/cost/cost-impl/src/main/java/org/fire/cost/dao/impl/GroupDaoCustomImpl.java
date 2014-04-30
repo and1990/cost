@@ -29,6 +29,32 @@ public class GroupDaoCustomImpl extends BaseJpaDaoSupport<Group, Long> implement
     }
 
     /**
+     * 获取用户所在组（个人组）
+     *
+     * @param userId
+     * @return
+     */
+    @Override
+    public Group getGroupByUser(Long userId) {
+        String sql = "select * from cost_group where group_id in";
+        sql += "(select group_id from cost_group_user where group_id in ";
+        sql += "(select group_id from cost_group_user ";
+        if (userId != null || userId != 0) {
+            sql += "where user_id=:user_id) ";
+        }
+        sql += "group by group_id having count(group_id)=1)";
+        Query query = entityManager.createNativeQuery(sql, Group.class);
+        if (userId != null || userId != 0) {
+            query.setParameter("user_id", userId);
+        }
+        List<Group> resultList = query.getResultList();
+        if (resultList != null && resultList.size() != 0) {
+            return resultList.get(0);
+        }
+        return null;
+    }
+
+    /**
      * 根据过滤条件查询组信息
      *
      * @return

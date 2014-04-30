@@ -106,6 +106,21 @@ public class GroupAction extends BaseAction<GroupVO> {
         return SUCCESS;
     }
 
+    /**
+     * 获取当前用户所在组（个人组）
+     *
+     * @return
+     */
+    @Action(value = "getGroupByUser", results = {@Result(type = "json", params = {"root", "groupVO", "contentType", "text/html"})})
+    public String getGroupByUser() {
+        try {
+            groupVO = groupService.getGroupByUser();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return SUCCESS;
+    }
+
     public GroupVO getGroupVO() {
         return groupVO;
     }

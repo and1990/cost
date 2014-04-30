@@ -22,4 +22,6 @@ public interface GroupService {
     int getGroupTotal();
 
     List<GroupVO> getAllGroupData();
+
+    GroupVO getGroupByUser();
 }

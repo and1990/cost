@@ -32,4 +32,12 @@ public interface GroupDaoCustom {
      * @return
      */
     List<Group> getAllGroupData();
+
+    /**
+     * 根据用户获取所在组（个人组）
+     *
+     * @param userId
+     * @return
+     */
+    Group getGroupByUser(Long userId);
 }

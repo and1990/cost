@@ -43,6 +43,7 @@ public class GroupServiceImpl implements GroupService {
      * @return
      */
     @Override
+    @Transactional(value = "transactionManager")
     public List<GroupVO> getAllGroupData() {
         List<GroupVO> groupVOList = new ArrayList<GroupVO>();
         try {
@@ -59,6 +60,21 @@ public class GroupServiceImpl implements GroupService {
             throw new RuntimeException(ex);
         }
         return groupVOList;
+    }
+
+    /**
+     * 得到当前用户所在的组（个人组）
+     *
+     * @return
+     */
+    @Override
+    @Transactional(value = "transactionManager")
+    public GroupVO getGroupByUser() {
+        //Long userId = AuthenticationUtil.getLoginUserId();
+        Long userId = 1L;
+        Group group = groupDao.getGroupByUser(userId);
+        GroupVO groupVO = makeGroup2VO(group);
+        return groupVO;
     }
 
     /**

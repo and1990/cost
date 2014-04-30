@@ -120,8 +120,8 @@
                     <tr>
                         <td>消费组:</td>
                         <td>
-                            <select class="groupId easyui-combobox" name="accountVO.groupId"
-                                    style="width:150px;">
+                            <select class="groupId easyui-combobox" id="groupId"
+                                    name="accountVO.groupId" style="width:150px;">
                             </select>
                         </td>
                     </tr>
@@ -238,11 +238,21 @@ $(function () {
             $('.clearType').combobox('setValue', data[0].code).combobox('setText', data[0].name);
         },
         onSelect: function (data) {
-            console.info(data);
-            if (data.code == 3) {
-                $(".groupId").combobox("clear").combo({disabled: true});
+            //$(".groupId").combo({disabled: false});
+        },
+        onChange: function (newValue, oldValue) {
+            if (newValue == 3) {
+                $.ajax({
+                    type: "POST",
+                    url: "<%=basePath%>/getGroupByUser.do",
+                    success: function (data) {
+                        var groupVo = JSON.parse(data);
+                        $('#groupId').combobox('setValue', groupVo.groupId);
+                        $(".groupId").combo({disabled: true});
+                    }
+                });
             } else {
-                $(".groupId").combo({disabled: false});
+                $(".groupId").combo("clear").combo({disabled: false});
             }
         }
     });
@@ -322,7 +332,6 @@ function modifyAccount() {
     $("#accountMoney").numberbox({value: rowData.accountMoney});
     $('#accountType').combobox('setValue', rowData.accountType);
     $('#clearType').combobox('setValue', rowData.clearType);
-    console.info(rowData.groupId);
     $('#groupId').combobox('setValue', rowData.groupId);
     $("#accountTime").val(rowData.accountTime);
     $("#accountRemark").val(rowData.accountRemark);
