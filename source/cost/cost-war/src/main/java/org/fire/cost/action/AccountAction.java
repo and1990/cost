@@ -42,16 +42,20 @@ public class AccountAction extends BaseAction<AccountVO> {
     private List<AccountVO> accountVOList;
 
     /**
-     * key：消费类型
-     * value：用户消费金额
+     * key：账单类型
+     * value：用户账单金额
      */
     private Map<String, List<AccountVO>> accountVoListMap;
 
     /**
-     * 消费类型VO
+     * 账单类型VO
+     */
+    private List<TypeVo> accountStatusList;
+
+    /**
+     * 账单状态VO
      */
     private List<TypeVo> accountTypeList;
-
     /**
      * 结算方式VO
      */
@@ -162,7 +166,7 @@ public class AccountAction extends BaseAction<AccountVO> {
     @Action(value = "approveAccount", results = {@Result(type = "json", params = {"root", "accountTypeList", "contentType", "text/html"})})
     public String approveAccount() {
         try {
-            accountService.approveAccount(accountIds,accountVO.getAccountStatus());
+            accountService.approveAccount(accountIds, accountVO.getAccountStatus());
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -200,6 +204,21 @@ public class AccountAction extends BaseAction<AccountVO> {
     }
 
     /**
+     * 得到账单状态
+     *
+     * @return
+     */
+    @Action(value = "getAccountStatus", results = {@Result(type = "json", params = {"root", "accountStatusList", "contentType", "text/html"})})
+    public String getAccountStatus() {
+        try {
+            accountStatusList = accountService.getAccountStatus();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return SUCCESS;
+    }
+
+    /**
      * 得到账单类型
      *
      * @return
@@ -215,7 +234,7 @@ public class AccountAction extends BaseAction<AccountVO> {
     }
 
     /**
-     * 查找消费类型对应的账单数据
+     * 查找账单类型对应的账单数据
      *
      * @return
      */
@@ -249,7 +268,7 @@ public class AccountAction extends BaseAction<AccountVO> {
     }
 
     /**
-     * 获取用户每种消费类型消费金额
+     * 获取用户每种账单类型账单金额
      *
      * @return
      */
@@ -296,6 +315,14 @@ public class AccountAction extends BaseAction<AccountVO> {
 
     public List<TypeVo> getClearTypeList() {
         return clearTypeList;
+    }
+
+    public List<TypeVo> getAccountStatusList() {
+        return accountStatusList;
+    }
+
+    public void setAccountStatusList(List<TypeVo> accountStatusList) {
+        this.accountStatusList = accountStatusList;
     }
 
     public void setClearTypeList(List<TypeVo> clearTypeList) {

@@ -69,13 +69,15 @@
                    style="width:100px;" editable="false"/>
 
             <span>状态：</span>
-            <select class="easyui-combobox" name="accountVO.accountStatus" style="width:100px;" editable="false">
-                <option value="0">全部</option>
-                <option value="1">未审批</option>
-                <option value="2">已审批</option>
-                <option value="3">审批未通过</option>
-                <option value="4">已结算</option>
-            </select>
+            <input class="accountStatus easyui-combobox" name="accountVO.accountStatus"
+                   style="width:100px;" editable="false"/>
+            <%-- <select class="easyui-combobox" name="accountVO.accountStatus" style="width:100px;" editable="false">
+                 <option value="0">全部</option>
+                 <option value="1">未审批</option>
+                 <option value="2">已审批</option>
+                 <option value="3">审批未通过</option>
+                 <option value="4">已结算</option>
+             </select>--%>
 
             消费时间从: <input class="Wdate" id="accountStartTime" name="accountVO.accountStartTime" style="width: 100px"
                           onfocus="WdatePicker({dateFmt:'yyyy-MM-dd',maxDate:'#F{$dp.$D(\'accountEndTime\');}'})">
@@ -220,7 +222,18 @@ $(function () {
         valueField: 'code',
         textField: 'name',
         onLoadSuccess: function (data) {
+            console.info(data);
             $('.accountType').combobox('setValue', data[0].code).combobox('setText', data[0].name);
+        }
+    });
+
+    //加载账单状态
+    $('.accountStatus').combobox({
+        url: '<%=basePath%>/getAccountStatus.do',
+        valueField: 'code',
+        textField: 'name',
+        onLoadSuccess: function (data) {
+            $('.accountStatus').combobox('setValue', data[0].code).combobox('setText', data[0].name);
         }
     });
 

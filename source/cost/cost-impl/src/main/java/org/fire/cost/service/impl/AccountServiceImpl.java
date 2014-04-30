@@ -232,11 +232,36 @@ public class AccountServiceImpl implements AccountService {
      * @return
      */
     @Override
-    @Transactional(value = "transactionManager", rollbackFor = RollbackException.class)
     public List<TypeVo> getAccountType() {
         AccountTypeEnum[] typeEnums = AccountTypeEnum.values();
         List<TypeVo> typeList = new ArrayList<TypeVo>();
+        TypeVo typeVo = new TypeVo();
+        typeVo.setCode(0);
+        typeVo.setName("全部");
+        typeList.add(typeVo);
         for (AccountTypeEnum typeEnum : typeEnums) {
+            TypeVo vo = new TypeVo();
+            vo.setCode(typeEnum.getCode());
+            vo.setName(typeEnum.getName());
+            typeList.add(vo);
+        }
+        return typeList;
+    }
+
+    /**
+     * 得到账单类型
+     *
+     * @return
+     */
+    @Override
+    public List<TypeVo> getAccountStatus() {
+        AccountStatusEnum[] typeEnums = AccountStatusEnum.values();
+        List<TypeVo> typeList = new ArrayList<TypeVo>();
+        TypeVo typeVo = new TypeVo();
+        typeVo.setCode(0);
+        typeVo.setName("全部");
+        typeList.add(typeVo);
+        for (AccountStatusEnum typeEnum : typeEnums) {
             TypeVo vo = new TypeVo();
             vo.setCode(typeEnum.getCode());
             vo.setName(typeEnum.getName());

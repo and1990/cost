@@ -121,4 +121,6 @@ public interface AccountService {
      * @return
      */
     Map<String, List<AccountVO>> getAccountGroupByTypeAndUser(String startTime, String endTime);
+
+    List<TypeVo> getAccountStatus();
 }
