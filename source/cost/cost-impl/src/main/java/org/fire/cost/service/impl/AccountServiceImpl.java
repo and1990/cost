@@ -168,13 +168,28 @@ public class AccountServiceImpl implements AccountService {
     /**
      * 审批账单
      *
+     * @param accountIds
+     * @param accountStatus
      * @return
      */
     @Override
     @Transactional(value = "transactionManager", rollbackFor = RollbackException.class)
-    public void approveAccount() {
+    public void approveAccount(String accountIds, Integer accountStatus) {
         try {
-
+            if (accountIds == null || accountIds.trim().length() == 0) {
+                return;
+            }
+            List<Account> accountList = new ArrayList<Account>();
+            String[] accountIdArr = accountIds.split(",");
+            for (String accountId : accountIdArr) {
+                Account account = accountDao.findOne(Long.valueOf(accountId));
+                Integer status = account.getAccountStatus();
+                if (account != null && status == AccountStatusEnum.Not_Approve.getCode()) {
+                    account.setAccountStatus(accountStatus);
+                    accountList.add(account);
+                }
+            }
+            accountDao.save(accountList);
         } catch (Exception e) {
             e.printStackTrace();
             throw new RollbackException();
@@ -184,13 +199,27 @@ public class AccountServiceImpl implements AccountService {
     /**
      * 结算账单
      *
+     * @param accountIds
      * @return
      */
     @Override
     @Transactional(value = "transactionManager", rollbackFor = RollbackException.class)
-    public void clearAccount() {
+    public void clearAccount(String accountIds) {
         try {
-
+            if (accountIds == null || accountIds.trim().length() == 0) {
+                return;
+            }
+            List<Account> accountList = new ArrayList<Account>();
+            String[] accountIdArr = accountIds.split(",");
+            for (String accountId : accountIdArr) {
+                Account account = accountDao.findOne(Long.valueOf(accountId));
+                Integer status = account.getAccountStatus();
+                if (account != null && status == AccountStatusEnum.Approve.getCode()) {
+                    account.setAccountStatus(AccountStatusEnum.Clear.getCode());
+                    accountList.add(account);
+                }
+            }
+            accountDao.save(accountList);
         } catch (Exception e) {
             e.printStackTrace();
             throw new RollbackException();

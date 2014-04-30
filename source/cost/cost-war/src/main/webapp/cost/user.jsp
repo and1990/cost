@@ -191,7 +191,6 @@
             checkOnSelect: true,
             pagination: true,
             toolbar: '#user_tool_bar',
-
             onBeforeLoad: function () {
                 $("#user_data_table").datagrid("clearSelections");
             },

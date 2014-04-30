@@ -6,7 +6,7 @@ package org.fire.cost.enums;
  * @author liutengfei
  */
 public enum AccountStatusEnum {
-    Not_Approve(1, "未审批"), Approve(2, "审批"), Clear(3, "结算"), Refuse(4, "拒绝");
+    Not_Approve(1, "未审批"), Approve(2, "已审批"), Clear(3, "结算"), Refuse(4, "拒绝");
 
     private int code;
     private String name;

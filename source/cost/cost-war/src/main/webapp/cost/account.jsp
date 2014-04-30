@@ -161,6 +161,22 @@
     </div>
 </div>
 
+//审批对话框
+<div id="approve_dialog" title="审批" class="easyui-dialog"
+     style="width:300px;height:200px;text-align:center"
+     data-options="closed:true,modal: true">
+    <div style="margin-top: 50px">
+        <select id="approve_dialog_select" class="easyui-combobox" style="width:150px;" editable="false">
+            <option value="2">同意</option>
+            <option value="4">拒绝</option>
+        </select>
+    </div>
+
+    <div style="text-align:center;padding:5px;margin-top: 20px">
+        <a href="#" class="easyui-linkbutton" onclick="confirm();">确定</a>
+    </div>
+</div>
+
 //文件上传对话框
 <div id="fileUploadDialog">
     <input type="file" name="file_upload" id="file_upload"/>
@@ -339,12 +355,20 @@ function approveAccount() {
         alert("请选择数据");
         return;
     }
-    var url = "<%=basePath%>/approveAccount.do?accountVO.accountId=" + rowData.accountId;
+    $("#approve_dialog").dialog("open");
+}
+//确认审批
+function confirm() {
+    var accountIds = getCheckedAccountIds();
+    //var status = $("#approve_dialog_select").val();
+    var status = $('#approve_dialog_select').combobox('getValue');
+    var url = "<%=basePath%>/approveAccount.do?accountIds=" + accountIds + "&accountVO.accountStatus=" + status;
     $.ajax({
                 type: "post",
                 url: url,
                 success: function (returnData) {
-                    $('#account_data_table').datagrid('reload');
+                    $("#approve_dialog").dialog("close");
+                    $('#account_data_table').datagrid('reload').datagrid('uncheckAll');
                 }
             }
     );
@@ -352,21 +376,23 @@ function approveAccount() {
 
 //结算
 function clearAccount() {
-    var rowData = $("#account_data_table").datagrid("getSelected");
+    var rowData = $("#account_data_table").datagrid("getChecked");
     if (rowData == undefined) {
         alert("请选择数据");
         return;
     }
-    var url = "<%=basePath%>/clearAccount.do?accountVO.accountId=" + rowData.accountId;
+    var accountIds = getCheckedAccountIds();
+    var url = "<%=basePath%>/clearAccount.do?accountIds=" + accountIds;
     $.ajax({
                 type: "post",
                 url: url,
                 success: function (returnData) {
-                    $('#account_data_table').datagrid('reload');
+                    $('#account_data_table').datagrid('reload').datagrid('uncheckAll');
                 }
             }
     );
 }
+
 
 //导出Excel
 function exportExcel() {
@@ -385,7 +411,6 @@ function queryThisMonth() {
 
 //提交表单
 function submitForm() {
-    //打开进度条
     $.messager.progress();
     var action = $("#action").val();
     var url = $("#url").val();
@@ -408,6 +433,17 @@ function submitForm() {
                 }
             }
     );
+}
+
+//获取选择的用户ID
+function getCheckedAccountIds() {
+    var accountIds = undefined;
+    var rowData = $("#account_data_table").datagrid("getChecked");
+    for (var i = 0; i < rowData.length; i++) {
+        var accountId = rowData[i].accountId;
+        accountIds = accountIds == undefined ? accountId : accountIds + "," + accountId;
+    }
+    return accountIds;
 }
 </script>
 </body>

@@ -69,15 +69,18 @@ public interface AccountService {
      * 结算账单
      *
      * @return
+     * @param accountIds
+     * @param accountStatus
      */
-    void approveAccount();
+    void approveAccount(String accountIds, Integer accountStatus);
 
     /**
      * 得到账单类型
      *
      * @return
+     * @param accountIds
      */
-    void clearAccount();
+    void clearAccount(String accountIds);
 
     /**
      * 得到账单类型

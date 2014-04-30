@@ -57,6 +57,11 @@ public class AccountAction extends BaseAction<AccountVO> {
      */
     private List<TypeVo> clearTypeList;
 
+    /**
+     * 账单ID
+     */
+    private String accountIds;
+
 
     /**
      * 根据过滤条件查询账单信息
@@ -157,7 +162,7 @@ public class AccountAction extends BaseAction<AccountVO> {
     @Action(value = "approveAccount", results = {@Result(type = "json", params = {"root", "accountTypeList", "contentType", "text/html"})})
     public String approveAccount() {
         try {
-            accountService.approveAccount();
+            accountService.approveAccount(accountIds,accountVO.getAccountStatus());
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -172,7 +177,7 @@ public class AccountAction extends BaseAction<AccountVO> {
     @Action(value = "clearAccount", results = {@Result(type = "json", params = {"root", "accountTypeList", "contentType", "text/html"})})
     public String clearAccount() {
         try {
-            accountService.clearAccount();
+            accountService.clearAccount(accountIds);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -295,5 +300,13 @@ public class AccountAction extends BaseAction<AccountVO> {
 
     public void setClearTypeList(List<TypeVo> clearTypeList) {
         this.clearTypeList = clearTypeList;
+    }
+
+    public String getAccountIds() {
+        return accountIds;
+    }
+
+    public void setAccountIds(String accountIds) {
+        this.accountIds = accountIds;
     }
 }
