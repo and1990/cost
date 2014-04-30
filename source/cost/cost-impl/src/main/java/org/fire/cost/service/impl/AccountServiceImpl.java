@@ -7,6 +7,7 @@ import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.fire.cost.dao.AccountDao;
 import org.fire.cost.dao.UserDao;
 import org.fire.cost.domain.Account;
+import org.fire.cost.domain.Group;
 import org.fire.cost.domain.User;
 import org.fire.cost.enums.AccountStatusEnum;
 import org.fire.cost.enums.AccountTypeEnum;
@@ -56,7 +57,11 @@ public class AccountServiceImpl implements AccountService {
         try {
             List<Account> accountList = accountDao.getAccountByFilter(vo, pageData);
             for (Account account : accountList) {
-                voList.add(makeAccount2VO(account));
+                AccountVO accountVO = makeAccount2VO(account);
+                Group group = account.getGroup();
+                accountVO.setGroupId(group.getGroupId());
+                accountVO.setGroupName(group.getGroupName());
+                voList.add(accountVO);
             }
             return voList;
         } catch (Exception e) {
@@ -203,6 +208,25 @@ public class AccountServiceImpl implements AccountService {
         AccountTypeEnum[] typeEnums = AccountTypeEnum.values();
         List<TypeVo> typeList = new ArrayList<TypeVo>();
         for (AccountTypeEnum typeEnum : typeEnums) {
+            TypeVo vo = new TypeVo();
+            vo.setCode(typeEnum.getCode());
+            vo.setName(typeEnum.getName());
+            typeList.add(vo);
+        }
+        return typeList;
+    }
+
+    /**
+     * 获取就算方式
+     *
+     * @return
+     */
+    @Override
+    @Transactional(value = "transactionManager", rollbackFor = RollbackException.class)
+    public List<TypeVo> getClearType() {
+        ClearTypeEnum[] typeEnums = ClearTypeEnum.values();
+        List<TypeVo> typeList = new ArrayList<TypeVo>();
+        for (ClearTypeEnum typeEnum : typeEnums) {
             TypeVo vo = new TypeVo();
             vo.setCode(typeEnum.getCode());
             vo.setName(typeEnum.getName());

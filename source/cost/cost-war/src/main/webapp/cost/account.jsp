@@ -1,12 +1,21 @@
-<%@page language="java" contentType="text/html; charset=utf8"
-        pageEncoding="utf8" %>
+<%@page language="java" contentType="text/html; charset=utf8" pageEncoding="utf8" %>
 <%
     String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + request.getContextPath();
 %>
-
-<link rel="stylesheet" type="text/css" href="<%=basePath%>/third/uploadify/uploadify.css">
-<script type="text/javascript" src="<%=basePath%>/third/uploadify/jquery.uploadify.min.js"></script>
-
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf8">
+    <link rel="stylesheet" type="text/css" href="<%=basePath %>/third/easy-ui/themes/default/easyui.css">
+    <link rel="stylesheet" type="text/css" href="<%=basePath %>/third/easy-ui/themes/icon.css">
+    <%--<link rel="stylesheet" type="text/css" href="<%=basePath%>/third/uploadify/uploadify.css">--%>
+    <%--<script type="text/javascript" src="<%=basePath%>/third/uploadify/jquery.uploadify.min.js"></script>--%>
+    <script type="text/javascript" src="<%=basePath%>/third/easy-ui/jquery.min.js"></script>
+    <script type="text/javascript" src="<%=basePath%>/third/easy-ui/jquery.easyui.min.js"></script>
+    <script type="text/javascript" src="<%=basePath%>/third/easy-ui/locale/easyui-lang-zh_CN.js"></script>
+    <script type="text/javascript" src="<%=basePath%>/third/My97DatePicker/WdatePicker.js"></script>
+</head>
+<body>
 <div id="account_data_layout" class="easyui-layout" data-options="fit:true">
     <div id="account_data_north"
          data-options="region:'north',border:0,fit:true">
@@ -17,9 +26,11 @@
                 <th data-options="field:'userName',width:80,align:'center'">用户名</th>
                 <th data-options="field:'accountMoney',width:80,align:'center' ">金额</th>
                 <th data-options="field:'accountTypeName',width:60,align:'center'">消费类型</th>
+                <th data-options="field:'clearTypeName',width:60,align:'center'">结算方式</th>
+                <th data-options="field:'groupName',width:60,align:'center'">消费组</th>
                 <th data-options="field:'accountTime',width:80,align:'center'">消费时间</th>
                 <th data-options="field:'accountStatusName',width:60,align:'center'">状态</th>
-                <th data-options="field:'accountFile',width:80,align:'center'">附件</th>
+                <%--<th data-options="field:'accountFile',width:80,align:'center'">附件</th>--%>
                 <th data-options="field:'createTime',width:120,align:'center'">创建时间</th>
                 <th data-options="field:'accountRemark',width:120,align:'center'">备注</th>
             </tr>
@@ -78,7 +89,7 @@
 
 <!-- 添加、修改账单对话框 -->
 <div id="account_dialog" class="easyui-dialog"
-     style="width:500px;height:300px;padding:2px;border:1px" data-options="closed:true,modal: true">
+     style="width:500px;height:400px;padding:2px;border:1px" data-options="closed:true,modal: true">
     <div class="easyui-panel" style="width:480px;text-align:center">
         <div style="padding:10px 10px 10px 100px">
             <form id="account_form" method="post">
@@ -104,6 +115,22 @@
                         </td>
                     </tr>
                     <tr>
+                        <td>结算方式:</td>
+                        <td>
+                            <select class="clearType easyui-combobox" name="accountVO.clearType"
+                                    style="width:150px;">
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>消费组:</td>
+                        <td>
+                            <select class="groupName easyui-combobox" name="accountVO.groupName"
+                                    style="width:150px;">
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
                         <td>消费时间:</td>
                         <td>
                             <input class="Wdate easyui-validatebox" id="accountTime" name="accountVO.accountTime"
@@ -116,12 +143,12 @@
                             <input class="text" id="accountRemark" name="accountVO.accountRemark"/>
                         </td>
                     </tr>
-                    <tr>
+                    <%--<tr>
                         <td>上传附件:</td>
                         <td>
                             <input class="text" id="accountFile" name="accountVO.accountFile"/>
                         </td>
-                    </tr>
+                    </tr>--%>
                 </table>
             </form>
             <div style="text-align:center;padding:5px">
@@ -173,11 +200,46 @@ $(function () {
 
     //加载账单类型
     $('.accountType').combobox({
-        url: '<%=request.getContextPath()%>/getAccountType.do',
+        url: '<%=basePath%>/getAccountType.do',
         valueField: 'code',
         textField: 'name',
         onLoadSuccess: function (data) {
             $('.accountType').combobox('setValue', data[0].code).combobox('setText', data[0].name);
+        }
+    });
+
+    //加载结算方式
+    $('.clearType').combobox({
+        url: '<%=basePath%>/getClearType.do',
+        valueField: 'code',
+        textField: 'name',
+        onLoadSuccess: function (data) {
+            $('.clearType').combobox('setValue', data[0].code).combobox('setText', data[0].name);
+        },
+        onSelect: function (data) {
+            console.info(data);
+            if (data.code == 3) {
+                $(".groupName").combobox("clear").combo({disabled: true});
+            } else {
+                $(".groupName").combo({disabled: false});
+            }
+        }
+    });
+
+    //加载组信息
+    $('.groupName').combobox({
+        url: '<%=basePath%>/getAllGroupData.do',
+        valueField: 'groupId',
+        textField: 'groupName',
+        onLoadSuccess: function (data) {
+            var rows = JSON.parse(data);
+            if (rows == undefined || rows.length == 0) {
+                return;
+            }
+            for (var i = 0; i < rows.length; i++) {
+                var groupVO = rows[i];
+                $('.groupName').combobox('setValue', groupVO.groupId).combobox('setText', groupVO.groupName);
+            }
         }
     });
 });
@@ -348,3 +410,5 @@ function submitForm() {
     );
 }
 </script>
+</body>
+</html>

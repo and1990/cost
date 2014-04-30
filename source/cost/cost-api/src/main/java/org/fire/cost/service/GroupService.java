@@ -11,7 +11,7 @@ import java.util.List;
  * @author liutengfei
  */
 public interface GroupService {
-    List<GroupVO> getGroupByFilter(GroupVO vo, PageData<GroupVO> pageData);
+    List<GroupVO> getGroupByFilter(PageData<GroupVO> pageData);
 
     boolean addGroup(GroupVO vo);
 
@@ -20,4 +20,6 @@ public interface GroupService {
     boolean deleteGroup(Long groupId);
 
     int getGroupTotal();
+
+    List<GroupVO> getAllGroupData();
 }

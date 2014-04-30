@@ -48,9 +48,14 @@ public class AccountAction extends BaseAction<AccountVO> {
     private Map<String, List<AccountVO>> accountVoListMap;
 
     /**
-     * 枚举类型VO
+     * 消费类型VO
      */
-    private List<TypeVo> typeList;
+    private List<TypeVo> accountTypeList;
+
+    /**
+     * 结算方式VO
+     */
+    private List<TypeVo> clearTypeList;
 
 
     /**
@@ -149,7 +154,7 @@ public class AccountAction extends BaseAction<AccountVO> {
      *
      * @return
      */
-    @Action(value = "approveAccount", results = {@Result(type = "json", params = {"root", "typeList", "contentType", "text/html"})})
+    @Action(value = "approveAccount", results = {@Result(type = "json", params = {"root", "accountTypeList", "contentType", "text/html"})})
     public String approveAccount() {
         try {
             accountService.approveAccount();
@@ -164,7 +169,7 @@ public class AccountAction extends BaseAction<AccountVO> {
      *
      * @return
      */
-    @Action(value = "clearAccount", results = {@Result(type = "json", params = {"root", "typeList", "contentType", "text/html"})})
+    @Action(value = "clearAccount", results = {@Result(type = "json", params = {"root", "accountTypeList", "contentType", "text/html"})})
     public String clearAccount() {
         try {
             accountService.clearAccount();
@@ -179,10 +184,25 @@ public class AccountAction extends BaseAction<AccountVO> {
      *
      * @return
      */
-    @Action(value = "getAccountType", results = {@Result(type = "json", params = {"root", "typeList", "contentType", "text/html"})})
+    @Action(value = "getAccountType", results = {@Result(type = "json", params = {"root", "accountTypeList", "contentType", "text/html"})})
     public String getAccountType() {
         try {
-            typeList = accountService.getAccountType();
+            accountTypeList = accountService.getAccountType();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return SUCCESS;
+    }
+
+    /**
+     * 得到账单类型
+     *
+     * @return
+     */
+    @Action(value = "getClearType", results = {@Result(type = "json", params = {"root", "clearTypeList", "contentType", "text/html"})})
+    public String getClearType() {
+        try {
+            clearTypeList = accountService.getClearType();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -261,11 +281,19 @@ public class AccountAction extends BaseAction<AccountVO> {
         this.accountVoListMap = accountVoListMap;
     }
 
-    public List<TypeVo> getTypeList() {
-        return typeList;
+    public List<TypeVo> getAccountTypeList() {
+        return accountTypeList;
     }
 
-    public void setTypeList(List<TypeVo> typeList) {
-        this.typeList = typeList;
+    public void setAccountTypeList(List<TypeVo> accountTypeList) {
+        this.accountTypeList = accountTypeList;
+    }
+
+    public List<TypeVo> getClearTypeList() {
+        return clearTypeList;
+    }
+
+    public void setClearTypeList(List<TypeVo> clearTypeList) {
+        this.clearTypeList = clearTypeList;
     }
 }

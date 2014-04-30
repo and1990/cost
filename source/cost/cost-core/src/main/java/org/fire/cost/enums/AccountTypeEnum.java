@@ -6,7 +6,7 @@ package org.fire.cost.enums;
  * @author liutengfei
  */
 public enum AccountTypeEnum {
-    Food(1, "食物"), Fun(2, "娱乐"), Traffic(3, "交通"), Other(4, "其他");
+    Food(1, "食物"), Lift(2, "生活用品"), Fun(3, "娱乐"), Traffic(4, "交通"), Other(5, "其他");
 
     private int code;
     private String name;

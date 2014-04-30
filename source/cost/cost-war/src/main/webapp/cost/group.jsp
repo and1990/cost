@@ -106,7 +106,7 @@ $(function () {
         border: true,
         collapsible: false,
         loadMsg: '数据装载中......',
-        url: '<%=basePath%>/getGroupByFilter.do',
+        url: '<%=basePath%>/getGroupByPage.do',
         idField: 'accountId',
         fit: true,
         fitColumns: true,

@@ -38,35 +38,59 @@ public class GroupServiceImpl implements GroupService {
     private UserDao userDao;
 
     /**
+     * 获取所有的组数据
+     *
+     * @return
+     */
+    @Override
+    public List<GroupVO> getAllGroupData() {
+        List<GroupVO> groupVOList = new ArrayList<GroupVO>();
+        try {
+            List<Group> groupList = groupDao.getAllGroupData();
+            if (groupList == null || groupList.size() == 0) {
+                return groupVOList;
+            }
+            for (Group group : groupList) {
+                GroupVO groupVO = makeGroup2VO(group);
+                groupVOList.add(groupVO);
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            throw new RuntimeException(ex);
+        }
+        return groupVOList;
+    }
+
+    /**
      * 根据过滤条件查询“组”数据
      *
-     * @param vo       过滤条件数据
      * @param pageData
      * @return
      */
     @Override
     @Transactional(value = "transactionManager")
-    public List<GroupVO> getGroupByFilter(GroupVO vo, PageData<GroupVO> pageData) {
+    public List<GroupVO> getGroupByFilter(PageData<GroupVO> pageData) {
         List<GroupVO> voList = new ArrayList<GroupVO>();
         try {
-            List<Group> groupList = groupDao.getGroupByFilter(vo, pageData);
-            if (groupList != null && groupList.size() != 0) {
-                for (Group group : groupList) {
-                    String userIds = null;
-                    String userNames = null;
-                    List<GroupUser> groupUserList = group.getGroupUserList();
-                    for (GroupUser groupUser : groupUserList) {
-                        User user = groupUser.getUser();
-                        String userId = user.getUserId().toString();
-                        userIds = userIds == null ? userId : userIds + "," + userId;
-                        String userName = user.getUserName();
-                        userNames = userNames == null ? userName : userNames + "," + userName;
-                    }
-                    GroupVO groupVO = makeGroup2VO(group);
-                    groupVO.setUserIds(userIds);
-                    groupVO.setUserNames(userNames);
-                    voList.add(groupVO);
+            List<Group> groupList = groupDao.getGroupByFilter(pageData);
+            if (groupList == null || groupList.size() == 0) {
+                return voList;
+            }
+            for (Group group : groupList) {
+                String userIds = null;
+                String userNames = null;
+                List<GroupUser> groupUserList = group.getGroupUserList();
+                for (GroupUser groupUser : groupUserList) {
+                    User user = groupUser.getUser();
+                    String userId = user.getUserId().toString();
+                    userIds = userIds == null ? userId : userIds + "," + userId;
+                    String userName = user.getUserName();
+                    userNames = userNames == null ? userName : userNames + "," + userName;
                 }
+                GroupVO groupVO = makeGroup2VO(group);
+                groupVO.setUserIds(userIds);
+                groupVO.setUserNames(userNames);
+                voList.add(groupVO);
             }
         } catch (Exception ex) {
             ex.printStackTrace();

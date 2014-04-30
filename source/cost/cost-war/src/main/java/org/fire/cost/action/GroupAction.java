@@ -25,20 +25,33 @@ public class GroupAction extends BaseAction<GroupVO> {
 
     private GroupVO groupVO;
 
+    private List<GroupVO> groupVOList;
+
+    @Action(value = "getAllGroupData", results = {@Result(type = "json", params = {"root", "groupVOList", "contentType", "text/html"})})
+    public String getAllGroupData() {
+        try {
+            groupVOList = groupService.getAllGroupData();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return SUCCESS;
+    }
+
     /**
      * 根据过滤条件查询“组”数据
      *
      * @return
      */
-    @Action(value = "getGroupByFilter", results = {@Result(type = "json", params = {"root", "pageData", "contentType", "text/html"})})
-    public String getGroupByFilter() {
+    @Action(value = "getGroupByPage", results = {@Result(type = "json", params = {"root", "pageData", "contentType", "text/html"})})
+    public String getGroupByPage() {
         try {
             if (pageData == null) {
                 pageData = new PageData<GroupVO>();
+            } else {
+                pageData.setPage(page);
+                pageData.setPageSize(rows);
             }
-            pageData.setPage(page);
-            pageData.setPageSize(rows);
-            List<GroupVO> voList = groupService.getGroupByFilter(null, pageData);
+            List<GroupVO> voList = groupService.getGroupByFilter(pageData);
             int total = groupService.getGroupTotal();
             pageData.setRows(voList);
             pageData.setTotal(total);
@@ -101,4 +114,11 @@ public class GroupAction extends BaseAction<GroupVO> {
         this.groupVO = groupVO;
     }
 
+    public List<GroupVO> getGroupVOList() {
+        return groupVOList;
+    }
+
+    public void setGroupVOList(List<GroupVO> groupVOList) {
+        this.groupVOList = groupVOList;
+    }
 }

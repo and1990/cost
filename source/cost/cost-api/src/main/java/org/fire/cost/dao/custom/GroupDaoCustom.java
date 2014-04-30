@@ -15,10 +15,9 @@ public interface GroupDaoCustom {
     /**
      * 根据过滤条件查询“组”数据
      *
-     * @param vo 组过滤条件
      * @return
      */
-    List<Group> getGroupByFilter(GroupVO vo, PageData<GroupVO> pageData);
+    List<Group> getGroupByFilter(PageData<GroupVO> pageData);
 
     /**
      * 得到组数据总记录数
@@ -26,4 +25,11 @@ public interface GroupDaoCustom {
      * @return
      */
     int getGroupTotal();
+
+    /**
+     * 获取所有的组数据
+     *
+     * @return
+     */
+    List<Group> getAllGroupData();
 }

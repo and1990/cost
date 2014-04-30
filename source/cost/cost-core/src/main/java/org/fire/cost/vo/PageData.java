@@ -24,6 +24,10 @@ public class PageData<T> {
     //默认显示条数
     private final static int DEFAULT_PAGE_SIZE = 10;
 
+    public PageData() {
+
+    }
+
     public int getPage() {
         return page;
     }

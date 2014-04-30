@@ -4,7 +4,6 @@ import org.fire.cost.dao.custom.GroupDaoCustom;
 import org.fire.cost.domain.Group;
 import org.fire.cost.vo.GroupVO;
 import org.fire.cost.vo.PageData;
-import org.hibernate.ejb.QueryImpl;
 
 import javax.persistence.Query;
 import java.util.List;
@@ -17,18 +16,27 @@ import java.util.List;
 public class GroupDaoCustomImpl extends BaseJpaDaoSupport<Group, Long> implements GroupDaoCustom {
 
     /**
-     * 根据过滤条件查询组信息
+     * 获取所有的组数据
      *
-     * @param vo 组过滤条件
      * @return
      */
     @Override
-    public List<Group> getGroupByFilter(GroupVO vo, PageData<GroupVO> pageData) {
+    public List<Group> getAllGroupData() {
         String sql = "select * from cost_group order by modify_time desc";
         Query query = entityManager.createNativeQuery(sql, Group.class);
-        if (query instanceof org.hibernate.ejb.QueryImpl) {
-            ((QueryImpl<?>) query).getHibernateQuery().setCacheable(true);
-        }
+        List<Group> resultList = query.getResultList();
+        return resultList;
+    }
+
+    /**
+     * 根据过滤条件查询组信息
+     *
+     * @return
+     */
+    @Override
+    public List<Group> getGroupByFilter(PageData<GroupVO> pageData) {
+        String sql = "select * from cost_group order by modify_time desc";
+        Query query = entityManager.createNativeQuery(sql, Group.class);
         int page = pageData.getPage();
         int pageSize = pageData.getPageSize();
         int start = (page - 1) * pageSize;

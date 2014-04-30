@@ -87,6 +87,13 @@ public interface AccountService {
     List<TypeVo> getAccountType();
 
     /**
+     * 得到结算方式
+     *
+     * @return
+     */
+    List<TypeVo> getClearType();
+
+    /**
      * 查找消费类型对应的账单数据
      *
      * @param accountStartTime 消费开始时间
@@ -94,6 +101,7 @@ public interface AccountService {
      * @return
      */
     List<AccountVO> getAccountGroupByAccountType(String accountStartTime, String accountEndTime);
+
 
     /**
      * 查找用户对应的账单数据
@@ -103,7 +111,6 @@ public interface AccountService {
      * @return
      */
     List<AccountVO> getAccountGroupByUser(String accountStartTime, String accountEndTime);
-
 
     /**
      * 获取用户每种消费类型消费金额

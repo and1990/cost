@@ -85,7 +85,7 @@ public class Account implements java.io.Serializable {
     }
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "group_id", nullable = false)
+    @JoinColumn(name = "group_id")
     public Group getGroup() {
         return this.group;
     }
@@ -94,7 +94,7 @@ public class Account implements java.io.Serializable {
         this.group = group;
     }
 
-    @Column(name = "account_money", nullable = false, precision = 10, scale = 0)
+    @Column(name = "account_money", nullable = false, precision = 10, scale = 2)
     public BigDecimal getAccountMoney() {
         return this.accountMoney;
     }
