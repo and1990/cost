@@ -27,6 +27,16 @@ public class GroupAction extends BaseAction<GroupVO> {
 
     private List<GroupVO> groupVOList;
 
+    /**
+     * 跳转到组员信息
+     *
+     * @return
+     */
+    @Action(value = "group", results = {@Result(name = SUCCESS, location = "/cost/group.jsp")})
+    public String skipToGroupData() {
+        return SUCCESS;
+    }
+
     @Action(value = "getAllGroupData", results = {@Result(type = "json", params = {"root", "groupVOList", "contentType", "text/html"})})
     public String getAllGroupData() {
         try {

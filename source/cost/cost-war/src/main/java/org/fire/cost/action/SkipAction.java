@@ -16,6 +16,26 @@ import org.springframework.stereotype.Controller;
 public class SkipAction extends BaseAction {
 
     /**
+     * 跳转到菜单
+     *
+     * @return
+     */
+    @Action(value = "menu", results = {@Result(name = SUCCESS, location = "/cost/menu.jsp")})
+    public String skipToMenu() {
+        return SUCCESS;
+    }
+
+    /**
+     * 跳转到公告
+     *
+     * @return
+     */
+    @Action(value = "notice", results = {@Result(name = SUCCESS, location = "/cost/notice.jsp")})
+    public String skipToNotice() {
+        return SUCCESS;
+    }
+
+    /**
      * 跳转到登录页面
      *
      * @return
@@ -82,16 +102,6 @@ public class SkipAction extends BaseAction {
      */
     @Action(value = "groupAccount", results = {@Result(name = SUCCESS, location = "/cost/groupAccount.jsp")})
     public String skipToGroupAccountData() {
-        return SUCCESS;
-    }
-
-    /**
-     * 跳转到公告
-     *
-     * @return
-     */
-    @Action(value = "notice", results = {@Result(name = SUCCESS, location = "/cost/notice.jsp")})
-    public String skipToNotice() {
         return SUCCESS;
     }
 

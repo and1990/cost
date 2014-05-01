@@ -4,52 +4,62 @@
     String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + request.getContextPath();
 %>
 
-<link rel="stylesheet" type="text/css" href="<%=basePath%>/js/uploadify/uploadify.css">
-<script type="text/javascript" src="<%=basePath%>/js/uploadify/jquery.uploadify.min.js"></script>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf8">
+    <link rel="shortcut icon" href="<%=basePath%>/image/ico.jpg" type="image/x-icon"/>
+    <link rel="stylesheet" type="text/css" href="<%=basePath %>/third/easy-ui/themes/default/easyui.css">
+    <link rel="stylesheet" type="text/css" href="<%=basePath %>/third/easy-ui/themes/icon.css">
 
+    <script type="text/javascript" src="<%=basePath%>/third/easy-ui/jquery.min.js"></script>
+    <script type="text/javascript" src="<%=basePath%>/third/easy-ui/jquery.easyui.min.js"></script>
+    <script type="text/javascript" src="<%=basePath%>/third/easy-ui/locale/easyui-lang-zh_CN.js"></script>
+</head>
+<body>
 <div id="account_data_layout" class="easyui-layout" data-options="fit:true">
     <div id="account_data_north"
          data-options="region:'north',border:0,fit:true">
         <table id="account_data_table"
-        <%--data-options="onClickCell:accessoryDo"--%>>
-            <thead>
-            <tr>
-                <th data-options="field:'userName',width:80,align:'center'">用户名</th>
-                <th data-options="field:'accountMoney',width:80,align:'center',
+        <thead>
+        <tr>
+            <th data-options="field:'userName',width:80,align:'center'">用户名</th>
+            <th data-options="field:'accountMoney',width:80,align:'center',
 						editor:{
 								type:'numberbox',
 								options:{min:0,precision:2}
 						}">金额
-                </th>
-                <th data-options="field:'accountTypeName',width:60,align:'center',formatter:showAccountTypeText,
+            </th>
+            <th data-options="field:'accountTypeName',width:60,align:'center',formatter:showAccountTypeText,
 						editor:{
 	                            type:'combobox',
 	                            options:{data:accountTypeData,valueField:'value',textField:'name'}
                          }"
-                        >消费类型
-                </th>
-                <th data-options="field:'accountPartner',width:80,align:'center',editor:'text'">组员</th>
-                <th data-options="field:'accountTime',width:80,align:'center',
+                    >消费类型
+            </th>
+            <th data-options="field:'accountPartner',width:80,align:'center',editor:'text'">组员</th>
+            <th data-options="field:'accountTime',width:80,align:'center',
 					editor:'datebox'">消费时间
-                </th>
-                <th data-options="field:'accountStatusName',width:60,align:'center',formatter:showIsApproveText,
+            </th>
+            <th data-options="field:'accountStatusName',width:60,align:'center',formatter:showIsApproveText,
 						editor:{
                             	type:'combobox',
                             	options:{data:isApproveData,valueField:'value',textField:'name'}
                         }"
-                        >是否审批
-                </th>
-                <%--<th data-options="field:'accountStatusName',width:60,align:'center',editor:'combobox',loader:getApproveText,mode:'remote'">是否审批</th>--%>
-                <th data-options="field:'accountFile',width:80,align:'center',formatter:showAccessoryText,
+                    >是否审批
+            </th>
+            <%--<th data-options="field:'accountStatusName',width:60,align:'center',editor:'combobox',loader:getApproveText,mode:'remote'">是否审批</th>--%>
+            <th data-options="field:'accountFile',width:80,align:'center',formatter:showAccessoryText,
 					    editor:{
 							options:{data:isApproveData,valueField:'value',textField:'name'}
 						}"
-                        >附件
-                </th>
-                <th data-options="field:'createTime',width:120,align:'center'">创建时间</th>
-                <th data-options="field:'accountRemark',width:120,align:'center',editor:'text'">备注</th>
-            </tr>
-            </thead>
+                    >附件
+            </th>
+            <th data-options="field:'createTime',width:120,align:'center'">创建时间</th>
+            <th data-options="field:'accountRemark',width:120,align:'center',editor:'text'">备注</th>
+        </tr>
+        </thead>
         </table>
     </div>
 </div>
@@ -183,11 +193,6 @@
     }
     //显示“附件”文本
     function showAccessoryText(value) {
-        if (value == undefined) {
-            return '<a href="javascript:void();">上传</a>';
-        } else {
-            return "<a href='javascript:void();'>浏览</a>";
-        }
     }
     //日期格式
     $.fn.datebox.defaults.formatter = function (date) {
@@ -198,3 +203,5 @@
     }
 
 </script>
+</body>
+</html>

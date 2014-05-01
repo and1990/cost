@@ -7,6 +7,14 @@
 %>
 <html>
 <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf8">
+    <link rel="shortcut icon" href="<%=basePath%>/image/ico.jpg" type="image/x-icon"/>
+    <link rel="stylesheet" type="text/css" href="<%=basePath %>/third/easy-ui/themes/default/easyui.css">
+    <link rel="stylesheet" type="text/css" href="<%=basePath %>/third/easy-ui/themes/icon.css">
+
+    <script type="text/javascript" src="<%=basePath%>/third/easy-ui/jquery.min.js"></script>
+    <script type="text/javascript" src="<%=basePath%>/third/easy-ui/jquery.easyui.min.js"></script>
+    <script type="text/javascript" src="<%=basePath%>/third/easy-ui/locale/easyui-lang-zh_CN.js"></script>
 </head>
 <body>
 <div id="user_data_layout" class="easyui-layout" data-options="fit:true">
@@ -58,8 +66,8 @@
                         <span>用户类型：</span>
                         <select class="easyui-combobox" name="userVO.userType" style="width:100px;">
                             <option value="0">全部</option>
-                            <option value="2">普通用户</option>
-                            <option value="1">管理员</option>
+                            <option value="1">普通用户</option>
+                            <option value="2">管理员</option>
                         </select>
                     </td>
                     <td>
@@ -294,7 +302,7 @@
             alert("请勾选数据");
             return;
         }
-        var promotion = userStatus == 1 ? "确定启用选择的用户？" : "确定禁用选择的用户？";
+        var promotion = userStatus == 1 ? "确定禁用选择的用户？" : "确定启用选择的用户？";
         if (window.confirm(promotion)) {
             var userIds = getCheckedUserIds();
             var url = "<%=basePath%>/modifyUserStatus.do?userIds=" + userIds + "&userVO.userStatus=" + userStatus;

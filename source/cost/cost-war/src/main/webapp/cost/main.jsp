@@ -3,8 +3,7 @@
 <%
     String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + request.getContextPath();
 %>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf8">
@@ -17,10 +16,10 @@
     <script type="text/javascript" src="<%=basePath%>/third/easy-ui/jquery.min.js"></script>
     <script type="text/javascript" src="<%=basePath%>/third/easy-ui/jquery.easyui.min.js"></script>
     <script type="text/javascript" src="<%=basePath%>/third/easy-ui/locale/easyui-lang-zh_CN.js"></script>
-    <script type="text/javascript" src="<%=basePath%>/third/My97DatePicker/WdatePicker.js"></script>
+    <%--<script type="text/javascript" src="<%=basePath%>/third/My97DatePicker/WdatePicker.js"></script>--%>
     <%--<script type="text/javascript" src="<%=basePath%>/third/lightbox/js/jquery.lightbox-0.5.js"></script>--%>
-    <%--<script type="text/javascript" src="<%=basePath%>/third/Highcharts/highcharts.js"></script>
-    <script type="text/javascript" src="<%=basePath%>/third/Highcharts/modules/exporting.js"></script>--%>
+    <script type="text/javascript" src="<%=basePath%>/third/Highcharts/highcharts.js"></script>
+    <script type="text/javascript" src="<%=basePath%>/third/Highcharts/modules/exporting.js"></script>
 </head>
 <body>
 <div id="main_layout" class="easyui-layout" data-options="fit:true">
@@ -36,7 +35,7 @@
     </div>
 
     <!--系统菜单信息-->
-    <div id="sysMenuInfo" data-options="region:'west',title:'系统功能',split:true,href:'<%=basePath %>/cost/menu.jsp'"
+    <div id="sysMenuInfo" data-options="region:'west',title:'系统功能',split:true,href:'<%=basePath %>/menu.do'"
          style="width: 205px;">
     </div>
 
@@ -44,15 +43,15 @@
     <div id="mainInfo" data-options="region:'center',title:'业务信息'">
         <div class="easyui-tabs"
              data-options="border:false,plain:true,fit:true" id="main_tabs">
-            <div title="账单信息" data-options="href:'<%=basePath %>/cost/account.do'" style="padding: 2px"></div>
-            <div title="组信息" data-options="href:'<%=basePath %>/cost/group.do'" style="padding: 2px"></div>
-            <div title="用户信息" data-options="href:'<%=basePath %>/cost/user.do'" style="padding: 2px"></div>
+            <%--<div title="账单信息" data-options="href:'<%=basePath %>/account.do'" style="padding: 2px"></div>--%>
+            <%-- <div title="组信息" data-options="href:'<%=basePath %>/group.do'" style="padding: 2px"></div>
+             <div title="用户信息" data-options="href:'<%=basePath %>/user.do'" style="padding: 2px"></div>--%>
         </div>
     </div>
 
     <!--公告信息-->
     <div id="noticeInfo"
-         data-options="region:'east',title:'公告信息',split:true,href:'<%=basePath %>/cost/notice.do'"
+         data-options="region:'east',title:'公告信息',split:true,href:'<%=basePath %>/notice.do'"
          style="width: 205px; padding: 2px">
     </div>
 </div>

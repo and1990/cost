@@ -32,8 +32,8 @@ public class CostAuthenticationFilter implements Filter {
     /**
      * 登出路径
      */
-    @Value("${cost.loginout.ptah}")
-    private String loginOutPath;
+    @Value("${cost.logout.ptah}")
+    private String logoutPath;
 
     /**
      * 初始化
@@ -72,14 +72,14 @@ public class CostAuthenticationFilter implements Filter {
                     log.debug("缓存不存在或者失效，请重新登录");
                 }
 
-                httpResponse.sendRedirect(loginOutPath);
+                httpResponse.sendRedirect(logoutPath);
                 return;
             }
         } else {
             if (log.isDebugEnabled()) {
                 log.debug("请求信息不全，无效，请检查http头信息");
             }
-            httpResponse.sendRedirect(loginOutPath);
+            httpResponse.sendRedirect(logoutPath);
             return;
         }
     }

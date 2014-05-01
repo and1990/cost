@@ -99,7 +99,7 @@
         <property name="securityManager" ref="securityManager"/>
         <property name="filters">
             <map>
-                <entry key="auth">
+                <entry key="authFilter">
                     <bean class="org.fire.cost.filter.CostAuthenticationFilter"/>
                 </entry>
             </map>
@@ -112,7 +112,7 @@
                 /third/** = anon
                 /welcome.do = anon
                 /login.do = anon
-                /** = anon
+                /** = authFilter
             </value>
         </property>
     </bean>
