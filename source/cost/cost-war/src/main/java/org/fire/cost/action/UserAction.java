@@ -4,6 +4,7 @@ import org.apache.struts2.convention.annotation.Action;
 import org.apache.struts2.convention.annotation.Namespace;
 import org.apache.struts2.convention.annotation.Result;
 import org.fire.cost.service.UserService;
+import org.fire.cost.vo.Message;
 import org.fire.cost.vo.PageData;
 import org.fire.cost.vo.UserVO;
 import org.springframework.stereotype.Controller;
@@ -18,10 +19,12 @@ public class UserAction extends BaseAction<UserVO> {
     private UserService userService;
 
     //用户vo对象
-    private UserVO userVO;
+    private UserVO userVO = new UserVO();
 
     //用户ID
     private String userIds;
+
+    private Message message = new Message();
 
     /**
      * 根据过滤条件查询用户
@@ -112,6 +115,37 @@ public class UserAction extends BaseAction<UserVO> {
         return SUCCESS;
     }
 
+    /**
+     * 验证密码是否正确
+     *
+     * @return
+     */
+    @Action(value = "validatePassword", results = {@Result(type = "json", params = {"root", "message", "contentType", "text/html"})})
+    public String validatePassword() {
+        try {
+            boolean isValidate = userService.validatePassword(userVO.getPassword());
+            message.setData(isValidate);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return SUCCESS;
+    }
+
+    /**
+     * 修改密码
+     *
+     * @return
+     */
+    @Action(value = "modifyPassword", results = {@Result(type = "json", params = {"root", "pageData", "contentType", "text/html"})})
+    public String modifyPassword() {
+        try {
+            userService.modifyPassword(userVO.getPassword());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return SUCCESS;
+    }
+
     public UserVO getUserVO() {
         return userVO;
     }
@@ -126,5 +160,13 @@ public class UserAction extends BaseAction<UserVO> {
 
     public void setUserIds(String userIds) {
         this.userIds = userIds;
+    }
+
+    public Message getMessage() {
+        return message;
+    }
+
+    public void setMessage(Message message) {
+        this.message = message;
     }
 }

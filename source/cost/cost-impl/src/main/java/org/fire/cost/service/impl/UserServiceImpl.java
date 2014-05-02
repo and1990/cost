@@ -210,6 +210,49 @@ public class UserServiceImpl implements UserService {
     }
 
     /**
+     * 修改密码
+     *
+     * @return
+     */
+    @Override
+    public void modifyPassword(String password) {
+        try {
+            Long userId = AuthenticationUtil.getLoginUserId();
+            User user = userDao.findOne(userId);
+            boolean passwordNotNull = password != null && password.trim().length() != 0;
+            if (user != null && passwordNotNull) {
+                user.setPassword(password);
+                userDao.save(user);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * 验证密码是否正确
+     *
+     * @return
+     */
+    @Override
+    public boolean validatePassword(String password) {
+        try {
+            Long userId = AuthenticationUtil.getLoginUserId();
+            User user = userDao.findOne(userId);
+            boolean passwordNotNull = password != null && password.trim().length() != 0;
+            if (user != null && passwordNotNull) {
+                String userPassword = user.getPassword();
+                if (password.equals(userPassword)) {
+                    return true;
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    /**
      * 将UserVO转换成User对象
      *
      * @param vo

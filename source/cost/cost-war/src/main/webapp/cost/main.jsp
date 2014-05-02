@@ -6,6 +6,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
+    <title></title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf8">
     <link rel="shortcut icon" href="<%=basePath%>/image/ico.jpg" type="image/x-icon"/>
     <link rel="stylesheet" type="text/css" href="<%=basePath %>/third/easy-ui/themes/default/easyui.css">
@@ -28,7 +29,7 @@
         <div style="font-family: Microsoft YaHei;font-size: 15px;">
             <span>欢迎你，${sessionScope.userName}</span>
             <span>|</span>
-            <span><a href="<%=basePath%>/modifyPassword.do" style="text-decoration: none">修改密码</a></span>
+            <span><a href="#" style="text-decoration: none" onclick="openModifyPasswordTab();">修改密码</a></span>
             <span>|</span>
             <span><a href="<%=basePath%>/loginOut.do" style="text-decoration: none">退出系统</a></span>
         </div>
@@ -60,6 +61,15 @@
     $(function () {
         $('#main_layout').layout('collapse', 'east');
     });
+
+    //打开修改密码标签页
+    function openModifyPasswordTab() {
+        $('#main_tabs').tabs('add', {
+            title: "修改密码",
+            href: "<%=basePath%>/cost/modifyPassword.jsp",
+            closable: true
+        });
+    }
 </script>
 
 </body>

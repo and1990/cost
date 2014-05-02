@@ -91,4 +91,19 @@ public interface UserService {
      * @param userStatus
      */
     void modifyUserStatus(String userIds, Integer userStatus);
+
+    /**
+     * 修改密码
+     *
+     * @return
+     */
+    void modifyPassword(String password);
+
+    /**
+     * 验证密码是否正确
+     *
+     * @param password
+     * @return
+     */
+    boolean validatePassword(String password);
 }
