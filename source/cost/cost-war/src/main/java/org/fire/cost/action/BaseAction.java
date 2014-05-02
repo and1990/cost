@@ -12,7 +12,7 @@ import org.springframework.stereotype.Controller;
 @Controller
 public abstract class BaseAction<T> extends ActionSupport {
     //分页对象
-    protected PageData<T> pageData;
+    protected PageData<T> pageData = new PageData<T>();
     //当前页
     protected int page;
     //每页显示条数

@@ -90,7 +90,7 @@ public class SkipAction extends BaseAction {
      *
      * @return
      */
-    @Action(value = "showGccount", results = {@Result(name = SUCCESS, location = "/cost/account.jsp")})
+    @Action(value = "showAccount", results = {@Result(name = SUCCESS, location = "/cost/account.jsp")})
     public String skipToAccountData() {
         return SUCCESS;
     }

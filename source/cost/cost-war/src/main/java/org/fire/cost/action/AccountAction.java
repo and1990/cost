@@ -7,16 +7,17 @@ import org.apache.struts2.convention.annotation.Result;
 import org.fire.cost.enums.HttpStatusEnum;
 import org.fire.cost.enums.ResultEnum;
 import org.fire.cost.service.AccountService;
+import org.fire.cost.util.DateUtil;
 import org.fire.cost.util.MessageUtil;
 import org.fire.cost.vo.AccountVO;
 import org.fire.cost.vo.Message;
-import org.fire.cost.vo.PageData;
 import org.fire.cost.vo.TypeVo;
 import org.springframework.stereotype.Controller;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -75,9 +76,6 @@ public class AccountAction extends BaseAction<AccountVO> {
     @Action(value = "getAccountByFilter", results = {@Result(type = "json", params = {"root", "pageData", "contentType", "text/html"})})
     public String getAccountByFilter() {
         try {
-            if (pageData == null) {
-                pageData = new PageData<AccountVO>();
-            }
             pageData.setPage(page);
             pageData.setPageSize(rows);
             List<AccountVO> voList = accountService.getAccountByFilter(accountVO, pageData);
@@ -167,6 +165,54 @@ public class AccountAction extends BaseAction<AccountVO> {
     public String approveAccount() {
         try {
             accountService.approveAccount(accountIds, accountVO.getAccountStatus());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return SUCCESS;
+    }
+
+    /**
+     * 查询本周
+     *
+     * @return
+     */
+    @Action(value = "getAccountByThisWeek", results = {@Result(type = "json", params = {"root", "pageData", "contentType", "text/html"})})
+    public String getAccountByThisWeek() {
+        try {
+            pageData.setPage(page);
+            pageData.setPageSize(rows);
+            Date firstDay = DateUtil.getFirstDayOfWeek();
+            Date endDay = DateUtil.getEndDayOfWeek();
+            accountVO.setAccountStartTime(DateUtil.makeDate2Str(firstDay, false));
+            accountVO.setAccountEndTime(DateUtil.makeDate2Str(endDay, false));
+            List<AccountVO> voList = accountService.getAccountByFilter(accountVO, pageData);
+            int total = accountService.getAccountTotal(accountVO);
+            pageData.setRows(voList);
+            pageData.setTotal(total);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return SUCCESS;
+    }
+
+    /**
+     * 查询本月
+     *
+     * @return
+     */
+    @Action(value = "getAccountByThisMonth", results = {@Result(type = "json", params = {"root", "pageData", "contentType", "text/html"})})
+    public String getAccountByThisMonth() {
+        try {
+            pageData.setPage(page);
+            pageData.setPageSize(rows);
+            Date firstDay = DateUtil.getFirstDayOfMonth();
+            Date endDay = DateUtil.getEndDayOfMonth();
+            accountVO.setAccountStartTime(DateUtil.makeDate2Str(firstDay, false));
+            accountVO.setAccountEndTime(DateUtil.makeDate2Str(endDay, false));
+            List<AccountVO> voList = accountService.getAccountByFilter(accountVO, pageData);
+            int total = accountService.getAccountTotal(accountVO);
+            pageData.setRows(voList);
+            pageData.setTotal(total);
         } catch (Exception e) {
             e.printStackTrace();
         }

@@ -55,9 +55,9 @@
         <a href="#" class="easyui-linkbutton" iconCls="icon-print" plain="true"
            onclick="exportExcel();">导出Excel</a>
         <a href="#" class="easyui-linkbutton" iconCls="icon-search" plain="true"
-           onclick="queryThisWeek();">查看本周</a>
+           onclick="queryAccountByThisWeek();">查看本周</a>
         <a href="#" class="easyui-linkbutton" iconCls="icon-search" plain="true"
-           onclick="queryThisMonth();">查看本月</a>
+           onclick="queryAccountByThisMonth();">查看本月</a>
     </div>
     <div>
         <form id="account_filter_form" method="post">
@@ -414,13 +414,29 @@ function exportExcel() {
 }
 
 //查询本周
-function queryThisWeek() {
-
+function queryAccountByThisWeek() {
+    $.ajax({
+                type: "post",
+                url: "<%=basePath%>/getAccountByThisWeek.do",
+                success: function (returnData) {
+                    var dataObj = JSON.parse(returnData);
+                    $('#account_data_table').datagrid('loadData', dataObj.rows);
+                }
+            }
+    );
 }
 
 //查询本月
-function queryThisMonth() {
-
+function queryAccountByThisMonth() {
+    $.ajax({
+                type: "post",
+                url: "<%=basePath%>/getAccountByThisMonth.do",
+                success: function (returnData) {
+                    var dataObj = JSON.parse(returnData);
+                    $('#account_data_table').datagrid('loadData', dataObj.rows);
+                }
+            }
+    );
 }
 
 //提交表单

@@ -257,7 +257,7 @@ public class AccountDaoCustomImpl extends BaseJpaDaoSupport<Account, Long> imple
         String accountEndTime = vo.getAccountEndTime();
         boolean accountEndTimeNotNull = accountEndTime != null && accountEndTime.trim().length() != 0;
         if (accountEndTimeNotNull) {
-            filterSQL += " and a.account_time<=:accountEndTime";
+            filterSQL += " and a.account_time<:accountEndTime";
         }
         return filterSQL;
     }
