@@ -23,23 +23,23 @@
         <li data-options="id:null">
             <span>用户信息</span>
             <ul>
-                <li data-options="id:'user'">用户信息</li>
-                <li data-options="id:'group'">组员信息</li>
+                <li data-options="id:'showUser'">用户信息</li>
+                <li data-options="id:'showGroup'">组员信息</li>
             </ul>
         </li>
         <li data-options="id:null">
             <span>消费信息</span>
             <ul>
-                <li data-options="id:'account'">账单信息</li>
-                <li data-options="id:'groupAccount'">组消费</li>
+                <li data-options="id:'showGccount'">账单信息</li>
+                <li data-options="id:'showGroupAccount'">组消费</li>
             </ul>
         </li>
         <li data-options="id:null">
             <span>数据分析</span>
             <ul>
-                <li data-options="id:'line'">线性图</li>
-                <li data-options="id:'column'">柱状图</li>
-                <li data-options="id:'pie'">饼状图</li>
+                <li data-options="id:'showPie'">饼状图</li>
+                <li data-options="id:'showLine'">线性图</li>
+                <li data-options="id:'showColumn'">柱状图</li>
             </ul>
         </li>
     </ul>

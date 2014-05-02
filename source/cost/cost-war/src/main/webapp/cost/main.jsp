@@ -35,7 +35,7 @@
     </div>
 
     <!--系统菜单信息-->
-    <div id="sysMenuInfo" data-options="region:'west',title:'系统功能',split:true,href:'<%=basePath %>/menu.do'"
+    <div id="sysMenuInfo" data-options="region:'west',title:'系统功能',split:true,href:'<%=basePath %>/showMenu.do'"
          style="width: 205px;">
     </div>
 
@@ -51,7 +51,7 @@
 
     <!--公告信息-->
     <div id="noticeInfo"
-         data-options="region:'east',title:'公告信息',split:true,href:'<%=basePath %>/notice.do'"
+         data-options="region:'east',title:'公告信息',split:true,href:'<%=basePath %>/showNotice.do'"
          style="width: 205px; padding: 2px">
     </div>
 </div>

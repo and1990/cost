@@ -32,10 +32,10 @@ public class GroupAction extends BaseAction<GroupVO> {
      *
      * @return
      */
-    @Action(value = "group", results = {@Result(name = SUCCESS, location = "/cost/group.jsp")})
+    /*@Action(value = "group", results = {@Result(name = SUCCESS, location = "/cost/group.jsp")})
     public String skipToGroupData() {
         return SUCCESS;
-    }
+    }*/
 
     @Action(value = "getAllGroupData", results = {@Result(type = "json", params = {"root", "groupVOList", "contentType", "text/html"})})
     public String getAllGroupData() {

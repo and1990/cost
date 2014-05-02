@@ -20,7 +20,7 @@ public class SkipAction extends BaseAction {
      *
      * @return
      */
-    @Action(value = "menu", results = {@Result(name = SUCCESS, location = "/cost/menu.jsp")})
+    @Action(value = "showMenu", results = {@Result(name = SUCCESS, location = "/cost/menu.jsp")})
     public String skipToMenu() {
         return SUCCESS;
     }
@@ -30,7 +30,7 @@ public class SkipAction extends BaseAction {
      *
      * @return
      */
-    @Action(value = "notice", results = {@Result(name = SUCCESS, location = "/cost/notice.jsp")})
+    @Action(value = "showNotice", results = {@Result(name = SUCCESS, location = "/cost/notice.jsp")})
     public String skipToNotice() {
         return SUCCESS;
     }
@@ -70,7 +70,7 @@ public class SkipAction extends BaseAction {
      *
      * @return
      */
-    @Action(value = "user", results = {@Result(name = SUCCESS, location = "/cost/user.jsp")})
+    @Action(value = "showUser", results = {@Result(name = SUCCESS, location = "/cost/user.jsp")})
     public String skipToUserData() {
         return SUCCESS;
     }
@@ -80,7 +80,7 @@ public class SkipAction extends BaseAction {
      *
      * @return
      */
-    @Action(value = "group", results = {@Result(name = SUCCESS, location = "/cost/group.jsp")})
+    @Action(value = "showGroup", results = {@Result(name = SUCCESS, location = "/cost/group.jsp")})
     public String skipToGroupData() {
         return SUCCESS;
     }
@@ -90,7 +90,7 @@ public class SkipAction extends BaseAction {
      *
      * @return
      */
-    @Action(value = "account", results = {@Result(name = SUCCESS, location = "/cost/account.jsp")})
+    @Action(value = "showGccount", results = {@Result(name = SUCCESS, location = "/cost/account.jsp")})
     public String skipToAccountData() {
         return SUCCESS;
     }
@@ -100,7 +100,7 @@ public class SkipAction extends BaseAction {
      *
      * @return
      */
-    @Action(value = "groupAccount", results = {@Result(name = SUCCESS, location = "/cost/groupAccount.jsp")})
+    @Action(value = "showGroupAccount", results = {@Result(name = SUCCESS, location = "/cost/groupAccount.jsp")})
     public String skipToGroupAccountData() {
         return SUCCESS;
     }
@@ -110,7 +110,7 @@ public class SkipAction extends BaseAction {
      *
      * @return
      */
-    @Action(value = "pie", results = {@Result(name = SUCCESS, location = "/cost/pieChart.jsp")})
+    @Action(value = "showPie", results = {@Result(name = SUCCESS, location = "/cost/pieChart.jsp")})
     public String skipToPieChart() {
         return SUCCESS;
     }
@@ -120,7 +120,7 @@ public class SkipAction extends BaseAction {
      *
      * @return
      */
-    @Action(value = "column", results = {@Result(name = SUCCESS, location = "/cost/columnChart.jsp")})
+    @Action(value = "showColumn", results = {@Result(name = SUCCESS, location = "/cost/columnChart.jsp")})
     public String skipToColumnChart() {
         return SUCCESS;
     }
@@ -130,7 +130,7 @@ public class SkipAction extends BaseAction {
      *
      * @return
      */
-    @Action(value = "line", results = {@Result(name = SUCCESS, location = "/cost/lineChart.jsp")})
+    @Action(value = "showLine", results = {@Result(name = SUCCESS, location = "/cost/lineChart.jsp")})
     public String skipToLineChart() {
         return SUCCESS;
     }
