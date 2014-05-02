@@ -9,11 +9,11 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf8">
     <link rel="shortcut icon" href="<%=basePath%>/image/ico.jpg" type="image/x-icon"/>
 
-    <%--<script type="text/javascript" src="<%=basePath%>/third/easy-ui/jquery.min.js"></script>
+    <script type="text/javascript" src="<%=basePath%>/third/easy-ui/jquery.min.js"></script>
     <script type="text/javascript" src="<%=basePath%>/third/My97DatePicker/WdatePicker.js"></script>
 
     <script type="text/javascript" src="<%=basePath%>/third/Highcharts/highcharts.js"></script>
-    <script type="text/javascript" src="<%=basePath%>/third/Highcharts/modules/exporting.js"></script>--%>
+    <script type="text/javascript" src="<%=basePath%>/third/Highcharts/modules/exporting.js"></script>
 </head>
 <body>
 <div style="font-family: 'Microsoft YaHei';font-size:16px">
