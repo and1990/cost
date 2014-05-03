@@ -179,8 +179,6 @@ public class AccountAction extends BaseAction<AccountVO> {
     @Action(value = "getAccountByThisWeek", results = {@Result(type = "json", params = {"root", "pageData", "contentType", "text/html"})})
     public String getAccountByThisWeek() {
         try {
-            pageData.setPage(page);
-            pageData.setPageSize(rows);
             Date firstDay = DateUtil.getFirstDayOfWeek();
             Date endDay = DateUtil.getEndDayOfWeek();
             accountVO.setAccountStartTime(DateUtil.makeDate2Str(firstDay, false));
@@ -203,8 +201,6 @@ public class AccountAction extends BaseAction<AccountVO> {
     @Action(value = "getAccountByThisMonth", results = {@Result(type = "json", params = {"root", "pageData", "contentType", "text/html"})})
     public String getAccountByThisMonth() {
         try {
-            pageData.setPage(page);
-            pageData.setPageSize(rows);
             Date firstDay = DateUtil.getFirstDayOfMonth();
             Date endDay = DateUtil.getEndDayOfMonth();
             accountVO.setAccountStartTime(DateUtil.makeDate2Str(firstDay, false));
