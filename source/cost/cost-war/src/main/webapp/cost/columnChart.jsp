@@ -27,11 +27,11 @@
             &nbsp;
             按消费类型查看：<input type="radio" name="accountType" value="2"/>
             &nbsp;
-            消费时间从: <input class="Wdate" id="column_startTime" name="accountVO.accountStartTime" style="width: 150px"
-                          onfocus="WdatePicker({dateFmt:'yyyy-MM-dd',maxDate:'#F{$dp.$D(\'accountEndTime\');}'})">
+            消费时间从: <input class="Wdate" id="column_start_time" name="accountVO.accountStartTime" style="width: 150px"
+                          onfocus="WdatePicker({dateFmt:'yyyy-MM-dd',maxDate:'#F{$dp.$D(\'column_end_time\');}'})">
             &nbsp;
-            到: <input class="Wdate" id="column_endTime" name="accountVO.accountEndTime" style="width: 150px"
-                      onfocus="WdatePicker({dateFmt:'yyyy-MM-dd',minDate:'#F{$dp.$D(\'accountStartTime\');}',maxDate:'%y-%M-%d'})">
+            到: <input class="Wdate" id="column_end_time" name="accountVO.accountEndTime" style="width: 150px"
+                      onfocus="WdatePicker({dateFmt:'yyyy-MM-dd',minDate:'#F{$dp.$D(\'column_start_time\');}',maxDate:'%y-%M-%d'})">
             &nbsp;&nbsp;
             <a href="#" style="text-decoration: none" iconCls="icon-search" onclick="showColumnChart();">查看</a>
         </div>
@@ -40,8 +40,8 @@
 
 <script type="text/javascript">
     $(function () {
-        $("#column_startTime").val("");
-        $("#column_endTime").val("");
+        $("#column_start_time").val("");
+        $("#column_end_time").val("");
         $.ajax({
             type: 'post',
             url: '<%=basePath%>/getAccountGroupByUser.do',
@@ -124,8 +124,8 @@
 
     //显示图表
     function showColumnChart() {
-        var startTime = $("#column_startTime").val();
-        var endTime = $("#column_endTime").val();
+        var startTime = $("#column_start_time").val();
+        var endTime = $("#column_end_time").val();
         var showType = $("input[name='accountType']:checked").val()
         loadData(startTime, endTime, showType);
         setChartTitle(startTime, endTime, showType);

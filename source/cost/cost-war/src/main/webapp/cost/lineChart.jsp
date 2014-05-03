@@ -25,11 +25,11 @@
 
     <div style="text-align: center;margin-top: 50px;">
         <div>
-            消费时间从: <input class="Wdate" id="line_startTime" name="accountVO.accountStartTime" style="width: 150px"
-                          onfocus="WdatePicker({dateFmt:'yyyy-MM-dd',maxDate:'#F{$dp.$D(\'accountEndTime\');}'})">
+            消费时间从: <input class="Wdate" id="line_start_time" name="accountVO.accountStartTime" style="width: 150px"
+                          onfocus="WdatePicker({dateFmt:'yyyy-MM-dd',maxDate:'#F{$dp.$D(\'line_end_time\');}'})">
             &nbsp;
-            到: <input class="Wdate" id="line_endTime" name="accountVO.accountEndTime" style="width: 150px"
-                      onfocus="WdatePicker({dateFmt:'yyyy-MM-dd',minDate:'#F{$dp.$D(\'line_startTime\');}',maxDate:'%y-%M-%d'})">
+            到: <input class="Wdate" id="line_end_time" name="accountVO.accountEndTime" style="width: 150px"
+                      onfocus="WdatePicker({dateFmt:'yyyy-MM-dd',minDate:'#F{$dp.$D(\'line_start_time\');}',maxDate:'%y-%M-%d'})">
             &nbsp;&nbsp;
             <a href="#" style="text-decoration: none" iconCls="icon-search" onclick="showLineChart();">查看</a>
         </div>
@@ -39,8 +39,8 @@
 <script type="text/javascript">
     var typeData = undefined;
     $(function () {
-        $("#line_startTime").val("");
-        $("#line_endTime").val("");
+        $("#line_start_time").val("");
+        $("#line_end_time").val("");
         $.ajax({
             type: 'post',
             url: '<%=basePath%>/getAccountType.do',
@@ -114,8 +114,8 @@
     }
     //显示图表
     function showLineChart() {
-        var startTime = $("#line_startTime").val();
-        var endTime = $("#line_endTime").val();
+        var startTime = $("#line_start_time").val();
+        var endTime = $("#line_end_time").val();
         loadData(startTime, endTime);
         setChartTitle(startTime, endTime);
     }

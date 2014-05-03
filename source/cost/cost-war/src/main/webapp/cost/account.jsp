@@ -8,8 +8,7 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf8">
     <link rel="stylesheet" type="text/css" href="<%=basePath %>/third/easy-ui/themes/default/easyui.css">
     <link rel="stylesheet" type="text/css" href="<%=basePath %>/third/easy-ui/themes/icon.css">
-    <%--<link rel="stylesheet" type="text/css" href="<%=basePath%>/third/uploadify/uploadify.css">--%>
-    <%--<script type="text/javascript" src="<%=basePath%>/third/uploadify/jquery.uploadify.min.js"></script>--%>
+
     <script type="text/javascript" src="<%=basePath%>/third/easy-ui/jquery.min.js"></script>
     <script type="text/javascript" src="<%=basePath%>/third/easy-ui/jquery.easyui.min.js"></script>
     <script type="text/javascript" src="<%=basePath%>/third/easy-ui/locale/easyui-lang-zh_CN.js"></script>
@@ -181,7 +180,6 @@
 <div id="lightbox"></div>
 
 <script type="text/javascript">
-//页面加载完成，加载数据
 $(function () {
     $('#account_data_table').datagrid({
         nowrap: false,
