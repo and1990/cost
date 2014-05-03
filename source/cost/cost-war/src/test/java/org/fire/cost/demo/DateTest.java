@@ -1,7 +1,6 @@
 package org.fire.cost.demo;
 
 import org.junit.Test;
-import org.springframework.util.DigestUtils;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -50,7 +49,7 @@ public class DateTest {
 
     @Test
     public void testMD5() {
-        byte[] bytes = DigestUtils.md5Digest("123".getBytes());
-        System.out.println(new String(bytes));
+        /*byte[] bytes = DigestUtils.md5Digest("123".getBytes());
+        System.out.println(new String(bytes));*/
     }
 }
