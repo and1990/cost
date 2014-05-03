@@ -307,7 +307,7 @@ function addAccount() {
 //修改账单
 function modifyAccount() {
     var rowDataArr = $("#account_data_table").datagrid("getChecked");
-    if (rowDataArr == undefined) {
+    if (rowDataArr == undefined || rowDataArr.length == 0) {
         alert("请选择数据");
         return;
     }
@@ -340,7 +340,7 @@ function modifyAccount() {
 //删除账单
 function deleteAccount() {
     var rowDataArr = $("#account_data_table").datagrid("getChecked");
-    if (rowDataArr == undefined) {
+    if (rowDataArr == undefined || rowDataArr.length == 0) {
         alert("请选择数据");
         return;
     }

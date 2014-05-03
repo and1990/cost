@@ -5,7 +5,6 @@ import org.fire.cost.dao.UserDao;
 import org.fire.cost.domain.User;
 import org.fire.cost.enums.UserStatusEnum;
 import org.fire.cost.enums.UserTypeEnum;
-import org.fire.cost.enums.YesOrNoEnum;
 import org.fire.cost.service.UserService;
 import org.fire.cost.util.AuthenticationUtil;
 import org.fire.cost.util.DateUtil;
@@ -93,8 +92,10 @@ public class UserServiceImpl implements UserService {
     public boolean addUser(UserVO vo) {
         try {
             vo.setUserStatus(UserStatusEnum.Enable.getCode());
-            vo.setUserType(YesOrNoEnum.No.getCode());
+            vo.setUserType(UserTypeEnum.Common.getCode());
             User user = makeVO2User(vo, null);
+            String password = vo.getPassword();
+            user.setPassword(password);
             userDao.save(user);
             return true;
         } catch (Exception e) {
@@ -202,11 +203,13 @@ public class UserServiceImpl implements UserService {
     @Override
     public void modifyUserStatus(String userIds, Integer userStatus) {
         String[] userIdArr = userIds.trim().split(",");
+        List<User> userList = new ArrayList<User>();
         for (String userId : userIdArr) {
             User user = userDao.findOne(Long.valueOf(userId));
             user.setUserStatus(userStatus);
-            userDao.save(user);
+            userList.add(user);
         }
+        userDao.save(userList);
     }
 
     /**

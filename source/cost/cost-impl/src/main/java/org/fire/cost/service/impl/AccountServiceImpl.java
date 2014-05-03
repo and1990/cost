@@ -5,6 +5,7 @@ import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.fire.cost.dao.AccountDao;
+import org.fire.cost.dao.GroupDao;
 import org.fire.cost.dao.UserDao;
 import org.fire.cost.domain.Account;
 import org.fire.cost.domain.Group;
@@ -46,6 +47,9 @@ public class AccountServiceImpl implements AccountService {
 
     @Resource
     private UserDao userDao;
+
+    @Resource
+    private GroupDao groupDao;
 
     /**
      * 根据过滤条件查询账单信息
@@ -473,18 +477,20 @@ public class AccountServiceImpl implements AccountService {
     private Account makeVO2Account(AccountVO vo, Account account) throws ParseException {
         if (account == null) {
             account = new Account();
-            account.setCreateUser(userService.getLoginUserName());
+            account.setCreateUser(AuthenticationUtil.getUserName());
             account.setCreateTime(new Date());
         }
         User user = userDao.findOne(AuthenticationUtil.getLoginUserId());
         account.setUser(user);
+        Group group = groupDao.findOne(vo.getGroupId());
+        account.setGroup(group);
         account.setAccountMoney(vo.getAccountMoney());
         account.setAccountTime(DateUtil.makeStr2Date(vo.getAccountTime(), false));
         account.setAccountStatus(vo.getAccountStatus());
         account.setAccountType(vo.getAccountType());
         account.setClearType(vo.getClearType());
         account.setAccountFile(vo.getAccountFile());
-        account.setModifyUser(userService.getLoginUserName());
+        account.setModifyUser(AuthenticationUtil.getUserName());
         account.setModifyTime(new Date());
         account.setAccountRemark(vo.getAccountRemark());
         return account;

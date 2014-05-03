@@ -48,7 +48,8 @@ public class AuthenticationServiceImpl extends AuthenticatingRealm implements Au
         String loginName = token.getUsername();
         char[] chars = token.getPassword();
         User user = userDao.findByLoginName(loginName);
-        if (user != null && user.getPassword().equals(new String(chars))) {
+        String inputPassword = new String(chars);
+        if (user != null && user.getPassword().equals(inputPassword)) {
             if (user.getUserStatus() == UserStatusEnum.Enable.getCode()) {
                 return new SimpleAuthenticationInfo(token.getPrincipal(), token.getPassword(), token.getUsername());
             } else {

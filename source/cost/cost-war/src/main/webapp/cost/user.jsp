@@ -106,56 +106,40 @@
                         <td>用户名：</td>
                         <td>
                             <input class="text easyui-validatebox" id="userName"
-                                   name="userVO.userName" value="用户名为中文"
-                                   style="color: gray;" data-options="required:true"
-                                   onfocus="if(this.value=='用户名为中文') {this.value='';}"
-                                   onblur="if(this.value=='') {this.value='用户名为中文';}"/>
+                                   name="userVO.userName" data-options="required:true"/>
                         </td>
                     </tr>
                     <tr>
                         <td>登录名:</td>
                         <td>
                             <input class="text easyui-validatebox" id="loginName"
-                                   name="userVO.loginName" value="数字和字母组合"
-                                   style="color: gray;" data-options="required:true"
-                                   onfocus="if(this.value=='数字和字母组合') {this.value='';}"
-                                   onblur="if(this.value=='') {this.value='数字和字母组合';}"
-                                    />
+                                   name="userVO.loginName" data-options="required:true"/>
                         </td>
                     </tr>
                     <tr id="tr_password">
                         <td>密码:</td>
                         <td>
-                            <input class="easyui-validatebox" id="password"
-                                   name="userVO.password" value="数字和字母组合"
-                                   style="color: gray;" data-options="required:true"
-                                   onfocus="if(this.value=='数字和字母组合') {this.value='';}"
-                                   onblur="if(this.value=='') {this.value='数字和字母组合';}"/>
+                            <input type="password" class="easyui-validatebox" id="password"
+                                   name="userVO.password" data-options="required:true"/>
                         </td>
                     </tr>
                     <tr id="tr_repassword">
                         <td>确认密码:</td>
                         <td>
-                            <input class="easyui-validatebox" id="repassword" value="密码必须一致"
-                                   style="color: gray;" data-options="required:true"
-                                   onfocus="if(this.value=='密码必须一致') {this.value='';}"
-                                   onblur="if(this.value=='') {this.value='密码必须一致';}"/>
+                            <input type="password" class="easyui-validatebox" id="repassword"
+                                   data-options="required:true"/>
                         </td>
                     </tr>
                     <tr>
                         <td>年龄:</td>
                         <td>
-                            <input class="text" id="userAge" name="userVO.userAge" style="color: gray;"
-                                   onfocus="if(this.value=='输入数字') {this.value='';}"
-                                   onblur="if(this.value=='') {this.value='输入数字';}"/>
+                            <input class="text" id="userAge" name="userVO.userAge"/>
                         </td>
                     </tr>
                     <tr>
                         <td>地址:</td>
                         <td>
-                            <input class="text" id="userAddress" name="userVO.userAddress"
-                                   onfocus="if(this.value=='输入有效地址') {this.value='';}"
-                                   onblur="if(this.value=='') {this.value='输入有效地址';}"/>
+                            <input class="text" id="userAddress" name="userVO.userAddress"/>
                         </td>
                     </tr>
                     <tr>
@@ -183,191 +167,209 @@
 </div>
 
 <script type="text/javascript">
-    $(function () {
-        $('#user_data_table').datagrid({
-            nowrap: false,
-            striped: true,
-            border: true,
-            collapsible: false,
-            loadMsg: '数据装载中......',
-            url: '<%=basePath%>/getUserByFilter.do',
-            idField: 'userId',
-            fit: true,
-            fitColumns: true,
-            singleSelect: false,
-            selectOnCheck: true,
-            checkOnSelect: true,
-            pagination: true,
-            toolbar: '#user_tool_bar',
-            onBeforeLoad: function () {
-                $("#user_data_table").datagrid("clearSelections");
-            },
-            onLoadSuccess: function (data) {
-                $("#user_data_table").datagrid("clearSelections");
-            }
-        });
-
-        $('#user_data_table').datagrid('getPager').pagination({
-            pageSize: 10,
-            pageList: [10, 20, 30, 40, 50],
-            beforePageText: '第',
-            afterPageText: '页    共 {pages} 页',
-            displayMsg: '当前显示 {from}-{to} 条记录   共 {total} 条记录'
-        });
+$(function () {
+    $('#user_data_table').datagrid({
+        nowrap: false,
+        striped: true,
+        border: true,
+        collapsible: false,
+        loadMsg: '数据装载中......',
+        url: '<%=basePath%>/getUserByFilter.do',
+        idField: 'userId',
+        fit: true,
+        fitColumns: true,
+        singleSelect: false,
+        selectOnCheck: true,
+        checkOnSelect: true,
+        pagination: true,
+        toolbar: '#user_tool_bar'
     });
 
-    //获取查询参数
-    function getUserByFilter() {
-        var queryData = $("#user_filter_form").serializeJson();
-        console.info(queryData);
-        $("#user_data_table").datagrid(
-                {
-                    queryParams: queryData,
-                    pageNumber: 1
-                }, 'load'
-        );
+    $('#user_data_table').datagrid('getPager').pagination({
+        pageSize: 10,
+        pageList: [10, 20, 30, 40, 50],
+        beforePageText: '第',
+        afterPageText: '页    共 {pages} 页',
+        displayMsg: '当前显示 {from}-{to} 条记录   共 {total} 条记录'
+    });
+});
+
+//获取查询参数
+function getUserByFilter() {
+    var queryData = $("#user_filter_form").serializeJson();
+    console.info(queryData);
+    $("#user_data_table").datagrid(
+            {
+                queryParams: queryData,
+                pageNumber: 1
+            }, 'load'
+    );
+}
+(function ($) {
+    $.fn.serializeJson = function () {
+        var serializeObj = {};
+        $(this.serializeArray()).each(function () {
+            serializeObj[this.name] = this.value;
+        });
+        return serializeObj;
+    };
+})(jQuery);
+
+//增加用户
+function addUser() {
+    //设置标题
+    $('#user_dialog').dialog({ title: '增加用户信息'});
+    //初始化界面
+    $("#userId").val("");
+    $("#userStatus").val("");
+    $("#userType").val("");
+    $("#userName").val("");
+    $("#loginName").val("");
+    $("#password").val("");
+    $("#repassword").val("");
+    $("#userAge").val("");
+    $("#userAddress").val("");
+    $("#userEmail").val("");
+    $("#userRemark").val("");
+    //打开弹出框
+    $("#user_dialog").dialog("open");
+    //设置action、url值，1代表增加
+    $("#action").val(1);
+    $("#url").val('<%=basePath%>/addUser.do');
+}
+
+//修改用户
+function modifyUser() {
+    var rowDataArr = $("#user_data_table").datagrid("getChecked");
+    if (rowDataArr == undefined || rowDataArr.length == 0) {
+        alert("请选择数据");
+        return;
     }
-    (function ($) {
-        $.fn.serializeJson = function () {
-            var serializeObj = {};
-            $(this.serializeArray()).each(function () {
-                serializeObj[this.name] = this.value;
-            });
-            return serializeObj;
-        };
-    })(jQuery);
-
-    //增加用户
-    function addUser() {
-        //设置标题
-        $('#user_dialog').dialog({ title: '增加用户信息'});
-        //打开弹出框
-        $("#user_dialog").dialog("open");
-        //设置action、url值，1代表增加
-        $("#action").val(1);
-        $("#url").val('<%=basePath%>/addUser.do');
+    if (rowDataArr.length > 1) {
+        alert("请选择一条数据");
+        return;
     }
+    //隐藏密码输入框
+    $("#tr_password").hide();
+    $("#tr_repassword").hide();
 
-    //修改用户
-    function modifyUser() {
-        var rowData = $("#user_data_table").datagrid("getSelected");
-        if (rowData == undefined) {
-            alert("请选择数据");
-            return;
-        }
-        //隐藏密码输入框
-        $("#tr_password").hide();
-        $("#tr_repassword").hide();
+    //设置标题
+    $('#user_dialog').dialog({ title: '修改用户信息'});
+    //打开弹出框
+    $("#user_dialog").dialog("open");
+    //设置action值，2代表修改
+    $("#action").val(2);
+    $("#url").val('<%=basePath%>/modifyUser.do');
 
-        //设置标题
-        $('#user_dialog').dialog({ title: '修改用户信息'});
-        //打开弹出框
-        $("#user_dialog").dialog("open");
-        //设置action值，2代表修改
-        $("#action").val(2);
-        $("#url").val('<%=basePath%>/modifyUser.do');
+    //填充数据
+    var rowData = rowDataArr[0];
+    $("#userId").val(rowData.userId);
+    $("#userStatus").val(rowData.userStatus);
+    $("#userType").val(rowData.userType);
+    $("#userName").val(rowData.userName);
+    $("#loginName").val(rowData.loginName);
+    $("#userAge").val(rowData.userAge);
+    $("#userAddress").val(rowData.userAddress);
+    $("#userEmail").val(rowData.userEmail);
+    $("#userRemark").val(rowData.userRemark);
+}
 
-        //填充数据
-        $("#userId").val(rowData.userId);
-        $("#userStatus").val(rowData.userStatus);
-        $("#userType").val(rowData.userType);
-        $("#userName").val(rowData.userName);
-        $("#loginName").val(rowData.loginName);
-        $("#userAge").val(rowData.userAge);
-        $("#userAddress").val(rowData.userAddress);
-        $("#userEmail").val(rowData.userEmail);
-        $("#userRemark").val(rowData.userRemark);
+//删除用户
+function deleteUser() {
+    var rowDataArr = $("#user_data_table").datagrid("getChecked");
+    if (rowDataArr == undefined || rowDataArr.length == 0) {
+        alert("请选择数据");
+        return;
     }
-
-    //删除用户
-    function deleteUser() {
-        if (window.confirm("确定删除？")) {
-            var rowData = $("#user_data_table").datagrid("getSelected");
-            var url = "<%=basePath%>/deleteUser.do?userVO.userId=" + rowData.userId;
-            $.ajax({
-                        type: "post",
-                        url: url,
-                        success: function (returnData) {
-                            $('#user_data_table').datagrid('reload');
-                        }
-                    }
-            );
-        }
+    if (rowDataArr.length > 1) {
+        alert("请选择一条数据");
+        return;
     }
-
-    //更新用户状态
-    function modifyUserStatus(userStatus) {
-        var rowData = $("#user_data_table").datagrid("getChecked");
-        if (rowData == undefined || rowData.length == 0) {
-            alert("请勾选数据");
-            return;
-        }
-        var promotion = userStatus == 1 ? "确定禁用选择的用户？" : "确定启用选择的用户？";
-        if (window.confirm(promotion)) {
-            var userIds = getCheckedUserIds();
-            var url = "<%=basePath%>/modifyUserStatus.do?userIds=" + userIds + "&userVO.userStatus=" + userStatus;
-            $.ajax({
-                        type: "post",
-                        url: url,
-                        success: function (returnData) {
-                            $('#user_data_table').datagrid('reload');
-                        }
-                    }
-            );
-        }
-    }
-
-    //提交表单
-    function submitForm() {
-        $(".easyui-validatebox").validatebox("validate");
-        //打开进度条
-        $.messager.progress();
-
-        var action = $("#action").val();
-        var url = $("#url").val();
-        $('#user_form').form('submit', {
+    if (window.confirm("确定删除？")) {
+        var rowData = rowDataArr[0];
+        var url = "<%=basePath%>/deleteUser.do?userVO.userId=" + rowData.userId;
+        $.ajax({
+                    type: "post",
                     url: url,
-                    onSubmit: function () {
-                        if (action == 1) {
-                            var isValid = $(this).form('validate');
-                            if (!isValid) {
-                                $.messager.progress('close');
-                                return false;
-                            }
-                            var password = $("#password").val();
-                            var rePassword = $("#rePassword").val();
-                            var passwordSame = password === rePassword;
-                            if (!passwordSame) {
-                                $.messager.progress('close');
-                                return false;
-                            }
-                        }
-                        return true;
-                    },
-                    success: function () {
-                        $.messager.progress('close');
-                        $('#user_form').form('clear');
-                        $("#user_dialog").dialog("close");
-                        if (action == 2) {
-                            $("#password").show();
-                            $("#repassword").show();
-                            $('#user_data_table').datagrid('reload');
-                        }
+                    success: function (returnData) {
+                        $('#user_data_table').datagrid('reload');
                     }
                 }
         );
     }
+}
 
-    //获取选择的用户ID
-    function getCheckedUserIds() {
-        var userIds = undefined;
-        var rowData = $("#user_data_table").datagrid("getChecked");
-        for (var i = 0; i < rowData.length; i++) {
-            var userId = rowData[i].userId;
-            userIds = userIds == undefined ? userId : userIds + "," + userId;
-        }
-        return userIds;
+//更新用户状态
+function modifyUserStatus(userStatus) {
+    var rowDataArr = $("#user_data_table").datagrid("getChecked");
+    if (rowDataArr == undefined || rowDataArr.length == 0) {
+        alert("请勾选数据");
+        return;
     }
+    var promotion = userStatus == 1 ? "确定禁用选择的用户？" : "确定启用选择的用户？";
+    if (window.confirm(promotion)) {
+        var userIds = getCheckedUserIds();
+        var url = "<%=basePath%>/modifyUserStatus.do?userIds=" + userIds + "&userVO.userStatus=" + userStatus;
+        $.ajax({
+                    type: "post",
+                    url: url,
+                    success: function (returnData) {
+                        $('#user_data_table').datagrid('reload');
+                    }
+                }
+        );
+    }
+}
+
+//提交表单
+function submitForm() {
+    //打开进度条
+    $.messager.progress();
+    var action = $("#action").val();
+    var url = $("#url").val();
+    $('#user_form').form('submit', {
+                url: url,
+                onSubmit: function () {
+                    if (action == 1) {
+                        var isValid = $(this).form('validate');
+                        if (!isValid) {
+                            $.messager.progress('close');
+                            return false;
+                        }
+                        var password = $("#password").val();
+                        var repassword = $("#repassword").val();
+                        var passwordSame = password === repassword;
+                        if (!passwordSame) {
+                            $.messager.progress('close');
+                            return false;
+                        }
+                    }
+                    return true;
+                },
+                success: function () {
+                    $.messager.progress('close');
+                    $('#user_form').form('clear');
+                    $("#user_dialog").dialog("close");
+                    $('#user_data_table').datagrid('reload');
+                    if (action == 2) {
+                        $("#password").show();
+                        $("#repassword").show();
+                    }
+                }
+            }
+    );
+}
+
+//获取选择的用户ID
+function getCheckedUserIds() {
+    var userIds = undefined;
+    var rowData = $("#user_data_table").datagrid("getChecked");
+    for (var i = 0; i < rowData.length; i++) {
+        var userId = rowData[i].userId;
+        userIds = userIds == undefined ? userId : userIds + "," + userId;
+    }
+    return userIds;
+}
 </script>
 </body>
 </html>

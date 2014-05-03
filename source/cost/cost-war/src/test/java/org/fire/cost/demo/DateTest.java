@@ -1,6 +1,7 @@
 package org.fire.cost.demo;
 
 import org.junit.Test;
+import org.springframework.util.DigestUtils;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -45,5 +46,11 @@ public class DateTest {
         cale.add(Calendar.MONTH, 1);
         cale.set(Calendar.DAY_OF_MONTH, 0);//设置为1号,当前日期既为本月第一天
         System.out.println("-----2------lastDay:" + cale.getTime());
+    }
+
+    @Test
+    public void testMD5() {
+        byte[] bytes = DigestUtils.md5Digest("123".getBytes());
+        System.out.println(new String(bytes));
     }
 }
