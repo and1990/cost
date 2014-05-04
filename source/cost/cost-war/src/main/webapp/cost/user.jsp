@@ -26,7 +26,7 @@
                 <th field="ck" checkbox="true"></th>
                 <th data-options="field:'userName',width:80,align:'center',editor:'text'">用户名</th>
                 <th data-options="field:'loginName',width:80,align:'center',editor:'text'">登录名</th>
-                <th data-options="field:'password',width:80,align:'center',editor:'text'">密码</th>
+                <th data-options="field:'password',width:80,align:'center',editor:'text',hidden:true">密码</th>
                 <th data-options="field:'userAge',width:80,align:'center',editor:'numberbox'">年龄</th>
                 <th data-options="field:'userAddress',width:120,align:'center',editor:'text'">地址</th>
                 <th data-options="field:'userEmail',width:120,align:'center',editor:'text'">邮箱</th>
