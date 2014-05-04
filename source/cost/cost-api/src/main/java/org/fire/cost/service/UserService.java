@@ -1,5 +1,6 @@
 package org.fire.cost.service;
 
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.fire.cost.vo.PageData;
 import org.fire.cost.vo.UserVO;
 
@@ -106,4 +107,11 @@ public interface UserService {
      * @return
      */
     boolean validatePassword(String password);
+
+    /**
+     * 获取excel数据
+     *
+     * @return
+     */
+    HSSFWorkbook getExcelData();
 }

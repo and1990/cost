@@ -31,13 +31,11 @@ public class UserDaoCustomImpl extends BaseJpaDaoSupport<User, Long> implements 
         if (query instanceof org.hibernate.ejb.QueryImpl) {
             ((QueryImpl<?>) query).getHibernateQuery().setCacheable(true);
         }
-        try {
-            setAliasValue(vo, query);
-        } catch (ParseException e) {
-            e.printStackTrace();
+        setAliasValue(vo, query);
+        if (vo.isPage()) {
+            query.setFirstResult(pageData.getPage() - 1);
+            query.setMaxResults(pageData.getPageSize());
         }
-        query.setFirstResult(pageData.getPage() - 1);
-        query.setMaxResults(pageData.getPageSize());
         List<User> resultList = query.getResultList();
         return resultList;
     }
@@ -54,11 +52,7 @@ public class UserDaoCustomImpl extends BaseJpaDaoSupport<User, Long> implements 
             sql += filterSQL;
         }
         Query query = entityManager.createNativeQuery(sql);
-        try {
-            setAliasValue(vo, query);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
+        setAliasValue(vo, query);
         int total = Integer.valueOf(query.getSingleResult().toString());
         return total;
     }
@@ -114,7 +108,7 @@ public class UserDaoCustomImpl extends BaseJpaDaoSupport<User, Long> implements 
     /**
      * 设置别名值
      */
-    private void setAliasValue(UserVO vo, Query query) throws ParseException {
+    private void setAliasValue(UserVO vo, Query query) {
         String userName = vo.getUserName();
         if (userName != null && userName.trim().length() != 0) {
             query.setParameter("userName", "%" + userName + "%");
@@ -133,7 +127,12 @@ public class UserDaoCustomImpl extends BaseJpaDaoSupport<User, Long> implements 
         }
         String endTime = vo.getEndTime();
         if (endTime != null && endTime.trim().length() != 0) {
-            Date date = DateUtil.makeStr2Date(endTime, false);
+            Date date = null;
+            try {
+                date = DateUtil.makeStr2Date(endTime, false);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
             endTime = DateUtil.makeDate2Str(DateUtil.addDays(date, 1), false);
             query.setParameter("endTime", endTime);
         }

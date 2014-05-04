@@ -52,7 +52,7 @@
         <a href="#" class="easyui-linkbutton" iconCls="icon-tag-red" plain="true"
            onclick="modifyUserStatus(1);">禁用</a>
         <a href="#" class="easyui-linkbutton" iconCls="icon-print" plain="true"
-           onclick="undoData('#user_data_table');">导出Excel</a>
+           onclick="exportUserToExcel();">导出Excel</a>
     </div>
     <div>
         <form id="user_filter_form" method="post">
@@ -369,6 +369,11 @@ function getCheckedUserIds() {
         userIds = userIds == undefined ? userId : userIds + "," + userId;
     }
     return userIds;
+}
+
+//导出excel
+function exportUserToExcel() {
+    window.location.href = "<%=basePath%>/exportUserToExcel.do";
 }
 </script>
 </body>

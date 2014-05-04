@@ -2,6 +2,7 @@ package org.fire.cost.service.impl;
 
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.log4j.Logger;
+import org.apache.poi.hssf.usermodel.*;
 import org.fire.cost.dao.UserDao;
 import org.fire.cost.domain.User;
 import org.fire.cost.enums.UserStatusEnum;
@@ -254,6 +255,107 @@ public class UserServiceImpl implements UserService {
             e.printStackTrace();
         }
         return false;
+    }
+
+    /**
+     * 导出用户到excel
+     *
+     * @return
+     */
+    @Override
+    public HSSFWorkbook getExcelData() {
+        HSSFWorkbook hwb = new HSSFWorkbook();
+        // 加边框
+        HSSFCellStyle style = hwb.createCellStyle();
+        style.setBorderBottom(HSSFCellStyle.BORDER_THIN);
+        style.setBorderTop(HSSFCellStyle.BORDER_THIN);
+        style.setBorderLeft(HSSFCellStyle.BORDER_THIN);
+        style.setBorderRight(HSSFCellStyle.BORDER_THIN);
+        // 列宽
+        HSSFSheet sheet = hwb.createSheet("用户");
+        for (int i = 0; i < 6; i++) {
+            sheet.setColumnWidth(i, (short) 5000);
+        }
+        HSSFRow row = null;
+        HSSFCell cell = null;
+        createExcelTitle(sheet, style, row, cell);
+        createExcelBody(sheet, style, row, cell);
+        return hwb;
+    }
+
+    /**
+     * 创建表头
+     *
+     * @param sheet
+     * @param row
+     * @param cell
+     */
+    private void createExcelTitle(HSSFSheet sheet, HSSFCellStyle style, HSSFRow row, HSSFCell cell) {
+        row = sheet.createRow(0);
+        cell = row.createCell(0);
+        cell.setCellValue("用户名");
+        cell.setCellStyle(style);
+        cell = row.createCell(1);
+        cell.setCellValue("登录名");
+        cell.setCellStyle(style);
+        cell = row.createCell(2);
+        cell.setCellValue("年龄");
+        cell.setCellStyle(style);
+        cell = row.createCell(3);
+        cell.setCellValue("地址");
+        cell.setCellStyle(style);
+        cell = row.createCell(4);
+        cell.setCellValue("邮箱");
+        cell.setCellStyle(style);
+        cell = row.createCell(5);
+        cell.setCellValue("用户类型");
+        cell.setCellStyle(style);
+        cell = row.createCell(6);
+        cell.setCellValue("用户状态");
+        cell.setCellStyle(style);
+        cell = row.createCell(7);
+        cell.setCellValue("备注");
+        cell.setCellStyle(style);
+    }
+
+    /**
+     * 创建表体数据
+     */
+    private void createExcelBody(HSSFSheet sheet, HSSFCellStyle style, HSSFRow row, HSSFCell cell) {
+        int rowIndex = 1;
+        UserVO userVO = new UserVO();
+        userVO.setPage(false);
+        List<UserVO> userVOList = getUserByFilter(userVO, new PageData<UserVO>());
+        for (UserVO vo : userVOList) {
+            row = sheet.createRow(rowIndex);
+            cell = row.createCell(0);
+            cell.setCellValue(vo.getUserName());
+            cell.setCellStyle(style);
+            cell = row.createCell(1);
+            cell.setCellValue(vo.getLoginName());
+            cell.setCellStyle(style);
+            cell = row.createCell(2);
+            cell.setCellValue(vo.getUserAge());
+            cell.setCellStyle(style);
+            cell = row.createCell(3);
+            cell.setCellValue(vo.getUserAddress());
+            cell.setCellStyle(style);
+            cell = row.createCell(4);
+            cell.setCellValue(vo.getUserEmail());
+            cell.setCellStyle(style);
+            cell = row.createCell(5);
+            Integer userType = vo.getUserType();
+            String userTypeName = UserTypeEnum.getName(userType);
+            cell.setCellValue(userTypeName);
+            cell = row.createCell(6);
+            Integer userStatus = vo.getUserStatus();
+            String userStatusName = UserStatusEnum.getName(userStatus);
+            cell.setCellValue(userStatusName);
+            cell = row.createCell(7);
+            cell.setCellValue(vo.getUserRemark());
+            cell.setCellStyle(style);
+            rowIndex++;
+        }
     }
 
     /**

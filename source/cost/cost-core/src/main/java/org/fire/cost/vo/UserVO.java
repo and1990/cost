@@ -50,6 +50,8 @@ public class UserVO implements Serializable {
     private String startTime;
     //结束时间
     private String endTime;
+    //是否分页,默认分页
+    private boolean isPage = true;
 
     public Long getUserId() {
         return userId;
@@ -209,5 +211,13 @@ public class UserVO implements Serializable {
 
     public void setEndTime(String endTime) {
         this.endTime = endTime;
+    }
+
+    public boolean isPage() {
+        return isPage;
+    }
+
+    public void setPage(boolean isPage) {
+        this.isPage = isPage;
     }
 }

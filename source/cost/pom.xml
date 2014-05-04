@@ -11,11 +11,12 @@
         <struts.version>2.3.16.2</struts.version>
         <spring.version>3.1.1.RELEASE</spring.version>
         <jpa.version>2.0.0</jpa.version>
-        <junit.version>4.10</junit.version>
         <springdatajpa.version>1.2.0.RELEASE</springdatajpa.version>
         <hibernate.version>3.5.6-Final</hibernate.version>
         <slf4j.version>1.6.4</slf4j.version>
         <aspectj.version>1.6.12</aspectj.version>
+        <poi.version>3.8</poi.version>
+        <junit.version>4.10</junit.version>
         <jodatime.version>2.1</jodatime.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
@@ -287,6 +288,23 @@
                 <groupId>commons-codec</groupId>
                 <artifactId>commons-codec</artifactId>
                 <version>1.4</version>
+            </dependency>
+
+            <!-- poi -->
+            <dependency>
+                <groupId>org.apache.poi</groupId>
+                <artifactId>poi</artifactId>
+                <version>${poi.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.poi</groupId>
+                <artifactId>poi-ooxml</artifactId>
+                <version>${poi.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.poi</groupId>
+                <artifactId>poi-ooxml-schemas</artifactId>
+                <version>${poi.version}</version>
             </dependency>
 
         </dependencies>
