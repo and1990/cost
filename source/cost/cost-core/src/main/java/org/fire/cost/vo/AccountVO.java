@@ -53,6 +53,8 @@ public class AccountVO implements Serializable {
     private String accountStartTime;
     //消费时间【结束时间】
     private String accountEndTime;
+    //是否分页
+    private boolean isPage = true;
 
     public Long getAccountId() {
         return accountId;
@@ -220,5 +222,13 @@ public class AccountVO implements Serializable {
 
     public void setAccountEndTime(String accountEndTime) {
         this.accountEndTime = accountEndTime;
+    }
+
+    public boolean isPage() {
+        return isPage;
+    }
+
+    public void setPage(boolean isPage) {
+        this.isPage = isPage;
     }
 }

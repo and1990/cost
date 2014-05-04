@@ -52,7 +52,7 @@
         <a href="#" class="easyui-linkbutton" iconCls="icon-tag-red" plain="true"
            onclick="clearAccount();">结算</a>
         <a href="#" class="easyui-linkbutton" iconCls="icon-print" plain="true"
-           onclick="exportExcel();">导出Excel</a>
+           onclick="exportAccountToExcel();">导出Excel</a>
         <a href="#" class="easyui-linkbutton" iconCls="icon-search" plain="true"
            onclick="queryAccountByThisWeek();">查看本周</a>
         <a href="#" class="easyui-linkbutton" iconCls="icon-search" plain="true"
@@ -407,8 +407,8 @@ function clearAccount() {
 
 
 //导出Excel
-function exportExcel() {
-
+function exportAccountToExcel() {
+    window.location.href = "<%=basePath%>/exportAccountToExcel.do";
 }
 
 //查询本周

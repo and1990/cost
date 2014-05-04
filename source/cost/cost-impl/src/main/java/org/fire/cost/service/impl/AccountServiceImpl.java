@@ -4,6 +4,7 @@ import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
+import org.apache.poi.hssf.usermodel.*;
 import org.fire.cost.dao.AccountDao;
 import org.fire.cost.dao.GroupDao;
 import org.fire.cost.dao.UserDao;
@@ -275,6 +276,33 @@ public class AccountServiceImpl implements AccountService {
     }
 
     /**
+     * 获取excel数据
+     *
+     * @return
+     */
+    @Override
+    @Transactional(value = "transactionManager", rollbackFor = RollbackException.class)
+    public HSSFWorkbook getExcelData() {
+        HSSFWorkbook hwb = new HSSFWorkbook();
+        // 加边框
+        HSSFCellStyle style = hwb.createCellStyle();
+        style.setBorderBottom(HSSFCellStyle.BORDER_THIN);
+        style.setBorderTop(HSSFCellStyle.BORDER_THIN);
+        style.setBorderLeft(HSSFCellStyle.BORDER_THIN);
+        style.setBorderRight(HSSFCellStyle.BORDER_THIN);
+        // 列宽
+        HSSFSheet sheet = hwb.createSheet("用户");
+        for (int i = 0; i < 6; i++) {
+            sheet.setColumnWidth(i, (short) 5000);
+        }
+        HSSFRow row = null;
+        HSSFCell cell = null;
+        createExcelTitle(sheet, style, row, cell);
+        createExcelBody(sheet, style, row, cell);
+        return hwb;
+    }
+
+    /**
      * 获取就算方式
      *
      * @return
@@ -465,6 +493,104 @@ public class AccountServiceImpl implements AccountService {
         return accountId;
     }
 
+    /**
+     * 创建表头
+     *
+     * @param sheet
+     * @param row
+     * @param cell
+     */
+    private void createExcelTitle(HSSFSheet sheet, HSSFCellStyle style, HSSFRow row, HSSFCell cell) {
+        row = sheet.createRow(0);
+        cell = row.createCell(0);
+        cell.setCellValue("用户名");
+        cell.setCellStyle(style);
+        cell = row.createCell(1);
+        cell.setCellValue("金额");
+        cell.setCellStyle(style);
+        cell = row.createCell(2);
+        cell.setCellValue("消费类型");
+        cell.setCellStyle(style);
+        cell = row.createCell(3);
+        cell.setCellValue("结算方式");
+        cell.setCellStyle(style);
+        cell = row.createCell(4);
+        cell.setCellValue("消费组");
+        cell.setCellStyle(style);
+        cell = row.createCell(5);
+        cell.setCellValue("消费时间");
+        cell.setCellStyle(style);
+        cell = row.createCell(6);
+        cell.setCellValue("状态");
+        cell.setCellStyle(style);
+        cell = row.createCell(7);
+        cell.setCellValue("创建时间");
+        cell.setCellStyle(style);
+        cell = row.createCell(8);
+        cell.setCellValue("创建人");
+        cell.setCellStyle(style);
+        cell = row.createCell(9);
+        cell.setCellValue("修改时间");
+        cell.setCellStyle(style);
+        cell = row.createCell(10);
+        cell.setCellValue("修改人");
+        cell.setCellStyle(style);
+        cell.setCellStyle(style);
+        cell = row.createCell(11);
+        cell.setCellValue("备注");
+        cell.setCellStyle(style);
+    }
+
+    /**
+     * 创建表体数据
+     */
+    private void createExcelBody(HSSFSheet sheet, HSSFCellStyle style, HSSFRow row, HSSFCell cell) {
+        int rowIndex = 1;
+        AccountVO accountVO = new AccountVO();
+        accountVO.setPage(false);
+        List<AccountVO> accountVOList = getAccountByFilter(accountVO, new PageData<AccountVO>());
+        for (AccountVO vo : accountVOList) {
+            row = sheet.createRow(rowIndex);
+            cell = row.createCell(0);
+            cell.setCellValue(vo.getUserName());
+            cell.setCellStyle(style);
+            cell = row.createCell(1);
+            cell.setCellValue(vo.getAccountMoney().toString());
+            cell.setCellStyle(style);
+            cell = row.createCell(2);
+            Integer accountType = vo.getAccountType();
+            String accountTypeName = AccountTypeEnum.getName(accountType);
+            cell.setCellValue(accountTypeName);
+            cell.setCellStyle(style);
+            cell = row.createCell(3);
+            Integer clearType = vo.getClearType();
+            String clearTypeName = ClearTypeEnum.getName(clearType);
+            cell.setCellValue(clearTypeName);
+            cell.setCellStyle(style);
+            cell = row.createCell(4);
+            cell.setCellValue(vo.getGroupName());
+            cell.setCellStyle(style);
+            cell = row.createCell(5);
+            cell.setCellValue(vo.getAccountTime());
+            cell.setCellStyle(style);
+            cell = row.createCell(6);
+            Integer accountStatus = vo.getAccountStatus();
+            String accountStatusName = AccountStatusEnum.getName(accountStatus);
+            cell.setCellValue(accountStatusName);
+            cell = row.createCell(7);
+            cell.setCellValue(vo.getCreateTime());
+            cell = row.createCell(8);
+            cell.setCellValue(vo.getCreateUser());
+            cell = row.createCell(9);
+            cell.setCellValue(vo.getModifyUser());
+            cell = row.createCell(10);
+            cell.setCellValue(vo.getModifyTime());
+            cell = row.createCell(11);
+            cell.setCellValue(vo.getAccountRemark());
+            cell.setCellStyle(style);
+            rowIndex++;
+        }
+    }
 
     /**
      * 将VO对象转换成实体对象
@@ -474,6 +600,7 @@ public class AccountServiceImpl implements AccountService {
      * @return
      * @throws ParseException
      */
+
     private Account makeVO2Account(AccountVO vo, Account account) throws ParseException {
         if (account == null) {
             account = new Account();

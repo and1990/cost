@@ -314,6 +314,18 @@ public class UserServiceImpl implements UserService {
         cell.setCellValue("用户状态");
         cell.setCellStyle(style);
         cell = row.createCell(7);
+        cell.setCellValue("创建人");
+        cell.setCellStyle(style);
+        cell = row.createCell(8);
+        cell.setCellValue("创建时间");
+        cell.setCellStyle(style);
+        cell = row.createCell(9);
+        cell.setCellValue("修改人");
+        cell.setCellStyle(style);
+        cell = row.createCell(10);
+        cell.setCellValue("修改时间");
+        cell.setCellStyle(style);
+        cell = row.createCell(11);
         cell.setCellValue("备注");
         cell.setCellStyle(style);
     }
@@ -351,7 +363,19 @@ public class UserServiceImpl implements UserService {
             Integer userStatus = vo.getUserStatus();
             String userStatusName = UserStatusEnum.getName(userStatus);
             cell.setCellValue(userStatusName);
+            cell = row.createCell(8);
+            cell.setCellValue(vo.getCreateUser());
+            cell.setCellStyle(style);
+            cell = row.createCell(9);
+            cell.setCellValue(vo.getCreateTime());
+            cell.setCellStyle(style);
+            cell = row.createCell(10);
+            cell.setCellValue(vo.getModifyUser());
+            cell.setCellStyle(style);
             cell = row.createCell(7);
+            cell.setCellValue(vo.getModifyTime());
+            cell.setCellStyle(style);
+            cell = row.createCell(11);
             cell.setCellValue(vo.getUserRemark());
             cell.setCellStyle(style);
             rowIndex++;

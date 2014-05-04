@@ -1,5 +1,6 @@
 package org.fire.cost.service;
 
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.fire.cost.vo.AccountVO;
 import org.fire.cost.vo.PageData;
 import org.fire.cost.vo.TypeVo;
@@ -68,17 +69,17 @@ public interface AccountService {
     /**
      * 结算账单
      *
-     * @return
      * @param accountIds
      * @param accountStatus
+     * @return
      */
     void approveAccount(String accountIds, Integer accountStatus);
 
     /**
      * 得到账单类型
      *
-     * @return
      * @param accountIds
+     * @return
      */
     void clearAccount(String accountIds);
 
@@ -122,5 +123,17 @@ public interface AccountService {
      */
     Map<String, List<AccountVO>> getAccountGroupByTypeAndUser(String startTime, String endTime);
 
+    /**
+     * 获取账单状态
+     *
+     * @return
+     */
     List<TypeVo> getAccountStatus();
+
+    /**
+     * 获取excel数据
+     *
+     * @return
+     */
+    HSSFWorkbook getExcelData();
 }

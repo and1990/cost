@@ -43,12 +43,13 @@ public class AccountDaoCustomImpl extends BaseJpaDaoSupport<Account, Long> imple
             e.printStackTrace();
         }
 
-        int page = pageData.getPage() - 1;
-        int pageSize = pageData.getPageSize();
-        int start = page * pageSize;
-        query.setFirstResult(start);
-        query.setMaxResults(pageSize);
-
+        if (vo.isPage()) {
+            int page = pageData.getPage() - 1;
+            int pageSize = pageData.getPageSize();
+            int start = page * pageSize;
+            query.setFirstResult(start);
+            query.setMaxResults(pageSize);
+        }
         List<Account> resultList = query.getResultList();
         return resultList;
     }

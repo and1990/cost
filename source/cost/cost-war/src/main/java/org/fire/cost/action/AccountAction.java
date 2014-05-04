@@ -1,5 +1,7 @@
 package org.fire.cost.action;
 
+import org.apache.commons.lang3.time.DateFormatUtils;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.struts2.ServletActionContext;
 import org.apache.struts2.convention.annotation.Action;
 import org.apache.struts2.convention.annotation.Namespace;
@@ -17,6 +19,7 @@ import org.springframework.stereotype.Controller;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.OutputStream;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -320,6 +323,37 @@ public class AccountAction extends BaseAction<AccountVO> {
         String endTime = accountVO.getAccountEndTime();
         accountVoListMap = accountService.getAccountGroupByTypeAndUser(startTime, endTime);
         return SUCCESS;
+    }
+
+    /**
+     * 导出excel
+     *
+     * @return
+     */
+    @Action(value = "exportAccountToExcel", results = {@Result(name = SUCCESS, type = "stream")})
+    public String exportAccountToExcel() {
+        try {
+            HSSFWorkbook hwb = accountService.getExcelData();
+            if (hwb != null) {
+                HttpServletResponse response = ServletActionContext.getResponse();
+                response.setCharacterEncoding("UTF-8");
+                response.setContentType("application/vnd.ms-excel");
+                response.setHeader("Pragma", "No-cache");
+                response.setHeader("Cache-Control", "No-cache");
+                response.setDateHeader("Expires", 0);
+
+                StringBuilder fileName = new StringBuilder();
+                String date = DateFormatUtils.format(new Date(), "yyyy-MM-dd");
+                fileName.append("账单").append(date).append(".xls").toString();
+                String gb2312FileName = new String(fileName.toString().getBytes("GB2312"), "iso8859-1");
+                response.setHeader("Content-Disposition", "attachment; filename=" + gb2312FileName);
+                OutputStream output = response.getOutputStream();
+                hwb.write(output);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
 
