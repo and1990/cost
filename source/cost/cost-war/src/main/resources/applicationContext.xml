@@ -40,7 +40,6 @@
           class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
         <property name="dataSource" ref="cost_dataSource"/>
         <property name="persistenceUnitName" value="cost"/>
-        <!--<property name="packagesToScan" value="org.fire.cost.domain"/>-->
         <property name="persistenceXmlLocation" value="classpath*:META-INF/persistence.xml"/>
         <property name="jpaVendorAdapter">
             <bean class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter">
@@ -117,7 +116,7 @@
         </property>
     </bean>
     <bean id="securityManager" class="org.apache.shiro.web.mgt.DefaultWebSecurityManager">
-        <property name="realm" ref="authenticationService"/>
+        <property name="realm" ref="costAuthenticationRealm"/>
     </bean>
     <bean id="lifecycleBeanPostProcessor" class="org.apache.shiro.spring.LifecycleBeanPostProcessor"/>
 </beans>

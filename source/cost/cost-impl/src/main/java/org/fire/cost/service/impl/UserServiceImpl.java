@@ -1,5 +1,6 @@
 package org.fire.cost.service.impl;
 
+import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.log4j.Logger;
 import org.fire.cost.dao.UserDao;
 import org.fire.cost.domain.User;
@@ -95,7 +96,7 @@ public class UserServiceImpl implements UserService {
             vo.setUserType(UserTypeEnum.Common.getCode());
             User user = makeVO2User(vo, null);
             String password = vo.getPassword();
-            user.setPassword(password);
+            user.setPassword(DigestUtils.md5Hex(password));
             userDao.save(user);
             return true;
         } catch (Exception e) {
@@ -224,7 +225,7 @@ public class UserServiceImpl implements UserService {
             User user = userDao.findOne(userId);
             boolean passwordNotNull = password != null && password.trim().length() != 0;
             if (user != null && passwordNotNull) {
-                user.setPassword(password);
+                user.setPassword(DigestUtils.md5Hex(password));
                 userDao.save(user);
             }
         } catch (Exception e) {

@@ -1,5 +1,6 @@
 package org.fire.cost.demo;
 
+import org.apache.commons.codec.digest.DigestUtils;
 import org.junit.Test;
 
 import java.util.Calendar;
@@ -51,5 +52,7 @@ public class DateTest {
     public void testMD5() {
         /*byte[] bytes = DigestUtils.md5Digest("123".getBytes());
         System.out.println(new String(bytes));*/
+        String password = DigestUtils.md5Hex("123");
+        System.out.println(password);
     }
 }
