@@ -240,14 +240,14 @@ public class UserServiceImpl implements UserService {
      * @return
      */
     @Override
-    public boolean validatePassword(String password) {
+    public boolean validatePassword(String inputPassword) {
         try {
             Long userId = AuthenticationUtil.getLoginUserId();
             User user = userDao.findOne(userId);
-            boolean passwordNotNull = password != null && password.trim().length() != 0;
+            boolean passwordNotNull = inputPassword != null && inputPassword.trim().length() != 0;
             if (user != null && passwordNotNull) {
-                String userPassword = user.getPassword();
-                if (password.equals(userPassword)) {
+                String password = user.getPassword();
+                if (DigestUtils.md5Hex(inputPassword).equals(password)) {
                     return true;
                 }
             }
