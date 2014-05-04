@@ -25,7 +25,7 @@
 <body>
 <div id="main_layout" class="easyui-layout" data-options="fit:true">
     <!--头信息-->
-    <div id="headInfo" data-options="region:'north',split:true" style="height: 35px;background:#E7F0FF">
+    <div id="headInfo" data-options="region:'north',split:true" style="height: 30px;background:#E7F0FF">
         <div style="font-family: Microsoft YaHei;font-size: 15px;">
             <span>欢迎你，${sessionScope.userName}</span>
             <span>|</span>
