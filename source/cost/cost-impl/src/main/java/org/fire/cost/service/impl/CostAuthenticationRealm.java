@@ -3,11 +3,13 @@ package org.fire.cost.service.impl;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.authz.AuthorizationInfo;
+import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.fire.cost.dao.UserDao;
 import org.fire.cost.domain.User;
 import org.fire.cost.enums.UserStatusEnum;
+import org.fire.cost.util.AuthenticationUtil;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -47,13 +49,17 @@ public class CostAuthenticationRealm extends AuthorizingRealm {
     }
 
     /**
-     * 授权
+     * 授权，设置用户角色
      *
      * @param principals
      * @return
      */
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
-        return null;
+        int userType = AuthenticationUtil.getUserType();
+        String role = userType == 1 ? "common" : "admin";
+        SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
+        info.addRole(role);
+        return info;
     }
 }
