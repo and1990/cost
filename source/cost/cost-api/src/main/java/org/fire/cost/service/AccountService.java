@@ -5,9 +5,6 @@ import org.fire.cost.vo.AccountVO;
 import org.fire.cost.vo.PageData;
 import org.fire.cost.vo.TypeVo;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
@@ -56,15 +53,6 @@ public interface AccountService {
      * @return
      */
     boolean deleteAccount(Long accountId);
-
-    /**
-     * 文件上传
-     *
-     * @param request
-     * @param response
-     * @return
-     */
-    boolean fileUpload(HttpServletRequest request, HttpServletResponse response) throws IOException;
 
     /**
      * 结算账单

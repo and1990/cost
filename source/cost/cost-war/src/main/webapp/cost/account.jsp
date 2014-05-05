@@ -48,8 +48,6 @@
         <shiro:hasRole name="admin">
             <a href="#" class="easyui-linkbutton" iconCls="icon-tag-blue" plain="true"
                onclick="approveAccount();">审批</a>
-            <a href="#" class="easyui-linkbutton" iconCls="icon-tag-red" plain="true"
-               onclick="clearAccount();">结算</a>
         </shiro:hasRole>
         <a href="#" class="easyui-linkbutton" iconCls="icon-print" plain="true"
            onclick="exportAccountToExcel();">导出Excel</a>
@@ -109,22 +107,6 @@
                         </td>
                     </tr>
                     <tr>
-                        <td>结算方式:</td>
-                        <td>
-                            <select class="clearType easyui-combobox" id="clearType"
-                                    name="accountVO.clearType" style="width:150px;">
-                            </select>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>消费组:</td>
-                        <td>
-                            <select class="groupId easyui-combobox" id="groupId"
-                                    name="accountVO.groupId" style="width:150px;">
-                            </select>
-                        </td>
-                    </tr>
-                    <tr>
                         <td>消费时间:</td>
                         <td>
                             <input class="Wdate easyui-validatebox" id="accountTime" name="accountVO.accountTime"
@@ -164,14 +146,6 @@
         <a href="#" class="easyui-linkbutton" onclick="approveConfirm();">确定</a>
     </div>
 </div>
-
-//文件上传对话框
-<div id="fileUploadDialog">
-    <input type="file" name="file_upload" id="file_upload"/>
-</div>
-
-//图片浏览对话框
-<div id="lightbox"></div>
 
 <script type="text/javascript">
 $(function () {
@@ -218,51 +192,6 @@ $(function () {
         textField: 'name',
         onLoadSuccess: function (data) {
             $('.accountStatus').combobox('setValue', data[0].code).combobox('setText', data[0].name);
-        }
-    });
-
-    //加载结算方式
-    $('.clearType').combobox({
-        url: '<%=basePath%>/getClearType.do',
-        valueField: 'code',
-        textField: 'name',
-        onLoadSuccess: function (data) {
-            $('.clearType').combobox('setValue', data[0].code).combobox('setText', data[0].name);
-        },
-        onSelect: function (data) {
-            //$(".groupId").combo({disabled: false});
-        },
-        onChange: function (newValue, oldValue) {
-            if (newValue == 3) {
-                $.ajax({
-                    type: "POST",
-                    url: "<%=basePath%>/getGroupByUser.do",
-                    success: function (data) {
-                        var groupVo = JSON.parse(data);
-                        $('#groupId').combobox('setValue', groupVo.groupId);
-                        $(".groupId").combo({disabled: true});
-                    }
-                });
-            } else {
-                $(".groupId").combo("clear").combo({disabled: false});
-            }
-        }
-    });
-
-    //加载组信息
-    $('.groupId').combobox({
-        url: '<%=basePath%>/getAllGroupData.do',
-        valueField: 'groupId',
-        textField: 'groupName',
-        onLoadSuccess: function (data) {
-            var rows = JSON.parse(data);
-            if (rows == undefined || rows.length == 0) {
-                return;
-            }
-            for (var i = 0; i < rows.length; i++) {
-                var groupVO = rows[i];
-                $('.groupId').combobox('setValue', groupVO.groupId).combobox('setText', groupVO.groupName);
-            }
         }
     });
 });
@@ -323,8 +252,6 @@ function modifyAccount() {
     $("#accountId").val(rowData.accountId);
     $("#accountMoney").numberbox({value: rowData.accountMoney});
     $('#accountType').combobox('setValue', rowData.accountType);
-    $('#clearType').combobox('setValue', rowData.clearType);
-    $('#groupId').combobox('setValue', rowData.groupId);
     $("#accountTime").val(rowData.accountTime);
     $("#accountRemark").val(rowData.accountRemark);
     $("#accountId").val(rowData.accountId);
@@ -367,32 +294,13 @@ function approveAccount() {
 }
 //确认审批
 function approveConfirm() {
-    var accountIds = getCheckedAccountIds();
+    var accountIds = getCheckedAccount();
     var status = $('#approve_dialog_select').combobox('getValue');
     $.ajax({
                 type: "post",
                 url: "<%=basePath%>/approveAccount.do?accountIds=" + accountIds + "&accountVO.accountStatus=" + status,
                 success: function (returnData) {
                     $("#approve_dialog").dialog("close");
-                    $('#account_data_table').datagrid('reload').datagrid('uncheckAll');
-                }
-            }
-    );
-}
-
-//结算
-function clearAccount() {
-    var rowData = $("#account_data_table").datagrid("getChecked");
-    if (rowData == undefined) {
-        alert("请选择数据");
-        return;
-    }
-    var accountIds = getCheckedAccountIds();
-    var url = "<%=basePath%>/clearAccount.do?accountIds=" + accountIds;
-    $.ajax({
-                type: "post",
-                url: url,
-                success: function (returnData) {
                     $('#account_data_table').datagrid('reload').datagrid('uncheckAll');
                 }
             }
@@ -457,8 +365,8 @@ function submitForm() {
     );
 }
 
-//获取选择的用户ID
-function getCheckedAccountIds() {
+//获取选择的账单ID
+function getCheckedAccount() {
     var accountIds = undefined;
     var rowData = $("#account_data_table").datagrid("getChecked");
     for (var i = 0; i < rowData.length; i++) {

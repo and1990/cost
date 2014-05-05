@@ -32,14 +32,12 @@ public class User implements java.io.Serializable {
     private Integer userStatus;
     private Integer userType;
     private Date loginTime;
-    private String userImage;
     private String createUser;
     private Date createTime;
     private String modifyUser;
     private Date modifyTime;
     private String userRemark;
     private List<Account> accountList = new ArrayList<Account>();
-    private List<GroupUser> groupUserList = new ArrayList<GroupUser>(0);
 
 
     public User() {
@@ -57,8 +55,8 @@ public class User implements java.io.Serializable {
     }
 
     public User(String userName, String password, String loginName, Integer userAge, String userAddress, String userEmail, Integer userStatus,
-                Integer userType, Date loginTime, String userImage, String createUser, Date createTime, String modifyUser, Date modifyTime,
-                String userRemark, List<Account> accountList, List<GroupUser> groupUserList) {
+                Integer userType, Date loginTime, String createUser, Date createTime, String modifyUser, Date modifyTime,
+                String userRemark, List<Account> accountList) {
         this.userName = userName;
         this.password = password;
         this.loginName = loginName;
@@ -68,14 +66,12 @@ public class User implements java.io.Serializable {
         this.userStatus = userStatus;
         this.userType = userType;
         this.loginTime = loginTime;
-        this.userImage = userImage;
         this.createUser = createUser;
         this.createTime = createTime;
         this.modifyUser = modifyUser;
         this.modifyTime = modifyTime;
         this.userRemark = userRemark;
         this.accountList = accountList;
-        this.groupUserList = groupUserList;
     }
 
     @Id
@@ -170,15 +166,6 @@ public class User implements java.io.Serializable {
         this.loginTime = loginTime;
     }
 
-    @Column(name = "user_image", length = 100)
-    public String getUserImage() {
-        return this.userImage;
-    }
-
-    public void setUserImage(String userImage) {
-        this.userImage = userImage;
-    }
-
     @Column(name = "create_user", length = 20)
     public String getCreateUser() {
         return this.createUser;
@@ -231,15 +218,6 @@ public class User implements java.io.Serializable {
 
     public void setAccountList(List<Account> Accounts) {
         this.accountList = Accounts;
-    }
-
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "user")
-    public List<GroupUser> getGroupUserList() {
-        return this.groupUserList;
-    }
-
-    public void setGroupUserList(List<GroupUser> groupUsers) {
-        this.groupUserList = groupUsers;
     }
 
 }

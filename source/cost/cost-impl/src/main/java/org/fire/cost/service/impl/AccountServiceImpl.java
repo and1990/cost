@@ -6,10 +6,8 @@ import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.poi.hssf.usermodel.*;
 import org.fire.cost.dao.AccountDao;
-import org.fire.cost.dao.GroupDao;
 import org.fire.cost.dao.UserDao;
 import org.fire.cost.domain.Account;
-import org.fire.cost.domain.Group;
 import org.fire.cost.domain.User;
 import org.fire.cost.enums.AccountStatusEnum;
 import org.fire.cost.enums.AccountTypeEnum;
@@ -27,7 +25,6 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.annotation.Resource;
 import javax.persistence.RollbackException;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.math.BigDecimal;
 import java.text.ParseException;
@@ -49,9 +46,6 @@ public class AccountServiceImpl implements AccountService {
     @Resource
     private UserDao userDao;
 
-    @Resource
-    private GroupDao groupDao;
-
     /**
      * 根据过滤条件查询账单信息
      */
@@ -63,9 +57,6 @@ public class AccountServiceImpl implements AccountService {
             List<Account> accountList = accountDao.getAccountByFilter(vo, pageData);
             for (Account account : accountList) {
                 AccountVO accountVO = makeAccount2VO(account);
-                Group group = account.getGroup();
-                accountVO.setGroupId(group.getGroupId());
-                accountVO.setGroupName(group.getGroupName());
                 voList.add(accountVO);
             }
             return voList;
@@ -134,41 +125,6 @@ public class AccountServiceImpl implements AccountService {
         }
     }
 
-
-    /**
-     * 文件上传
-     *
-     * @param request
-     * @param response
-     */
-    @Override
-    public boolean fileUpload(HttpServletRequest request, HttpServletResponse response) {
-        try {
-            request.setCharacterEncoding("UTF-8");
-            String path = request.getSession().getServletContext().getRealPath("") + File.separator + "image";
-            String upLoadDirPath = getUpLoadDirPath(path);
-            List<FileItem> itemList = getFileItemList(request, upLoadDirPath);
-            long accountId = getAccountId(itemList);
-            String accessoryValue = accountDao.findOne(accountId).getAccountFile();
-            for (FileItem item : itemList) {
-                if (!item.isFormField()) {
-                    String itemName = item.getName();
-                    String itemPrefix = itemName.substring(0, itemName.indexOf("."));
-                    String itemPostfix = itemName.substring(itemName.indexOf("."), itemName.length());
-                    String fileName = itemPrefix + "_" + System.currentTimeMillis() + itemPostfix;
-                    item.write(new File(upLoadDirPath, fileName));
-                    String finalFileName = request.getContextPath() + "/image/FileUpload/" + fileName;
-                    accessoryValue = accessoryValue == null ? finalFileName : accessoryValue + "," + finalFileName;
-                }
-            }
-            //更新数据库
-            updateAccountFile(accountId, accessoryValue);
-            return true;
-        } catch (Exception e) {
-            e.printStackTrace();
-            throw new RollbackException();
-        }
-    }
 
     /**
      * 审批账单
@@ -422,45 +378,6 @@ public class AccountServiceImpl implements AccountService {
     }
 
     /**
-     * 更新账单附件
-     *
-     * @param accountId
-     * @param accessoryValue
-     */
-    @Transactional(value = "transactionManager", rollbackFor = RollbackException.class)
-    private void updateAccountFile(long accountId, String accessoryValue) {
-        if (accountId == 0) {
-            return;
-        }
-        Account account = accountDao.findOne(accountId);
-        account.setAccountFile(accessoryValue);
-        accountDao.save(account);
-    }
-
-
-    /**
-     * 生成文件上传到的文件夹
-     *
-     * @param path
-     * @return
-     */
-    private String getUpLoadDirPath(String path) {
-        final String fileUpLoadDirname = "FileUpload";
-        File[] fileArr = new File(path).listFiles();
-        boolean isFileUploadExist = false;
-        for (File f : fileArr) {
-            if (f.isDirectory() && fileUpLoadDirname.equals(f.getName())) {
-                isFileUploadExist = true;
-                break;
-            }
-        }
-        if (!isFileUploadExist) {
-            new File(path + File.separator + fileUpLoadDirname).mkdir();
-        }
-        return path + File.separator + fileUpLoadDirname;
-    }
-
-    /**
      * 得到itemList
      *
      * @param request
@@ -609,14 +526,10 @@ public class AccountServiceImpl implements AccountService {
         }
         User user = userDao.findOne(AuthenticationUtil.getLoginUserId());
         account.setUser(user);
-        Group group = groupDao.findOne(vo.getGroupId());
-        account.setGroup(group);
         account.setAccountMoney(vo.getAccountMoney());
         account.setAccountTime(DateUtil.makeStr2Date(vo.getAccountTime(), false));
         account.setAccountStatus(vo.getAccountStatus());
         account.setAccountType(vo.getAccountType());
-        account.setClearType(vo.getClearType());
-        account.setAccountFile(vo.getAccountFile());
         account.setModifyUser(AuthenticationUtil.getUserName());
         account.setModifyTime(new Date());
         account.setAccountRemark(vo.getAccountRemark());
@@ -640,9 +553,6 @@ public class AccountServiceImpl implements AccountService {
         vo.setAccountStatusName(AccountStatusEnum.getName(account.getAccountStatus()));
         vo.setAccountType(account.getAccountType());
         vo.setAccountTypeName(AccountTypeEnum.getName(account.getAccountType()));
-        vo.setClearType(account.getClearType());
-        vo.setClearTypeName(ClearTypeEnum.getName(account.getClearType()));
-        vo.setAccountFile(account.getAccountFile());
         vo.setCreateUser(account.getCreateUser());
         vo.setCreateTime(DateUtil.makeDate2Str(account.getCreateTime(), true));
         vo.setModifyUser(account.getModifyUser());

@@ -24,8 +24,6 @@ public class UserVO implements Serializable {
 
     private String userEmail;
 
-    private String userImage;
-
     private String loginTime;
 
     private Integer userStatus;
@@ -107,14 +105,6 @@ public class UserVO implements Serializable {
 
     public void setUserEmail(String userEmail) {
         this.userEmail = userEmail;
-    }
-
-    public String getUserImage() {
-        return userImage;
-    }
-
-    public void setUserImage(String userImage) {
-        this.userImage = userImage;
     }
 
     public String getLoginTime() {

@@ -402,7 +402,6 @@ public class UserServiceImpl implements UserService {
         user.setUserAge(vo.getUserAge());
         user.setUserAddress(vo.getUserAddress());
         user.setUserEmail(vo.getUserEmail());
-        user.setUserImage(vo.getUserImage());
         user.setUserStatus(vo.getUserStatus());
         user.setUserType(vo.getUserType());
         user.setUserRemark(vo.getUserRemark());
@@ -426,7 +425,6 @@ public class UserServiceImpl implements UserService {
         vo.setUserAge(user.getUserAge());
         vo.setUserAddress(user.getUserAddress());
         vo.setUserEmail(user.getUserEmail());
-        vo.setUserImage(user.getUserImage());
         vo.setLoginTime(DateUtil.makeDate2Str(user.getLoginTime(), true));
         vo.setUserStatus(user.getUserStatus());
         vo.setUserStatusName(UserStatusEnum.getName(user.getUserStatus()));
