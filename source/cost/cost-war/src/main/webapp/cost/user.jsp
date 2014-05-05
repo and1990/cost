@@ -69,7 +69,7 @@
                     </td>
                     <td>
                         <span>用户类型：</span>
-                        <select class="easyui-combobox" name="userVO.userType" style="width:100px;">
+                        <select class="easyui-combobox" name="userVO.userType" style="width:120px;">
                             <option value="0">全部</option>
                             <option value="1">普通用户</option>
                             <option value="2">管理员</option>
@@ -77,7 +77,7 @@
                     </td>
                     <td>
                         <span>状态：</span>
-                        <select class="easyui-combobox" name="userVO.userStatus" style="width:100px;">
+                        <select class="easyui-combobox" name="userVO.userStatus" style="width:120px;">
                             <option value="0">全部</option>
                             <option value="1">可用</option>
                             <option value="2">禁用</option>

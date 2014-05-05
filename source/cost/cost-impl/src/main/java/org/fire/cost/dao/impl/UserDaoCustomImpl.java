@@ -107,7 +107,7 @@ public class UserDaoCustomImpl extends BaseJpaDaoSupport<User, Long> implements 
         }
         Subject subject = SecurityUtils.getSubject();
         if (!subject.hasRole("admin")) {
-            filterSQL += " and create_time=:userId";
+            filterSQL += " and user_Id=:userId";
         }
         return filterSQL;
     }
@@ -144,7 +144,7 @@ public class UserDaoCustomImpl extends BaseJpaDaoSupport<User, Long> implements 
             query.setParameter("endTime", endTime);
         }
         Subject subject = SecurityUtils.getSubject();
-        if (subject.hasRole("admin")) {
+        if (!subject.hasRole("admin")) {
             Long userId = AuthenticationUtil.getLoginUserId();
             query.setParameter("userId", userId);
         }
