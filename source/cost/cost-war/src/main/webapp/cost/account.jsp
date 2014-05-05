@@ -39,14 +39,14 @@
 <!-- 工具栏 -->
 <div id="account_tool_bar" style="padding: 5px; height: auto">
     <div style="margin-bottom: 5px">
-        <a href="#" class="easyui-linkbutton" iconCls="icon-add" plain="true"
+        <a href="#" id="add_button" class="easyui-linkbutton" iconCls="icon-add" plain="true"
            onclick="addAccount();">增加</a>
-        <a href="#" class="easyui-linkbutton" iconCls="icon-edit" plain="true"
+        <a href="#" id="modify_button" class="easyui-linkbutton" iconCls="icon-edit" plain="true"
            onclick="modifyAccount();">修改</a>
-        <a href="#" class="easyui-linkbutton" iconCls="icon-remove" plain="true"
+        <a href="#" id="delete_button" class="easyui-linkbutton" iconCls="icon-remove" plain="true"
            onclick="deleteAccount();">删除</a>
         <shiro:hasRole name="admin">
-            <a href="#" class="easyui-linkbutton" iconCls="icon-tag-blue" plain="true"
+            <a href="#" id="approve_button" class="easyui-linkbutton" iconCls="icon-tag-blue" plain="true"
                onclick="approveAccount();">审批</a>
         </shiro:hasRole>
         <a href="#" class="easyui-linkbutton" iconCls="icon-print" plain="true"
@@ -147,6 +147,11 @@
     </div>
 </div>
 
+<!-- 隐藏字段 -->
+<div>
+    <input type="hidden" id="userId" name="userId" value="${userId}"/>
+</div>
+
 <script type="text/javascript">
 $(function () {
     $('#account_data_table').datagrid({
@@ -163,7 +168,36 @@ $(function () {
         selectOnCheck: true,
         checkOnSelect: true,
         pagination: true,
-        toolbar: "#account_tool_bar"
+        toolbar: "#account_tool_bar",
+        onCheck: function (rowIndex, rowData) {
+            var userId = $("#userId").val();
+            if (userId != rowData.userId) {
+                $('#modify_button').linkbutton('disable');
+                $('#delete_button').linkbutton('disable');
+            }
+        },
+        onUncheck: function (rowIndex, rowData) {
+            var rows = $("#account_data_table").datagrid("getChecked");
+            if (rows == undefined || rows.length == 0) {
+                $('#modify_button').linkbutton('enable');
+                $('#delete_button').linkbutton('enable');
+            } else {
+                if (onlyOwnData(rows)) {
+                    $('#modify_button').linkbutton('enable');
+                    $('#delete_button').linkbutton('enable');
+                }
+            }
+        },
+        onCheckAll: function (rows) {
+            if (!onlyOwnData(rows)) {
+                $('#modify_button').linkbutton('disable');
+                $('#delete_button').linkbutton('disable');
+            }
+        },
+        onUncheckAll: function (rows) {
+            $('#modify_button').linkbutton('enable');
+            $('#delete_button').linkbutton('enable');
+        }
     });
 
     //设置分页
@@ -374,6 +408,18 @@ function getCheckedAccount() {
         accountIds = accountIds == undefined ? accountId : accountIds + "," + accountId;
     }
     return accountIds;
+}
+
+//是否是自己添加的数据
+function onlyOwnData(rows) {
+    var userId = $("#userId").val();
+    var onlyOwnData = true;
+    for (var index = 0; index < rows.length; index++) {
+        if (userId != rows[index].userId) {
+            onlyOwnData = false;
+        }
+    }
+    return onlyOwnData;
 }
 </script>
 </body>

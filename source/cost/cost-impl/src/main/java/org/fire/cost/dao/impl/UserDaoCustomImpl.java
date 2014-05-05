@@ -1,7 +1,10 @@
 package org.fire.cost.dao.impl;
 
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.subject.Subject;
 import org.fire.cost.dao.custom.UserDaoCustom;
 import org.fire.cost.domain.User;
+import org.fire.cost.util.AuthenticationUtil;
 import org.fire.cost.util.DateUtil;
 import org.fire.cost.vo.PageData;
 import org.fire.cost.vo.UserVO;
@@ -102,6 +105,10 @@ public class UserDaoCustomImpl extends BaseJpaDaoSupport<User, Long> implements 
         if (endTime != null && endTime.trim().length() != 0) {
             filterSQL += " and create_time<:endTime";
         }
+        Subject subject = SecurityUtils.getSubject();
+        if (!subject.hasRole("admin")) {
+            filterSQL += " and create_time=:userId";
+        }
         return filterSQL;
     }
 
@@ -135,6 +142,11 @@ public class UserDaoCustomImpl extends BaseJpaDaoSupport<User, Long> implements 
             }
             endTime = DateUtil.makeDate2Str(DateUtil.addDays(date, 1), false);
             query.setParameter("endTime", endTime);
+        }
+        Subject subject = SecurityUtils.getSubject();
+        if (subject.hasRole("admin")) {
+            Long userId = AuthenticationUtil.getLoginUserId();
+            query.setParameter("userId", userId);
         }
     }
 
