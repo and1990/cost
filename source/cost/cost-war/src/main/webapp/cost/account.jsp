@@ -1,4 +1,5 @@
 <%@page language="java" contentType="text/html; charset=utf8" pageEncoding="utf8" %>
+<%@taglib prefix="shiro" uri="http://shiro.apache.org/tags" %>
 <%
     String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + request.getContextPath();
 %>
@@ -25,11 +26,8 @@
                 <th data-options="field:'userName',width:80,align:'center'">用户名</th>
                 <th data-options="field:'accountMoney',width:80,align:'center' ">金额</th>
                 <th data-options="field:'accountTypeName',width:60,align:'center'">消费类型</th>
-                <th data-options="field:'clearTypeName',width:60,align:'center'">结算方式</th>
-                <th data-options="field:'groupName',width:60,align:'center'">消费组</th>
                 <th data-options="field:'accountTime',width:80,align:'center'">消费时间</th>
                 <th data-options="field:'accountStatusName',width:60,align:'center'">状态</th>
-                <%--<th data-options="field:'accountFile',width:80,align:'center'">附件</th>--%>
                 <th data-options="field:'createTime',width:120,align:'center'">创建时间</th>
                 <th data-options="field:'accountRemark',width:120,align:'center'">备注</th>
             </tr>
@@ -47,10 +45,12 @@
            onclick="modifyAccount();">修改</a>
         <a href="#" class="easyui-linkbutton" iconCls="icon-remove" plain="true"
            onclick="deleteAccount();">删除</a>
-        <a href="#" class="easyui-linkbutton" iconCls="icon-tag-blue" plain="true"
-           onclick="approveAccount();">审批</a>
-        <a href="#" class="easyui-linkbutton" iconCls="icon-tag-red" plain="true"
-           onclick="clearAccount();">结算</a>
+        <shiro:hasRole name="admin">
+            <a href="#" class="easyui-linkbutton" iconCls="icon-tag-blue" plain="true"
+               onclick="approveAccount();">审批</a>
+            <a href="#" class="easyui-linkbutton" iconCls="icon-tag-red" plain="true"
+               onclick="clearAccount();">结算</a>
+        </shiro:hasRole>
         <a href="#" class="easyui-linkbutton" iconCls="icon-print" plain="true"
            onclick="exportAccountToExcel();">导出Excel</a>
         <a href="#" class="easyui-linkbutton" iconCls="icon-search" plain="true"
@@ -137,12 +137,6 @@
                             <input class="text" id="accountRemark" name="accountVO.accountRemark"/>
                         </td>
                     </tr>
-                    <%--<tr>
-                        <td>上传附件:</td>
-                        <td>
-                            <input class="text" id="accountFile" name="accountVO.accountFile"/>
-                        </td>
-                    </tr>--%>
                 </table>
             </form>
             <div style="text-align:center;padding:5px">

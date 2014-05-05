@@ -1,6 +1,7 @@
 <%@page language="java" contentType="text/html; charset=utf8"
         pageEncoding="utf8" %>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@taglib prefix="shiro" uri="http://shiro.apache.org/tags" %>
 
 <%
     String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + request.getContextPath();
@@ -41,16 +42,20 @@
 
 <div id="user_tool_bar" style="padding: 5px; height: auto">
     <div style="margin-bottom: 5px">
-        <a href="#" class="easyui-linkbutton" iconCls="icon-add" plain="true"
-           onclick="addUser();">增加</a>
+        <shiro:hasRole name="admin">
+            <a href="#" class="easyui-linkbutton" iconCls="icon-add" plain="true"
+               onclick="addUser();">增加</a>
+        </shiro:hasRole>
         <a href="#" class="easyui-linkbutton" iconCls="icon-edit" plain="true"
            onclick="modifyUser();">修改</a>
-        <a href="#" class="easyui-linkbutton" iconCls="icon-remove" plain="true"
-           onclick="deleteUser();">删除</a>
-        <a href="#" class="easyui-linkbutton" iconCls="icon-tag-blue" plain="true"
-           onclick="modifyUserStatus(2);">启用</a>
-        <a href="#" class="easyui-linkbutton" iconCls="icon-tag-red" plain="true"
-           onclick="modifyUserStatus(1);">禁用</a>
+        <shiro:hasRole name="admin">
+            <a href="#" class="easyui-linkbutton" iconCls="icon-remove" plain="true"
+               onclick="deleteUser();">删除</a>
+            <a href="#" class="easyui-linkbutton" iconCls="icon-tag-blue" plain="true"
+               onclick="modifyUserStatus(2);">启用</a>
+            <a href="#" class="easyui-linkbutton" iconCls="icon-tag-red" plain="true"
+               onclick="modifyUserStatus(1);">禁用</a>
+        </shiro:hasRole>
         <a href="#" class="easyui-linkbutton" iconCls="icon-print" plain="true"
            onclick="exportUserToExcel();">导出Excel</a>
     </div>
