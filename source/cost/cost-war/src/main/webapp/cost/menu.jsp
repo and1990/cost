@@ -24,14 +24,12 @@
             <span>用户信息</span>
             <ul>
                 <li data-options="id:'showUser'">用户信息</li>
-                <li data-options="id:'showGroup'">组员信息</li>
             </ul>
         </li>
         <li data-options="id:null">
             <span>消费信息</span>
             <ul>
                 <li data-options="id:'showAccount'">账单信息</li>
-                <li data-options="id:'showGroupAccount'">组消费</li>
             </ul>
         </li>
         <li data-options="id:null">
