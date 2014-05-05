@@ -134,7 +134,7 @@ public class AccountDaoCustomImpl extends BaseJpaDaoSupport<Account, Long> imple
      */
     @Override
     public List<AccountVO> getAccountGroupByUser(String accountStartTime, String accountEndTime) {
-        String sql = "SELECT  CONCAT(u.user_name, '_', u.user_id) AS userName, " +
+        String sql = "SELECT  CONCAT(u.user_name) AS userName, " +
                 "  SUM(a.account_money) AS accountMoney  FROM  cost_user u " +
                 "LEFT JOIN cost_account a ON u.user_id = a.user_id WHERE 1=1 ";
         boolean accountStartTimeNotNull = accountStartTime != null && accountStartTime.trim().length() != 0;
