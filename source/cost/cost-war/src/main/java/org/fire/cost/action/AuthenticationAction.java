@@ -76,6 +76,9 @@ public class AuthenticationAction extends BaseAction {
             if (msg.indexOf("COST") >= 0) {
                 msg = msg.substring("COST:".length(), msg.length());
                 MessageUtil.setMessage(message, ResultEnum.Success, HttpStatusEnum.Success, msg, null);
+            } else {
+                msg = "内部错误，请重试";
+                MessageUtil.setMessage(message, ResultEnum.Fail, HttpStatusEnum.ServerError, msg, null);
             }
         }
         return SUCCESS;
