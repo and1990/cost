@@ -19,7 +19,7 @@ import javax.persistence.Table;
  * 作者：刘腾飞
  */
 @Entity
-@Table(name = "cost_user", catalog = "cost")
+@Table(name = "cost_user")
 public class User implements java.io.Serializable {
 
     private Long userId;
