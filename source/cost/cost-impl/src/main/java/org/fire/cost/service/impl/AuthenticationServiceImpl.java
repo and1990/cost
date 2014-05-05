@@ -65,6 +65,8 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         Long userId = user.getUserId();
         userContext.setUserId(userId);
         userContext.setUserName(user.getUserName());
+        int userType = user.getUserType();
+        userContext.setUserType((short) userType);
         userContext.setUuid(UUID.randomUUID().toString());
         userContext.setTimeStamp(String.valueOf(System.currentTimeMillis()));
         StringBuffer sessionId = new StringBuffer();
