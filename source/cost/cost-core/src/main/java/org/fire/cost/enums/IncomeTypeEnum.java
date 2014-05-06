@@ -5,7 +5,7 @@ package org.fire.cost.enums;
  * 时间：2014年05月06日 下午3:05
  * 作者：刘腾飞
  */
-public enum IncomeEnum {
+public enum IncomeTypeEnum {
 
     pay(1, "工资");
 
@@ -13,7 +13,7 @@ public enum IncomeEnum {
 
     private String name;
 
-    private IncomeEnum(int code, String name) {
+    private IncomeTypeEnum(int code, String name) {
         this.code = code;
         this.name = name;
     }
@@ -25,7 +25,7 @@ public enum IncomeEnum {
      * @return
      */
     public static int getCode(String name) {
-        for (IncomeEnum enumType : IncomeEnum.values()) {
+        for (IncomeTypeEnum enumType : IncomeTypeEnum.values()) {
             if (name != null && name.equals(enumType.getName())) {
                 return enumType.getCode();
             }
@@ -40,7 +40,7 @@ public enum IncomeEnum {
      * @return
      */
     public static String getName(int code) {
-        for (IncomeEnum enumType : IncomeEnum.values()) {
+        for (IncomeTypeEnum enumType : IncomeTypeEnum.values()) {
             if (code == enumType.getCode()) {
                 return enumType.getName();
             }

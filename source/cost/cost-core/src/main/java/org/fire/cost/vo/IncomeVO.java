@@ -10,12 +10,19 @@ public class IncomeVO {
     private Long userId;
     private String userName;
     private Integer incomeMoney;
+    private Integer incomeType;
+    private String incomeTypeName;
     private String incomeTime;
     private String createUser;
     private String createTime;
     private String modifyUser;
     private String modifyTime;
     private String incomeRemark;
+    //自定义
+    private String incomeStartTime;
+    private String incomeEndTime;
+    //是否分页
+    private boolean isPage;
 
     public Long getIncomeId() {
         return incomeId;
@@ -47,6 +54,22 @@ public class IncomeVO {
 
     public void setIncomeMoney(Integer incomeMoney) {
         this.incomeMoney = incomeMoney;
+    }
+
+    public Integer getIncomeType() {
+        return incomeType;
+    }
+
+    public void setIncomeType(Integer incomeType) {
+        this.incomeType = incomeType;
+    }
+
+    public String getIncomeTypeName() {
+        return incomeTypeName;
+    }
+
+    public void setIncomeTypeName(String incomeTypeName) {
+        this.incomeTypeName = incomeTypeName;
     }
 
     public String getIncomeTime() {
@@ -97,5 +120,27 @@ public class IncomeVO {
         this.incomeRemark = incomeRemark;
     }
 
+    public String getIncomeStartTime() {
+        return incomeStartTime;
+    }
 
+    public void setIncomeStartTime(String incomeStartTime) {
+        this.incomeStartTime = incomeStartTime;
+    }
+
+    public String getIncomeEndTime() {
+        return incomeEndTime;
+    }
+
+    public void setIncomeEndTime(String incomeEndTime) {
+        this.incomeEndTime = incomeEndTime;
+    }
+
+    public boolean isPage() {
+        return isPage;
+    }
+
+    public void setPage(boolean isPage) {
+        this.isPage = isPage;
+    }
 }

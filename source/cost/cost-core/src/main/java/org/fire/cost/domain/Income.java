@@ -1,6 +1,7 @@
 package org.fire.cost.domain;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.sql.Timestamp;
 
 import static javax.persistence.GenerationType.IDENTITY;
@@ -12,9 +13,10 @@ import static javax.persistence.GenerationType.IDENTITY;
  */
 @Entity
 @Table(name = "cost_income")
-public class Income {
+public class Income implements Serializable {
     private Long incomeId;
     private Integer incomeMoney;
+    private Integer incomeType;
     private Timestamp incomeTime;
     private String createUser;
     private Timestamp createTime;
@@ -42,6 +44,16 @@ public class Income {
 
     public void setIncomeMoney(Integer incomeMoney) {
         this.incomeMoney = incomeMoney;
+    }
+
+    @Basic
+    @Column(name = "income_type", nullable = false, insertable = true, updatable = true, length = 10, precision = 0)
+    public Integer getIncomeType() {
+        return incomeType;
+    }
+
+    public void setIncomeType(Integer incomeType) {
+        this.incomeType = incomeType;
     }
 
     @Basic

@@ -47,12 +47,12 @@ public class AccountAction extends BaseAction<AccountVO> {
     private Map<String, List<AccountVO>> accountVoListMap;
 
     /**
-     * 账单类型VO
+     * 账单状态VO
      */
     private List<TypeVo> accountStatusList;
 
     /**
-     * 账单状态VO
+     * 账单类型VO
      */
     private List<TypeVo> accountTypeList;
     /**
