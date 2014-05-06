@@ -7,9 +7,7 @@
 
         <class>org.fire.cost.domain.User</class>
         <class>org.fire.cost.domain.Account</class>
-        <class>org.fire.cost.domain.CostIncome</class>
-        <class>org.fire.cost.domain.CostUser</class>
-        <class>org.fire.cost.domain.CostAccount</class>
+        <class>org.fire.cost.domain.Income</class>
 
         <properties>
             <property name="hibernate.dialect" value="org.hibernate.dialect.MySQLDialect"/>
