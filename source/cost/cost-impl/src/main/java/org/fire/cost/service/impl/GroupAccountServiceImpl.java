@@ -3,7 +3,7 @@ package org.fire.cost.service.impl;
 import org.fire.cost.dao.AccountDao;
 import org.fire.cost.dao.GroupAccountDao;
 import org.fire.cost.dao.GroupDao;
-import org.fire.cost.entity.Group;
+import org.fire.cost.domain.Group;
 import org.fire.cost.service.GroupAccountService;
 import org.fire.cost.util.DateUtil;
 import org.fire.cost.vo.AccountVO;
@@ -20,8 +20,7 @@ import java.util.List;
  * 时间：14-2-19 下午9:01
  */
 @Service
-public class GroupAccountServiceImpl implements GroupAccountService
-{
+public class GroupAccountServiceImpl implements GroupAccountService {
 
     //@Resource
     private GroupAccountDao groupAccountDao;
@@ -39,8 +38,7 @@ public class GroupAccountServiceImpl implements GroupAccountService
      * @return
      */
     @Override
-    public List<GroupAccountVO> getGroupAccountByFilter(GroupAccountVO vo)
-    {
+    public List<GroupAccountVO> getGroupAccountByFilter(GroupAccountVO vo) {
         return null;
     }
 
@@ -50,17 +48,16 @@ public class GroupAccountServiceImpl implements GroupAccountService
      * @return
      */
     @Override
-    public boolean addGroupAccount(Long groupId)
-    {
+    public boolean addGroupAccount(Long groupId) {
         //TODO
         Group group = groupDao.findGroupByStatus();
         Date modifyTime = group.getModifyTime();
         String startTime = DateUtil.makeDate2Str(modifyTime, false);
         String endTime = null;
         AccountVO vo = new AccountVO();
-        vo.setStartTime(startTime);
-        vo.setEndTime(endTime);
-        accountDao.getAccountByFilter(vo);
+        /*vo.setStartTime(startTime);
+        vo.setEndTime(endTime);*/
+        accountDao.getAccountByFilter(vo, null);
         return false;
     }
 }

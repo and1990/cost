@@ -1,11 +1,12 @@
 package org.fire.cost.service;
 
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.fire.cost.vo.PageData;
 import org.fire.cost.vo.UserVO;
 
 import java.util.List;
 
-public interface UserService
-{
+public interface UserService {
 
     /**
      * 用户登录
@@ -28,14 +29,21 @@ public interface UserService
      *
      * @return
      */
-    public String getLoginUserName();
+    String getLoginUserName();
 
     /**
      * 根据过滤条件查询用户
      *
      * @param vo
      */
-    List<UserVO> getUserByFilter(UserVO vo);
+    List<UserVO> getUserByFilter(UserVO vo, PageData<UserVO> pageData);
+
+    /**
+     * 获取总用户记录数
+     *
+     * @return
+     */
+    int getUserDataTotal(UserVO vo);
 
     /**
      * 增加用户
@@ -76,4 +84,34 @@ public interface UserService
      * @return
      */
     String getUserNamesByUserIds(String userIds);
+
+    /**
+     * 禁用用户
+     *
+     * @param userIds
+     * @param userStatus
+     */
+    void modifyUserStatus(String userIds, Integer userStatus);
+
+    /**
+     * 修改密码
+     *
+     * @return
+     */
+    void modifyPassword(String password);
+
+    /**
+     * 验证密码是否正确
+     *
+     * @param password
+     * @return
+     */
+    boolean validatePassword(String password);
+
+    /**
+     * 获取excel数据
+     *
+     * @return
+     */
+    HSSFWorkbook getExcelData();
 }

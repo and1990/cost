@@ -1,6 +1,7 @@
 package org.fire.cost.vo;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 
 
 /**
@@ -8,25 +9,20 @@ import java.io.Serializable;
  * 作者：liutengfei 【刘腾飞】
  * 时间：14-2-14 下午2:07
  */
-public class GroupAccountVO implements Serializable
-{
-    private long groupAccountId;
+public class GroupAccountVO implements Serializable {
+    private static final long serialVersionUID = 1L;
 
-    private long groupId;
+    private Long groupAccountId;
 
-    private String groupName;
+    private Long groupId;
 
-    private String userIds;
-
-    private String userNames;
-
-    private String accountMoney;
+    private BigDecimal accountMoney;
 
     private String startDate;
 
     private String endDate;
 
-    private int isOver;
+    private Integer isOver;
 
     private String isOverName;
 
@@ -36,133 +32,83 @@ public class GroupAccountVO implements Serializable
 
     private String groupAccountRemark;
 
-    public long getGroupAccountId()
-    {
+    public Long getGroupAccountId() {
         return groupAccountId;
     }
 
-    public void setGroupAccountId(long groupAccountId)
-    {
+    public void setGroupAccountId(Long groupAccountId) {
         this.groupAccountId = groupAccountId;
     }
 
-    public long getGroupId()
-    {
+    public Long getGroupId() {
         return groupId;
     }
 
-    public void setGroupId(long groupId)
-    {
+    public void setGroupId(Long groupId) {
         this.groupId = groupId;
     }
 
-    public String getGroupName()
-    {
-        return groupName;
-    }
-
-    public void setGroupName(String groupName)
-    {
-        this.groupName = groupName;
-    }
-
-    public String getUserIds()
-    {
-        return userIds;
-    }
-
-    public void setUserIds(String userIds)
-    {
-        this.userIds = userIds;
-    }
-
-    public String getUserNames()
-    {
-        return userNames;
-    }
-
-    public void setUserNames(String userNames)
-    {
-        this.userNames = userNames;
-    }
-
-    public String getAccountMoney()
-    {
+    public BigDecimal getAccountMoney() {
         return accountMoney;
     }
 
-    public void setAccountMoney(String accountMoney)
-    {
+    public void setAccountMoney(BigDecimal accountMoney) {
         this.accountMoney = accountMoney;
     }
 
-    public String getStartDate()
-    {
+    public String getStartDate() {
         return startDate;
     }
 
-    public void setStartDate(String startDate)
-    {
+    public void setStartDate(String startDate) {
         this.startDate = startDate;
     }
 
-    public String getEndDate()
-    {
+    public String getEndDate() {
         return endDate;
     }
 
-    public void setEndDate(String endDate)
-    {
+    public void setEndDate(String endDate) {
         this.endDate = endDate;
     }
 
-    public int getIsOver()
-    {
+    public int getIsOver() {
         return isOver;
     }
 
-    public void setIsOver(int isOver)
-    {
+    public void setIsOver(Integer isOver) {
         this.isOver = isOver;
     }
 
-    public String getIsOverName()
-    {
+    public String getIsOverName() {
         return isOverName;
     }
 
-    public void setIsOverName(String isOverName)
-    {
+    public void setIsOverName(String isOverName) {
         this.isOverName = isOverName;
     }
 
-    public String getCreateUser()
-    {
+    public String getCreateUser() {
         return createUser;
     }
 
-    public void setCreateUser(String createUser)
-    {
+    public void setCreateUser(String createUser) {
         this.createUser = createUser;
     }
 
-    public String getCreateTime()
-    {
+    public String getCreateTime() {
         return createTime;
     }
 
-    public void setCreateTime(String createTime)
-    {
+    public void setCreateTime(String createTime) {
         this.createTime = createTime;
     }
 
-    public String getGroupAccountRemark()
-    {
+    public String getGroupAccountRemark() {
         return groupAccountRemark;
     }
 
-    public void setGroupAccountRemark(String groupAccountRemark)
-    {
+    public void setGroupAccountRemark(String groupAccountRemark) {
         this.groupAccountRemark = groupAccountRemark;
     }
 }

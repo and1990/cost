@@ -1,7 +1,7 @@
 package org.fire.cost.dao;
 
 import org.fire.cost.dao.custom.GroupAccountDaoCustom;
-import org.fire.cost.entity.GroupAccount;
+import org.fire.cost.domain.GroupAccount;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 /**
@@ -9,5 +9,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
  * 作者：liutengfei 【刘腾飞】
  * 时间：14-2-19 下午8:58
  */
-public interface GroupAccountDao extends JpaRepository<GroupAccount, Long>, GroupAccountDaoCustom
-{}
+public interface GroupAccountDao extends JpaRepository<GroupAccount, Long>, GroupAccountDaoCustom {
+}

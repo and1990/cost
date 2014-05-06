@@ -4,6 +4,7 @@ import net.rubyeye.xmemcached.exception.MemcachedException;
 import org.fire.cost.context.ThreadMessageContext;
 import org.fire.cost.context.UserContext;
 import org.fire.cost.service.CostContextService;
+import org.fire.cost.util.AuthenticationUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -12,6 +13,8 @@ import javax.annotation.Resource;
 import javax.servlet.*;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.concurrent.TimeoutException;
 
@@ -20,8 +23,7 @@ import java.util.concurrent.TimeoutException;
  *
  * @author liutengfei
  */
-public class CostAuthenticationFilter implements Filter
-{
+public class CostAuthenticationFilter implements Filter {
     private static final Logger log = LoggerFactory.getLogger(CostAuthenticationFilter.class);
 
     @Resource
@@ -30,113 +32,74 @@ public class CostAuthenticationFilter implements Filter
     /**
      * 登出路径
      */
-    @Value("${cost.loginout.ptah}")
-    private String loginOutPath;
-
-    /**
-     * 心跳检查
-     */
-    @Value("$(cost.palpitation.path)")
-    private String palpitationPath;
+    @Value("${cost.logout.ptah}")
+    private String logoutPath;
 
     /**
      * 初始化
      */
-    public void init(FilterConfig filterConfig) throws ServletException
-    {
-        // TODO Auto-generated method stub
+    public void init(FilterConfig filterConfig) throws ServletException {
     }
 
     /**
      * 请求验证
      */
-    public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException
-    {
+    public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
         HttpServletRequest httpRequest = (HttpServletRequest) request;
-        Cookie[] cookieArr = httpRequest.getCookies();
-        String sessionId = getCookieValue(cookieArr, "sessionId");
-        if (sessionId != null && sessionId.trim().length() > 0)
-        {
-            UserContext cache = costContextService.getUserContext(sessionId);
-            if (cache != null)
-            {
-                UserContext userContext = new UserContext();
-                String userId = getCookieValue(cookieArr, "userId");
-                String uuid = getCookieValue(cookieArr, "uuid");
-                userContext.setSessionId(sessionId);
-                userContext.setUserId(Long.valueOf(userId));
-                userContext.setUuid(uuid);
-                userContext.setTimeStamp(cache.getTimeStamp());
-                userContext.setUserType(cache.getUserType());
+        HttpServletResponse httpResponse = (HttpServletResponse) response;
+        HttpSession session = httpRequest.getSession();
+        String userName = (String) session.getAttribute("userName");
+        if (userName == null || userName.length() == 0) {
+            session.setAttribute("userName", AuthenticationUtil.getUserName());
+        }
+        String sessionId = getCookieValue(httpRequest, "sessionId");
+        if (sessionId != null && sessionId.trim().length() > 0) {
+            UserContext userContext = costContextService.getUserContext(sessionId);
+            if (userContext != null) {
                 ThreadMessageContext.set(userContext);
-                try
-                {
-                    int path = httpRequest.getRequestURI().lastIndexOf(palpitationPath);
-                    //业务请求 延迟会话
-                    if (path < 0)
-                    {
-                        costContextService.delay(sessionId);
-                    }
-                    chain.doFilter(request, response);
-                } catch (InterruptedException e)
-                {
+                try {
+                    costContextService.delay(sessionId);
+                    chain.doFilter(httpRequest, httpResponse);
+                } catch (InterruptedException e) {
                     e.printStackTrace();
-                } catch (MemcachedException e)
-                {
+                } catch (MemcachedException e) {
                     e.printStackTrace();
-                } catch (TimeoutException e)
-                {
+                } catch (TimeoutException e) {
                     e.printStackTrace();
                 }
-            } else
-            {
-                if (log.isDebugEnabled())
-                {
+            } else {
+                if (log.isDebugEnabled()) {
                     log.debug("缓存不存在或者失效，请重新登录");
                 }
-                request.getRequestDispatcher(loginOutPath).forward(request, response);
+
+                httpResponse.sendRedirect(logoutPath);
                 return;
             }
-        } else
-        {
-            if (log.isDebugEnabled())
-            {
-                log.debug("请求头信息不全，无效，请检查http头信息");
+        } else {
+            if (log.isDebugEnabled()) {
+                log.debug("请求信息不全，无效，请检查http头信息");
             }
-            request.getRequestDispatcher(loginOutPath).forward(request, response);
+            httpResponse.sendRedirect(logoutPath);
             return;
         }
     }
 
-    public void destroy()
-    {
-        // TODO Auto-generated method stub
+    public void destroy() {
 
     }
 
     /**
      * 得到cookie的值
      *
-     * @param cookieArr
      * @return
      */
-    private String getCookieValue(Cookie[] cookieArr, String key)
-    {
-        if (cookieArr == null || cookieArr.length == 0)
-        {
-            return null;
-        }
-        for (Cookie cookie : cookieArr)
-        {
-            if ("sessionId".equals(cookie.getName()) && "sessionId".equals(key))
-            {
-                return cookie.getValue();
-            } else if ("uuid".equals(cookie.getName()) && "uuid".equals(key))
-            {
-                return cookie.getValue();
-            } else if ("userId".equals(cookie.getName()) && "userId".equals(key))
-            {
-                return cookie.getValue();
+    private String getCookieValue(HttpServletRequest request, String key) {
+        Cookie[] cookieArr = request.getCookies();
+        if (cookieArr != null && cookieArr.length != 0) {
+            for (Cookie cookie : cookieArr) {
+                if ("sessionId".equals(cookie.getName()) && "sessionId".equals(key)) {
+                    return cookie.getValue();
+                }
             }
         }
         return null;
