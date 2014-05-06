@@ -1,13 +1,19 @@
 package org.fire.cost.enums;
 
-public enum HttpStatusEnum {
-    Success(200, "成功"), Warn(300, "警告"), RequestError(400, "请求错误"), ServerError(500, "内部错误");
+/**
+ * 注释：收入方式
+ * 时间：2014年05月06日 下午3:05
+ * 作者：刘腾飞
+ */
+public enum IncomeEnum {
+
+    pay(1, "工资");
 
     private int code;
 
     private String name;
 
-    private HttpStatusEnum(int code, String name) {
+    private IncomeEnum(int code, String name) {
         this.code = code;
         this.name = name;
     }
@@ -19,7 +25,7 @@ public enum HttpStatusEnum {
      * @return
      */
     public static int getCode(String name) {
-        for (HttpStatusEnum enumType : HttpStatusEnum.values()) {
+        for (IncomeEnum enumType : IncomeEnum.values()) {
             if (name != null && name.equals(enumType.getName())) {
                 return enumType.getCode();
             }
@@ -34,7 +40,7 @@ public enum HttpStatusEnum {
      * @return
      */
     public static String getName(int code) {
-        for (HttpStatusEnum enumType : HttpStatusEnum.values()) {
+        for (IncomeEnum enumType : IncomeEnum.values()) {
             if (code == enumType.getCode()) {
                 return enumType.getName();
             }
@@ -57,5 +63,6 @@ public enum HttpStatusEnum {
     public void setName(String name) {
         this.name = name;
     }
+
 
 }
