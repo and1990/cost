@@ -27,8 +27,8 @@
                 <th data-options="field:'incomeMoney',width:80,align:'center' ">金额</th>
                 <th data-options="field:'incomeTypeName',width:60,align:'center'">收入方式</th>
                 <th data-options="field:'incomeTime',width:80,align:'center'">收入时间</th>
+                <th data-options="field:'createUser',width:120,align:'center'">创建人</th>
                 <th data-options="field:'createTime',width:120,align:'center'">创建时间</th>
-                <th data-options="field:'modifyTime',width:120,align:'center'">创建时间</th>
                 <th data-options="field:'incomeRemark',width:120,align:'center'">备注</th>
             </tr>
             </thead>
