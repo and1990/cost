@@ -7,10 +7,8 @@ var httpUrl = undefined;
 // 发送数据
 var sendData = undefined;
 // 增加记录
-function addData(dataTableId, url)
-{
-    if (actionType != undefined)
-    {
+function addData(dataTableId, url) {
+    if (actionType != undefined) {
         return;
     }
     actionType = 0;
@@ -21,10 +19,8 @@ function addData(dataTableId, url)
     sendData = $(dataTableId).datagrid('getSelected');
 }
 // 编辑记录
-function editData(dataTableId, url)
-{
-    if (actionType != undefined)
-    {
+function editData(dataTableId, url) {
+    if (actionType != undefined) {
         return;
     }
     actionType = 1;
@@ -33,14 +29,11 @@ function editData(dataTableId, url)
     sendData = $(dataTableId).datagrid('getSelected');
 }
 // 删除记录
-function removeData(dataTableId, url)
-{
-    if (actionType != undefined)
-    {
+function removeData(dataTableId, url) {
+    if (actionType != undefined) {
         return;
     }
-    if (window.confirm("确定删除？"))
-    {
+    if (window.confirm("确定删除？")) {
         actionType = 2;
         sendData = $(dataTableId).datagrid('getSelected');
         var jsonData = JSON.stringify(sendData);
@@ -50,10 +43,8 @@ function removeData(dataTableId, url)
     }
 }
 // 保存记录
-function saveData(dataTableId)
-{
-    if (actionType == undefined)
-    {
+function saveData(dataTableId) {
+    if (actionType == undefined) {
         return;
     }
     $(dataTableId).datagrid('acceptChanges');
@@ -63,39 +54,32 @@ function saveData(dataTableId)
     actionType = undefined;
 }
 // 撤销
-function undoData(dataTableId)
-{
+function undoData(dataTableId) {
     $(dataTableId).datagrid('rejectChanges');
     actionType = undefined;
 }
 // 变化行数
-function getChanges(dataTableId)
-{
+function getChanges(dataTableId) {
     var rows = $(dataTableId).datagrid('getChanges');
     alert(rows.length + ' rows are changed!');
 }
 // 向服务端发送请求
-function sendRequest(jsonData, httpUrl)
-{
+function sendRequest(jsonData, httpUrl) {
     $.ajax({
         type: "POST",
         contentType: "application/json",
         data: jsonData,
         url: httpUrl,
-        success: function (data)
-        {
+        success: function (data) {
             // 成功
-            if (data.result == 1)
-            {
+            if (data.result == 1) {
                 alert("操作成功");
             }
-            if (data.result == 2)
-            {
+            if (data.result == 2) {
                 alert(data.exceptionMsg);
             }
         },
-        error: function (data)
-        {
+        error: function (data) {
             alert("系统错误，请联系管理员");
         }
     });
@@ -105,10 +89,8 @@ var statusData = [
     {'value': '1', 'name': '不可用'},
     {'value': '2', 'name': '可用'}
 ];
-function showStatusText(value)
-{
-    for (var i = 0; i < statusData.length; i++)
-    {
+function showStatusText(value) {
+    for (var i = 0; i < statusData.length; i++) {
         if (statusData[i].value == value)
             return statusData[i].name;
     }
@@ -119,10 +101,8 @@ var isAdminData = [
     {'value': '1', 'name': '否'},
     {'value': '2', 'name': '是'}
 ];
-function showIsAdminText(value)
-{
-    for (var i = 0; i < isAdminData.length; i++)
-    {
+function showIsAdminText(value) {
+    for (var i = 0; i < isAdminData.length; i++) {
         if (isAdminData[i].value == value)
             return isAdminData[i].name;
     }
