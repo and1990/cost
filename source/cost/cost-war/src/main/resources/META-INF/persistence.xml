@@ -7,6 +7,9 @@
 
         <class>org.fire.cost.domain.User</class>
         <class>org.fire.cost.domain.Account</class>
+        <class>org.fire.cost.domain.CostIncome</class>
+        <class>org.fire.cost.domain.CostUser</class>
+        <class>org.fire.cost.domain.CostAccount</class>
 
         <properties>
             <property name="hibernate.dialect" value="org.hibernate.dialect.MySQLDialect"/>
@@ -20,7 +23,7 @@
             <property name="hibernate.memcached.servers" value="127.0.0.1:11211"/>
             <property name="hibernate.memcached.memcacheClientFactory"
                       value="net.rubyeye.xmemcached.utils.hibernate.XmemcachedClientFactory"/>
-            <property name="hibernate.connection.url" value="jdbc:mysql://localhost:3306/cost"/>
+            <property name="hibernate.connection.url" value="jdbc:mysql://localhost:3306/cost_shasha"/>
             <property name="hibernate.connection.driver_class" value="com.mysql.jdbc.Driver"/>
             <property name="hibernate.connection.username" value="root"/>
             <property name="hibernate.connection.password" value="1234"/>

@@ -38,6 +38,7 @@ public class User implements java.io.Serializable {
     private Date modifyTime;
     private String userRemark;
     private List<Account> accountList = new ArrayList<Account>();
+    private List<Income> incomeList = new ArrayList<Income>();
 
 
     public User() {
@@ -218,6 +219,15 @@ public class User implements java.io.Serializable {
 
     public void setAccountList(List<Account> Accounts) {
         this.accountList = Accounts;
+    }
+
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "user")
+    public List<Income> getIncomeList() {
+        return incomeList;
+    }
+
+    public void setIncomeList(List<Income> incomeList) {
+        this.incomeList = incomeList;
     }
 
 }
