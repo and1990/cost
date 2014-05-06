@@ -13,6 +13,7 @@ import java.util.List;
  * 作者：刘腾飞
  */
 public class IncomeDaoCustomImpl implements IncomeDaoCustom {
+
     @Override
     public List<Income> getIncomeByFilter(IncomeVO vo, PageData<IncomeVO> pageData) {
         return null;
