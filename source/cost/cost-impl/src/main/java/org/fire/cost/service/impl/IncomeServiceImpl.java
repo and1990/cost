@@ -2,9 +2,13 @@ package org.fire.cost.service.impl;
 
 import org.apache.poi.hssf.usermodel.*;
 import org.fire.cost.dao.IncomeDao;
+import org.fire.cost.dao.UserDao;
 import org.fire.cost.domain.Income;
+import org.fire.cost.domain.User;
 import org.fire.cost.enums.IncomeTypeEnum;
 import org.fire.cost.service.IncomeService;
+import org.fire.cost.util.AuthenticationUtil;
+import org.fire.cost.util.DateUtil;
 import org.fire.cost.vo.IncomeVO;
 import org.fire.cost.vo.PageData;
 import org.fire.cost.vo.TypeVo;
@@ -12,7 +16,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -25,6 +31,9 @@ public class IncomeServiceImpl implements IncomeService {
     @Resource
     private IncomeDao incomeDao;
 
+    @Resource
+    private UserDao userDao;
+
     /**
      * 查询收入
      *
@@ -33,6 +42,7 @@ public class IncomeServiceImpl implements IncomeService {
      * @return
      */
     @Override
+    @Transactional(value = "transactionManager")
     public List<IncomeVO> getIncomeByFilter(IncomeVO vo, PageData<IncomeVO> pageData) {
         List<IncomeVO> incomeVOList = new ArrayList<IncomeVO>();
         try {
@@ -77,6 +87,9 @@ public class IncomeServiceImpl implements IncomeService {
     public boolean addIncome(IncomeVO vo) {
         try {
             Income income = makeVoToIncome(null, vo);
+            Long userId = AuthenticationUtil.getLoginUserId();
+            User user = userDao.findOne(userId);
+            income.setUser(user);
             incomeDao.save(income);
             return true;
         } catch (Exception e) {
@@ -92,6 +105,7 @@ public class IncomeServiceImpl implements IncomeService {
      * @return
      */
     @Override
+    @Transactional(value = "transactionManager")
     public boolean modifyIncome(IncomeVO vo) {
         try {
             Long incomeId = vo.getIncomeId();
@@ -112,6 +126,7 @@ public class IncomeServiceImpl implements IncomeService {
      * @return
      */
     @Override
+    @Transactional(value = "transactionManager")
     public boolean deleteIncome(Long incomeId) {
         try {
             incomeDao.delete(incomeId);
@@ -179,6 +194,7 @@ public class IncomeServiceImpl implements IncomeService {
      * @return
      */
     @Override
+    @Transactional(value = "transactionManager")
     public HSSFWorkbook getExcelData() {
         HSSFWorkbook hwb = new HSSFWorkbook();
         try {
@@ -288,8 +304,19 @@ public class IncomeServiceImpl implements IncomeService {
      * @param incomeVO
      * @return
      */
-    private Income makeVoToIncome(Income income, IncomeVO incomeVO) {
-
+    private Income makeVoToIncome(Income income, IncomeVO incomeVO) throws ParseException {
+        if (income == null) {
+            income = new Income();
+            income.setCreateUser(AuthenticationUtil.getUserName());
+            income.setCreateTime(new Date());
+        }
+        income.setIncomeMoney(incomeVO.getIncomeMoney());
+        String incomeTime = incomeVO.getIncomeTime();
+        income.setIncomeTime(DateUtil.makeStr2Date(incomeTime, false));
+        income.setIncomeType(incomeVO.getIncomeType());
+        income.setIncomeRemark(incomeVO.getIncomeRemark());
+        income.setModifyTime(new Date());
+        income.setModifyUser(AuthenticationUtil.getUserName());
         return income;
     }
 
@@ -300,6 +327,25 @@ public class IncomeServiceImpl implements IncomeService {
      */
     private IncomeVO makeIncomeToVo(Income income) {
         IncomeVO incomeVO = new IncomeVO();
+        if (income == null) {
+            return incomeVO;
+        }
+        User user = income.getUser();
+        incomeVO.setIncomeId(income.getIncomeId());
+        incomeVO.setUserId(user.getUserId());
+        incomeVO.setUserName(user.getUserName());
+        incomeVO.setIncomeMoney(income.getIncomeMoney());
+        Date incomeTime = income.getIncomeTime();
+        incomeVO.setIncomeTime(DateUtil.makeDate2Str(incomeTime, false));
+        Integer incomeType = income.getIncomeType();
+        incomeVO.setIncomeType(incomeType);
+        String incomeTypeName = IncomeTypeEnum.getName(incomeType);
+        incomeVO.setIncomeTypeName(incomeTypeName);
+        incomeVO.setCreateUser(income.getCreateUser());
+        incomeVO.setCreateTime(DateUtil.makeDate2Str(income.getCreateTime(), true));
+        incomeVO.setModifyUser(income.getModifyUser());
+        incomeVO.setModifyTime(DateUtil.makeDate2Str(income.getCreateTime(), true));
+        incomeVO.setIncomeRemark(income.getIncomeRemark());
         return incomeVO;
     }
 }

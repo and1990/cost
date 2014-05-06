@@ -41,9 +41,9 @@
     <div style="margin-bottom: 5px">
         <a href="#" id="add_button" class="easyui-linkbutton" iconCls="icon-add" plain="true"
            onclick="addIncome();">增加</a>
-        <a href="#" id="modify_button" class="easyui-linkbutton" iconCls="icon-edit" plain="true"
+        <a href="#" id="modify_button_income" class="easyui-linkbutton" iconCls="icon-edit" plain="true"
            onclick="modifyIncome();">修改</a>
-        <a href="#" id="delete_button" class="easyui-linkbutton" iconCls="icon-remove" plain="true"
+        <a href="#" id="delete_button_income" class="easyui-linkbutton" iconCls="icon-remove" plain="true"
            onclick="deleteIncome();">删除</a>
         <a href="#" class="easyui-linkbutton" iconCls="icon-print" plain="true"
            onclick="exportincomeToExcel();">导出Excel</a>
@@ -57,13 +57,8 @@
             <input class="incomeType easyui-combobox" name="incomeVO.incomeType"
                    style="width:100px;" editable="false"/>
 
-            <span>状态：</span>
-            <input class="incomeStatus easyui-combobox" name="incomeVO.incomeStatus"
-                   style="width:100px;" editable="false"/>
-
             收入时间从: <input class="Wdate" id="incomeStartTime" name="incomeVO.incomeStartTime" style="width: 100px"
                           onfocus="WdatePicker({dateFmt:'yyyy-MM-dd',maxDate:'#F{$dp.$D(\'incomeEndTime\');}'})">
-
             到: <input class="Wdate" id="incomeEndTime" name="incomeVO.incomeEndTime" style="width: 100px"
                       onfocus="WdatePicker({dateFmt:'yyyy-MM-dd',minDate:'#F{$dp.$D(\'incomeStartTime\');}',maxDate:'%y-%M-%d'})">
             <a href="#" class="easyui-linkbutton" iconCls="icon-search" onclick="getIncomeByFilter();">查询</a>
@@ -80,7 +75,6 @@
                 <table cellpadding="5">
                     <tr>
                         <input type="hidden" id="incomeId" name="incomeVO.incomeId"/>
-                        <input type="hidden" id="incomeStatus" name="incomeVO.incomeStatus"/>
                     </tr>
                     <tr>
                         <td>金额：</td>
@@ -148,31 +142,31 @@ $(function () {
         onCheck: function (rowIndex, rowData) {
             var userId = $("#userId").val();
             if (userId != rowData.userId) {
-                $('#modify_button').linkbutton('disable');
-                $('#delete_button').linkbutton('disable');
+                $('#modify_button_income').linkbutton('disable');
+                $('#delete_button_income').linkbutton('disable');
             }
         },
         onUncheck: function (rowIndex, rowData) {
             var rows = $("#income_data_table").datagrid("getChecked");
             if (rows == undefined || rows.length == 0) {
-                $('#modify_button').linkbutton('enable');
-                $('#delete_button').linkbutton('enable');
+                $('#modify_button_income').linkbutton('enable');
+                $('#delete_button_income').linkbutton('enable');
             } else {
                 if (onlyOwnData(rows)) {
-                    $('#modify_button').linkbutton('enable');
-                    $('#delete_button').linkbutton('enable');
+                    $('#modify_button_income').linkbutton('enable');
+                    $('#delete_button_income').linkbutton('enable');
                 }
             }
         },
         onCheckAll: function (rows) {
             if (!onlyOwnData(rows)) {
-                $('#modify_button').linkbutton('disable');
-                $('#delete_button').linkbutton('disable');
+                $('#modify_button_income').linkbutton('disable');
+                $('#delete_button_income').linkbutton('disable');
             }
         },
         onUncheckAll: function (rows) {
-            $('#modify_button').linkbutton('enable');
-            $('#delete_button').linkbutton('enable');
+            $('#modify_button_income').linkbutton('enable');
+            $('#delete_button_income').linkbutton('enable');
         }
     });
 
@@ -187,7 +181,7 @@ $(function () {
 
     //加载收入类型
     $('.incomeType').combobox({
-        url: '<%=basePath%>/getincomeType.do',
+        url: '<%=basePath%>/getIncomeType.do',
         valueField: 'code',
         textField: 'name',
         onLoadSuccess: function (data) {
@@ -255,7 +249,6 @@ function modifyIncome() {
     $("#incomeTime").val(rowData.incomeTime);
     $("#incomeRemark").val(rowData.incomeRemark);
     $("#incomeId").val(rowData.incomeId);
-    $("#incomeStatus").val(rowData.incomeStatus);
 }
 
 //删除收入
@@ -285,7 +278,7 @@ function deleteIncome() {
 
 //导出Excel
 function exportincomeToExcel() {
-    window.location.href = "<%=basePath%>/exportincomeToExcel.do";
+    window.location.href = "<%=basePath%>/exportIncomeToExcel.do";
 }
 
 //提交表单

@@ -2,7 +2,8 @@ package org.fire.cost.domain;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.sql.Timestamp;
+import java.math.BigDecimal;
+import java.util.Date;
 
 import static javax.persistence.GenerationType.IDENTITY;
 
@@ -15,13 +16,13 @@ import static javax.persistence.GenerationType.IDENTITY;
 @Table(name = "cost_income")
 public class Income implements Serializable {
     private Long incomeId;
-    private Integer incomeMoney;
+    private BigDecimal incomeMoney;
     private Integer incomeType;
-    private Timestamp incomeTime;
+    private Date incomeTime;
     private String createUser;
-    private Timestamp createTime;
+    private Date createTime;
     private String modifyUser;
-    private Timestamp modifyTime;
+    private Date modifyTime;
     private String incomeRemark;
     private User user;
 
@@ -38,11 +39,11 @@ public class Income implements Serializable {
 
     @Basic
     @Column(name = "income_money", nullable = false, insertable = true, updatable = true, length = 10, precision = 0)
-    public Integer getIncomeMoney() {
+    public BigDecimal getIncomeMoney() {
         return incomeMoney;
     }
 
-    public void setIncomeMoney(Integer incomeMoney) {
+    public void setIncomeMoney(BigDecimal incomeMoney) {
         this.incomeMoney = incomeMoney;
     }
 
@@ -58,11 +59,11 @@ public class Income implements Serializable {
 
     @Basic
     @Column(name = "income_time", nullable = false, insertable = true, updatable = true, length = 19, precision = 0)
-    public Timestamp getIncomeTime() {
+    public Date getIncomeTime() {
         return incomeTime;
     }
 
-    public void setIncomeTime(Timestamp incomeTime) {
+    public void setIncomeTime(Date incomeTime) {
         this.incomeTime = incomeTime;
     }
 
@@ -78,11 +79,11 @@ public class Income implements Serializable {
 
     @Basic
     @Column(name = "create_time", nullable = true, insertable = true, updatable = true, length = 19, precision = 0)
-    public Timestamp getCreateTime() {
+    public Date getCreateTime() {
         return createTime;
     }
 
-    public void setCreateTime(Timestamp createTime) {
+    public void setCreateTime(Date createTime) {
         this.createTime = createTime;
     }
 
@@ -98,11 +99,11 @@ public class Income implements Serializable {
 
     @Basic
     @Column(name = "modify_time", nullable = true, insertable = true, updatable = true, length = 19, precision = 0)
-    public Timestamp getModifyTime() {
+    public Date getModifyTime() {
         return modifyTime;
     }
 
-    public void setModifyTime(Timestamp modifyTime) {
+    public void setModifyTime(Date modifyTime) {
         this.modifyTime = modifyTime;
     }
 

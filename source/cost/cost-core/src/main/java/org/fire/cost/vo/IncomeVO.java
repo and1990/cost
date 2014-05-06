@@ -1,5 +1,7 @@
 package org.fire.cost.vo;
 
+import java.math.BigDecimal;
+
 /**
  * 注释：收入实体类
  * 时间：2014年05月06日 下午2:16
@@ -9,7 +11,7 @@ public class IncomeVO {
     private Long incomeId;
     private Long userId;
     private String userName;
-    private Integer incomeMoney;
+    private BigDecimal incomeMoney;
     private Integer incomeType;
     private String incomeTypeName;
     private String incomeTime;
@@ -48,11 +50,11 @@ public class IncomeVO {
         this.userName = userName;
     }
 
-    public Integer getIncomeMoney() {
+    public BigDecimal getIncomeMoney() {
         return incomeMoney;
     }
 
-    public void setIncomeMoney(Integer incomeMoney) {
+    public void setIncomeMoney(BigDecimal incomeMoney) {
         this.incomeMoney = incomeMoney;
     }
 

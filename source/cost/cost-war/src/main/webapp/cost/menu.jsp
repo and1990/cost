@@ -27,9 +27,21 @@
             </ul>
         </li>
         <li data-options="id:null">
-            <span>消费信息</span>
+            <span>收支信息</span>
             <ul>
-                <li data-options="id:'showAccount'">账单信息</li>
+                <li data-options="id:'showIncome'">收入信息</li>
+            </ul>
+            <ul>
+                <li data-options="id:'showAccount'">支出信息</li>
+            </ul>
+        </li>
+        <li data-options="id:null">
+            <span>流水账</span>
+            <ul>
+                <li data-options="id:'showIncome'">收支明细</li>
+            </ul>
+            <ul>
+                <li data-options="id:'showAccount'">收支统计</li>
             </ul>
         </li>
         <li data-options="id:null">
@@ -65,7 +77,6 @@
                 } else {
                     $('#help_tree').tree('expand', node.target);
                 }
-
             }
         });
     });

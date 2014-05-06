@@ -86,6 +86,16 @@ public class SkipAction extends BaseAction {
     }
 
     /**
+     * 跳转到收入
+     *
+     * @return
+     */
+    @Action(value = "showIncome", results = {@Result(name = SUCCESS, location = "/cost/income.jsp")})
+    public String skipToIncomeData() {
+        return SUCCESS;
+    }
+
+    /**
      * 跳转到消费
      *
      * @return

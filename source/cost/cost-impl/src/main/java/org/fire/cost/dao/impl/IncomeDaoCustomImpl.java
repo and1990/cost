@@ -1,7 +1,6 @@
 package org.fire.cost.dao.impl;
 
 import org.fire.cost.dao.custom.IncomeDaoCustom;
-import org.fire.cost.domain.Account;
 import org.fire.cost.domain.Income;
 import org.fire.cost.util.DateUtil;
 import org.fire.cost.vo.IncomeVO;
@@ -21,7 +20,7 @@ public class IncomeDaoCustomImpl extends BaseJpaDaoSupport<Income, Long> impleme
 
     @Override
     public List<Income> getIncomeByFilter(IncomeVO vo, PageData<IncomeVO> pageData) {
-        String sql = "select a.* from cost_income i inner join cost_user u";
+        String sql = "select i.* from cost_income i inner join cost_user u";
         sql += " on i.user_id=u.user_id where 1=1";
         String filterSQL = getFilterSQL(vo);
         if (filterSQL != null && filterSQL.trim().length() != 0) {
@@ -29,7 +28,7 @@ public class IncomeDaoCustomImpl extends BaseJpaDaoSupport<Income, Long> impleme
         }
         sql += " order by create_time desc";
 
-        Query query = entityManager.createNativeQuery(sql, Account.class);
+        Query query = entityManager.createNativeQuery(sql, Income.class);
         setAliasValue(vo, query);
         if (vo.isPage()) {
             int page = pageData.getPage() - 1;
@@ -82,19 +81,19 @@ public class IncomeDaoCustomImpl extends BaseJpaDaoSupport<Income, Long> impleme
             filterSQL += " and u.user_name like :userName";
         }
         Integer incomeType = vo.getIncomeType();
-        boolean accountTypeNotNull = incomeType != null && incomeType != 0;
-        if (accountTypeNotNull) {
-            filterSQL += " and a.income_type=:incomeType";
+        boolean incomeTypeNotNull = incomeType != null && incomeType != 0;
+        if (incomeTypeNotNull) {
+            filterSQL += " and i.income_type=:incomeType";
         }
         String incomeStartTime = vo.getIncomeStartTime();
-        boolean accountStartTimeNotNull = incomeStartTime != null && incomeStartTime.trim().length() != 0;
-        if (accountStartTimeNotNull) {
-            filterSQL += " and a.account_time>=:incomeStartTime";
+        boolean incomeStartTimeNotNull = incomeStartTime != null && incomeStartTime.trim().length() != 0;
+        if (incomeStartTimeNotNull) {
+            filterSQL += " and i.income_time>=:incomeStartTime";
         }
         String incomeEndTime = vo.getIncomeEndTime();
-        boolean accountEndTimeNotNull = incomeEndTime != null && incomeEndTime.trim().length() != 0;
-        if (accountEndTimeNotNull) {
-            filterSQL += " and a.account_time<:incomeEndTime";
+        boolean incomeEndTimeNotNull = incomeEndTime != null && incomeEndTime.trim().length() != 0;
+        if (incomeEndTimeNotNull) {
+            filterSQL += " and i.income_time<:incomeEndTime";
         }
         return filterSQL;
     }
@@ -112,18 +111,18 @@ public class IncomeDaoCustomImpl extends BaseJpaDaoSupport<Income, Long> impleme
             query.setParameter("userName", "%" + userName + "%");
         }
         Integer incomeType = vo.getIncomeType();
-        boolean accountTypeNotNull = incomeType != null && incomeType != 0;
-        if (accountTypeNotNull) {
+        boolean incomeTypeNotNull = incomeType != null && incomeType != 0;
+        if (incomeTypeNotNull) {
             query.setParameter("incomeType", incomeType);
         }
         String incomeStartTime = vo.getIncomeStartTime();
-        boolean accountStartTimeNotNull = incomeStartTime != null && incomeStartTime.trim().length() != 0;
-        if (accountStartTimeNotNull) {
+        boolean incomeStartTimeNotNull = incomeStartTime != null && incomeStartTime.trim().length() != 0;
+        if (incomeStartTimeNotNull) {
             query.setParameter("incomeStartTime", incomeStartTime);
         }
         String incomeEndTime = vo.getIncomeEndTime();
-        boolean accountEndTimeNotNull = incomeEndTime != null && incomeEndTime.trim().length() != 0;
-        if (accountEndTimeNotNull) {
+        boolean incomeEndTimeNotNull = incomeEndTime != null && incomeEndTime.trim().length() != 0;
+        if (incomeEndTimeNotNull) {
             Date date = null;
             try {
                 date = DateUtil.makeStr2Date(incomeEndTime, false);

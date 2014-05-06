@@ -46,8 +46,8 @@ public class IncomeAction extends BaseAction<IncomeVO> {
      *
      * @return
      */
-    @Action(value = "getAccountByFilter", results = {@Result(type = "json", params = {"root", "pageData", "contentType", "text/html"})})
-    public String getAccountByFilter() {
+    @Action(value = "getIncomeByFilter", results = {@Result(type = "json", params = {"root", "pageData", "contentType", "text/html"})})
+    public String getIncomeByFilter() {
         try {
             pageData.setPage(page);
             pageData.setPageSize(rows);
@@ -66,8 +66,8 @@ public class IncomeAction extends BaseAction<IncomeVO> {
      *
      * @return
      */
-    @Action(value = "addAccount", results = {@Result(type = "json", params = {"root", "pageData", "contentType", "text/html"})})
-    public String addAccount() {
+    @Action(value = "addIncome", results = {@Result(type = "json", params = {"root", "pageData", "contentType", "text/html"})})
+    public String addIncome() {
         try {
             incomeService.addIncome(incomeVO);
         } catch (Exception e) {
@@ -81,8 +81,8 @@ public class IncomeAction extends BaseAction<IncomeVO> {
      *
      * @return
      */
-    @Action(value = "modifyAccount", results = {@Result(type = "json", params = {"root", "pageData", "contentType", "text/html"})})
-    public String modifyAccount() {
+    @Action(value = "modifyIncome", results = {@Result(type = "json", params = {"root", "pageData", "contentType", "text/html"})})
+    public String modifyIncome() {
         try {
             incomeService.modifyIncome(incomeVO);
         } catch (Exception e) {
@@ -96,8 +96,8 @@ public class IncomeAction extends BaseAction<IncomeVO> {
      *
      * @return
      */
-    @Action(value = "deleteAccount", results = {@Result(type = "json", params = {"root", "pageData", "contentType", "text/html"})})
-    public String deleteAccount() {
+    @Action(value = "deleteIncome", results = {@Result(type = "json", params = {"root", "pageData", "contentType", "text/html"})})
+    public String deleteIncome() {
         try {
             incomeService.deleteIncome(incomeVO.getIncomeId());
         } catch (Exception e) {
@@ -111,7 +111,7 @@ public class IncomeAction extends BaseAction<IncomeVO> {
      *
      * @return
      */
-    @Action(value = "getAccountType", results = {@Result(type = "json", params = {"root", "incomeTypeList", "contentType", "text/html"})})
+    @Action(value = "getIncomeType", results = {@Result(type = "json", params = {"root", "incomeTypeList", "contentType", "text/html"})})
     public String getIncomeType() {
         try {
             incomeTypeList = incomeService.getIncomeType();
@@ -126,8 +126,8 @@ public class IncomeAction extends BaseAction<IncomeVO> {
      *
      * @return
      */
-    @Action(value = "exportAccountToExcel", results = {@Result(name = SUCCESS, type = "stream")})
-    public String exportAccountToExcel() {
+    @Action(value = "exportIncomeToExcel", results = {@Result(name = SUCCESS, type = "stream")})
+    public String exportIncomeToExcel() {
         try {
             HSSFWorkbook hwb = incomeService.getExcelData();
             if (hwb != null) {
