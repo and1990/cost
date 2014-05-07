@@ -46,7 +46,7 @@ public class IncomeAction extends BaseAction<IncomeVO> {
      *
      * @return
      */
-    @Action(value = "getIncomeByFilter", results = {@Result(type = "json", params = {"root", "pageData", "contentType", "text/html"})})
+    @Action(value = "getIncomeByYear", results = {@Result(type = "json", params = {"root", "pageData", "contentType", "text/html"})})
     public String getIncomeByFilter() {
         try {
             pageData.setPage(page);

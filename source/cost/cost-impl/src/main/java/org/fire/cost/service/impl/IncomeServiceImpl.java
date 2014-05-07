@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import javax.persistence.RollbackException;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
@@ -42,7 +43,7 @@ public class IncomeServiceImpl implements IncomeService {
      * @return
      */
     @Override
-    @Transactional(value = "transactionManager")
+    @Transactional(value = "transactionManager", rollbackFor = RollbackException.class)
     public List<IncomeVO> getIncomeByFilter(IncomeVO vo, PageData<IncomeVO> pageData) {
         List<IncomeVO> incomeVOList = new ArrayList<IncomeVO>();
         try {
@@ -83,7 +84,7 @@ public class IncomeServiceImpl implements IncomeService {
      * @return
      */
     @Override
-    @Transactional(value = "transactionManager")
+    @Transactional(value = "transactionManager", rollbackFor = RollbackException.class)
     public boolean addIncome(IncomeVO vo) {
         try {
             Income income = makeVoToIncome(null, vo);
@@ -105,7 +106,7 @@ public class IncomeServiceImpl implements IncomeService {
      * @return
      */
     @Override
-    @Transactional(value = "transactionManager")
+    @Transactional(value = "transactionManager", rollbackFor = RollbackException.class)
     public boolean modifyIncome(IncomeVO vo) {
         try {
             Long incomeId = vo.getIncomeId();
@@ -126,7 +127,7 @@ public class IncomeServiceImpl implements IncomeService {
      * @return
      */
     @Override
-    @Transactional(value = "transactionManager")
+    @Transactional(value = "transactionManager", rollbackFor = RollbackException.class)
     public boolean deleteIncome(Long incomeId) {
         try {
             incomeDao.delete(incomeId);
@@ -194,7 +195,7 @@ public class IncomeServiceImpl implements IncomeService {
      * @return
      */
     @Override
-    @Transactional(value = "transactionManager")
+    @Transactional(value = "transactionManager", rollbackFor = RollbackException.class)
     public HSSFWorkbook getExcelData() {
         HSSFWorkbook hwb = new HSSFWorkbook();
         try {

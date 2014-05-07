@@ -130,7 +130,7 @@ $(function () {
         border: true,
         collapsible: false,
         loadMsg: '数据装载中......',
-        url: '<%=basePath%>/getIncomeByFilter.do',
+        url: '<%=basePath%>/getIncomeByYear.do',
         idField: 'incomeId',
         fit: true,
         fitColumns: true,
