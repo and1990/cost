@@ -18,7 +18,7 @@ public interface StreamService {
      * @param year
      * @return
      */
-    List<StreamVO> getIncomeByYear(int year);
+    List<StreamVO> getStreamByYear(int year);
 
 
     /**
@@ -26,7 +26,7 @@ public interface StreamService {
      *
      * @return
      */
-    List<StreamVO> getIncomeGroupByMonth();
+    List<StreamVO> getStreamGroupByMonth();
 
     /**
      * 获取excel数据

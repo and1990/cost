@@ -2,9 +2,8 @@ package org.fire.cost.dao.impl;
 
 import org.fire.cost.dao.custom.StreamDaoCustom;
 import org.fire.cost.domain.Stream;
-import org.fire.cost.vo.PageData;
-import org.fire.cost.vo.StreamVO;
 
+import javax.persistence.Query;
 import java.util.List;
 
 /**
@@ -14,12 +13,10 @@ import java.util.List;
  */
 public class StreamDaoCustomImpl extends BaseJpaDaoSupport<Stream, Long> implements StreamDaoCustom {
     @Override
-    public List<Stream> getStreamByYear(int year) {
-        return null;
-    }
-
-    @Override
-    public List<StreamVO> getStreamGroupByMonth() {
-        return null;
+    public List<Stream> getStreamGroupByMonth() {
+        String sql = "";
+        Query query = entityManager.createNativeQuery(sql, Stream.class);
+        List<Stream> list = query.getResultList();
+        return list;
     }
 }
