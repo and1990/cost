@@ -4,6 +4,7 @@ import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.fire.cost.vo.StreamVO;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * 流水账service接口
@@ -25,8 +26,9 @@ public interface StreamService {
      * 查找月份对应的流水账数据
      *
      * @return
+     * @param year
      */
-    List<StreamVO> getStreamGroupByMonth();
+    Map<String, List<String>> getStreamGroupByMonth(int year);
 
     /**
      * 获取excel数据

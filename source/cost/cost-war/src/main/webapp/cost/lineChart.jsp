@@ -69,6 +69,17 @@
 
     });
 
+    Highcharts.setOptions({
+        lang: {
+            printChart: '打印图表',
+            downloadPNG: '保存为PNG',
+            downloadJPEG: '保存为JPEG',
+            downloadPDF: '保存为PDF',
+            downloadSVG: '',
+            loading: '正在加载...'
+        }
+    });
+
     //初始化图表
     function initChart(userArr, dataObjArr) {
         $('#line_container').highcharts({

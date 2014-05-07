@@ -144,4 +144,14 @@ public class SkipAction extends BaseAction {
     public String skipToLineChart() {
         return SUCCESS;
     }
+
+    /**
+     * 跳转到流水账柱状图
+     *
+     * @return
+     */
+    @Action(value = "showStreamColumn", results = {@Result(name = SUCCESS, location = "/cost/streamColumnChart.jsp")})
+    public String skipToStreamColumnChart() {
+        return SUCCESS;
+    }
 }

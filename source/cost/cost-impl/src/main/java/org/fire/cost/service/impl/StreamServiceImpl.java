@@ -10,9 +10,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import javax.persistence.RollbackException;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.math.BigDecimal;
+import java.util.*;
 
 /**
  * 注释：流水账service实现
@@ -52,18 +51,63 @@ public class StreamServiceImpl implements StreamService {
     /**
      * 获取月份对应的流水账记录
      *
+     * @param year
      * @return
      */
     @Override
     @Transactional(value = "transactionManager", rollbackFor = RollbackException.class)
-    public List<StreamVO> getStreamGroupByMonth() {
-        List<StreamVO> voList = new ArrayList<StreamVO>();
+    public Map<String, List<String>> getStreamGroupByMonth(int year) {
+        Map<String, List<String>> streamVoListMap = new HashMap<String, List<String>>();
         try {
-            List<Stream> streamList = streamDao.getStreamGroupByMonth();
+            List<StreamVO> streamList = streamDao.getStreamGroupByMonth(year);
+            List<String> incomeList = getMoneyList(streamList, 1);
+            streamVoListMap.put("1", incomeList);
+            List<String> accountList = getMoneyList(streamList, 2);
+            streamVoListMap.put("2", accountList);
+            List<String> leftList = getMoneyList(streamList, 3);
+            streamVoListMap.put("3", leftList);
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return voList;
+        return streamVoListMap;
+    }
+
+    /**
+     * 获取金额
+     *
+     * @param streamList
+     * @param type       类型，1：收入，2：支出，3：剩余
+     * @return
+     */
+    private List<String> getMoneyList(List<StreamVO> streamList, int type) {
+        int[] monthArr = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12};
+        List<String> moneyList = new ArrayList<String>();
+        for (int month : monthArr) {
+            String moneyStr = "0";
+            for (StreamVO vo : streamList) {
+                int streamMonth = vo.getMonth();
+                if (month != streamMonth) {
+                    continue;
+                }
+                BigDecimal money = BigDecimal.ZERO;
+                switch (type) {
+                    case 1:
+                        money = vo.getIncomeMoney();
+                        break;
+                    case 2:
+                        money = vo.getAccountMoney();
+                        break;
+                    case 3:
+                        money = vo.getLeftMoney();
+                        break;
+                    default:
+                        money = BigDecimal.ZERO;
+                }
+                moneyStr = money.toString();
+            }
+            moneyList.add(moneyStr);
+        }
+        return moneyList;
     }
 
     /**

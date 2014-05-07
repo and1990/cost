@@ -12,9 +12,9 @@ public class StreamVO {
     private Long streamId;
     private Integer year;
     private Integer month;
-    private BigDecimal incomeMoney;
-    private BigDecimal accountMoney;
-    private BigDecimal leftMoney;
+    private BigDecimal incomeMoney = BigDecimal.ZERO;
+    private BigDecimal accountMoney = BigDecimal.ZERO;
+    private BigDecimal leftMoney = BigDecimal.ZERO;
     private Date createTime;
 
     public Long getStreamId() {

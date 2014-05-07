@@ -1,6 +1,7 @@
 package org.fire.cost.dao.custom;
 
 import org.fire.cost.domain.Stream;
+import org.fire.cost.vo.StreamVO;
 
 import java.util.List;
 
@@ -10,6 +11,6 @@ import java.util.List;
  * @author liutengfei
  */
 public interface StreamDaoCustom {
-    List<Stream> getStreamGroupByMonth();
+    List<StreamVO> getStreamGroupByMonth(int year);
 
 }

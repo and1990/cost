@@ -14,9 +14,7 @@ import org.springframework.stereotype.Controller;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletResponse;
 import java.io.OutputStream;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 /**
  * 注释：流水账action
@@ -34,6 +32,10 @@ public class StreamAction extends BaseAction<StreamVO> {
      */
     private List<StreamVO> streamVOList = new ArrayList<StreamVO>();
     /**
+     * 月份对应的流水账信息，key：收入、支出、剩余，value：对应的金额
+     */
+    private Map<String, List<String>> moneyListMap = new HashMap<String, List<String>>();
+    /**
      * 流水账类型VO
      */
     private List<TypeVo> yearList;
@@ -46,7 +48,22 @@ public class StreamAction extends BaseAction<StreamVO> {
     @Action(value = "getIncomeByYear", results = {@Result(type = "json", params = {"root", "streamVOList", "contentType", "text/html"})})
     public String getIncomeByFilter() {
         try {
-            streamVOList = streamService.getIncomeByYear(2014);
+            streamVOList = streamService.getStreamByYear(2014);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return SUCCESS;
+    }
+
+    /**
+     * 查询每月流水账信息
+     *
+     * @return
+     */
+    @Action(value = "getStreamGroupByMonth", results = {@Result(type = "json", params = {"root", "moneyListMap", "contentType", "text/html"})})
+    public String getStreamGroupByMonth() {
+        try {
+            moneyListMap = streamService.getStreamGroupByMonth(2014);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -105,6 +122,14 @@ public class StreamAction extends BaseAction<StreamVO> {
 
     public void setStreamVOList(List<StreamVO> streamVOList) {
         streamVOList = streamVOList;
+    }
+
+    public Map<String, List<String>> getMoneyListMap() {
+        return moneyListMap;
+    }
+
+    public void setMoneyListMap(Map<String, List<String>> moneyListMap) {
+        this.moneyListMap = moneyListMap;
     }
 
     public List<TypeVo> getYearList() {
