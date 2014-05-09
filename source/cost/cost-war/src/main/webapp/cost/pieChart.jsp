@@ -123,12 +123,12 @@
         var startTime = $("#pie_start_time").val();
         var endTime = $("#pie_end_time").val();
         var accountClass = $("#account_type_select").combo("getValue");
-        loadData(startTime, endTime, accountClass);
-        setChartTitle(startTime, endTime, accountClass);
+        loadPieData(startTime, endTime, accountClass);
+        setPieTitle(startTime, endTime, accountClass);
     }
 
     //设置图表格式
-    function setChartTitle(startTime, endTime, accountClass) {
+    function setPieTitle(startTime, endTime, accountClass) {
         var typeText = "日常消费类型";
         if (accountClass == 2) {
             typeText = "投资";
@@ -159,7 +159,7 @@
     }
 
     //加载数据
-    function loadData(startTime, endTime, accountClass) {
+    function loadPieData(startTime, endTime, accountClass) {
         var url = "<%=basePath%>/getAccountGroupByAccountType.do";
         if (startTime == undefined) {
             startTime = "";

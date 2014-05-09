@@ -127,12 +127,12 @@
         var startTime = $("#column_start_time").val();
         var endTime = $("#column_end_time").val();
         var showType = $("input[name='accountType']:checked").val()
-        loadData(startTime, endTime, showType);
-        setChartTitle(startTime, endTime, showType);
+        loadColumnData(startTime, endTime, showType);
+        setPieTitle(startTime, endTime, showType);
     }
 
     //设置图表格式
-    function setChartTitle(startTime, endTime, showType) {
+    function setPieTitle(startTime, endTime, showType) {
         var typeText = "用户";
         if (showType == 2) {
             typeText = "消费类型";
@@ -163,7 +163,7 @@
     }
 
     //加载数据
-    function loadData(startTime, endTime, showType) {
+    function loadColumnData(startTime, endTime, showType) {
         var url = "<%=basePath%>/getAccountGroupByUser.do";
         if (showType == 2) {
             url = "<%=basePath%>/getAccountGroupByAccountType.do";

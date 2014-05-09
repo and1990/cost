@@ -15,7 +15,7 @@
 </head>
 <body>
 <div style="font-family: 'Microsoft YaHei';font-size:16px">
-    <div id="column_container" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+    <div id="stream_column_container" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
 
     <div style="text-align: center;margin-bottom: 50px">
         <span id="null_data" style="color: #FF2F2F"></span>
@@ -24,7 +24,7 @@
     <div style="text-align: center;margin-top: 50px;">
         <div>
             按年份查看：<input type="radio" name="year" checked="true"/>
-            <a href="#" style="text-decoration: none" iconCls="icon-search" onclick="showColumnChart();">查看</a>
+            <a href="#" style="text-decoration: none" iconCls="icon-search" onclick="showStreamColumnChart();">查看</a>
         </div>
     </div>
 </div>
@@ -56,7 +56,7 @@
     //初始化图表
     function initChart(valueObjArr) {
         var monthArr = getMonth();
-        $('#column_container').highcharts({
+        $('#stream_column_container').highcharts({
             chart: {
                 type: 'column',
                 style: {fontFamily: 'Microsoft YaHei', fontSize: '16px'}
@@ -95,13 +95,13 @@
     }
 
     //显示图表
-    function showColumnChart() {
-        loadData(2014);
-        setChartTitle(2014);
+    function showStreamColumnChart() {
+        loadStreamData(2014);
+        setStreamColumnTitle(2014);
     }
 
     //加载数据
-    function loadData(year) {
+    function loadStreamData(year) {
         var monthArr = getMonth();
         $.ajax({
             type: 'post',
@@ -112,7 +112,7 @@
                     return;
                 }
                 var valueArr = getData(returnData);
-                var chart = $('#column_container').highcharts();
+                var chart = $('#stream_column_container').highcharts();
                 chart.xAxis[0].setCategories(monthArr);
                 chart.series[0].setData(valueArr);
                 if (valueArr == undefined || valueArr.length == 0) {
@@ -126,9 +126,9 @@
 
 
     //设置图表格式
-    function setChartTitle(year) {
+    function setStreamColumnTitle(year) {
         var title = "2014";
-        var chart = $('#column_container').highcharts();
+        var chart = $('#stream_column_container').highcharts();
         chart.setTitle({text: title});
     }
 

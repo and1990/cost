@@ -89,7 +89,7 @@
 
 <!-- 添加、修改账单对话框 -->
 <div id="account_dialog" class="easyui-dialog"
-     style="width:500px;height:250px;padding:2px;border:1px" data-options="closed:true,modal: true">
+     style="width:500px;height:300px;padding:2px;border:1px" data-options="closed:true,modal: true">
     <div class="easyui-panel" style="width:480px;text-align:center">
         <div style="padding:10px 10px 10px 100px">
             <form id="account_form" method="post">
@@ -262,7 +262,6 @@ $(function () {
         valueField: 'code',
         textField: 'name',
         onLoadSuccess: function (data) {
-            console.info(data);
             $('.accountStatus').combobox('setValue', data[0].code).combobox('setText', data[0].name);
         }
     });

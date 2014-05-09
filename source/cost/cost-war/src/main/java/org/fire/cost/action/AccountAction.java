@@ -283,7 +283,10 @@ public class AccountAction extends BaseAction<AccountVO> {
         try {
             String startTime = accountVO.getAccountStartTime();
             String endTime = accountVO.getAccountEndTime();
-            int accountClass = accountVO.getAccountClass();
+            Integer accountClass = accountVO.getAccountClass();
+            if (accountClass == null) {
+                accountClass = 1;
+            }
             accountVOList = accountService.getAccountGroupByAccountType(startTime, endTime, accountClass);
         } catch (Exception e) {
             e.printStackTrace();

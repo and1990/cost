@@ -127,12 +127,12 @@
     function showLineChart() {
         var startTime = $("#line_start_time").val();
         var endTime = $("#line_end_time").val();
-        loadData(startTime, endTime);
-        setChartTitle(startTime, endTime);
+        loadLineData(startTime, endTime);
+        setLineTitle(startTime, endTime);
     }
 
     //设置图表格式
-    function setChartTitle(startTime, endTime) {
+    function setLineTitle(startTime, endTime) {
         var title = undefined;
         var startNotNull = startTime != undefined && startTime != '';
         var endIsNull = endTime == undefined || endTime == '';
@@ -158,7 +158,7 @@
     }
 
     //加载数据
-    function loadData(startTime, endTime) {
+    function loadLineData(startTime, endTime) {
         if (startTime == undefined) {
             startTime = "";
         }
