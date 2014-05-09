@@ -12,6 +12,7 @@
 
     <script type="text/javascript" src="<%=basePath%>/third/easy-ui/jquery.min.js"></script>
     <script type="text/javascript" src="<%=basePath%>/third/easy-ui/jquery.easyui.min.js"></script>
+    <script type="text/javascript" src="<%=basePath%>/third/easy-ui/datagrid-detailview.js"></script>
     <script type="text/javascript" src="<%=basePath%>/third/easy-ui/locale/easyui-lang-zh_CN.js"></script>
     <script type="text/javascript" src="<%=basePath%>/third/My97DatePicker/WdatePicker.js"></script>
 </head>
@@ -19,17 +20,22 @@
 <div id="stream_data_layout" class="easyui-layout" data-options="fit:true">
     <div id="stream_data_north"
          data-options="region:'north',border:0,fit:true">
+        <!-- 统计数据 -->
         <table id="stream_data_table">
             <thead>
             <tr>
                 <th data-options="field:'month',width:80,align:'center'">月份</th>
-                <th data-options="field:'streamMoney',width:80,align:'center' ">收入金额</th>
+                <th data-options="field:'incomeMoney',width:80,align:'center' ">收入金额</th>
                 <th data-options="field:'accountMoney',width:80,align:'center' ">支出金额</th>
                 <th data-options="field:'leftMoney',width:80,align:'center' ">剩余金额</th>
                 <th data-options="field:'createTime',width:60,align:'center'">创建时间</th>
             </tr>
             </thead>
         </table>
+        <!-- 明细数据 -->
+        <div style="padding:2px" id="stream_detail_div">
+            <table id="stream_detail_table"></table>
+        </div>
     </div>
 </div>
 
@@ -37,7 +43,7 @@
 <div id="stream_tool_bar" style="padding: 5px; height: auto">
     <div style="margin-bottom: 5px">
         <a href="#" class="easyui-linkbutton" iconCls="icon-print" plain="true"
-           onclick="exportstreamToExcel();">导出Excel</a>
+           onclick="exportStreamToExcel();">导出Excel</a>
     </div>
     <div>
         <span>年份：</span>
@@ -58,13 +64,20 @@
             idField: 'streamId',
             fit: true,
             fitColumns: true,
-            singleSelect: false,
-            toolbar: "#stream_tool_bar"
+            singleSelect: true,
+            toolbar: "#stream_tool_bar",
+            view: detailview,
+            detailFormatter: function (index, row) {
+                return $("#stream_detail_div").html();
+            },
+            onExpandRow: function (index, row) {
+                showStreamDetail(index, row);
+            }
         });
 
         //加载年份
         $('#year').combobox({
-            url: '<%=basePath%>/getYear.do',
+            url: '<%=basePath%>/getYears.do',
             valueField: 'code',
             textField: 'name',
             onLoadSuccess: function (data) {
@@ -84,6 +97,40 @@
         );
     }
 
+    //显示流水明细
+    function showStreamDetail(index, row) {
+        var detailTable = $('#stream_data_table').datagrid('getRowDetail', index).find('#stream_detail_table');
+        detailTable.datagrid({
+            url: '<%=basePath%>/getStreamDetail.do',
+            fitColumns: true,
+            singleSelect: true,
+            rownumbers: true,
+            loadMsg: '',
+            height: 'auto',
+            columns: [
+                [
+                    {field: 'date', title: '日期', width: 150, align: 'center'},
+                    {field: 'typeName', title: '收支类型', width: 100, align: 'center'},
+                    {field: 'money', title: '金额', width: 100, align: 'center'},
+                    {field: 'remark', title: '备注', width: 100, align: 'center'}
+                ]
+            ],
+            onResize: function () {
+                $('#stream_data_table').datagrid('fixDetailRowHeight', index);
+            },
+            onLoadSuccess: function () {
+                setTimeout(function () {
+                    $('#stream_data_table').datagrid('fixDetailRowHeight', index);
+                }, 0);
+            }
+        });
+        $('#stream_data_table').datagrid('fixDetailRowHeight', index);
+    }
+
+    //导出excel
+    function exportStreamToExcel() {
+        window.location.href = "<%=basePath%>/exportStreamToExcel.do";
+    }
 </script>
 </body>
 </html>

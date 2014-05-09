@@ -160,7 +160,6 @@
             dataObj.data = valueArr;
             dataObjArr.push(dataObj);
         }
-
         return dataObjArr;
     }
 

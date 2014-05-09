@@ -6,7 +6,8 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-    <title>家庭理财系统</title>
+    <%--<title>家庭理财系统</title>--%>
+    <title></title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf8">
     <link rel="shortcut icon" href="<%=basePath%>/image/ico.jpg" type="image/x-icon"/>
 
@@ -16,6 +17,7 @@
     <script type="text/javascript" src="<%=basePath%>/third/easy-ui/jquery.min.js"></script>
 
     <script type="text/javascript" src="<%=basePath%>/third/easy-ui/jquery.easyui.min.js"></script>
+    <script type="text/javascript" src="<%=basePath%>/third/easy-ui/datagrid-detailview.js"></script>
     <script type="text/javascript" src="<%=basePath%>/third/easy-ui/locale/easyui-lang-zh_CN.js"></script>
 
     <script type="text/javascript" src="<%=basePath%>/third/My97DatePicker/WdatePicker.js"></script>

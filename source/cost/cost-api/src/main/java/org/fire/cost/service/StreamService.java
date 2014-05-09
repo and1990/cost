@@ -1,7 +1,9 @@
 package org.fire.cost.service;
 
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.fire.cost.vo.StreamDetailVO;
 import org.fire.cost.vo.StreamVO;
+import org.fire.cost.vo.TypeVo;
 
 import java.util.List;
 import java.util.Map;
@@ -21,12 +23,26 @@ public interface StreamService {
      */
     List<StreamVO> getStreamByYear(int year);
 
+    /**
+     * 获取年份列表
+     *
+     * @return
+     */
+    List<TypeVo> getYears();
+
+    /**
+     * 查询流水明细
+     *
+     * @param month
+     * @return
+     */
+    List<StreamDetailVO> getStreamDetail(int month);
 
     /**
      * 查找月份对应的流水账数据
      *
-     * @return
      * @param year
+     * @return
      */
     Map<String, List<String>> getStreamGroupByMonth(int year);
 

@@ -104,6 +104,17 @@ public class DateUtil extends DateUtils {
     }
 
     /**
+     * 获取当前年
+     *
+     * @return
+     */
+    public static int getCurrentYear() {
+        Calendar cale = Calendar.getInstance();
+        int year = cale.get(Calendar.YEAR);
+        return year;
+    }
+
+    /**
      * 将日期类型转换成字符串
      *
      * @param date

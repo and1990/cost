@@ -7,6 +7,8 @@ import org.apache.struts2.convention.annotation.Action;
 import org.apache.struts2.convention.annotation.Namespace;
 import org.apache.struts2.convention.annotation.Result;
 import org.fire.cost.service.StreamService;
+import org.fire.cost.util.DateUtil;
+import org.fire.cost.vo.StreamDetailVO;
 import org.fire.cost.vo.StreamVO;
 import org.fire.cost.vo.TypeVo;
 import org.springframework.stereotype.Controller;
@@ -32,6 +34,10 @@ public class StreamAction extends BaseAction<StreamVO> {
      */
     private List<StreamVO> streamVOList = new ArrayList<StreamVO>();
     /**
+     * 流水账明细VO
+     */
+    private List<StreamDetailVO> streamDetailVOList = new ArrayList<StreamDetailVO>();
+    /**
      * 月份对应的流水账信息，key：收入、支出、剩余，value：对应的金额
      */
     private Map<String, List<String>> moneyListMap = new HashMap<String, List<String>>();
@@ -41,14 +47,56 @@ public class StreamAction extends BaseAction<StreamVO> {
     private List<TypeVo> yearList;
 
     /**
+     * 查询某年数据
+     */
+    private int year;
+    /**
+     * 查询某月流水明细
+     */
+    private int month;
+
+    /**
      * 根据过滤条件查询流水账信息
      *
      * @return
      */
-    @Action(value = "getIncomeByYear", results = {@Result(type = "json", params = {"root", "streamVOList", "contentType", "text/html"})})
+    @Action(value = "getStreamByYear", results = {@Result(type = "json", params = {"root", "streamVOList", "contentType", "text/html"})})
     public String getIncomeByFilter() {
         try {
-            streamVOList = streamService.getStreamByYear(2014);
+            if (year == 0) {
+                year = DateUtil.getCurrentYear();
+            }
+            streamVOList = streamService.getStreamByYear(year);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return SUCCESS;
+    }
+
+    /**
+     * 获取年份列表
+     *
+     * @return
+     */
+    @Action(value = "getYears", results = {@Result(type = "json", params = {"root", "yearList", "contentType", "text/html"})})
+    public String getYears() {
+        try {
+            yearList = streamService.getYears();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return SUCCESS;
+    }
+
+    /**
+     * 获取流水明细
+     *
+     * @return
+     */
+    @Action(value = "getStreamDetail", results = {@Result(type = "json", params = {"root", "streamDetailVOList", "contentType", "text/html"})})
+    public String getStreamDetail() {
+        try {
+            streamDetailVOList = streamService.getStreamDetail(month);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -63,22 +111,10 @@ public class StreamAction extends BaseAction<StreamVO> {
     @Action(value = "getStreamGroupByMonth", results = {@Result(type = "json", params = {"root", "moneyListMap", "contentType", "text/html"})})
     public String getStreamGroupByMonth() {
         try {
-            moneyListMap = streamService.getStreamGroupByMonth(2014);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return SUCCESS;
-    }
-
-    /**
-     * 得到流水账类型
-     *
-     * @return
-     */
-    @Action(value = "getYear", results = {@Result(type = "json", params = {"root", "yearList", "contentType", "text/html"})})
-    public String getYear() {
-        try {
-
+            if (year == 0) {
+                year = DateUtil.getCurrentYear();
+            }
+            moneyListMap = streamService.getStreamGroupByMonth(year);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -90,8 +126,8 @@ public class StreamAction extends BaseAction<StreamVO> {
      *
      * @return
      */
-    @Action(value = "exportIncomeToExcel", results = {@Result(name = SUCCESS, type = "stream")})
-    public String exportIncomeToExcel() {
+    @Action(value = "exportStreamToExcel", results = {@Result(name = SUCCESS, type = "stream")})
+    public String exportStreamToExcel() {
         try {
             HSSFWorkbook hwb = streamService.getExcelData();
             if (hwb != null) {
@@ -124,6 +160,14 @@ public class StreamAction extends BaseAction<StreamVO> {
         streamVOList = streamVOList;
     }
 
+    public List<StreamDetailVO> getStreamDetailVOList() {
+        return streamDetailVOList;
+    }
+
+    public void setStreamDetailVOList(List<StreamDetailVO> streamDetailVOList) {
+        this.streamDetailVOList = streamDetailVOList;
+    }
+
     public Map<String, List<String>> getMoneyListMap() {
         return moneyListMap;
     }
@@ -138,5 +182,21 @@ public class StreamAction extends BaseAction<StreamVO> {
 
     public void setYearList(List<TypeVo> yearList) {
         this.yearList = yearList;
+    }
+
+    public int getYear() {
+        return year;
+    }
+
+    public void setYear(int year) {
+        this.year = year;
+    }
+
+    public int getMonth() {
+        return month;
+    }
+
+    public void setMonth(int month) {
+        this.month = month;
     }
 }

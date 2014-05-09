@@ -4,7 +4,10 @@ import org.apache.poi.hssf.usermodel.*;
 import org.fire.cost.dao.StreamDao;
 import org.fire.cost.domain.Stream;
 import org.fire.cost.service.StreamService;
+import org.fire.cost.util.DateUtil;
+import org.fire.cost.vo.StreamDetailVO;
 import org.fire.cost.vo.StreamVO;
+import org.fire.cost.vo.TypeVo;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -46,6 +49,45 @@ public class StreamServiceImpl implements StreamService {
             e.printStackTrace();
         }
         return voList;
+    }
+
+    /**
+     * 获取年份列表
+     *
+     * @return
+     */
+    @Override
+    public List<TypeVo> getYears() {
+        List<TypeVo> typeVoList = new ArrayList<TypeVo>();
+        int year = DateUtil.getCurrentYear();
+        for (int i = year - 2; i <= year; i++) {
+            TypeVo vo = new TypeVo();
+            vo.setCode(i);
+            vo.setName(i + "");
+            typeVoList.add(vo);
+        }
+        return typeVoList;
+    }
+
+    /**
+     * 获取流水明细
+     *
+     * @param month
+     * @return
+     */
+    @Override
+    public List<StreamDetailVO> getStreamDetail(int month) {
+        List<StreamDetailVO> streamDetailVOList = new ArrayList<StreamDetailVO>();
+        for (int i = 0; i < 5; i++) {
+            StreamDetailVO vo = new StreamDetailVO();
+            vo.setDate(DateUtil.makeDate2Str(new Date(), false));
+            vo.setType(1);
+            vo.setTypeName("收入");
+            vo.setMoney(new BigDecimal(20));
+            vo.setRemark("just test");
+            streamDetailVOList.add(vo);
+        }
+        return streamDetailVOList;
     }
 
     /**
@@ -237,7 +279,8 @@ public class StreamServiceImpl implements StreamService {
         vo.setIncomeMoney(stream.getIncomeMoney());
         vo.setAccountMoney(stream.getAccountMoney());
         vo.setLeftMoney(stream.getLeftMoney());
-        vo.setCreateTime(new Date());
+        Date createTime = stream.getCreateTime();
+        vo.setCreateTime(DateUtil.makeDate2Str(createTime, true));
         return vo;
     }
 }

@@ -116,6 +116,16 @@ public class SkipAction extends BaseAction {
     }
 
     /**
+     * 跳转到流水账
+     *
+     * @return
+     */
+    @Action(value = "showStream", results = {@Result(name = SUCCESS, location = "/cost/stream.jsp")})
+    public String skipToStreamData() {
+        return SUCCESS;
+    }
+
+    /**
      * 跳转到饼状图
      *
      * @return

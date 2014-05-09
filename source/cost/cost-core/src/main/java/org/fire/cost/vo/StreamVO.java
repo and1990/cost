@@ -1,7 +1,6 @@
 package org.fire.cost.vo;
 
 import java.math.BigDecimal;
-import java.util.Date;
 
 /**
  * 注释：流水账VO
@@ -15,7 +14,7 @@ public class StreamVO {
     private BigDecimal incomeMoney = BigDecimal.ZERO;
     private BigDecimal accountMoney = BigDecimal.ZERO;
     private BigDecimal leftMoney = BigDecimal.ZERO;
-    private Date createTime;
+    private String createTime;
 
     public Long getStreamId() {
         return streamId;
@@ -65,11 +64,11 @@ public class StreamVO {
         this.leftMoney = leftMoney;
     }
 
-    public Date getCreateTime() {
+    public String getCreateTime() {
         return createTime;
     }
 
-    public void setCreateTime(Date createTime) {
+    public void setCreateTime(String createTime) {
         this.createTime = createTime;
     }
 
