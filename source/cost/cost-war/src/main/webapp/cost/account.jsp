@@ -63,16 +63,19 @@
             <input class="text" name="accountVO.userName" style="width:100px;"/>
 
             <span>消费种类：</span>
-            <input class="accountClass easyui-combobox" name="accountVO.accountClass"
-                   style="width:100px;" editable="false"/>
+            <select class="accountClass easyui-combobox" name="accountVO.accountClass"
+                    style="width:100px;" editable="false">
+            </select>
 
             <span>消费类型：</span>
-            <input class="accountType easyui-combobox" name="accountVO.accountType" id="accountTypeParam"
-                   style="width:100px;" editable="false"/>
+            <select class="accountType easyui-combobox" name="accountVO.accountType"
+                    style="width:100px;" editable="false">
+            </select>
 
             <span>状态：</span>
-            <input class="accountStatus easyui-combobox" name="accountVO.accountStatus"
-                   style="width:100px;" editable="false"/>
+            <select class="accountStatus easyui-combobox" name="accountVO.accountStatus"
+                    style="width:100px;" editable="false">
+            </select>
 
             消费时间从: <input class="Wdate" id="accountStartTime" name="accountVO.accountStartTime" style="width: 100px"
                           onfocus="WdatePicker({dateFmt:'yyyy-MM-dd',maxDate:'#F{$dp.$D(\'accountEndTime\');}'})">
@@ -86,7 +89,7 @@
 
 <!-- 添加、修改账单对话框 -->
 <div id="account_dialog" class="easyui-dialog"
-     style="width:500px;height:300px;padding:2px;border:1px" data-options="closed:true,modal: true">
+     style="width:500px;height:250px;padding:2px;border:1px" data-options="closed:true,modal: true">
     <div class="easyui-panel" style="width:480px;text-align:center">
         <div style="padding:10px 10px 10px 100px">
             <form id="account_form" method="post">
@@ -236,7 +239,7 @@ $(function () {
             //加载账单类型
             if (newValue == 0) {
                 $('.accountType').combobox("disable");
-                $('#accountTypeParam').combobox('setValue', 0);
+                $('.accountType').combobox('setValue', 0);
                 return;
             }
             $('.accountType').combobox({
@@ -253,19 +256,16 @@ $(function () {
         }
     });
 
-
     //加载账单状态
     $('.accountStatus').combobox({
         url: '<%=basePath%>/getAccountStatus.do',
         valueField: 'code',
         textField: 'name',
         onLoadSuccess: function (data) {
+            console.info(data);
             $('.accountStatus').combobox('setValue', data[0].code).combobox('setText', data[0].name);
         }
     });
-
-    //设置账单类型默认不可用
-    $('.accountType').combobox("disable");
 });
 
 //获取查询参数
@@ -323,7 +323,6 @@ function modifyAccount() {
     var rowData = rowDataArr[0];
     $("#accountId").val(rowData.accountId);
     $("#accountMoney").numberbox({value: rowData.accountMoney});
-    $('#accountClass').combobox('setValue', rowData.accountClass);
     $('#accountType').combobox('setValue', rowData.accountType);
     $("#accountTime").val(rowData.accountTime);
     $("#accountRemark").val(rowData.accountRemark);

@@ -23,12 +23,14 @@
     </div>
     <div style="text-align: center;margin-top: 50px;">
         <div>
-            按用户查看：<input type="radio" name="accountType" value="1" checked="true"/>
+            消费类型类别：
+            <select class="easyui-combobox" name="state" style="width:120px;" id="account_type_select">
+                <option value="1">日常消费</option>
+                <option value="2">投资</option>
+            </select>
             &nbsp;
-            按消费类型查看：<input type="radio" name="accountType" value="2"/>
-            &nbsp;
-            消费时间从: <input class="Wdate" id="pie_start_time" name="accountVO.accountStartTime" style="width: 150px"
-                          onfocus="WdatePicker({dateFmt:'yyyy-MM-dd',maxDate:'#F{$dp.$D(\'pie_end_time\');}'})">
+            消费类型时间从: <input class="Wdate" id="pie_start_time" name="accountVO.accountStartTime" style="width: 150px"
+                            onfocus="WdatePicker({dateFmt:'yyyy-MM-dd',maxDate:'#F{$dp.$D(\'pie_end_time\');}'})">
             &nbsp;
             到: <input class="Wdate" id="pie_end_time" name="accountVO.accountEndTime" style="width: 150px"
                       onfocus="WdatePicker({dateFmt:'yyyy-MM-dd',minDate:'#F{$dp.$D(\'pie_start_time\');}',maxDate:'%y-%M-%d'})">
@@ -44,10 +46,10 @@
         $("#pie_end_time").val("");
         $.ajax({
             type: 'post',
-            url: '<%=basePath%>/getAccountGroupByUser.do',
+            url: '<%=basePath%>/getAccountGroupByAccountType.do?accountVO.accountClass=1',
             success: function (returnData) {
                 if (returnData != undefined) {
-                    var accountArr = getAccountDataByUser(returnData);
+                    var accountArr = getAccountDataByAccountType(returnData);
                     if (accountArr != undefined && accountArr.length != 0) {
                         initChart(accountArr);
                     }
@@ -82,7 +84,7 @@
                         text: ''
                     },
                     title: {
-                        text: "消费占比[消费类型]"
+                        text: "消费类型占比[日常消费]"
                     },
                     tooltip: {
                         enabled: true,
@@ -120,56 +122,53 @@
     function showPieChart() {
         var startTime = $("#pie_start_time").val();
         var endTime = $("#pie_end_time").val();
-        var showType = $("input[name='accountType']:checked").val()
-        loadData(startTime, endTime, showType);
-        setChartTitle(startTime, endTime, showType);
+        var accountClass = $("#account_type_select").combo("getValue");
+        loadData(startTime, endTime, accountClass);
+        setChartTitle(startTime, endTime, accountClass);
     }
 
     //设置图表格式
-    function setChartTitle(startTime, endTime, showType) {
-        var typeText = "用户";
-        if (showType == 2) {
-            typeText = "消费类型";
+    function setChartTitle(startTime, endTime, accountClass) {
+        var typeText = "日常消费类型";
+        if (accountClass == 2) {
+            typeText = "投资";
         }
 
         var title = undefined;
         var startNotNull = startTime != undefined && startTime != '';
         var endIsNull = endTime == undefined || endTime == '';
         if (startNotNull && endIsNull) {
-            title = startTime + "以后消费占比[" + typeText + "]";
+            title = startTime + "以后消费类型占比[" + typeText + "]";
         }
 
         var startIsNull = startTime == undefined || startTime == '';
         var endNotNull = endTime != undefined && endTime != '';
         if (startIsNull && endNotNull) {
-            title = endTime + "之前消费占比[" + typeText + "]";
+            title = endTime + "之前消费类型占比[" + typeText + "]";
         }
 
         if (startNotNull && endNotNull) {
-            title = startTime + "至" + endTime + "消费占比[" + typeText + "]";
+            title = startTime + "至" + endTime + "消费类型占比[" + typeText + "]";
         }
 
         if (startIsNull && endIsNull) {
-            title = "消费占比[" + typeText + "]";
+            title = "消费类型占比[" + typeText + "]";
         }
         var chart = $('#pie_container').highcharts();
         chart.setTitle({text: title});
     }
 
     //加载数据
-    function loadData(startTime, endTime, showType) {
-        var url = "<%=basePath%>/getAccountGroupByUser.do";
-        if (showType == 2) {
-            url = "<%=basePath%>/getAccountGroupByAccountType.do";
-        }
-
+    function loadData(startTime, endTime, accountClass) {
+        var url = "<%=basePath%>/getAccountGroupByAccountType.do";
         if (startTime == undefined) {
             startTime = "";
         }
         if (endTime == undefined) {
             endTime = "";
         }
-        var data = {"accountVO.accountStartTime": startTime, "accountVO.accountEndTime": endTime};
+        var data = {"accountVO.accountStartTime": startTime, "accountVO.accountEndTime": endTime,
+            "accountVO.accountClass": accountClass};
         $.ajax({
             type: 'post',
             url: url,
@@ -179,10 +178,7 @@
                     $('#null_data').html("未加载到数据...");
                     return;
                 }
-                var accountArr = getAccountDataByUser(returnData);
-                if (showType == 2) {
-                    accountArr = getAccountDataByAccountType(returnData);
-                }
+                var accountArr = getAccountDataByAccountType(returnData);
                 var chart = $('#pie_container').highcharts();
                 chart.series[0].setData(accountArr);
                 if (accountArr == undefined || accountArr.length == 0) {
@@ -192,22 +188,6 @@
                 }
             }
         });
-    }
-
-    //得到用户对应的账单数据
-    function getAccountDataByUser(returnData) {
-        var accountArr = new Array();
-        if (returnData == undefined) {
-            return;
-        }
-        var rows = JSON.parse(returnData);
-        for (var i = 0; i < rows.length; i++) {
-            var arr = new Array();
-            arr[0] = rows[i].userName;
-            arr[1] = rows[i].accountMoney;
-            accountArr.push(arr);
-        }
-        return accountArr;
     }
 
     /**

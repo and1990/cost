@@ -43,7 +43,7 @@
         $("#line_end_time").val("");
         $.ajax({
             type: 'post',
-            url: '<%=basePath%>/getAccountType.do',
+            url: '<%=basePath%>/getAccountType.do?accountVO.accountClass=1',
             success: function (returnData) {
                 if (returnData == undefined) {
                     $('#null_data').html("未加载到数据...");

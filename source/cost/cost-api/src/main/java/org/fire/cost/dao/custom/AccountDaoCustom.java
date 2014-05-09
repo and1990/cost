@@ -16,7 +16,7 @@ public interface AccountDaoCustom {
 
     int getAccountTotal(AccountVO vo);
 
-    List<AccountVO> getAccountGroupByAccountType(String accountStartTime, String accountEndTime);
+    List<AccountVO> getAccountGroupByAccountType(String accountStartTime, String accountEndTime, int accountClass);
 
     List<AccountVO> getAccountGroupByUser(String accountStartTime, String accountEndTime);
 

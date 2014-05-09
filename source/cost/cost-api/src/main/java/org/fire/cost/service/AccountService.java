@@ -97,11 +97,13 @@ public interface AccountService {
     /**
      * 查找消费类型对应的账单数据
      *
+     *
      * @param accountStartTime 消费开始时间
      * @param accountEndTime   消费结束时间
+     * @param accountClass
      * @return
      */
-    List<AccountVO> getAccountGroupByAccountType(String accountStartTime, String accountEndTime);
+    List<AccountVO> getAccountGroupByAccountType(String accountStartTime, String accountEndTime, int accountClass);
 
     /**
      * 查找用户对应的账单数据

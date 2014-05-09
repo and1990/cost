@@ -3,6 +3,7 @@ package org.fire.cost.dao.impl;
 import org.fire.cost.dao.custom.AccountDaoCustom;
 import org.fire.cost.domain.Account;
 import org.fire.cost.enums.AccountTypeEnum;
+import org.fire.cost.enums.InvestEnum;
 import org.fire.cost.util.DateUtil;
 import org.fire.cost.vo.AccountVO;
 import org.fire.cost.vo.PageData;
@@ -84,11 +85,11 @@ public class AccountDaoCustomImpl extends BaseJpaDaoSupport<Account, Long> imple
      *
      * @param accountStartTime 消费开始时间
      * @param accountEndTime   消费结束时间
+     * @param accountClass
      * @return
      */
     @Override
-    public List<AccountVO> getAccountGroupByAccountType(String accountStartTime, String accountEndTime) {
-
+    public List<AccountVO> getAccountGroupByAccountType(String accountStartTime, String accountEndTime, int accountClass) {
         String sql = "select account_type,sum(account_money) as account_money from cost_account WHERE 1=1 ";
         boolean accountStartTimeNotNull = accountStartTime != null && accountStartTime.trim().length() != 0;
         if (accountStartTimeNotNull) {
@@ -97,6 +98,10 @@ public class AccountDaoCustomImpl extends BaseJpaDaoSupport<Account, Long> imple
         boolean accountEndTimeNotNull = accountEndTime != null && accountEndTime.trim().length() != 0;
         if (accountEndTimeNotNull) {
             sql += "and account_time<:endTime ";
+        }
+        boolean accountClassNotNull = accountClass != 0;
+        if (accountClassNotNull) {
+            sql += "and account_class=:accountClass ";
         }
         sql += "group by account_type ";
 
@@ -107,6 +112,9 @@ public class AccountDaoCustomImpl extends BaseJpaDaoSupport<Account, Long> imple
         if (accountEndTimeNotNull) {
             query.setParameter("endTime", accountEndTime);
         }
+        if (accountClassNotNull) {
+            query.setParameter("accountClass", accountClass);
+        }
         query.unwrap(SQLQuery.class).setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP);
         List<Map> resultList = query.getResultList();
         List<AccountVO> accountVOList = new ArrayList<AccountVO>();
@@ -116,7 +124,11 @@ public class AccountDaoCustomImpl extends BaseJpaDaoSupport<Account, Long> imple
                 AccountVO accountVO = new AccountVO();
                 Integer accountType = Integer.valueOf(map.get("account_type").toString());
                 accountVO.setAccountType(accountType);
-                accountVO.setAccountTypeName(AccountTypeEnum.getName(accountType));
+                String name = AccountTypeEnum.getName(accountType);
+                if (accountClass == 2) {
+                    name = InvestEnum.getName(accountType);
+                }
+                accountVO.setAccountTypeName(name);
                 accountVO.setAccountMoney(new BigDecimal(map.get("account_money").toString()));
                 accountVOList.add(accountVO);
             }

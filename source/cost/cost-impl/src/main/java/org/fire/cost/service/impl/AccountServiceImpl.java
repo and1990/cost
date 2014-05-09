@@ -293,11 +293,12 @@ public class AccountServiceImpl implements AccountService {
      *
      * @param accountStartTime 消费开始时间
      * @param accountEndTime   消费结束时间
+     * @param accountClass
      * @return
      */
     @Override
-    public List<AccountVO> getAccountGroupByAccountType(String accountStartTime, String accountEndTime) {
-        List<AccountVO> accountVOList = accountDao.getAccountGroupByAccountType(accountStartTime, accountEndTime);
+    public List<AccountVO> getAccountGroupByAccountType(String accountStartTime, String accountEndTime, int accountClass) {
+        List<AccountVO> accountVOList = accountDao.getAccountGroupByAccountType(accountStartTime, accountEndTime, accountClass);
         return accountVOList;
     }
 

@@ -232,7 +232,10 @@ public class AccountAction extends BaseAction<AccountVO> {
     @Action(value = "getAccountType", results = {@Result(type = "json", params = {"root", "accountTypeList", "contentType", "text/html"})})
     public String getAccountType() {
         try {
-            int accountClass = accountVO.getAccountClass();
+            Integer accountClass = accountVO.getAccountClass();
+            if (accountClass == null) {
+                accountClass = 1;
+            }
             accountTypeList = accountService.getAccountType(accountClass);
         } catch (Exception e) {
             e.printStackTrace();
@@ -280,7 +283,8 @@ public class AccountAction extends BaseAction<AccountVO> {
         try {
             String startTime = accountVO.getAccountStartTime();
             String endTime = accountVO.getAccountEndTime();
-            accountVOList = accountService.getAccountGroupByAccountType(startTime, endTime);
+            int accountClass = accountVO.getAccountClass();
+            accountVOList = accountService.getAccountGroupByAccountType(startTime, endTime, accountClass);
         } catch (Exception e) {
             e.printStackTrace();
         }
