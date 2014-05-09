@@ -9,9 +9,7 @@ import org.fire.cost.dao.AccountDao;
 import org.fire.cost.dao.UserDao;
 import org.fire.cost.domain.Account;
 import org.fire.cost.domain.User;
-import org.fire.cost.enums.AccountStatusEnum;
-import org.fire.cost.enums.AccountTypeEnum;
-import org.fire.cost.enums.ClearTypeEnum;
+import org.fire.cost.enums.*;
 import org.fire.cost.service.AccountService;
 import org.fire.cost.service.UserService;
 import org.fire.cost.util.AuthenticationUtil;
@@ -187,20 +185,15 @@ public class AccountServiceImpl implements AccountService {
         }
     }
 
-    /**
-     * 得到账单类型
-     *
-     * @return
-     */
     @Override
-    public List<TypeVo> getAccountType() {
-        AccountTypeEnum[] typeEnums = AccountTypeEnum.values();
+    public List<TypeVo> getAccountClass() {
+        AccountClassEnum[] typeEnums = AccountClassEnum.values();
         List<TypeVo> typeList = new ArrayList<TypeVo>();
         TypeVo typeVo = new TypeVo();
         typeVo.setCode(0);
         typeVo.setName("全部");
         typeList.add(typeVo);
-        for (AccountTypeEnum typeEnum : typeEnums) {
+        for (AccountClassEnum typeEnum : typeEnums) {
             TypeVo vo = new TypeVo();
             vo.setCode(typeEnum.getCode());
             vo.setName(typeEnum.getName());
@@ -211,6 +204,24 @@ public class AccountServiceImpl implements AccountService {
 
     /**
      * 得到账单类型
+     *
+     * @param accountClass
+     * @return
+     */
+    @Override
+    public List<TypeVo> getAccountType(int accountClass) {
+        List<TypeVo> typeList = new ArrayList<TypeVo>();
+        if (accountClass == 1) {
+            typeList = getCommonAccountType();
+        } else if (accountClass == 2) {
+            typeList = getInvestAccountType();
+        }
+        return typeList;
+    }
+
+
+    /**
+     * 得到账单状态
      *
      * @return
      */
@@ -515,11 +526,54 @@ public class AccountServiceImpl implements AccountService {
         account.setAccountMoney(vo.getAccountMoney());
         account.setAccountTime(DateUtil.makeStr2Date(vo.getAccountTime(), false));
         account.setAccountStatus(vo.getAccountStatus());
+        account.setAccountClass(vo.getAccountClass());
         account.setAccountType(vo.getAccountType());
         account.setModifyUser(AuthenticationUtil.getUserName());
         account.setModifyTime(new Date());
         account.setAccountRemark(vo.getAccountRemark());
         return account;
+    }
+
+    /**
+     * 获取日常类型
+     *
+     * @return
+     */
+    private List<TypeVo> getCommonAccountType() {
+        List<TypeVo> typeList = new ArrayList<TypeVo>();
+        AccountTypeEnum[] typeEnums = AccountTypeEnum.values();
+        TypeVo typeVo = new TypeVo();
+        typeVo.setCode(0);
+        typeVo.setName("全部");
+        typeList.add(typeVo);
+        for (AccountTypeEnum typeEnum : typeEnums) {
+            TypeVo vo = new TypeVo();
+            vo.setCode(typeEnum.getCode());
+            vo.setName(typeEnum.getName());
+            typeList.add(vo);
+        }
+        return typeList;
+    }
+
+    /**
+     * 获取投资类型
+     *
+     * @return
+     */
+    private List<TypeVo> getInvestAccountType() {
+        List<TypeVo> typeList = new ArrayList<TypeVo>();
+        InvestEnum[] typeEnums = InvestEnum.values();
+        TypeVo typeVo = new TypeVo();
+        typeVo.setCode(0);
+        typeVo.setName("全部");
+        typeList.add(typeVo);
+        for (InvestEnum typeEnum : typeEnums) {
+            TypeVo vo = new TypeVo();
+            vo.setCode(typeEnum.getCode());
+            vo.setName(typeEnum.getName());
+            typeList.add(vo);
+        }
+        return typeList;
     }
 
     /**
@@ -535,14 +589,28 @@ public class AccountServiceImpl implements AccountService {
         vo.setUserName(account.getUser().getUserName());
         vo.setAccountMoney(account.getAccountMoney());
         vo.setAccountTime(DateUtil.makeDate2Str(account.getAccountTime(), false));
-        vo.setAccountStatus(account.getAccountStatus());
-        vo.setAccountStatusName(AccountStatusEnum.getName(account.getAccountStatus()));
-        vo.setAccountType(account.getAccountType());
-        vo.setAccountTypeName(AccountTypeEnum.getName(account.getAccountType()));
+        Integer accountStatus = account.getAccountStatus();
+        vo.setAccountStatus(accountStatus);
+        String accountStatusName = AccountStatusEnum.getName(accountStatus);
+        vo.setAccountStatusName(accountStatusName);
+        Integer accountType = account.getAccountType();
+        vo.setAccountType(accountType);
+        String accountTypeName = null;
+        Integer accountClass = account.getAccountClass();
+        vo.setAccountClass(accountClass);
+        vo.setAccountClassName(AccountClassEnum.getName(accountClass));
+        if (accountClass == 1) {
+            accountTypeName = AccountTypeEnum.getName(accountType);
+        } else if (accountClass == 2) {
+            accountTypeName = InvestEnum.getName(accountType);
+        }
+        vo.setAccountTypeName(accountTypeName);
         vo.setCreateUser(account.getCreateUser());
-        vo.setCreateTime(DateUtil.makeDate2Str(account.getCreateTime(), true));
+        String createTime = DateUtil.makeDate2Str(account.getCreateTime(), true);
+        vo.setCreateTime(createTime);
         vo.setModifyUser(account.getModifyUser());
-        vo.setModifyTime(DateUtil.makeDate2Str(account.getCreateTime(), true));
+        String modifyTime = DateUtil.makeDate2Str(account.getModifyTime(), true);
+        vo.setModifyTime(modifyTime);
         vo.setAccountRemark(account.getAccountRemark());
         return vo;
     }

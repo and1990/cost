@@ -21,6 +21,7 @@ public class Account implements java.io.Serializable {
     private User user;
     private BigDecimal accountMoney;
     private Date accountTime;
+    private Integer accountClass;
     private Integer accountType;
     private Integer accountStatus;
     private String createUser;
@@ -93,6 +94,15 @@ public class Account implements java.io.Serializable {
 
     public void setAccountTime(Date accountTime) {
         this.accountTime = accountTime;
+    }
+
+    @Column(name = "account_class", nullable = false)
+    public Integer getAccountClass() {
+        return accountClass;
+    }
+
+    public void setAccountClass(Integer accountClass) {
+        this.accountClass = accountClass;
     }
 
     @Column(name = "account_type", nullable = false)

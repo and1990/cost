@@ -1,17 +1,17 @@
 package org.fire.cost.enums;
 
 /**
- * 消费类型枚举
+ * 投资类型枚举：定期存款、活期存款、购买保险、购买基金、购买股票
  *
  * @author liutengfei
  */
-public enum AccountEnum {
-    Food(1, "食物"), Life(2, "生活用品"), Fun(3, "娱乐"), Other(4, "其他");
+public enum InvestEnum {
+    Deposit(1, "存款"), Insurance(2, "保险"), Fund(3, "基金"), Shares(4, "股票");
 
     private int code;
     private String name;
 
-    private AccountEnum(int code, String name) {
+    private InvestEnum(int code, String name) {
         this.code = code;
         this.name = name;
     }
@@ -23,7 +23,7 @@ public enum AccountEnum {
      * @return
      */
     public static int getCode(String name) {
-        for (AccountEnum enumType : AccountEnum.values()) {
+        for (InvestEnum enumType : InvestEnum.values()) {
             if (name != null && name.equals(enumType.getName())) {
                 return enumType.getCode();
             }
@@ -38,7 +38,7 @@ public enum AccountEnum {
      * @return
      */
     public static String getName(int code) {
-        for (AccountEnum enumType : AccountEnum.values()) {
+        for (InvestEnum enumType : InvestEnum.values()) {
             if (code == enumType.getCode()) {
                 return enumType.getName();
             }

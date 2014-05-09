@@ -18,13 +18,13 @@ public class AccountVO implements Serializable {
 
     private String userName;
 
-    private Long groupId;
-
-    private String groupName;
-
     private BigDecimal accountMoney;
 
     private String accountTime;
+
+    private Integer accountClass;
+
+    private String accountClassName;
 
     private Integer accountType;
 
@@ -33,10 +33,6 @@ public class AccountVO implements Serializable {
     private Integer accountStatus;
 
     private String accountStatusName;
-
-    private Integer clearType;
-
-    private String clearTypeName;
 
     private String accountFile;
 
@@ -80,22 +76,6 @@ public class AccountVO implements Serializable {
         this.userName = userName;
     }
 
-    public Long getGroupId() {
-        return groupId;
-    }
-
-    public void setGroupId(Long groupId) {
-        this.groupId = groupId;
-    }
-
-    public String getGroupName() {
-        return groupName;
-    }
-
-    public void setGroupName(String groupName) {
-        this.groupName = groupName;
-    }
-
     public BigDecimal getAccountMoney() {
         return accountMoney;
     }
@@ -110,6 +90,22 @@ public class AccountVO implements Serializable {
 
     public void setAccountTime(String accountTime) {
         this.accountTime = accountTime;
+    }
+
+    public Integer getAccountClass() {
+        return accountClass;
+    }
+
+    public void setAccountClass(Integer accountClass) {
+        this.accountClass = accountClass;
+    }
+
+    public String getAccountClassName() {
+        return accountClassName;
+    }
+
+    public void setAccountClassName(String accountClassName) {
+        this.accountClassName = accountClassName;
     }
 
     public Integer getAccountType() {
@@ -142,22 +138,6 @@ public class AccountVO implements Serializable {
 
     public void setAccountStatusName(String accountStatusName) {
         this.accountStatusName = accountStatusName;
-    }
-
-    public Integer getClearType() {
-        return clearType;
-    }
-
-    public void setClearType(Integer clearType) {
-        this.clearType = clearType;
-    }
-
-    public String getClearTypeName() {
-        return clearTypeName;
-    }
-
-    public void setClearTypeName(String clearTypeName) {
-        this.clearTypeName = clearTypeName;
     }
 
     public String getAccountFile() {

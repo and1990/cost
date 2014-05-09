@@ -240,6 +240,11 @@ public class AccountDaoCustomImpl extends BaseJpaDaoSupport<Account, Long> imple
         if (userNameNotNull) {
             filterSQL += " and u.user_name like :userName";
         }
+        Integer accountClass = vo.getAccountClass();
+        boolean accountClassNotNull = accountClass != null && accountClass != 0;
+        if (accountClassNotNull) {
+            filterSQL += " and a.account_class=:accountClass";
+        }
         Integer accountType = vo.getAccountType();
         boolean accountTypeNotNull = accountType != null && accountType != 0;
         if (accountTypeNotNull) {
@@ -274,6 +279,11 @@ public class AccountDaoCustomImpl extends BaseJpaDaoSupport<Account, Long> imple
         boolean userNameNotNull = userName != null && userName.length() != 0;
         if (userNameNotNull) {
             query.setParameter("userName", "%" + userName + "%");
+        }
+        Integer accountClass = vo.getAccountClass();
+        boolean accountClassNotNull = accountClass != null && accountClass != 0;
+        if (accountClassNotNull) {
+            query.setParameter("accountClass", accountClass);
         }
         Integer accountType = vo.getAccountType();
         boolean accountTypeNotNull = accountType != null && accountType != 0;

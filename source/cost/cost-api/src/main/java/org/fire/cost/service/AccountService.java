@@ -72,11 +72,19 @@ public interface AccountService {
     void clearAccount(String accountIds);
 
     /**
-     * 得到账单类型
+     * 获取消费种类
      *
      * @return
      */
-    List<TypeVo> getAccountType();
+    List<TypeVo> getAccountClass();
+
+    /**
+     * 得到账单类型
+     *
+     * @return
+     * @param accountClass
+     */
+    List<TypeVo> getAccountType(int accountClass);
 
     /**
      * 得到结算方式
@@ -84,6 +92,7 @@ public interface AccountService {
      * @return
      */
     List<TypeVo> getClearType();
+
 
     /**
      * 查找消费类型对应的账单数据
@@ -93,7 +102,6 @@ public interface AccountService {
      * @return
      */
     List<AccountVO> getAccountGroupByAccountType(String accountStartTime, String accountEndTime);
-
 
     /**
      * 查找用户对应的账单数据

@@ -51,6 +51,11 @@ public class AccountAction extends BaseAction<AccountVO> {
      */
     private List<TypeVo> accountStatusList;
 
+
+    /**
+     * 账单种类VO
+     */
+    private List<TypeVo> accountClassList;
     /**
      * 账单类型VO
      */
@@ -64,7 +69,6 @@ public class AccountAction extends BaseAction<AccountVO> {
      * 账单ID
      */
     private String accountIds;
-
 
     /**
      * 根据过滤条件查询账单信息
@@ -206,6 +210,21 @@ public class AccountAction extends BaseAction<AccountVO> {
     }
 
     /**
+     * 得到账单种类
+     *
+     * @return
+     */
+    @Action(value = "getAccountClass", results = {@Result(type = "json", params = {"root", "accountClassList", "contentType", "text/html"})})
+    public String getAccountClass() {
+        try {
+            accountClassList = accountService.getAccountClass();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return SUCCESS;
+    }
+
+    /**
      * 得到账单类型
      *
      * @return
@@ -213,7 +232,8 @@ public class AccountAction extends BaseAction<AccountVO> {
     @Action(value = "getAccountType", results = {@Result(type = "json", params = {"root", "accountTypeList", "contentType", "text/html"})})
     public String getAccountType() {
         try {
-            accountTypeList = accountService.getAccountType();
+            int accountClass = accountVO.getAccountClass();
+            accountTypeList = accountService.getAccountType(accountClass);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -351,6 +371,14 @@ public class AccountAction extends BaseAction<AccountVO> {
 
     public void setAccountVoListMap(Map<String, List<AccountVO>> accountVoListMap) {
         this.accountVoListMap = accountVoListMap;
+    }
+
+    public List<TypeVo> getAccountClassList() {
+        return accountClassList;
+    }
+
+    public void setAccountClassList(List<TypeVo> accountClassList) {
+        this.accountClassList = accountClassList;
     }
 
     public List<TypeVo> getAccountTypeList() {
