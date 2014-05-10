@@ -55,4 +55,16 @@ public class DateTest {
         String password = DigestUtils.md5Hex("123");
         System.out.println(password);
     }
+
+    @Test
+    public void testLastDayOfMonth() {
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.YEAR, 2014);
+        calendar.set(Calendar.MONTH, 5);
+        int day = calendar.getMaximum(Calendar.DATE);
+        int month = calendar.get(Calendar.MONTH);
+        System.out.println(day);
+        System.out.println(month);
+        System.out.println(calendar.get(Calendar.MONTH));
+    }
 }

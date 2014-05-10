@@ -31,12 +31,20 @@ public interface StreamService {
     List<TypeVo> getYears();
 
     /**
+     * 同步流水数据
+     *
+     * @param year
+     * @return
+     */
+    boolean synStreamData(int year);
+
+    /**
      * 查询流水明细
      *
      * @param month
      * @return
      */
-    List<StreamDetailVO> getStreamDetail(int month);
+    List<StreamDetailVO> getStreamDetail(int year, int month);
 
     /**
      * 查找月份对应的流水账数据

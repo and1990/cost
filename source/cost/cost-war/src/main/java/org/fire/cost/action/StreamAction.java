@@ -89,6 +89,24 @@ public class StreamAction extends BaseAction<StreamVO> {
     }
 
     /**
+     * 同步流水数据
+     *
+     * @return
+     */
+    @Action(value = "synStreamData", results = {@Result(type = "json", params = {"root", "pageData", "contentType", "text/html"})})
+    public String synStreamData() {
+        try {
+            if (year == 0) {
+                year = Calendar.getInstance().get(Calendar.YEAR);
+            }
+            streamService.synStreamData(year);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return SUCCESS;
+    }
+
+    /**
      * 获取流水明细
      *
      * @return
@@ -96,7 +114,10 @@ public class StreamAction extends BaseAction<StreamVO> {
     @Action(value = "getStreamDetail", results = {@Result(type = "json", params = {"root", "streamDetailVOList", "contentType", "text/html"})})
     public String getStreamDetail() {
         try {
-            streamDetailVOList = streamService.getStreamDetail(month);
+            if (year == 0) {
+                year = Calendar.getInstance().get(Calendar.YEAR);
+            }
+            streamDetailVOList = streamService.getStreamDetail(year, month);
         } catch (Exception e) {
             e.printStackTrace();
         }

@@ -28,13 +28,13 @@
                 <th data-options="field:'incomeMoney',width:80,align:'center' ">收入金额</th>
                 <th data-options="field:'accountMoney',width:80,align:'center' ">支出金额</th>
                 <th data-options="field:'leftMoney',width:80,align:'center' ">剩余金额</th>
-                <th data-options="field:'createTime',width:60,align:'center'">创建时间</th>
+                <th data-options="field:'createTime',width:60,align:'center'">同步时间</th>
             </tr>
             </thead>
         </table>
         <!-- 明细数据 -->
         <div style="padding:2px" id="stream_detail_div">
-            <table id="stream_detail_table"></table>
+            <table id="stream_detail_table" bgcolor="#ff7f50"></table>
         </div>
     </div>
 </div>
@@ -42,13 +42,13 @@
 <!-- 工具栏 -->
 <div id="stream_tool_bar" style="padding: 5px; height: auto">
     <div style="margin-bottom: 5px">
-        <a href="#" class="easyui-linkbutton" iconCls="icon-print" plain="true"
-           onclick="exportStreamToExcel();">导出Excel</a>
-    </div>
-    <div>
         <span>年份：</span>
         <input id="year" class="easyui-combobox" name="streamVO.year"
                style="width:100px;" editable="false"/>
+        <a href="#" id="approve_button" class="easyui-linkbutton" iconCls="icon-tag-blue" plain="true"
+           onclick="synStreamData();">同步数据</a>
+        <a href="#" class="easyui-linkbutton" iconCls="icon-print" plain="true"
+           onclick="exportStreamToExcel();">导出Excel</a>
     </div>
 </div>
 
@@ -99,9 +99,11 @@
 
     //显示流水明细
     function showStreamDetail(index, row) {
+        var year = $('#year').combobox("getValue");
+        year = 2014;
         var detailTable = $('#stream_data_table').datagrid('getRowDetail', index).find('#stream_detail_table');
         detailTable.datagrid({
-            url: '<%=basePath%>/getStreamDetail.do',
+            url: '<%=basePath%>/getStreamDetail.do?year=' + year + "&month=" + row.month,
             fitColumns: true,
             singleSelect: true,
             rownumbers: true,
@@ -122,9 +124,27 @@
                 setTimeout(function () {
                     $('#stream_data_table').datagrid('fixDetailRowHeight', index);
                 }, 0);
+            },
+            rowStyler: function (index, row) {
+                if (row.type == 1) {
+                    return 'background-color:lightgreen;';
+                }
             }
         });
         $('#stream_data_table').datagrid('fixDetailRowHeight', index);
+    }
+
+    //同步流水数据
+    function synStreamData() {
+        var year = $('#year').combobox("getValue");
+        year = 2014;
+        $.ajax({
+            method: "post",
+            url: "<%=basePath%>/synStreamData.do?year=" + year,
+            success: function (returnData) {
+                $("#stream_data_table").datagrid("reload");
+            }
+        });
     }
 
     //导出excel

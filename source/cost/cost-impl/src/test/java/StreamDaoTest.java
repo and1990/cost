@@ -27,4 +27,8 @@ public class StreamDaoTest {
         System.out.println(streamList.size());
     }
 
+    public void detetStreamData(){
+
+    }
+
 }

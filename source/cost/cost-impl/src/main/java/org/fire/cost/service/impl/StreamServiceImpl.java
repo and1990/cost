@@ -3,11 +3,12 @@ package org.fire.cost.service.impl;
 import org.apache.poi.hssf.usermodel.*;
 import org.fire.cost.dao.StreamDao;
 import org.fire.cost.domain.Stream;
+import org.fire.cost.enums.IncomeAndAccountEnum;
+import org.fire.cost.service.AccountService;
+import org.fire.cost.service.IncomeService;
 import org.fire.cost.service.StreamService;
 import org.fire.cost.util.DateUtil;
-import org.fire.cost.vo.StreamDetailVO;
-import org.fire.cost.vo.StreamVO;
-import org.fire.cost.vo.TypeVo;
+import org.fire.cost.vo.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,6 +24,12 @@ import java.util.*;
  */
 @Service
 public class StreamServiceImpl implements StreamService {
+    @Resource
+    private AccountService accountService;
+
+    @Resource
+    private IncomeService incomeService;
+
     @Resource
     private StreamDao streamDao;
 
@@ -70,25 +77,66 @@ public class StreamServiceImpl implements StreamService {
     }
 
     /**
+     * 同步该年份的流水账数据
+     *
+     * @param year
+     * @return
+     */
+    @Transactional(value = "transactionManager", rollbackFor = RollbackException.class)
+    public boolean synStreamData(int year) {
+        try {
+            List<Stream> entityList = streamDao.findStreamByYear(year);
+            streamDao.delete(entityList);
+            List<Stream> streamList = getSynData(year);
+            streamDao.save(streamList);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return true;
+    }
+
+    /**
+     * 获取同步数据
+     *
+     * @param year
+     * @return
+     */
+    private List<Stream> getSynData(int year) {
+        List<Stream> streamList = new ArrayList<Stream>();
+        Calendar calendar = Calendar.getInstance();
+        int currentMonth = calendar.get(Calendar.MONTH);
+        for (int month = 0; month <= currentMonth; month++) {
+            List<IncomeVO> incomeDataList = getIncomeDataByMonth(year, month);
+            List<AccountVO> accountDataList = getAccountDataByMonth(year, month);
+            BigDecimal totalIncomeMoney = getTotalIncomeMoney(incomeDataList);
+            BigDecimal totalAccountMoney = getTotalAccountMoney(accountDataList);
+            BigDecimal leftMoney = totalIncomeMoney.subtract(totalAccountMoney);
+            Stream stream = new Stream();
+            stream.setYear(year);
+            stream.setMonth(month + 1);
+            stream.setIncomeMoney(totalIncomeMoney);
+            stream.setAccountMoney(totalAccountMoney);
+            stream.setLeftMoney(leftMoney);
+            stream.setCreateTime(new Date());
+            streamList.add(stream);
+        }
+        return streamList;
+    }
+
+    /**
      * 获取流水明细
      *
      * @param month
      * @return
      */
     @Override
-    public List<StreamDetailVO> getStreamDetail(int month) {
-        List<StreamDetailVO> streamDetailVOList = new ArrayList<StreamDetailVO>();
-        for (int i = 0; i < 5; i++) {
-            StreamDetailVO vo = new StreamDetailVO();
-            vo.setDate(DateUtil.makeDate2Str(new Date(), false));
-            vo.setType(1);
-            vo.setTypeName("收入");
-            vo.setMoney(new BigDecimal(20));
-            vo.setRemark("just test");
-            streamDetailVOList.add(vo);
-        }
+    public List<StreamDetailVO> getStreamDetail(int year, int month) {
+        List<AccountVO> accountVOList = getAccountDataByMonth(year, month);
+        List<IncomeVO> incomeVOList = getIncomeDataByMonth(year, month);
+        List<StreamDetailVO> streamDetailVOList = getDetailData(accountVOList, incomeVOList);
         return streamDetailVOList;
     }
+
 
     /**
      * 获取月份对应的流水账记录
@@ -113,6 +161,39 @@ public class StreamServiceImpl implements StreamService {
         }
         return streamVoListMap;
     }
+
+
+    /**
+     * 获取excel数据
+     *
+     * @return
+     */
+    @Override
+    @Transactional(value = "transactionManager", rollbackFor = RollbackException.class)
+    public HSSFWorkbook getExcelData() {
+        HSSFWorkbook hwb = new HSSFWorkbook();
+        try {
+            // 加边框
+            HSSFCellStyle style = hwb.createCellStyle();
+            style.setBorderBottom(HSSFCellStyle.BORDER_THIN);
+            style.setBorderTop(HSSFCellStyle.BORDER_THIN);
+            style.setBorderLeft(HSSFCellStyle.BORDER_THIN);
+            style.setBorderRight(HSSFCellStyle.BORDER_THIN);
+            // 列宽
+            HSSFSheet sheet = hwb.createSheet("收入");
+            for (int i = 0; i < 6; i++) {
+                sheet.setColumnWidth(i, (short) 5000);
+            }
+            HSSFRow row = null;
+            HSSFCell cell = null;
+            createExcelTitle(sheet, style, row, cell);
+            createExcelBody(sheet, style, row, cell);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return hwb;
+    }
+
 
     /**
      * 获取金额
@@ -153,34 +234,121 @@ public class StreamServiceImpl implements StreamService {
     }
 
     /**
-     * 获取excel数据
+     * 根据月份获取账单数据
      *
+     * @param year
+     * @param month
      * @return
      */
-    @Override
-    @Transactional(value = "transactionManager", rollbackFor = RollbackException.class)
-    public HSSFWorkbook getExcelData() {
-        HSSFWorkbook hwb = new HSSFWorkbook();
-        try {
-            // 加边框
-            HSSFCellStyle style = hwb.createCellStyle();
-            style.setBorderBottom(HSSFCellStyle.BORDER_THIN);
-            style.setBorderTop(HSSFCellStyle.BORDER_THIN);
-            style.setBorderLeft(HSSFCellStyle.BORDER_THIN);
-            style.setBorderRight(HSSFCellStyle.BORDER_THIN);
-            // 列宽
-            HSSFSheet sheet = hwb.createSheet("收入");
-            for (int i = 0; i < 6; i++) {
-                sheet.setColumnWidth(i, (short) 5000);
+    private List<AccountVO> getAccountDataByMonth(int year, int month) {
+        PageData<AccountVO> pageData = new PageData<AccountVO>();
+        pageData.setPage(1);
+        pageData.setPageSize(Integer.MAX_VALUE);
+        AccountVO vo = new AccountVO();
+        vo.setAccountStartTime(year + "-" + month + "-1");
+        vo.setAccountEndTime(year + "-" + month + "-31");
+        List<AccountVO> accountVOList = accountService.getAccountByFilter(vo, pageData);
+        return accountVOList;
+    }
+
+    /**
+     * 根据月份获取收入数据
+     *
+     * @param year
+     * @param month
+     * @return
+     */
+    private List<IncomeVO> getIncomeDataByMonth(int year, int month) {
+        PageData<IncomeVO> pageData = new PageData<IncomeVO>();
+        pageData.setPage(1);
+        pageData.setPageSize(Integer.MAX_VALUE);
+        IncomeVO vo = new IncomeVO();
+        vo.setIncomeStartTime(year + "-" + month + "-1");
+        vo.setIncomeEndTime(year + "-" + month + "-31");
+        List<IncomeVO> incomeVOList = incomeService.getIncomeByFilter(vo, pageData);
+        return incomeVOList;
+    }
+
+    /**
+     * 整合收支明细数据
+     *
+     * @param accountVOList
+     * @param incomeVOList
+     * @return
+     */
+    private List<StreamDetailVO> getDetailData(List<AccountVO> accountVOList, List<IncomeVO> incomeVOList) {
+        List<StreamDetailVO> detailVOList = new ArrayList<StreamDetailVO>();
+        boolean accountNotNull = accountVOList != null && accountVOList.size() != 0;
+        if (accountNotNull) {
+            for (AccountVO accountVO : accountVOList) {
+                StreamDetailVO detailVO = new StreamDetailVO();
+                detailVO.setDate(accountVO.getAccountTime());
+                detailVO.setMoney(accountVO.getAccountMoney());
+                int code = IncomeAndAccountEnum.Account.getCode();
+                detailVO.setType(code);
+                String name = IncomeAndAccountEnum.Account.getName();
+                detailVO.setTypeName(name);
+                detailVO.setRemark(accountVO.getAccountRemark());
+                detailVOList.add(detailVO);
             }
-            HSSFRow row = null;
-            HSSFCell cell = null;
-            createExcelTitle(sheet, style, row, cell);
-            createExcelBody(sheet, style, row, cell);
-        } catch (Exception e) {
-            e.printStackTrace();
         }
-        return hwb;
+        boolean incomeNotNull = incomeVOList != null && incomeVOList.size() != 0;
+        if (incomeNotNull) {
+            for (IncomeVO incomeVO : incomeVOList) {
+                StreamDetailVO detailVO = new StreamDetailVO();
+                detailVO.setDate(incomeVO.getIncomeTime());
+                detailVO.setMoney(incomeVO.getIncomeMoney());
+                int code = IncomeAndAccountEnum.Income.getCode();
+                detailVO.setType(code);
+                String name = IncomeAndAccountEnum.Income.getName();
+                detailVO.setTypeName(name);
+                detailVO.setRemark(incomeVO.getIncomeRemark());
+                detailVOList.add(detailVO);
+            }
+        }
+        Collections.sort(detailVOList, new Comparator<StreamDetailVO>() {
+            @Override
+            public int compare(StreamDetailVO o1, StreamDetailVO o2) {
+                return o2.getDate().compareTo(o1.getDate());
+            }
+        });
+        return detailVOList;
+    }
+
+    /**
+     * 获取收入总金额
+     *
+     * @param incomeVOList
+     * @return
+     */
+    private BigDecimal getTotalIncomeMoney(List<IncomeVO> incomeVOList) {
+        BigDecimal totalMoney = BigDecimal.ZERO;
+        boolean incomeNotNull = incomeVOList != null && incomeVOList.size() != 0;
+        if (incomeNotNull) {
+            for (IncomeVO incomeVO : incomeVOList) {
+                BigDecimal incomeMoney = incomeVO.getIncomeMoney();
+                totalMoney = totalMoney.add(incomeMoney);
+            }
+        }
+        return totalMoney;
+    }
+
+    /**
+     * 获取支出总金额
+     *
+     * @param accountVOList
+     * @return
+     */
+    private BigDecimal getTotalAccountMoney(List<AccountVO> accountVOList) {
+        BigDecimal totalMoney = BigDecimal.ZERO;
+        boolean incomeNotNull = accountVOList != null && accountVOList.size() != 0;
+        if (incomeNotNull) {
+            for (AccountVO accountVO : accountVOList) {
+                BigDecimal incomeMoney = accountVO.getAccountMoney();
+                totalMoney = totalMoney.add(incomeMoney);
+            }
+        }
+        return totalMoney;
     }
 
     /**
