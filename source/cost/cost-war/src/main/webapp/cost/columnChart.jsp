@@ -23,9 +23,9 @@
 
     <div style="text-align: center;margin-top: 50px;">
         <div>
-            按用户查看：<input type="radio" name="accountType" value="1" checked="true"/>
+            按消费类型查看：<input type="radio" name="accountType" value="2" checked="true"/>
             &nbsp;
-            按消费类型查看：<input type="radio" name="accountType" value="2"/>
+            按用户查看：<input type="radio" name="accountType" value="1"/>
             &nbsp;
             消费时间从: <input class="Wdate" id="column_start_time" name="accountVO.accountStartTime" style="width: 150px"
                           onfocus="WdatePicker({dateFmt:'yyyy-MM-dd',maxDate:'#F{$dp.$D(\'column_end_time\');}'})">
@@ -44,14 +44,15 @@
         $("#column_end_time").val("");
         $.ajax({
             type: 'post',
-            url: '<%=basePath%>/getAccountGroupByUser.do',
+            url: '<%=basePath%>/getAccountGroupByAccountType.do',
             success: function (returnData) {
                 if (returnData == undefined) {
                     return;
                 }
                 var nameArr = new Array();
                 var valueArr = new Array();
-                setAccountDataByUser(nameArr, valueArr, returnData);
+                //setAccountDataByUser(nameArr, valueArr, returnData);
+                setAccountDataByAccountType(nameArr, valueArr, returnData);
                 if (nameArr.length != 0 && valueArr.length != 0) {
                     initChart(nameArr, valueArr);
                 }
