@@ -105,7 +105,7 @@ public class StreamServiceImpl implements StreamService {
         List<Stream> streamList = new ArrayList<Stream>();
         Calendar calendar = Calendar.getInstance();
         int currentMonth = calendar.get(Calendar.MONTH);
-        for (int month = 0; month <= currentMonth; month++) {
+        for (int month = 1; month <= currentMonth + 1; month++) {
             List<IncomeVO> incomeDataList = getIncomeDataByMonth(year, month);
             List<AccountVO> accountDataList = getAccountDataByMonth(year, month);
             BigDecimal totalIncomeMoney = getTotalIncomeMoney(incomeDataList);
@@ -113,7 +113,7 @@ public class StreamServiceImpl implements StreamService {
             BigDecimal leftMoney = totalIncomeMoney.subtract(totalAccountMoney);
             Stream stream = new Stream();
             stream.setYear(year);
-            stream.setMonth(month + 1);
+            stream.setMonth(month);
             stream.setIncomeMoney(totalIncomeMoney);
             stream.setAccountMoney(totalAccountMoney);
             stream.setLeftMoney(leftMoney);

@@ -96,7 +96,7 @@
                         <td>收入时间:</td>
                         <td>
                             <input class="Wdate easyui-validatebox" id="incomeTime" name="incomeVO.incomeTime"
-                                   onfocus="WdatePicker({minDate:'%y-%M-{%d-7}',maxDate:'%y-%M-%d'})"/>
+                                   onfocus="WdatePicker({dateFmt:'yyyy-MM-dd'})"/>
                         </td>
                     </tr>
                     <tr>
