@@ -47,6 +47,7 @@
                 <li data-options="id:'showPie'">饼状图</li>
                 <li data-options="id:'showColumn'">柱状图</li>
                 <li data-options="id:'showLine'">线性图</li>
+                <li data-options="id:'showInvestLine'">投资分析</li>
                 <li data-options="id:'showStreamColumn'">流水账分析</li>
             </ul>
         </li>

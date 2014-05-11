@@ -15,6 +15,7 @@ import org.springframework.stereotype.Controller;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletResponse;
 import java.io.OutputStream;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -41,10 +42,15 @@ public class AccountAction extends BaseAction<AccountVO> {
     private List<AccountVO> accountVOList;
 
     /**
-     * key：账单类型
+     * key：用户名
      * value：用户账单金额
      */
     private Map<String, List<AccountVO>> accountVoListMap;
+
+    /**
+     * 投资数据，key：月份，value：数据
+     */
+    private Map<String, List<AccountVO>> investListMap;
 
     /**
      * 账单状态VO
@@ -69,6 +75,9 @@ public class AccountAction extends BaseAction<AccountVO> {
      * 账单ID
      */
     private String accountIds;
+
+    //年份
+    private int year;
 
     /**
      * 根据过滤条件查询账单信息
@@ -355,6 +364,20 @@ public class AccountAction extends BaseAction<AccountVO> {
         return null;
     }
 
+    /**
+     * 获取每月投资数据
+     *
+     * @return
+     */
+    @Action(value = "getInvestGroupByMonth", results = {@Result(type = "json", params = {"root", "accountVoListMap", "contentType", "text/html"})})
+    public String getInvestGroupByMonth() {
+        if (year == 0) {
+            year = Calendar.getInstance().get(Calendar.YEAR);
+        }
+        accountVoListMap = accountService.getInvestGroupByMonth(year);
+        return SUCCESS;
+    }
+
 
     public AccountVO getAccountVO() {
         return accountVO;
@@ -378,6 +401,14 @@ public class AccountAction extends BaseAction<AccountVO> {
 
     public void setAccountVoListMap(Map<String, List<AccountVO>> accountVoListMap) {
         this.accountVoListMap = accountVoListMap;
+    }
+
+    public Map<String, List<AccountVO>> getInvestListMap() {
+        return investListMap;
+    }
+
+    public void setInvestListMap(Map<String, List<AccountVO>> investListMap) {
+        this.investListMap = investListMap;
     }
 
     public List<TypeVo> getAccountClassList() {
@@ -418,5 +449,13 @@ public class AccountAction extends BaseAction<AccountVO> {
 
     public void setAccountIds(String accountIds) {
         this.accountIds = accountIds;
+    }
+
+    public int getYear() {
+        return year;
+    }
+
+    public void setYear(int year) {
+        this.year = year;
     }
 }

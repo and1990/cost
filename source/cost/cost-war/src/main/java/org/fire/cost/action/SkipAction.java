@@ -156,6 +156,16 @@ public class SkipAction extends BaseAction {
     }
 
     /**
+     * 跳转到投资线性图
+     *
+     * @return
+     */
+    @Action(value = "showInvestLine", results = {@Result(name = SUCCESS, location = "/cost/investLineChart.jsp")})
+    public String skipToInvestLineChart() {
+        return SUCCESS;
+    }
+
+    /**
      * 跳转到流水账柱状图
      *
      * @return

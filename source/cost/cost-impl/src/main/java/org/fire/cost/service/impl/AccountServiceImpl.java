@@ -1,9 +1,5 @@
 package org.fire.cost.service.impl;
 
-import org.apache.commons.fileupload.FileItem;
-import org.apache.commons.fileupload.FileUploadException;
-import org.apache.commons.fileupload.disk.DiskFileItemFactory;
-import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.poi.hssf.usermodel.*;
 import org.fire.cost.dao.AccountDao;
 import org.fire.cost.dao.UserDao;
@@ -22,8 +18,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import javax.persistence.RollbackException;
-import javax.servlet.http.HttpServletRequest;
-import java.io.File;
 import java.math.BigDecimal;
 import java.text.ParseException;
 import java.util.*;
@@ -269,6 +263,7 @@ public class AccountServiceImpl implements AccountService {
         return hwb;
     }
 
+
     /**
      * 获取就算方式
      *
@@ -297,6 +292,7 @@ public class AccountServiceImpl implements AccountService {
      * @return
      */
     @Override
+    @Transactional(value = "transactionManager", rollbackFor = RollbackException.class)
     public List<AccountVO> getAccountGroupByAccountType(String accountStartTime, String accountEndTime, int accountClass) {
         List<AccountVO> accountVOList = accountDao.getAccountGroupByAccountType(accountStartTime, accountEndTime, accountClass);
         return accountVOList;
@@ -310,6 +306,7 @@ public class AccountServiceImpl implements AccountService {
      * @return
      */
     @Override
+    @Transactional(value = "transactionManager", rollbackFor = RollbackException.class)
     public List<AccountVO> getAccountGroupByUser(String accountStartTime, String accountEndTime) {
         List<AccountVO> accountVOList = accountDao.getAccountGroupByUser(accountStartTime, accountEndTime);
         return accountVOList;
@@ -321,12 +318,115 @@ public class AccountServiceImpl implements AccountService {
      * @return
      */
     @Override
+    @Transactional(value = "transactionManager", rollbackFor = RollbackException.class)
     public Map<String, List<AccountVO>> getAccountGroupByTypeAndUser(String startTime, String endTime) {
         List<AccountVO> accountVOList = accountDao.getAccountGroupByTypeAndUser(startTime, endTime);
         Map<String, List<AccountVO>> accountVoListMap = new LinkedHashMap<String, List<AccountVO>>();
         setAccountDataGroupByTypeAndUser(accountVOList, accountVoListMap);
         setAccountDataIfTypeIsNull(accountVoListMap);
         return accountVoListMap;
+    }
+
+    /**
+     * 获取每月投资数据
+     *
+     * @return
+     */
+    @Override
+    @Transactional(value = "transactionManager", rollbackFor = RollbackException.class)
+    public Map<String, List<AccountVO>> getInvestGroupByMonth(int year) {
+        List<Account> accountList = getInvestData(year);
+        Map<String, List<AccountVO>> investListMap = getInvestListMap(accountList);
+        setInvestDataIfTypeIsNull(investListMap);
+        return investListMap;
+    }
+
+    /**
+     * 获取投资数据
+     *
+     * @param year
+     * @return
+     */
+    private List<Account> getInvestData(int year) {
+        AccountVO accountVO = new AccountVO();
+        accountVO.setAccountStartTime(year + "-01-01");
+        accountVO.setAccountEndTime(year + "-12-31");
+        accountVO.setAccountClass(AccountClassEnum.Invest.getCode());
+        PageData<AccountVO> pageData = new PageData<AccountVO>();
+        pageData.setPage(1);
+        pageData.setPageSize(Integer.MAX_VALUE);
+        return accountDao.getAccountByFilter(accountVO, pageData);
+    }
+
+    /**
+     * 获取月份
+     *
+     * @param account
+     * @return
+     */
+    private String getMonth(Account account) {
+        Date accountTime = account.getAccountTime();
+        String time = DateUtil.makeDate2Str(accountTime, false);
+        int startIndex = time.indexOf("-");
+        int lastIndex = time.lastIndexOf("-");
+        time = time.substring(startIndex, lastIndex);
+        return time.indexOf("0") == 0 ? time.substring(0, 1) : time;
+    }
+
+    /**
+     * 获取投资数据，key：月份，value：数据
+     *
+     * @param accountList
+     * @return
+     */
+    private Map<String, List<AccountVO>> getInvestListMap(List<Account> accountList) {
+        Map<String, List<AccountVO>> investListMap = new LinkedHashMap<String, List<AccountVO>>();
+        for (Account account : accountList) {
+            String month = getMonth(account);
+            List<AccountVO> accountVOList = investListMap.get(month);
+            if (accountVOList == null) {
+                accountVOList = new ArrayList<AccountVO>();
+            }
+            AccountVO vo = makeAccount2VO(account);
+            accountVOList.add(vo);
+            investListMap.put(month, accountVOList);
+        }
+        return investListMap;
+    }
+
+    /**
+     * 如果月份对应的投资类型不存在，需把对应的投资类型金额设置为0
+     *
+     * @param accountVoListMap
+     */
+    private void setInvestDataIfTypeIsNull(Map<String, List<AccountVO>> accountVoListMap) {
+        InvestEnum[] typeEnums = InvestEnum.values();
+        Set<String> keySet = accountVoListMap.keySet();
+        for (String userName : keySet) {
+            List<AccountVO> voList = accountVoListMap.get(userName);
+            for (InvestEnum typeEnum : typeEnums) {
+                int code = typeEnum.getCode();
+                boolean isContain = false;
+                for (AccountVO accountVO : voList) {
+                    Integer accountType = accountVO.getAccountType();
+                    if (accountType != null && accountType == code) {
+                        isContain = true;
+                    }
+                }
+                if (!isContain) {
+                    AccountVO accountVO = new AccountVO();
+                    accountVO.setAccountType(code);
+                    accountVO.setAccountMoney(BigDecimal.ZERO);
+                    voList.add(accountVO);
+                }
+                Collections.sort(voList, new Comparator<AccountVO>() {
+                    @Override
+                    public int compare(AccountVO o1, AccountVO o2) {
+                        return o1.getAccountType() - o2.getAccountType();
+                    }
+                });
+            }
+        }
     }
 
     /**
@@ -361,8 +461,8 @@ public class AccountServiceImpl implements AccountService {
      */
     private void setAccountDataIfTypeIsNull(Map<String, List<AccountVO>> accountVoListMap) {
         AccountTypeEnum[] typeEnums = AccountTypeEnum.values();
-        Set<String> userNameSet = accountVoListMap.keySet();
-        for (String userName : userNameSet) {
+        Set<String> keySet = accountVoListMap.keySet();
+        for (String userName : keySet) {
             List<AccountVO> voList = accountVoListMap.get(userName);
             for (AccountTypeEnum typeEnum : typeEnums) {
                 int code = typeEnum.getCode();
@@ -387,39 +487,6 @@ public class AccountServiceImpl implements AccountService {
                 });
             }
         }
-    }
-
-    /**
-     * 得到itemList
-     *
-     * @param request
-     * @param upLoadDirPath
-     * @return
-     * @throws FileUploadException
-     */
-    private List<FileItem> getFileItemList(HttpServletRequest request, String upLoadDirPath) throws FileUploadException {
-        DiskFileItemFactory factory = new DiskFileItemFactory();
-        factory.setRepository(new File(upLoadDirPath));
-        factory.setSizeThreshold(1024 * 1024);
-        ServletFileUpload upload = new ServletFileUpload(factory);
-        return upload.parseRequest(request);
-    }
-
-    /**
-     * 得到账单ID
-     *
-     * @param itemList
-     * @return
-     */
-    private long getAccountId(List<FileItem> itemList) {
-        long accountId = 0;
-        for (FileItem item : itemList) {
-            String fieldName = item.getFieldName();
-            if (item.isFormField() && "accountId".equals(fieldName)) {
-                accountId = Long.valueOf(item.getString());
-            }
-        }
-        return accountId;
     }
 
     /**

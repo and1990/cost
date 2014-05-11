@@ -134,4 +134,11 @@ public interface AccountService {
      * @return
      */
     HSSFWorkbook getExcelData();
+
+    /**
+     * 获取每月投资数据
+     *
+     * @return
+     */
+    Map<String,List<AccountVO>> getInvestGroupByMonth(int year);
 }
