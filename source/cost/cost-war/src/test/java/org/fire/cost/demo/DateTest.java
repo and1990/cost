@@ -67,4 +67,10 @@ public class DateTest {
         System.out.println(month);
         System.out.println(calendar.get(Calendar.MONTH));
     }
+
+    @Test
+    public void testSub() {
+        String time = "05";
+        System.out.println(time.substring(1, 2));
+    }
 }

@@ -23,7 +23,8 @@
 
     <div style="text-align: center;margin-top: 50px;">
         <div>
-            按年份查看：<input type="radio" name="year" checked="true"/>
+            <span>年份：</span>
+            <input id="streamChartYear" class="easyui-combobox" style="width:100px;" editable="false"/>
             <a href="#" style="text-decoration: none" iconCls="icon-search" onclick="showStreamColumnChart();">查看</a>
         </div>
     </div>
@@ -38,6 +39,25 @@
                 if (returnData != undefined) {
                     initChart(getData(returnData));
                 }
+            }
+        });
+
+        //加载年份
+        $('#streamChartYear').combobox({
+            url: '<%=basePath%>/getYears.do',
+            valueField: 'code',
+            textField: 'name',
+            onLoadSuccess: function (data) {
+                $('#streamChartYear').combobox('setValue', data[0].code).combobox('setText', data[0].name);
+            },
+            onChange: function (newValue, oldValue) {
+                $.ajax({
+                    method: "post",
+                    url: "<%=basePath%>/getStreamGroupByMonth.do?year=" + newValue,
+                    success: function (returnData) {
+                        initChart(getData(returnData));
+                    }
+                });
             }
         });
     });

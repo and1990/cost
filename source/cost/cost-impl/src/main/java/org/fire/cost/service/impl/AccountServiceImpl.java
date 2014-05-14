@@ -359,21 +359,6 @@ public class AccountServiceImpl implements AccountService {
     }
 
     /**
-     * 获取月份
-     *
-     * @param account
-     * @return
-     */
-    private String getMonth(Account account) {
-        Date accountTime = account.getAccountTime();
-        String time = DateUtil.makeDate2Str(accountTime, false);
-        int startIndex = time.indexOf("-");
-        int lastIndex = time.lastIndexOf("-");
-        time = time.substring(startIndex, lastIndex);
-        return time.indexOf("0") == 0 ? time.substring(0, 1) : time;
-    }
-
-    /**
      * 获取投资数据，key：月份，value：数据
      *
      * @param accountList
@@ -392,6 +377,22 @@ public class AccountServiceImpl implements AccountService {
             investListMap.put(month, accountVOList);
         }
         return investListMap;
+    }
+
+
+    /**
+     * 获取月份
+     *
+     * @param account
+     * @return
+     */
+    private String getMonth(Account account) {
+        Date accountTime = account.getAccountTime();
+        String time = DateUtil.makeDate2Str(accountTime, false);
+        int startIndex = time.indexOf("-");
+        int lastIndex = time.lastIndexOf("-");
+        time = time.substring(startIndex, lastIndex);
+        return time.indexOf("0") == 0 ? time.substring(0, 1) : time;
     }
 
     /**

@@ -61,7 +61,7 @@ public class StreamAction extends BaseAction<StreamVO> {
      * @return
      */
     @Action(value = "getStreamByYear", results = {@Result(type = "json", params = {"root", "streamVOList", "contentType", "text/html"})})
-    public String getIncomeByFilter() {
+    public String getStreamByYear() {
         try {
             if (year == 0) {
                 year = DateUtil.getCurrentYear();

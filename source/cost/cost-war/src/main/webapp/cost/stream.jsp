@@ -82,25 +82,22 @@
             textField: 'name',
             onLoadSuccess: function (data) {
                 $('#year').combobox('setValue', data[0].code).combobox('setText', data[0].name);
+            },
+            onChange: function (newValue, oldValue) {
+                var data = {"year": newValue};
+                $("#stream_data_table").datagrid(
+                        {
+                            queryParams: data,
+                            pageNumber: 1
+                        }, 'load'
+                );
             }
         });
     });
 
-    //获取查询参数
-    function getStreamByFilter() {
-        var queryData = $("#stream_filter_form").serializeJson();
-        $("#stream_data_table").datagrid(
-                {
-                    queryParams: queryData,
-                    pageNumber: 1
-                }, 'load'
-        );
-    }
-
     //显示流水明细
     function showStreamDetail(index, row) {
         var year = $('#year').combobox("getValue");
-        year = 2014;
         var detailTable = $('#stream_data_table').datagrid('getRowDetail', index).find('#stream_detail_table');
         detailTable.datagrid({
             url: '<%=basePath%>/getStreamDetail.do?year=' + year + "&month=" + row.month,
@@ -137,7 +134,6 @@
     //同步流水数据
     function synStreamData() {
         var year = $('#year').combobox("getValue");
-        year = 2014;
         $.ajax({
             method: "post",
             url: "<%=basePath%>/synStreamData.do?year=" + year,

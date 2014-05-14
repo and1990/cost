@@ -240,6 +240,35 @@ public class AccountDaoCustomImpl extends BaseJpaDaoSupport<Account, Long> imple
     }
 
     /**
+     * 获取每月投资数据
+     *
+     * @param year
+     * @return
+     */
+    @Override
+    public List<AccountVO> getInvestGroupByMonth(int year) {
+        String sql = "select account_type,sum(account_money) as account_money from cost_account "
+                + "where account_class=2 and account_time>=:startTime and account_time<:endTime group by account_type";
+        String startTime = year + "-01-01";
+        String endTime = year + "-12-31";
+        Query query = entityManager.createNativeQuery(sql);
+        query.setParameter("startTime", startTime);
+        query.setParameter("endTime", endTime);
+        query.unwrap(SQLQuery.class).setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP);
+        List<Map> list = query.getResultList();
+        List<AccountVO> accountVOList = new ArrayList<AccountVO>();
+        for (Map map : list) {
+            AccountVO accountVO = new AccountVO();
+            Integer accountType = Integer.valueOf(map.get("account_type").toString());
+            accountVO.setAccountType(accountType);
+            accountVO.setAccountTypeName(AccountTypeEnum.getName(accountType));
+            accountVO.setAccountMoney(new BigDecimal(map.get("account_money").toString()));
+            accountVOList.add(accountVO);
+        }
+        return accountVOList;
+    }
+
+    /**
      * 得到过滤条件
      *
      * @param vo
