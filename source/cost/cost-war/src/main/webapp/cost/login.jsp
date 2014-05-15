@@ -39,8 +39,8 @@
             <br>
 
             <div>
-                <input type="checkbox"/><span>记住密码</span> &nbsp;&nbsp;&nbsp;&nbsp;
-                <a>快速注册</a>
+                <%--<input type="checkbox"/><span>记住密码</span> &nbsp;&nbsp;&nbsp;&nbsp;
+                <a>快速注册</a>--%>
             </div>
         </form>
         <div>

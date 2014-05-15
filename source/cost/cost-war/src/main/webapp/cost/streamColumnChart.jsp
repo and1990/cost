@@ -8,7 +8,15 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf8">
     <link rel="shortcut icon" href="<%=basePath%>/image/ico.jpg" type="image/x-icon"/>
+
+    <link rel="stylesheet" type="text/css" href="<%=basePath %>/third/easy-ui/themes/default/easyui.css">
+    <link rel="stylesheet" type="text/css" href="<%=basePath %>/third/easy-ui/themes/icon.css">
+
     <script type="text/javascript" src="<%=basePath%>/third/easy-ui/jquery.min.js"></script>
+
+    <script type="text/javascript" src="<%=basePath%>/third/easy-ui/jquery.easyui.min.js"></script>
+    <script type="text/javascript" src="<%=basePath%>/third/easy-ui/locale/easyui-lang-zh_CN.js"></script>
+
     <script type="text/javascript" src="<%=basePath%>/third/My97DatePicker/WdatePicker.js"></script>
     <script type="text/javascript" src="<%=basePath%>/third/Highcharts/highcharts.js"></script>
     <script type="text/javascript" src="<%=basePath%>/third/Highcharts/modules/exporting.js"></script>
@@ -116,40 +124,19 @@
 
     //显示图表
     function showStreamColumnChart() {
-        loadStreamData(2014);
-        setStreamColumnTitle(2014);
-    }
-
-    //加载数据
-    function loadStreamData(year) {
-        var monthArr = getMonth();
+        var year = $('#streamChartYear').combobox('getValue');
         $.ajax({
             type: 'post',
             url: "<%=basePath%>/getStreamGroupByMonth.do?year=" + year,
             success: function (returnData) {
                 if (returnData == undefined) {
                     $('#null_data').html("未加载到数据...");
-                    return;
-                }
-                var valueArr = getData(returnData);
-                var chart = $('#stream_column_container').highcharts();
-                chart.xAxis[0].setCategories(monthArr);
-                chart.series[0].setData(valueArr);
-                if (valueArr == undefined || valueArr.length == 0) {
-                    $('#null_data').html("未加载到数据...");
                 } else {
+                    initChart(getData(returnData));
                     $('#null_data').html("");
                 }
             }
         });
-    }
-
-
-    //设置图表格式
-    function setStreamColumnTitle(year) {
-        var title = "2014";
-        var chart = $('#stream_column_container').highcharts();
-        chart.setTitle({text: title});
     }
 
 
