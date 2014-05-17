@@ -94,9 +94,9 @@ public class IncomeServiceImpl implements IncomeService {
             incomeDao.save(income);
             return true;
         } catch (Exception e) {
-
+            e.printStackTrace();
+            throw new RuntimeException();
         }
-        return false;
     }
 
     /**
