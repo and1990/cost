@@ -83,6 +83,8 @@
             textField: 'name',
             onLoadSuccess: function (data) {
                 $('#year').combobox('setValue', data[0].code).combobox('setText', data[0].name);
+                var year = new Date().getFullYear();
+                $("#year ").combobox("setValue", year);
             },
             onChange: function (newValue, oldValue) {
                 var data = {"year": newValue};
