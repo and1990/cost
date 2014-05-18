@@ -24,7 +24,7 @@
         <table id="stream_data_table">
             <thead>
             <tr>
-                <th data-options="field:'month',width:80,align:'center'">月份</th>
+                <th data-options="field:'monthName',width:80,align:'center'">月份</th>
                 <th data-options="field:'incomeMoney',width:80,align:'center' ">收入金额</th>
                 <th data-options="field:'accountMoney',width:80,align:'center' ">支出金额</th>
                 <th data-options="field:'leftMoney',width:80,align:'center' ">剩余金额</th>
@@ -65,6 +65,7 @@
             fit: true,
             fitColumns: true,
             singleSelect: true,
+            showFooter: true,
             toolbar: "#stream_tool_bar",
             view: detailview,
             detailFormatter: function (index, row) {
@@ -98,6 +99,9 @@
     //显示流水明细
     function showStreamDetail(index, row) {
         var year = $('#year').combobox("getValue");
+        if (row.month == undefined) {
+            return;
+        }
         var detailTable = $('#stream_data_table').datagrid('getRowDetail', index).find('#stream_detail_table');
         detailTable.datagrid({
             url: '<%=basePath%>/getStreamDetail.do?year=' + year + "&month=" + row.month,

@@ -11,6 +11,7 @@ public class StreamVO {
     private Long streamId;
     private Integer year;
     private Integer month;
+    private String monthName;
     private BigDecimal incomeMoney = BigDecimal.ZERO;
     private BigDecimal accountMoney = BigDecimal.ZERO;
     private BigDecimal leftMoney = BigDecimal.ZERO;
@@ -38,6 +39,14 @@ public class StreamVO {
 
     public void setMonth(Integer month) {
         this.month = month;
+    }
+
+    public String getMonthName() {
+        return monthName;
+    }
+
+    public void setMonthName(String monthName) {
+        this.monthName = monthName;
     }
 
     public BigDecimal getIncomeMoney() {

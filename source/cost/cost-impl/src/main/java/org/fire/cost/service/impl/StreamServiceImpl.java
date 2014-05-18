@@ -52,11 +52,13 @@ public class StreamServiceImpl implements StreamService {
                 StreamVO streamVO = makeStreamToVo(stream);
                 voList.add(streamVO);
             }
+            setTotalData(voList);
         } catch (Exception e) {
             e.printStackTrace();
         }
         return voList;
     }
+
 
     /**
      * 获取年份列表
@@ -192,6 +194,30 @@ public class StreamServiceImpl implements StreamService {
             e.printStackTrace();
         }
         return hwb;
+    }
+
+    /**
+     * 设置总计行
+     *
+     * @param voList
+     */
+    private void setTotalData(List<StreamVO> voList) {
+        BigDecimal incomeTotal = BigDecimal.ZERO;
+        BigDecimal accountTotal = BigDecimal.ZERO;
+        for (StreamVO vo : voList) {
+            BigDecimal incomeMoney = vo.getIncomeMoney();
+            incomeTotal = incomeTotal.add(incomeMoney);
+
+            BigDecimal accountMoney = vo.getAccountMoney();
+            accountTotal = accountTotal.add(accountMoney);
+        }
+        BigDecimal leftMoney = incomeTotal.subtract(accountTotal);
+        StreamVO streamVO = new StreamVO();
+        streamVO.setMonthName("总计");
+        streamVO.setIncomeMoney(incomeTotal);
+        streamVO.setAccountMoney(accountTotal);
+        streamVO.setLeftMoney(leftMoney);
+        voList.add(streamVO);
     }
 
 
@@ -443,7 +469,9 @@ public class StreamServiceImpl implements StreamService {
     private StreamVO makeStreamToVo(Stream stream) {
         StreamVO vo = new StreamVO();
         vo.setYear(stream.getYear());
-        vo.setMonth(stream.getMonth());
+        Integer month = stream.getMonth();
+        vo.setMonth(month);
+        vo.setMonthName(month + "月份");
         vo.setIncomeMoney(stream.getIncomeMoney());
         vo.setAccountMoney(stream.getAccountMoney());
         vo.setLeftMoney(stream.getLeftMoney());
