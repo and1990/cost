@@ -471,7 +471,7 @@ public class StreamServiceImpl implements StreamService {
         vo.setYear(stream.getYear());
         Integer month = stream.getMonth();
         vo.setMonth(month);
-        vo.setMonthName(month + "月份");
+        vo.setMonthName(month + "");
         vo.setIncomeMoney(stream.getIncomeMoney());
         vo.setAccountMoney(stream.getAccountMoney());
         vo.setLeftMoney(stream.getLeftMoney());
