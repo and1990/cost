@@ -57,6 +57,8 @@
             textField: 'name',
             onLoadSuccess: function (data) {
                 $('#streamChartYear').combobox('setValue', data[0].code).combobox('setText', data[0].name);
+                var year = new Date().getFullYear();
+                $("#streamChartYear ").combobox("setValue", year);
             }
         });
     });
