@@ -111,6 +111,8 @@ public class CostAuthenticationFilter implements Filter {
         session.setAttribute("userName", userName);
         Long userId = AuthenticationUtil.getLoginUserId();
         session.setAttribute("userId", userId);
+        int userType = AuthenticationUtil.getUserType();
+        session.setAttribute("userType", userType);
     }
 
 }
