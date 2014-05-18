@@ -46,6 +46,7 @@
     <!--主页面信息-->
     <div id="mainInfo" data-options="region:'center',title:'业务信息'">
         <div class="easyui-tabs" data-options="border:false,plain:true,fit:true" id="main_tabs">
+            <div title="账单信息" data-options="href:'<%=basePath %>/cost/account.jsp'" style="padding: 2px"></div>
         </div>
     </div>
 

@@ -57,15 +57,6 @@
             textField: 'name',
             onLoadSuccess: function (data) {
                 $('#streamChartYear').combobox('setValue', data[0].code).combobox('setText', data[0].name);
-            },
-            onChange: function (newValue, oldValue) {
-                $.ajax({
-                    method: "post",
-                    url: "<%=basePath%>/getStreamGroupByMonth.do?year=" + newValue,
-                    success: function (returnData) {
-                        initChart(getData(returnData));
-                    }
-                });
             }
         });
     });
