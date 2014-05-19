@@ -129,7 +129,7 @@
 
     //设置图表格式
     function setPieTitle(startTime, endTime, accountClass) {
-        var typeText = "日常消费类型";
+        var typeText = "日常消费";
         if (accountClass == 2) {
             typeText = "投资";
         }

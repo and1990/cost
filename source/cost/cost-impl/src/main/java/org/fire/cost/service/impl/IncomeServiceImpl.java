@@ -146,6 +146,9 @@ public class IncomeServiceImpl implements IncomeService {
     public List<TypeVo> getIncomeType() {
         IncomeTypeEnum[] typeEnums = IncomeTypeEnum.values();
         List<TypeVo> typeList = new ArrayList<TypeVo>();
+        TypeVo typeVo = new TypeVo();
+        typeVo.setCode(0);
+        typeVo.setName("全部");
         for (IncomeTypeEnum typeEnum : typeEnums) {
             TypeVo vo = new TypeVo();
             vo.setCode(typeEnum.getCode());
