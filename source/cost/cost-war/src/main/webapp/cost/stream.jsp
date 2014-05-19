@@ -151,7 +151,8 @@
 
     //导出excel
     function exportStreamToExcel() {
-        window.location.href = "<%=basePath%>/exportStreamToExcel.do";
+        var year = $('#year').combobox("getValue");
+        window.location.href = "<%=basePath%>/exportStreamToExcel.do?year=" + year;
     }
 </script>
 </body>

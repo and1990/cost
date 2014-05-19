@@ -1,6 +1,5 @@
 package org.fire.cost.action;
 
-import org.apache.commons.lang3.time.DateFormatUtils;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.struts2.ServletActionContext;
 import org.apache.struts2.convention.annotation.Action;
@@ -150,7 +149,7 @@ public class StreamAction extends BaseAction<StreamVO> {
     @Action(value = "exportStreamToExcel", results = {@Result(name = SUCCESS, type = "stream")})
     public String exportStreamToExcel() {
         try {
-            HSSFWorkbook hwb = streamService.getExcelData();
+            HSSFWorkbook hwb = streamService.getExcelData(year);
             if (hwb != null) {
                 HttpServletResponse response = ServletActionContext.getResponse();
                 response.setCharacterEncoding("UTF-8");
@@ -160,8 +159,7 @@ public class StreamAction extends BaseAction<StreamVO> {
                 response.setDateHeader("Expires", 0);
 
                 StringBuilder fileName = new StringBuilder();
-                String year = DateFormatUtils.format(new Date(), "yyyy");
-                fileName.append("流水账").append(year).append(".xls").toString();
+                fileName.append("流水账[").append(year).append("].xls").toString();
                 String gb2312FileName = new String(fileName.toString().getBytes("GB2312"), "iso8859-1");
                 response.setHeader("Content-Disposition", "attachment; filename=" + gb2312FileName);
                 OutputStream output = response.getOutputStream();

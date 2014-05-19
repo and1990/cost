@@ -176,24 +176,23 @@ public class StreamServiceImpl implements StreamService {
      */
     @Override
     @Transactional(value = "transactionManager", rollbackFor = RollbackException.class)
-    public HSSFWorkbook getExcelData() {
+    public HSSFWorkbook getExcelData(int year) {
         HSSFWorkbook hwb = new HSSFWorkbook();
         try {
-            // 加边框
             HSSFCellStyle style = hwb.createCellStyle();
             style.setBorderBottom(HSSFCellStyle.BORDER_THIN);
             style.setBorderTop(HSSFCellStyle.BORDER_THIN);
             style.setBorderLeft(HSSFCellStyle.BORDER_THIN);
             style.setBorderRight(HSSFCellStyle.BORDER_THIN);
-            // 列宽
-            HSSFSheet sheet = hwb.createSheet("收入");
+
+            HSSFSheet sheet = hwb.createSheet("流水账");
             for (int i = 0; i < 6; i++) {
                 sheet.setColumnWidth(i, (short) 5000);
             }
             HSSFRow row = null;
             HSSFCell cell = null;
             createExcelTitle(sheet, style, row, cell);
-            createExcelBody(sheet, style, row, cell);
+            createExcelBody(sheet, style, row, cell, year);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -416,19 +415,29 @@ public class StreamServiceImpl implements StreamService {
     /**
      * 创建表体数据
      */
-    private void createExcelBody(HSSFSheet sheet, HSSFCellStyle style, HSSFRow row, HSSFCell cell) {
+    private void createExcelBody(HSSFSheet sheet, HSSFCellStyle style, HSSFRow row, HSSFCell cell, int year) {
         int rowIndex = 1;
-        List<StreamVO> streamVOList = getStreamByYear(2014);
+        List<StreamVO> streamVOList = getStreamByYear(year);
         for (StreamVO vo : streamVOList) {
             row = sheet.createRow(rowIndex);
             cell = row.createCell(0);
-            cell.setCellValue(vo.getStreamId());
+            Long streamId = vo.getStreamId();
+            if (streamId == null || streamId == 0) {
+                cell.setCellValue("");
+            } else {
+                cell.setCellValue(streamId);
+            }
             cell.setCellStyle(style);
             cell = row.createCell(1);
-            cell.setCellValue(vo.getYear());
+            Integer voYear = vo.getYear();
+            if (voYear == null || voYear == 0) {
+                cell.setCellValue("");
+            } else {
+                cell.setCellValue(voYear);
+            }
             cell.setCellStyle(style);
             cell = row.createCell(2);
-            cell.setCellValue(vo.getMonth());
+            cell.setCellValue(vo.getMonthName());
             cell.setCellStyle(style);
             cell = row.createCell(3);
             cell.setCellValue(vo.getIncomeMoney().toString());
@@ -438,7 +447,12 @@ public class StreamServiceImpl implements StreamService {
             cell = row.createCell(5);
             cell.setCellValue(vo.getLeftMoney().toString());
             cell = row.createCell(6);
-            cell.setCellValue(vo.getCreateTime());
+            String createTime = vo.getCreateTime();
+            if (createTime == null || createTime.length() == 0) {
+                cell.setCellValue("");
+            } else {
+                cell.setCellValue(createTime);
+            }
             cell.setCellStyle(style);
             rowIndex++;
         }
@@ -472,6 +486,7 @@ public class StreamServiceImpl implements StreamService {
      */
     private StreamVO makeStreamToVo(Stream stream) {
         StreamVO vo = new StreamVO();
+        vo.setStreamId(stream.getStreamId());
         vo.setYear(stream.getYear());
         Integer month = stream.getMonth();
         vo.setMonth(month);

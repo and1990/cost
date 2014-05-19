@@ -59,5 +59,5 @@ public interface StreamService {
      *
      * @return
      */
-    HSSFWorkbook getExcelData();
+    HSSFWorkbook getExcelData(int year);
 }
