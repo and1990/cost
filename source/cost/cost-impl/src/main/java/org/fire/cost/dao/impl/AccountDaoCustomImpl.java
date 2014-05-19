@@ -13,10 +13,7 @@ import org.hibernate.transform.Transformers;
 import javax.persistence.Query;
 import java.math.BigDecimal;
 import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * 账单扩展实现类
@@ -133,6 +130,33 @@ public class AccountDaoCustomImpl extends BaseJpaDaoSupport<Account, Long> imple
                 accountVOList.add(accountVO);
             }
         }
+        List<AccountVO> list = new ArrayList<AccountVO>();
+        AccountTypeEnum[] typeEnums = AccountTypeEnum.values();
+        for (AccountTypeEnum typeEnum : typeEnums) {
+            int code = typeEnum.getCode();
+            boolean isContain = false;
+            for (AccountVO accountVO : accountVOList) {
+                Integer type = accountVO.getAccountType();
+                if (type != null && type == code) {
+                    isContain = true;
+                    break;
+                }
+            }
+            if (!isContain) {
+                AccountVO accountVO = new AccountVO();
+                accountVO.setAccountType(code);
+                accountVO.setAccountTypeName(typeEnum.getName());
+                accountVO.setAccountMoney(BigDecimal.ZERO);
+                list.add(accountVO);
+            }
+        }
+        accountVOList.addAll(list);
+        Collections.sort(accountVOList, new Comparator<AccountVO>() {
+            @Override
+            public int compare(AccountVO o1, AccountVO o2) {
+                return o1.getAccountType() - o2.getAccountType();
+            }
+        });
         return accountVOList;
     }
 
