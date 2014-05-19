@@ -149,6 +149,7 @@ public class IncomeServiceImpl implements IncomeService {
         TypeVo typeVo = new TypeVo();
         typeVo.setCode(0);
         typeVo.setName("全部");
+        typeList.add(typeVo);
         for (IncomeTypeEnum typeEnum : typeEnums) {
             TypeVo vo = new TypeVo();
             vo.setCode(typeEnum.getCode());
