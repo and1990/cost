@@ -193,6 +193,7 @@
     function getData(returnData) {
         var dataObjArr = new Array();
         var typeArr = $.parseJSON(typeData);
+        typeArr.shift();
         var rows = $.parseJSON(returnData);
         for (var typeIndex = 0; typeIndex < typeArr.length; typeIndex++) {
             var valueArr = new Array();
