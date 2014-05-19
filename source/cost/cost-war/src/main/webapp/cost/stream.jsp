@@ -45,6 +45,8 @@
         <span>年份：</span>
         <input id="year" class="easyui-combobox" name="streamVO.year"
                style="width:100px;" editable="false"/>
+        <a href="#" class="easyui-linkbutton" iconCls="icon-search" plain="true"
+           onclick="queryStreamByYear();">查看</a>
         <a href="#" id="approve_button" class="easyui-linkbutton" iconCls="icon-tag-blue" plain="true"
            onclick="synStreamData();">同步数据</a>
         <a href="#" class="easyui-linkbutton" iconCls="icon-print" plain="true"
@@ -67,6 +69,11 @@
             singleSelect: true,
             showFooter: true,
             toolbar: "#stream_tool_bar",
+            onLoadSuccess: function (data) {
+                if (data.rows.length == 0) {
+                    $.messager.alert("提示", "没有加载到数据！", "info");
+                }
+            },
             view: detailview,
             detailFormatter: function (index, row) {
                 return $("#stream_detail_div").html();
@@ -85,15 +92,6 @@
                 $('#year').combobox('setValue', data[0].code).combobox('setText', data[0].name);
                 var year = new Date().getFullYear();
                 $("#year ").combobox("setValue", year);
-            },
-            onChange: function (newValue, oldValue) {
-                var data = {"year": newValue};
-                $("#stream_data_table").datagrid(
-                        {
-                            queryParams: data,
-                            pageNumber: 1
-                        }, 'load'
-                );
             }
         });
     });
@@ -147,6 +145,18 @@
                 $("#stream_data_table").datagrid("reload");
             }
         });
+    }
+
+    //查询
+    function queryStreamByYear() {
+        var year = $('#year').combobox("getValue");
+        var data = {"year": year};
+        $("#stream_data_table").datagrid(
+                {
+                    queryParams: data,
+                    pageNumber: 1
+                }, 'load'
+        );
     }
 
     //导出excel
