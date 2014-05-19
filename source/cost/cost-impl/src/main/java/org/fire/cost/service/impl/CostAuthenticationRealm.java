@@ -35,9 +35,11 @@ public class CostAuthenticationRealm extends AuthorizingRealm {
         User user = userDao.findByLoginName(loginName);
         String inputPassword = new String(token.getPassword());
         String md5Password = DigestUtils.md5Hex(inputPassword);
-        String password = user.getPassword();
-        if (user != null && password.equals(md5Password)) {
-            if (user.getUserStatus() == UserStatusEnum.Enable.getCode()) {
+        if (user != null) {
+            String password = user.getPassword();
+            boolean passwordRight = password.equals(md5Password);
+            boolean userEnable = user.getUserStatus() == UserStatusEnum.Enable.getCode();
+            if (passwordRight && userEnable) {
                 return new SimpleAuthenticationInfo(token.getPrincipal(), token.getPassword(), token.getUsername());
             } else {
                 throw new AuthenticationException("COST:用户被禁用");
