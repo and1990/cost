@@ -165,8 +165,8 @@
 
 <!-- 隐藏字段 -->
 <div>
-    <input type="hidden" id="userId" name="userId" value="${userId}"/>
-    <input type="hidden" id="userType" name="userType" value="${userType}"/>
+    <input type="hidden" id="hidden_userId" name="userId" value="${userId}"/>
+    <input type="hidden" id="hidden_userType" name="userType" value="${userType}"/>
 </div>
 
 <script type="text/javascript">
@@ -187,8 +187,8 @@ $(function () {
         pagination: true,
         toolbar: "#account_tool_bar",
         onCheck: function (rowIndex, rowData) {
-            var userId = $("#userId").val();
-            var userType = $("#userType").val();
+            var userId = $("#hidden_userId").val();
+            var userType = $("#hidden_userType").val();
             if (userId != rowData.userId && userType == 1) {
                 $('#modify_button').linkbutton('disable');
                 $('#delete_button').linkbutton('disable');
@@ -207,7 +207,7 @@ $(function () {
             }
         },
         onCheckAll: function (rows) {
-            var userType = $("#userType").val();
+            var userType = $("#hidden_userType").val();
             if (!onlyOwnData(rows) && userType == 1) {
                 $('#modify_button').linkbutton('disable');
                 $('#delete_button').linkbutton('disable');
@@ -451,7 +451,7 @@ function getCheckedAccount() {
 
 //是否是自己添加的数据
 function onlyOwnData(rows) {
-    var userId = $("#userId").val();
+    var userId = $("#hidden_userId").val();
     var onlyOwnData = true;
     for (var index = 0; index < rows.length; index++) {
         if (userId != rows[index].userId) {
