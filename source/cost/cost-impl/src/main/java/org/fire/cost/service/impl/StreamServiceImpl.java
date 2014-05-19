@@ -106,7 +106,11 @@ public class StreamServiceImpl implements StreamService {
     private List<Stream> getSynData(int year) {
         List<Stream> streamList = new ArrayList<Stream>();
         Calendar calendar = Calendar.getInstance();
-        int currentMonth = calendar.get(Calendar.MONTH);
+        int currentYear = calendar.get(Calendar.YEAR);
+        int currentMonth = 11;
+        if (currentYear == year) {
+            currentMonth = calendar.get(Calendar.MONTH);
+        }
         for (int month = 1; month <= currentMonth + 1; month++) {
             List<IncomeVO> incomeDataList = getIncomeDataByMonth(year, month);
             List<AccountVO> accountDataList = getAccountDataByMonth(year, month);
