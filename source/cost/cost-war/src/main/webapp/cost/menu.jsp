@@ -39,16 +39,15 @@
             <span>流水账</span>
             <ul>
                 <li data-options="id:'showStream'">流水账统计明细</li>
+                <li data-options="id:'showStreamColumn'">流水账分析</li>
             </ul>
         </li>
         <li data-options="id:null">
-            <span>数据分析</span>
+            <span>数据分析图表</span>
             <ul>
-                <li data-options="id:'showPie'">饼状图</li>
-                <li data-options="id:'showColumn'">柱状图</li>
-                <li data-options="id:'showLine'">线性图</li>
-                <%--<li data-options="id:'showInvestLine'">投资分析</li>--%>
-                <li data-options="id:'showStreamColumn'">流水账分析</li>
+                <li data-options="id:'showPie'">分类支出</li>
+                <li data-options="id:'showColumn'">消费金额</li>
+                <li data-options="id:'showLine'">消费线性分析</li>
             </ul>
         </li>
     </ul>
