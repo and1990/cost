@@ -6,7 +6,7 @@ package org.fire.cost.enums;
  * @author liutengfei
  */
 public enum InvestEnum {
-    Deposit(1, "存款"), Insurance(2, "保险"), Fund(3, "基金"), Shares(4, "股票");
+    Deposit(1, "存款"), Insurance(2, "保险"), Fund(3, "基金"), Shares(4, "股票"), Financial(5, "理财产品");
 
     private int code;
     private String name;

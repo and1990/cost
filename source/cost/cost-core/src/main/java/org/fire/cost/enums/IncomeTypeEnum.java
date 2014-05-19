@@ -7,7 +7,7 @@ package org.fire.cost.enums;
  */
 public enum IncomeTypeEnum {
 
-    pay(1, "工资"), Interest(2, "利息"), Bonus(3, "奖金"), Other(4, "其他");
+    pay(1, "工资"), Interest(2, "利息"), Bonus(3, "奖金"), partTimeJob(4, "兼职"), Invest(5, "投资"), Other(6, "其他");
 
     private int code;
 
