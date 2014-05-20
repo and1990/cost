@@ -9,18 +9,18 @@ import org.springframework.stereotype.Controller;
 import javax.annotation.Resource;
 
 /**
- * 注释：组消费action
+ * 注释：结算action
  * 作者：liutengfei 【刘腾飞】
  * 时间：14-2-14 下午2:09
  */
 @Namespace("/")
 @Controller
-public class GroupAccountAction extends BaseAction {
+public class ClearAccountAction extends BaseAction {
     @Resource
     private GroupAccountService groupAccountService;
 
     /**
-     * 根据查询条件查询组消费信息
+     * 根据查询条件查询结算信息
      *
      * @param vo
      * @return

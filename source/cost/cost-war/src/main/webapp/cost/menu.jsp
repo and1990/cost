@@ -44,6 +44,12 @@
                 <li data-options="id:'showStreamColumn'">流水账</li>
             </ul>
         </li>
+        <li data-options="id:null">
+            <span>结算</span>
+            <ul>
+                <li data-options="id:'showPie'">结算信息</li>
+            </ul>
+        </li>
     </ul>
 </div>
 

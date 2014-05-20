@@ -1,19 +1,11 @@
 package org.fire.cost.domain;
 
-import java.util.Date;
+import javax.persistence.*;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
 
 import static javax.persistence.GenerationType.IDENTITY;
-
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
 
 /**
  * 注释：
@@ -33,7 +25,6 @@ public class Group implements java.io.Serializable {
     private Date modifyTime;
     private String groupRemark;
     private List<Account> accountList = new ArrayList<Account>();
-    private List<GroupAccount> groupAccountList = new ArrayList<GroupAccount>();
     private List<GroupUser> groupUserList = new ArrayList<GroupUser>();
 
 
@@ -45,7 +36,7 @@ public class Group implements java.io.Serializable {
         this.groupStatus = groupStatus;
     }
 
-    public Group(String groupName, Integer groupStatus, String createUser, Date createTime, String modifyUser, Date modifyTime, String groupRemark, List<Account> accountList, List<GroupAccount> groupAccountList) {
+    public Group(String groupName, Integer groupStatus, String createUser, Date createTime, String modifyUser, Date modifyTime, String groupRemark, List<Account> accountList) {
         this.groupName = groupName;
         this.groupStatus = groupStatus;
         this.createUser = createUser;
@@ -54,7 +45,6 @@ public class Group implements java.io.Serializable {
         this.modifyTime = modifyTime;
         this.groupRemark = groupRemark;
         this.accountList = accountList;
-        this.groupAccountList = groupAccountList;
     }
 
     @Id
@@ -139,16 +129,6 @@ public class Group implements java.io.Serializable {
     public void setAccountList(List<Account> accountList) {
         this.accountList = accountList;
     }
-
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "group")
-    public List<GroupAccount> getGroupAccountList() {
-        return this.groupAccountList;
-    }
-
-    public void setGroupAccountList(List<GroupAccount> costGroupAccounts) {
-        this.groupAccountList = costGroupAccounts;
-    }
-
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "group")
     public List<GroupUser> getGroupUserList() {

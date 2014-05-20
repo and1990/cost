@@ -1,11 +1,11 @@
 package org.fire.cost.service;
 
-import org.fire.cost.vo.GroupAccountVO;
+import org.fire.cost.vo.ClearAccountVO;
 
 import java.util.List;
 
 /**
- * 注释：组消费service
+ * 注释：结算service
  * 作者：liutengfei 【刘腾飞】
  * 时间：14-2-19 下午9:01
  */
@@ -17,7 +17,7 @@ public interface GroupAccountService
      * @param vo
      * @return
      */
-    public List<GroupAccountVO> getGroupAccountByFilter(GroupAccountVO vo);
+    public List<ClearAccountVO> getGroupAccountByFilter(ClearAccountVO vo);
 
     /**
      * 添加组消费

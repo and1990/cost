@@ -21,61 +21,49 @@
 <div id="account_data_layout" class="easyui-layout" data-options="fit:true">
     <div id="account_data_north"
          data-options="region:'north',border:0,fit:true">
-        <table id="account_data_table"
-        <thead>
-        <tr>
-            <th data-options="field:'userName',width:80,align:'center'">用户名</th>
-            <th data-options="field:'accountMoney',width:80,align:'center',
+        <table id="account_data_table">
+            <thead>
+            <tr>
+                <th data-options="field:'userName',width:80,align:'center'">用户名</th>
+                <th data-options="field:'accountMoney',width:80,align:'center',
 						editor:{
 								type:'numberbox',
 								options:{min:0,precision:2}
 						}">金额
-            </th>
-            <th data-options="field:'accountTypeName',width:60,align:'center',formatter:showAccountTypeText,
+                </th>
+                <th data-options="field:'accountTypeName',width:60,align:'center',formatter:showAccountTypeText,
 						editor:{
 	                            type:'combobox',
 	                            options:{data:accountTypeData,valueField:'value',textField:'name'}
                          }"
-                    >消费类型
-            </th>
-            <th data-options="field:'accountPartner',width:80,align:'center',editor:'text'">组员</th>
-            <th data-options="field:'accountTime',width:80,align:'center',
+                        >消费类型
+                </th>
+                <th data-options="field:'accountPartner',width:80,align:'center',editor:'text'">组员</th>
+                <th data-options="field:'accountTime',width:80,align:'center',
 					editor:'datebox'">消费时间
-            </th>
-            <th data-options="field:'accountStatusName',width:60,align:'center',formatter:showIsApproveText,
+                </th>
+                <th data-options="field:'accountStatusName',width:60,align:'center',formatter:showIsApproveText,
 						editor:{
                             	type:'combobox',
                             	options:{data:isApproveData,valueField:'value',textField:'name'}
                         }"
-                    >是否审批
-            </th>
-            <%--<th data-options="field:'accountStatusName',width:60,align:'center',editor:'combobox',loader:getApproveText,mode:'remote'">是否审批</th>--%>
-            <th data-options="field:'accountFile',width:80,align:'center',formatter:showAccessoryText,
+                        >是否审批
+                </th>
+                <%--<th data-options="field:'accountStatusName',width:60,align:'center',editor:'combobox',loader:getApproveText,mode:'remote'">是否审批</th>--%>
+                <th data-options="field:'accountFile',width:80,align:'center',formatter:showAccessoryText,
 					    editor:{
 							options:{data:isApproveData,valueField:'value',textField:'name'}
 						}"
-                    >附件
-            </th>
-            <th data-options="field:'createTime',width:120,align:'center'">创建时间</th>
-            <th data-options="field:'accountRemark',width:120,align:'center',editor:'text'">备注</th>
-        </tr>
-        </thead>
+                        >附件
+                </th>
+                <th data-options="field:'createTime',width:120,align:'center'">创建时间</th>
+                <th data-options="field:'accountRemark',width:120,align:'center',editor:'text'">备注</th>
+            </tr>
+            </thead>
         </table>
     </div>
 </div>
 <div id="account_filter_bar" style="padding: 5px; height: auto">
-    <%--<div style="margin-bottom: 5px">
-        <a href="javascript:void(0);" class="easyui-linkbutton" iconCls="icon-add" plain="true"
-           onclick="addData('#account_data_table','<%=basePath%>/rest/account/addAccount');">增加</a>
-        <a href="javascript:void(0);" class="easyui-linkbutton" iconCls="icon-edit" plain="true"
-           onclick="editData('#account_data_table','<%=basePath%>/rest/account/modifyAccount');">修改</a>
-        <a href="javascript:void(0);" class="easyui-linkbutton" iconCls="icon-remove" plain="true"
-           onclick="removeData('#account_data_table','<%=basePath%>/rest/account/deleteAccount');">删除</a>
-        <a href="javascript:void(0);" class="easyui-linkbutton" iconCls="icon-undo" plain="true"
-           onclick="undoData('#account_data_table');">撤销</a>
-        <a href="javascript:void(0);" class="easyui-linkbutton" iconCls="icon-save" plain="true"
-           onclick="saveData('#account_data_table');">保存</a>
-    </div>--%>
     <div>
         创建时间从: <input class="easyui-datebox" style="width: 80px">
         到: <input class="easyui-datebox" style="width: 80px">

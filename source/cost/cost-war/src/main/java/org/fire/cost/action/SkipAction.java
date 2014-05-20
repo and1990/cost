@@ -96,11 +96,11 @@ public class SkipAction extends BaseAction {
     }
 
     /**
-     * 跳转到组消费
+     * 跳转到结算
      *
      * @return
      */
-    @Action(value = "showGroupAccount", results = {@Result(name = SUCCESS, location = "/cost/groupAccount.jsp")})
+    @Action(value = "showGroupAccount", results = {@Result(name = SUCCESS, location = "/cost/clearAccount.jsp")})
     public String skipToGroupAccountData() {
         return SUCCESS;
     }

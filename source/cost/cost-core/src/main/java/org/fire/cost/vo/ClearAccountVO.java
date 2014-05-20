@@ -5,16 +5,14 @@ import java.math.BigDecimal;
 
 
 /**
- * 注释：组消费VO
+ * 注释：结算VO
  * 作者：liutengfei 【刘腾飞】
  * 时间：14-2-14 下午2:07
  */
-public class GroupAccountVO implements Serializable {
+public class ClearAccountVO implements Serializable {
     private static final long serialVersionUID = 1L;
 
-    private Long groupAccountId;
-
-    private Long groupId;
+    private Long clearAccountId;
 
     private BigDecimal accountMoney;
 
@@ -22,30 +20,22 @@ public class GroupAccountVO implements Serializable {
 
     private String endDate;
 
-    private Integer isOver;
+    private Integer overType;
 
-    private String isOverName;
+    private String overTypeName;
 
     private String createUser;
 
     private String createTime;
 
-    private String groupAccountRemark;
+    private String clearAccountRemark;
 
-    public Long getGroupAccountId() {
-        return groupAccountId;
+    public Long getClearAccountId() {
+        return clearAccountId;
     }
 
-    public void setGroupAccountId(Long groupAccountId) {
-        this.groupAccountId = groupAccountId;
-    }
-
-    public Long getGroupId() {
-        return groupId;
-    }
-
-    public void setGroupId(Long groupId) {
-        this.groupId = groupId;
+    public void setClearAccountId(Long clearAccountId) {
+        this.clearAccountId = clearAccountId;
     }
 
     public BigDecimal getAccountMoney() {
@@ -72,20 +62,20 @@ public class GroupAccountVO implements Serializable {
         this.endDate = endDate;
     }
 
-    public int getIsOver() {
-        return isOver;
+    public int getOverType() {
+        return overType;
     }
 
-    public void setIsOver(Integer isOver) {
-        this.isOver = isOver;
+    public void setOverType(Integer overType) {
+        this.overType = overType;
     }
 
-    public String getIsOverName() {
-        return isOverName;
+    public String getOverTypeName() {
+        return overTypeName;
     }
 
-    public void setIsOverName(String isOverName) {
-        this.isOverName = isOverName;
+    public void setOverTypeName(String overTypeName) {
+        this.overTypeName = overTypeName;
     }
 
     public String getCreateUser() {
@@ -104,11 +94,11 @@ public class GroupAccountVO implements Serializable {
         this.createTime = createTime;
     }
 
-    public String getGroupAccountRemark() {
-        return groupAccountRemark;
+    public String getClearAccountRemark() {
+        return clearAccountRemark;
     }
 
-    public void setGroupAccountRemark(String groupAccountRemark) {
-        this.groupAccountRemark = groupAccountRemark;
+    public void setClearAccountRemark(String clearAccountRemark) {
+        this.clearAccountRemark = clearAccountRemark;
     }
 }
