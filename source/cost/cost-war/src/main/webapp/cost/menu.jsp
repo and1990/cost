@@ -32,14 +32,16 @@
             <ul>
                 <li data-options="id:'showAccount'">账单信息</li>
                 <li data-options="id:'showGroupAccount'">组消费</li>
+                <li data-options="id:'showStream'">流水明细</li>
             </ul>
         </li>
         <li data-options="id:null">
             <span>数据分析</span>
             <ul>
-                <li data-options="id:'showPie'">饼状图</li>
-                <li data-options="id:'showColumn'">柱状图</li>
+                <li data-options="id:'showPie'">消费占比</li>
+                <li data-options="id:'showColumn'">消费金额</li>
                 <li data-options="id:'showLine'">线性图</li>
+                <li data-options="id:'showStreamColumn'">流水账</li>
             </ul>
         </li>
     </ul>
@@ -67,7 +69,6 @@
                 } else {
                     $('#help_tree').tree('expand', node.target);
                 }
-
             }
         });
     });

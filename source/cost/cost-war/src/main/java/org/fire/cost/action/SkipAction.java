@@ -106,6 +106,16 @@ public class SkipAction extends BaseAction {
     }
 
     /**
+     * 跳转到流水账
+     *
+     * @return
+     */
+    @Action(value = "showStream", results = {@Result(name = SUCCESS, location = "/cost/stream.jsp")})
+    public String skipToStreamData() {
+        return SUCCESS;
+    }
+
+    /**
      * 跳转到饼状图
      *
      * @return
@@ -132,6 +142,16 @@ public class SkipAction extends BaseAction {
      */
     @Action(value = "showLine", results = {@Result(name = SUCCESS, location = "/cost/lineChart.jsp")})
     public String skipToLineChart() {
+        return SUCCESS;
+    }
+
+    /**
+     * 跳转到流水账柱状图
+     *
+     * @return
+     */
+    @Action(value = "showStreamColumn", results = {@Result(name = SUCCESS, location = "/cost/streamColumnChart.jsp")})
+    public String skipToStreamColumnChart() {
         return SUCCESS;
     }
 }
