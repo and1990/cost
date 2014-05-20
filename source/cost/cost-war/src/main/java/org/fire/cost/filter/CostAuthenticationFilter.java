@@ -47,11 +47,6 @@ public class CostAuthenticationFilter implements Filter {
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
         HttpServletRequest httpRequest = (HttpServletRequest) request;
         HttpServletResponse httpResponse = (HttpServletResponse) response;
-        HttpSession session = httpRequest.getSession();
-        String userName = (String) session.getAttribute("userName");
-        if (userName == null || userName.length() == 0) {
-            session.setAttribute("userName", AuthenticationUtil.getUserName());
-        }
         String sessionId = getCookieValue(httpRequest, "sessionId");
         if (sessionId != null && sessionId.trim().length() > 0) {
             UserContext userContext = costContextService.getUserContext(sessionId);
@@ -59,6 +54,7 @@ public class CostAuthenticationFilter implements Filter {
                 ThreadMessageContext.set(userContext);
                 try {
                     costContextService.delay(sessionId);
+                    setValue(httpRequest);
                     chain.doFilter(httpRequest, httpResponse);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
@@ -71,7 +67,6 @@ public class CostAuthenticationFilter implements Filter {
                 if (log.isDebugEnabled()) {
                     log.debug("缓存不存在或者失效，请重新登录");
                 }
-
                 httpResponse.sendRedirect(logoutPath);
                 return;
             }
@@ -103,6 +98,21 @@ public class CostAuthenticationFilter implements Filter {
             }
         }
         return null;
+    }
+
+    /**
+     * 设置值
+     *
+     * @param httpRequest
+     */
+    private void setValue(HttpServletRequest httpRequest) {
+        HttpSession session = httpRequest.getSession();
+        String userName = AuthenticationUtil.getUserName();
+        session.setAttribute("userName", userName);
+        Long userId = AuthenticationUtil.getLoginUserId();
+        session.setAttribute("userId", userId);
+        int userType = AuthenticationUtil.getUserType();
+        session.setAttribute("userType", userType);
     }
 
 }

@@ -76,7 +76,7 @@
                 text: ''
             },
             title: {
-                text: '消费金额[个人]'
+                text: '消费金额[用户]'
             },
             xAxis: {
                 categories: nameArr,

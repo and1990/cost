@@ -22,7 +22,6 @@ import org.springframework.stereotype.Controller;
 import javax.annotation.Resource;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 @Namespace("/")
 @Controller
@@ -66,9 +65,6 @@ public class AuthenticationAction extends BaseAction {
             setCookie(userContext);
             //更新登录时间
             userService.changeUserLoginTime(userContext.getUserId());
-            //设置用户名
-            HttpSession session = ServletActionContext.getRequest().getSession();
-            session.setAttribute("userName", userContext.getUserName());
             //设置返回信息
             MessageUtil.setMessage(message, ResultEnum.Success, HttpStatusEnum.Success, null, null);
         } catch (AuthenticationException e) {
@@ -76,6 +72,9 @@ public class AuthenticationAction extends BaseAction {
             if (msg.indexOf("COST") >= 0) {
                 msg = msg.substring("COST:".length(), msg.length());
                 MessageUtil.setMessage(message, ResultEnum.Success, HttpStatusEnum.Success, msg, null);
+            } else {
+                msg = "内部错误，请重试";
+                MessageUtil.setMessage(message, ResultEnum.Fail, HttpStatusEnum.ServerError, msg, null);
             }
         }
         return SUCCESS;

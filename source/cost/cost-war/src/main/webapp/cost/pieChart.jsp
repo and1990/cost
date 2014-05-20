@@ -82,7 +82,7 @@
                         text: ''
                     },
                     title: {
-                        text: "消费占比[消费类型]"
+                        text: "消费占比[用户]"
                     },
                     tooltip: {
                         enabled: true,
