@@ -43,4 +43,20 @@ public class ClearAccountDaoCustomImpl extends BaseJpaDaoSupport<ClearAccount, L
         int total = Integer.valueOf(query.getSingleResult().toString());
         return total;
     }
+
+    /**
+     * 获取最后一次的结算记录
+     *
+     * @return
+     */
+    @Override
+    public ClearAccount getLatestClearData() {
+        String sql = "select * from clear_account order by clear_account_id desc limit 0,1";
+        Query query = entityManager.createNativeQuery(sql);
+        List<ClearAccount> clearAccountList = query.getResultList();
+        if (clearAccountList != null && clearAccountList.size() != 0) {
+            return clearAccountList.get(0);
+        }
+        return null;
+    }
 }

@@ -5,6 +5,7 @@ import org.fire.cost.vo.AccountVO;
 import org.fire.cost.vo.PageData;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * 账单dao扩展类
@@ -21,4 +22,7 @@ public interface AccountDaoCustom {
     List<AccountVO> getAccountGroupByUser(String accountStartTime, String accountEndTime);
 
     List<AccountVO> getAccountGroupByTypeAndUser(String startTime, String endTime);
+
+    Map<Long, List<AccountVO>> getAccountGroupByGroupAndUser(String startTime, String endTime);
+
 }

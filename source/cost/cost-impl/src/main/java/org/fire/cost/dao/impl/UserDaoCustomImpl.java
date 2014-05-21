@@ -8,7 +8,6 @@ import org.fire.cost.vo.UserVO;
 import org.hibernate.ejb.QueryImpl;
 
 import javax.persistence.Query;
-import java.text.ParseException;
 import java.util.Date;
 import java.util.List;
 
@@ -127,12 +126,7 @@ public class UserDaoCustomImpl extends BaseJpaDaoSupport<User, Long> implements 
         }
         String endTime = vo.getEndTime();
         if (endTime != null && endTime.trim().length() != 0) {
-            Date date = null;
-            try {
-                date = DateUtil.makeStr2Date(endTime, false);
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
+            Date date = DateUtil.makeStr2Date(endTime, false);
             endTime = DateUtil.makeDate2Str(DateUtil.addDays(date, 1), false);
             query.setParameter("endTime", endTime);
         }

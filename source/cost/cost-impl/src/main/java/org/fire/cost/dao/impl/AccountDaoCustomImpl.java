@@ -12,10 +12,7 @@ import org.hibernate.transform.Transformers;
 import javax.persistence.Query;
 import java.math.BigDecimal;
 import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * 账单扩展实现类
@@ -134,9 +131,8 @@ public class AccountDaoCustomImpl extends BaseJpaDaoSupport<Account, Long> imple
      */
     @Override
     public List<AccountVO> getAccountGroupByUser(String accountStartTime, String accountEndTime) {
-        String sql = "SELECT  CONCAT(u.user_name, '_', u.user_id) AS userName, " +
-                "  SUM(a.account_money) AS accountMoney  FROM  cost_user u " +
-                "LEFT JOIN cost_account a ON u.user_id = a.user_id WHERE 1=1 ";
+        String sql = "SELECT  u.user_id as userId,u.user_name AS userName,SUM(a.account_money) AS accountMoney "
+                + "FROM  cost_user u LEFT JOIN cost_account a ON u.user_id = a.user_id WHERE 1=1 ";
         boolean accountStartTimeNotNull = accountStartTime != null && accountStartTime.trim().length() != 0;
         if (accountStartTimeNotNull) {
             sql += "and a.account_time>=:startTime ";
@@ -225,6 +221,56 @@ public class AccountDaoCustomImpl extends BaseJpaDaoSupport<Account, Long> imple
             }
         }
         return accountVOList;
+    }
+
+    /**
+     * 获取组对应的消费数据
+     *
+     * @param startTime
+     * @param endTime
+     * @return
+     */
+    @Override
+    public Map<Long, List<AccountVO>> getAccountGroupByGroupAndUser(String startTime, String endTime) {
+        String sql = "SELECT group_id,user_id,sum(account_money) as account_money from cost_account WHERE 1 = 1";
+        boolean accountStartTimeNotNull = startTime != null && startTime.trim().length() != 0;
+        if (accountStartTimeNotNull) {
+            sql += " and account_time>=:startTime";
+        }
+        boolean accountEndTimeNotNull = endTime != null && endTime.trim().length() != 0;
+        if (accountEndTimeNotNull) {
+            sql += " and account_time<:endTime";
+        }
+        sql += " group by group_id,user_id";
+        Query query = entityManager.createNativeQuery(sql);
+        if (accountStartTimeNotNull) {
+            query.setParameter("startTime", startTime);
+        }
+        if (accountEndTimeNotNull) {
+            query.setParameter("endTime", endTime);
+        }
+        query.unwrap(SQLQuery.class).setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP);
+        List<Map> resultList = query.getResultList();
+        boolean resultDataNotNull = resultList != null && resultList.size() != 0;
+        Map<Long, List<AccountVO>> accountVOListMap = new HashMap<Long, List<AccountVO>>();
+        if (resultDataNotNull) {
+            return accountVOListMap;
+        }
+        for (Map map : resultList) {
+            Long groupId = Long.valueOf(map.get("group_id").toString());
+            List<AccountVO> accountVOList = accountVOListMap.get(groupId);
+            if (accountVOList == null) {
+                accountVOList = new ArrayList<AccountVO>();
+            }
+            AccountVO accountVO = new AccountVO();
+            accountVO.setGroupId(groupId);
+            BigDecimal accountMoney = new BigDecimal(map.get("account_money").toString());
+            accountVO.setAccountMoney(accountMoney);
+            accountVO.setUserName(map.get("user_name").toString());
+            accountVOList.add(accountVO);
+            accountVOListMap.put(groupId, accountVOList);
+        }
+        return accountVOListMap;
     }
 
     /**

@@ -24,4 +24,11 @@ public interface ClearAccountDaoCustom {
      * @return
      */
     int getClearTotal();
+
+    /**
+     * 获取最后一次的结算记录
+     *
+     * @return
+     */
+    ClearAccount getLatestClearData();
 }

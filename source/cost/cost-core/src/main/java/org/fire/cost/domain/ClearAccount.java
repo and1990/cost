@@ -18,7 +18,6 @@ public class ClearAccount implements Serializable {
     private BigDecimal accountMoney;
     private Date startDate;
     private Date endDate;
-    private Integer overType;
     private String createUser;
     private Date createTime;
     private String clearAccountRemark;
@@ -62,16 +61,6 @@ public class ClearAccount implements Serializable {
 
     public void setEndDate(Date endDate) {
         this.endDate = endDate;
-    }
-
-    @Basic
-    @Column(name = "over_type", nullable = false, insertable = true, updatable = true, length = 10, precision = 0)
-    public Integer getOverType() {
-        return overType;
-    }
-
-    public void setOverType(Integer overType) {
-        this.overType = overType;
     }
 
     @Basic
@@ -119,7 +108,6 @@ public class ClearAccount implements Serializable {
         if (createTime != null ? !createTime.equals(that.createTime) : that.createTime != null) return false;
         if (createUser != null ? !createUser.equals(that.createUser) : that.createUser != null) return false;
         if (endDate != null ? !endDate.equals(that.endDate) : that.endDate != null) return false;
-        if (overType != null ? !overType.equals(that.overType) : that.overType != null) return false;
         if (startDate != null ? !startDate.equals(that.startDate) : that.startDate != null) return false;
 
         return true;
@@ -131,7 +119,6 @@ public class ClearAccount implements Serializable {
         result = 31 * result + (accountMoney != null ? accountMoney.hashCode() : 0);
         result = 31 * result + (startDate != null ? startDate.hashCode() : 0);
         result = 31 * result + (endDate != null ? endDate.hashCode() : 0);
-        result = 31 * result + (overType != null ? overType.hashCode() : 0);
         result = 31 * result + (createUser != null ? createUser.hashCode() : 0);
         result = 31 * result + (createTime != null ? createTime.hashCode() : 0);
         result = 31 * result + (clearAccountRemark != null ? clearAccountRemark.hashCode() : 0);
