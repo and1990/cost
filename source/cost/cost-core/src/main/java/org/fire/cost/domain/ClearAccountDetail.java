@@ -19,6 +19,7 @@ public class ClearAccountDetail {
     private Integer overType;
     private String detailRemark;
     private ClearAccount clearAccount;
+    private User user;
 
     @Id
     @Column(name = "clear_account_detail_id", nullable = false, insertable = true, updatable = true, length = 19, precision = 0)
@@ -129,5 +130,15 @@ public class ClearAccountDetail {
 
     public void setClearAccount(ClearAccount clearAccount) {
         this.clearAccount = clearAccount;
+    }
+
+    @ManyToOne
+    @JoinColumn(name = "user_id", referencedColumnName = "user_id", nullable = false)
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 }

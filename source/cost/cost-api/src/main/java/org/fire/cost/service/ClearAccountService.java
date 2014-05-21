@@ -1,6 +1,7 @@
 package org.fire.cost.service;
 
 import org.fire.cost.vo.ClearAccountVO;
+import org.fire.cost.vo.PageData;
 
 import java.util.List;
 
@@ -9,21 +10,23 @@ import java.util.List;
  * 作者：liutengfei 【刘腾飞】
  * 时间：14-2-19 下午9:01
  */
-public interface GroupAccountService
-{
+public interface ClearAccountService {
     /**
-     * 根据查询条件查询组消费信息
+     * 获取结算信息
      *
-     * @param vo
      * @return
      */
-    public List<ClearAccountVO> getGroupAccountByFilter(ClearAccountVO vo);
+    List<ClearAccountVO> getClearData(PageData pageData);
 
     /**
-     * 添加组消费
+     * 获取结算记录数
      *
-     * @param groupId 组ID
      * @return
      */
-    public boolean addGroupAccount(Long groupId);
+    int getClearTotal();
+
+    /**
+     * 结算
+     */
+    void clearData();
 }

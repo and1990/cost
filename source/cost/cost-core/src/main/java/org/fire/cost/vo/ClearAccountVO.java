@@ -20,10 +20,6 @@ public class ClearAccountVO implements Serializable {
 
     private String endDate;
 
-    private Integer overType;
-
-    private String overTypeName;
-
     private String createUser;
 
     private String createTime;
@@ -60,22 +56,6 @@ public class ClearAccountVO implements Serializable {
 
     public void setEndDate(String endDate) {
         this.endDate = endDate;
-    }
-
-    public int getOverType() {
-        return overType;
-    }
-
-    public void setOverType(Integer overType) {
-        this.overType = overType;
-    }
-
-    public String getOverTypeName() {
-        return overTypeName;
-    }
-
-    public void setOverTypeName(String overTypeName) {
-        this.overTypeName = overTypeName;
     }
 
     public String getCreateUser() {

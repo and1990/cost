@@ -16,7 +16,7 @@ public class ClearAccountDetail {
     private BigDecimal accountMoney;
     private BigDecimal clearMoney;
     private Integer clearType;
-    private Integer overType;
+    private Integer overStatus;
     private String detailRemark;
     private ClearAccount clearAccount;
 
@@ -71,13 +71,13 @@ public class ClearAccountDetail {
     }
 
     @Basic
-    @Column(name = "over_type", nullable = false, insertable = true, updatable = true, length = 10, precision = 0)
-    public Integer getOverType() {
-        return overType;
+    @Column(name = "over_status", nullable = false, insertable = true, updatable = true, length = 10, precision = 0)
+    public Integer getOverStatus() {
+        return overStatus;
     }
 
-    public void setOverType(Integer overType) {
-        this.overType = overType;
+    public void setOverStatus(Integer overStatus) {
+        this.overStatus = overStatus;
     }
 
     @Basic
@@ -103,7 +103,7 @@ public class ClearAccountDetail {
         if (clearMoney != null ? !clearMoney.equals(that.clearMoney) : that.clearMoney != null) return false;
         if (clearType != null ? !clearType.equals(that.clearType) : that.clearType != null) return false;
         if (detailRemark != null ? !detailRemark.equals(that.detailRemark) : that.detailRemark != null) return false;
-        if (overType != null ? !overType.equals(that.overType) : that.overType != null) return false;
+        if (overStatus != null ? !overStatus.equals(that.overStatus) : that.overStatus != null) return false;
         if (payMoney != null ? !payMoney.equals(that.payMoney) : that.payMoney != null) return false;
 
         return true;
@@ -116,7 +116,7 @@ public class ClearAccountDetail {
         result = 31 * result + (accountMoney != null ? accountMoney.hashCode() : 0);
         result = 31 * result + (clearMoney != null ? clearMoney.hashCode() : 0);
         result = 31 * result + (clearType != null ? clearType.hashCode() : 0);
-        result = 31 * result + (overType != null ? overType.hashCode() : 0);
+        result = 31 * result + (overStatus != null ? overStatus.hashCode() : 0);
         result = 31 * result + (detailRemark != null ? detailRemark.hashCode() : 0);
         return result;
     }

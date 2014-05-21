@@ -1,8 +1,9 @@
 package org.fire.cost.domain;
 
 import javax.persistence.*;
-import java.sql.Date;
-import java.sql.Timestamp;
+import java.io.Serializable;
+import java.math.BigDecimal;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -12,14 +13,14 @@ import java.util.List;
  */
 @Entity
 @Table(name = "clear_account")
-public class ClearAccount {
+public class ClearAccount implements Serializable {
     private Long clearAccountId;
-    private Integer accountMoney;
+    private BigDecimal accountMoney;
     private Date startDate;
     private Date endDate;
     private Integer overType;
     private String createUser;
-    private Timestamp createTime;
+    private Date createTime;
     private String clearAccountRemark;
     private List<ClearAccountDetail> accountDetailList;
 
@@ -35,11 +36,11 @@ public class ClearAccount {
 
     @Basic
     @Column(name = "account_money", nullable = false, insertable = true, updatable = true, length = 10, precision = 0)
-    public Integer getAccountMoney() {
+    public BigDecimal getAccountMoney() {
         return accountMoney;
     }
 
-    public void setAccountMoney(Integer accountMoney) {
+    public void setAccountMoney(BigDecimal accountMoney) {
         this.accountMoney = accountMoney;
     }
 
@@ -85,11 +86,11 @@ public class ClearAccount {
 
     @Basic
     @Column(name = "create_time", nullable = true, insertable = true, updatable = true, length = 19, precision = 0)
-    public Timestamp getCreateTime() {
+    public Date getCreateTime() {
         return createTime;
     }
 
-    public void setCreateTime(Timestamp createTime) {
+    public void setCreateTime(Date createTime) {
         this.createTime = createTime;
     }
 

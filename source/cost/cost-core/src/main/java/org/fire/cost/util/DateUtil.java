@@ -39,7 +39,7 @@ public class DateUtil extends DateUtils {
      * @param showSecond
      * @return
      */
-    public static Date makeStr2Date(String dateStr, boolean showSecond) throws ParseException {
+    public static Date makeStr2Date(String dateStr, boolean showSecond) {
         if (dateStr == null || dateStr.length() == 0) {
             throw new RuntimeException("输入正确日期字符串");
         }
@@ -48,7 +48,12 @@ public class DateUtil extends DateUtils {
             text = "yyyy-MM-dd HH:mm:ss";
         }
         SimpleDateFormat format = new SimpleDateFormat(text);
-        return format.parse(dateStr);
+        try {
+            return format.parse(dateStr);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     /**

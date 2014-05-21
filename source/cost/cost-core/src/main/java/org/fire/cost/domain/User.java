@@ -1,17 +1,11 @@
 package org.fire.cost.domain;
 
-import java.util.*;
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
+import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 import static javax.persistence.GenerationType.IDENTITY;
-
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
 
 /**
  * 注释：
@@ -40,6 +34,7 @@ public class User implements java.io.Serializable {
     private String userRemark;
     private List<Account> accountList = new ArrayList<Account>();
     private List<GroupUser> groupUserList = new ArrayList<GroupUser>(0);
+    private List<ClearAccountDetail> detailList = new ArrayList<ClearAccountDetail>();
 
 
     public User() {
@@ -242,4 +237,12 @@ public class User implements java.io.Serializable {
         this.groupUserList = groupUsers;
     }
 
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "user")
+    public List<ClearAccountDetail> getDetailList() {
+        return detailList;
+    }
+
+    public void setDetailList(List<ClearAccountDetail> detailList) {
+        this.detailList = detailList;
+    }
 }

@@ -1,8 +1,5 @@
 package org.fire.cost.vo;
 
-import org.fire.cost.domain.ClearAccount;
-
-import javax.persistence.*;
 import java.math.BigDecimal;
 
 /**
@@ -16,8 +13,13 @@ public class ClearAccountDetailVO {
     private BigDecimal accountMoney;
     private BigDecimal clearMoney;
     private Integer clearType;
-    private Integer overType;
+    private String clearTypeName;
+    private Integer overStatus;
+    private String overStatusName;
     private String detailRemark;
+    private Long clearAccountId;
+    private Long userId;
+    private String userName;
 
     public Long getClearAccountDetailId() {
         return clearAccountDetailId;
@@ -59,12 +61,28 @@ public class ClearAccountDetailVO {
         this.clearType = clearType;
     }
 
-    public Integer getOverType() {
-        return overType;
+    public String getClearTypeName() {
+        return clearTypeName;
     }
 
-    public void setOverType(Integer overType) {
-        this.overType = overType;
+    public void setClearTypeName(String clearTypeName) {
+        this.clearTypeName = clearTypeName;
+    }
+
+    public Integer getOverStatus() {
+        return overStatus;
+    }
+
+    public void setOverStatus(Integer overStatus) {
+        this.overStatus = overStatus;
+    }
+
+    public String getOverStatusName() {
+        return overStatusName;
+    }
+
+    public void setOverStatusName(String overStatusName) {
+        this.overStatusName = overStatusName;
     }
 
     public String getDetailRemark() {
@@ -75,4 +93,27 @@ public class ClearAccountDetailVO {
         this.detailRemark = detailRemark;
     }
 
+    public Long getClearAccountId() {
+        return clearAccountId;
+    }
+
+    public void setClearAccountId(Long clearAccountId) {
+        this.clearAccountId = clearAccountId;
+    }
+
+    public Long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Long userId) {
+        this.userId = userId;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
 }
