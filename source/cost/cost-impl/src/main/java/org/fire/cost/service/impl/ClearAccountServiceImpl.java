@@ -87,26 +87,74 @@ public class ClearAccountServiceImpl implements ClearAccountService {
         while (groupIterator.hasNext()) {
             Group group = groupIterator.next();
             List<GroupUser> groupUserList = group.getGroupUserList();
-            List<User> userList = new ArrayList<User>();
-            boolean groupUserNotNull = groupUserList != null && groupUserList.size() != 0;
-            if (groupUserNotNull) {
-                for (GroupUser groupUser : groupUserList) {
-                    userList.add(groupUser.getUser());
-                }
-            }
+            List<User> userList = getUserList(groupUserList);
             Long groupId = group.getGroupId();
             userDataMap.put(groupId, userList);
         }
+
+        Map<Long, List<ClearAccountDetail>> clearDataDetailMap = new HashMap<Long, List<ClearAccountDetail>>();
         groupIterator = groups.iterator();
         while (groupIterator.hasNext()) {
             Group group = groupIterator.next();
             Long groupId = group.getGroupId();
             List<AccountVO> accountVOList = accountDataMap.get(groupId);
             List<User> userList = userDataMap.get(groupId);
+            BigDecimal totalMoney = getTotalAccountMoney(accountVOList);
+            int size = userList.size();
+            BigDecimal payMoney = totalMoney.divide(new BigDecimal(size), BigDecimal.ROUND_HALF_UP);
+            List<ClearAccountDetail> detailList = new ArrayList<ClearAccountDetail>();
+            for (User user : userList) {
+                Long userId = user.getUserId();
+                BigDecimal accountMoney = BigDecimal.ZERO;
+                for (AccountVO accountVO : accountVOList) {
+                    Long tempUserId = accountVO.getUserId();
+                    if (userId.toString().equals(tempUserId.toString())) {
+                        accountMoney = accountMoney.add(accountVO.getAccountMoney());
+                    }
+                }
+                BigDecimal clearMoney = payMoney.divide(accountMoney);
+                ClearAccountDetail detail = new ClearAccountDetail();
+                detail.setUser(user);
+                detail.setPayMoney(payMoney);
+                detail.setAccountMoney(accountMoney);
+                detail.setClearMoney(clearMoney);
+                detail.setClearType(1);
+                detail.setOverStatus(1);
+                detailList.add(detail);
+            }
+            clearDataDetailMap.put(groupId, detailList);
+        }
+
+        List<User> allUserList = null;//TODO
+        List<ClearAccountDetail> detailList = new ArrayList<ClearAccountDetail>();
+        groupIterator = groups.iterator();
+        for (User user : allUserList) {
+            Long userId = user.getUserId();
+            while (groupIterator.hasNext()) {
+                Group group = groupIterator.next();
+                List<ClearAccountDetail> details = clearDataDetailMap.get(group.getGroupId());
+                for (ClearAccountDetail detail : details) {
+                    Long tempUserId = detail.getUser().getUserId();
+                    if (userId.toString().equals(tempUserId.toString())) {
+
+                    }
+                }
+            }
         }
 
         //ClearAccount clearAccount = getClearAccount(accountVOList);
         //List<ClearAccountDetail> detailList = getClearAccountDetail(clearAccount, accountVOList);
+    }
+
+    private List<User> getUserList(List<GroupUser> groupUserList) {
+        List<User> userList = new ArrayList<User>();
+        boolean groupUserNotNull = groupUserList != null && groupUserList.size() != 0;
+        if (groupUserNotNull) {
+            for (GroupUser groupUser : groupUserList) {
+                userList.add(groupUser.getUser());
+            }
+        }
+        return userList;
     }
 
     /**
