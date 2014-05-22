@@ -349,6 +349,12 @@ function submitForm() {
                             return false;
                         }
                     }
+                    var userAge = $("#userAge").val();
+                    if (userAge <= 0 || userAge > 150) {
+                        $.messager.progress('close');
+                        $.messager.alert("提示", "年龄应大于0小于等于150", "info");
+                        return false;
+                    }
                     return true;
                 },
                 success: function () {
