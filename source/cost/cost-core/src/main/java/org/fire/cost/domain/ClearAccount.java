@@ -6,6 +6,8 @@ import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
+import static javax.persistence.GenerationType.IDENTITY;
+
 /**
  * 注释：结算实体
  * 时间：2014年05月20日 下午6:02
@@ -24,6 +26,7 @@ public class ClearAccount implements Serializable {
     private List<ClearAccountDetail> accountDetailList;
 
     @Id
+    @GeneratedValue(strategy = IDENTITY)
     @Column(name = "clear_account_id", nullable = false, insertable = true, updatable = true, length = 19, precision = 0)
     public Long getClearAccountId() {
         return clearAccountId;

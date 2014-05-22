@@ -251,9 +251,9 @@ public class AccountDaoCustomImpl extends BaseJpaDaoSupport<Account, Long> imple
         }
         query.unwrap(SQLQuery.class).setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP);
         List<Map> resultList = query.getResultList();
-        boolean resultDataNotNull = resultList != null && resultList.size() != 0;
+        boolean resultDataIsNull = resultList == null || resultList.size() == 0;
         Map<Long, List<AccountVO>> accountVOListMap = new HashMap<Long, List<AccountVO>>();
-        if (resultDataNotNull) {
+        if (resultDataIsNull) {
             return accountVOListMap;
         }
         for (Map map : resultList) {
@@ -266,7 +266,7 @@ public class AccountDaoCustomImpl extends BaseJpaDaoSupport<Account, Long> imple
             accountVO.setGroupId(groupId);
             BigDecimal accountMoney = new BigDecimal(map.get("account_money").toString());
             accountVO.setAccountMoney(accountMoney);
-            accountVO.setUserName(map.get("user_name").toString());
+            accountVO.setUserId(Long.valueOf(map.get("user_id").toString()));
             accountVOList.add(accountVO);
             accountVOListMap.put(groupId, accountVOList);
         }

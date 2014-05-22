@@ -40,4 +40,12 @@ public interface GroupDaoCustom {
      * @return
      */
     Group getGroupByUser(Long userId);
+
+    /**
+     * 根据组类型获取数据
+     *
+     * @param groupType
+     * @return
+     */
+    Group getGroupByType(int groupType);
 }

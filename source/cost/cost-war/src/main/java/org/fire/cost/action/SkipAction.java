@@ -116,6 +116,16 @@ public class SkipAction extends BaseAction {
     }
 
     /**
+     * 跳转到流水账
+     *
+     * @return
+     */
+    @Action(value = "showClear", results = {@Result(name = SUCCESS, location = "/cost/clear.jsp")})
+    public String skipToClearData() {
+        return SUCCESS;
+    }
+
+    /**
      * 跳转到饼状图
      *
      * @return

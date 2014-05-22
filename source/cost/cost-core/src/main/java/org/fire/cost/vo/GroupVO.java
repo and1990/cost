@@ -16,6 +16,10 @@ public class GroupVO implements Serializable {
 
     private String userNames;
 
+    private Integer groupType;
+
+    private String groupTypeName;
+
     private Integer groupStatus;
 
     private String groupStatusName;
@@ -72,6 +76,22 @@ public class GroupVO implements Serializable {
 
     public void setUserNames(String userNames) {
         this.userNames = userNames;
+    }
+
+    public Integer getGroupType() {
+        return groupType;
+    }
+
+    public void setGroupType(Integer groupType) {
+        this.groupType = groupType;
+    }
+
+    public String getGroupTypeName() {
+        return groupTypeName;
+    }
+
+    public void setGroupTypeName(String groupTypeName) {
+        this.groupTypeName = groupTypeName;
     }
 
     public Integer getGroupStatus() {

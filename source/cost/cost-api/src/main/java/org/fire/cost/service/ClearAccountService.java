@@ -19,11 +19,11 @@ public interface ClearAccountService {
     List<ClearAccountVO> getClearData(PageData pageData);
 
     /**
-     * 获取最后一次的结算记录
+     * 获取最后一次的结算日期
      *
      * @return
      */
-    ClearAccountVO getLatestClearData();
+    String getLatestClearDate();
 
     /**
      * 获取结算记录数

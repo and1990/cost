@@ -22,7 +22,7 @@ public class GroupDaoCustomImpl extends BaseJpaDaoSupport<Group, Long> implement
      */
     @Override
     public List<Group> getAllGroupData() {
-        String sql = "select * from cost_group order by modify_time desc";
+        String sql = "select * from cost_group where group_status<>2 order by modify_time desc";
         Query query = entityManager.createNativeQuery(sql, Group.class);
         List<Group> resultList = query.getResultList();
         return resultList;
@@ -83,5 +83,23 @@ public class GroupDaoCustomImpl extends BaseJpaDaoSupport<Group, Long> implement
         Query query = entityManager.createNativeQuery(sql);
         Integer total = Integer.valueOf(query.getSingleResult().toString());
         return total;
+    }
+
+    /**
+     * 根据组类型获取数据
+     *
+     * @param groupType
+     * @return
+     */
+    @Override
+    public Group getGroupByType(int groupType) {
+        String sql = "select * from cost_group where group_type=:groupType";
+        Query query = entityManager.createNativeQuery(sql, Group.class);
+        query.setParameter("groupType", groupType);
+        List<Group> resultList = query.getResultList();
+        if (resultList != null && resultList.size() != 0) {
+            return resultList.get(0);
+        }
+        return null;
     }
 }

@@ -18,6 +18,7 @@ public class Group implements java.io.Serializable {
 
     private Long groupId;
     private String groupName;
+    private Integer groupType;
     private Integer groupStatus;
     private String createUser;
     private Date createTime;
@@ -65,6 +66,15 @@ public class Group implements java.io.Serializable {
 
     public void setGroupName(String groupName) {
         this.groupName = groupName;
+    }
+
+    @Column(name = "group_type", nullable = false)
+    public Integer getGroupType() {
+        return groupType;
+    }
+
+    public void setGroupType(Integer groupType) {
+        this.groupType = groupType;
     }
 
     @Column(name = "group_status", nullable = false)

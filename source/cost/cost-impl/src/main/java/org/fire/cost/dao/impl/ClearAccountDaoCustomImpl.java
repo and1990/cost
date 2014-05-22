@@ -52,7 +52,7 @@ public class ClearAccountDaoCustomImpl extends BaseJpaDaoSupport<ClearAccount, L
     @Override
     public ClearAccount getLatestClearData() {
         String sql = "select * from clear_account order by clear_account_id desc limit 0,1";
-        Query query = entityManager.createNativeQuery(sql);
+        Query query = entityManager.createNativeQuery(sql, ClearAccount.class);
         List<ClearAccount> clearAccountList = query.getResultList();
         if (clearAccountList != null && clearAccountList.size() != 0) {
             return clearAccountList.get(0);

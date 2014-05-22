@@ -65,7 +65,7 @@
             toolbar: "#clear_tool_bar",
             onLoadSuccess: function (data) {
                 if (data.rows.length == 0) {
-                    $.messager.alert("提示", "没有加载到数据！", "info");
+                    //$.messager.alert("提示", "没有加载到数据！", "info");
                 }
             },
             view: detailview,
@@ -122,7 +122,7 @@
             method: "post",
             url: "<%=basePath%>/clearData.do",
             success: function (returnData) {
-                
+                $('#clear_data_table').datagrid('reload');
             }
         });
     }

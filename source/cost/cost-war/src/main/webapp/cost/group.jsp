@@ -29,6 +29,7 @@
                     editor:{type:'combobox', options:{ editable:false, onShowPanel:openUserDialog}}">组员
                 </th>
                 <th data-options="field:'groupStatus',width:60,align:'center',hidden:true"/>
+                <th data-options="field:'groupTypeName',width:60,align:'center'">类型</th>
                 <th data-options="field:'groupStatusName',width:60,align:'center'">状态</th>
                 <th data-options="field:'groupRemark',width:120,align:'center',editor:'text'">备注</th>
                 <th data-options="field:'createUser',width:120,align:'center'">创建人</th>

@@ -47,7 +47,7 @@
         <li data-options="id:null">
             <span>结算</span>
             <ul>
-                <li data-options="id:'showPie'">结算信息</li>
+                <li data-options="id:'showClear'">结算信息</li>
             </ul>
         </li>
     </ul>

@@ -2,8 +2,10 @@ package org.fire.cost.service.impl;
 
 import org.fire.cost.dao.AccountDao;
 import org.fire.cost.dao.ClearAccountDao;
+import org.fire.cost.dao.ClearAccountDetailDao;
 import org.fire.cost.dao.GroupDao;
 import org.fire.cost.domain.*;
+import org.fire.cost.enums.OverStatusEnum;
 import org.fire.cost.service.ClearAccountService;
 import org.fire.cost.util.AuthenticationUtil;
 import org.fire.cost.util.DateUtil;
@@ -11,8 +13,10 @@ import org.fire.cost.vo.AccountVO;
 import org.fire.cost.vo.ClearAccountVO;
 import org.fire.cost.vo.PageData;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import javax.persistence.RollbackException;
 import java.math.BigDecimal;
 import java.util.*;
 
@@ -23,7 +27,6 @@ import java.util.*;
  */
 @Service
 public class ClearAccountServiceImpl implements ClearAccountService {
-
     @Resource
     private AccountDao accountDao;
 
@@ -32,6 +35,9 @@ public class ClearAccountServiceImpl implements ClearAccountService {
 
     @Resource
     private ClearAccountDao clearAccountDao;
+
+    @Resource
+    private ClearAccountDetailDao detailDao;
 
     /**
      * 获取结算信息
@@ -50,15 +56,21 @@ public class ClearAccountServiceImpl implements ClearAccountService {
     }
 
     /**
-     * 获取最后一次的结算记录
+     * 获取最后一次的结算日期
      *
      * @return
      */
     @Override
-    public ClearAccountVO getLatestClearData() {
+    public String getLatestClearDate() {
+        String date = "";
         ClearAccount clearAccount = clearAccountDao.getLatestClearData();
-        ClearAccountVO clearAccountVO = makePoToVo(clearAccount);
-        return clearAccountVO;
+        if (clearAccount == null) {
+            date = "2013-12-1 00:00:00";
+        } else {
+            Date endDate = clearAccount.getEndDate();
+            date = DateUtil.makeDate2Str(endDate, true);
+        }
+        return date;
     }
 
     /**
@@ -78,76 +90,90 @@ public class ClearAccountServiceImpl implements ClearAccountService {
      * @return
      */
     @Override
+    @Transactional(value = "transactionManager", rollbackFor = RollbackException.class)
     public void clearData() {
+        //获取用户对应的结算明细
+        List<ClearAccountDetail> detailList = getDetailList();
+        //设置结算明细数据
+        setClearAccountDetail(detailList);
+        //获取结算数据
+        ClearAccount clearAccount = getClearAccount(detailList);
+        clearAccount = clearAccountDao.save(clearAccount);
+
+        //保存明细数据
+        for (ClearAccountDetail detail : detailList) {
+            detail.setClearAccount(clearAccount);
+        }
+        detailDao.save(detailList);
+    }
+
+    /**
+     * 获取用户对应的结算明细
+     *
+     * @return
+     */
+    private List<ClearAccountDetail> getDetailList() {
+        Group group = groupDao.getGroupByType(2);
+        List<User> allUserList = getUserList(group);
+        List<ClearAccountDetail> detailList = new ArrayList<ClearAccountDetail>();
+        for (User user : allUserList) {
+            ClearAccountDetail detail = new ClearAccountDetail();
+            detail.setUser(user);
+            detail.setPayMoney(BigDecimal.ZERO);
+            detail.setAccountMoney(BigDecimal.ZERO);
+            detail.setClearMoney(BigDecimal.ZERO);
+            detail.setOverStatus(OverStatusEnum.Not_Clear.getCode());
+            detailList.add(detail);
+        }
+        return detailList;
+    }
+
+    /**
+     * 设置结算明细
+     *
+     * @param detailList
+     */
+    private void setClearAccountDetail(List<ClearAccountDetail> detailList) {
         Map<Long, List<AccountVO>> accountDataMap = getAccountData();
+        if (accountDataMap == null || accountDataMap.size() == 0) {
+            return;
+        }
         Set<Long> groupIdSet = accountDataMap.keySet();
         Iterable<Group> groups = groupDao.findAll(groupIdSet);
         Iterator<Group> groupIterator = groups.iterator();
-        Map<Long, List<User>> userDataMap = new HashMap<Long, List<User>>();
         while (groupIterator.hasNext()) {
             Group group = groupIterator.next();
-            List<GroupUser> groupUserList = group.getGroupUserList();
-            List<User> userList = getUserList(groupUserList);
-            Long groupId = group.getGroupId();
-            userDataMap.put(groupId, userList);
+            List<AccountVO> accountVOList = accountDataMap.get(group.getGroupId());
+            List<User> groupUserList = getUserList(group);
+            BigDecimal payMoney = getPayMoney(accountVOList, groupUserList);
+            setDetailAccountUser(detailList, accountVOList, groupUserList, payMoney);
+            setDetailNotAccountUser(detailList, accountVOList, groupUserList, payMoney);
+
         }
-
-        Map<Long, List<ClearAccountDetail>> clearDataDetailMap = new HashMap<Long, List<ClearAccountDetail>>();
-        groupIterator = groups.iterator();
-        while (groupIterator.hasNext()) {
-            Group group = groupIterator.next();
-            Long groupId = group.getGroupId();
-            List<AccountVO> accountVOList = accountDataMap.get(groupId);
-            List<User> userList = userDataMap.get(groupId);
-            BigDecimal totalMoney = getTotalAccountMoney(accountVOList);
-            int size = userList.size();
-            BigDecimal payMoney = totalMoney.divide(new BigDecimal(size), BigDecimal.ROUND_HALF_UP);
-            List<ClearAccountDetail> detailList = new ArrayList<ClearAccountDetail>();
-            for (User user : userList) {
-                Long userId = user.getUserId();
-                BigDecimal accountMoney = BigDecimal.ZERO;
-                for (AccountVO accountVO : accountVOList) {
-                    Long tempUserId = accountVO.getUserId();
-                    if (userId.toString().equals(tempUserId.toString())) {
-                        accountMoney = accountMoney.add(accountVO.getAccountMoney());
-                    }
-                }
-                BigDecimal clearMoney = payMoney.divide(accountMoney);
-                ClearAccountDetail detail = new ClearAccountDetail();
-                detail.setUser(user);
-                detail.setPayMoney(payMoney);
-                detail.setAccountMoney(accountMoney);
-                detail.setClearMoney(clearMoney);
-                detail.setClearType(1);
-                detail.setOverStatus(1);
-                detailList.add(detail);
-            }
-            clearDataDetailMap.put(groupId, detailList);
-        }
-
-        List<User> allUserList = null;//TODO
-        List<ClearAccountDetail> detailList = new ArrayList<ClearAccountDetail>();
-        groupIterator = groups.iterator();
-        for (User user : allUserList) {
-            Long userId = user.getUserId();
-            while (groupIterator.hasNext()) {
-                Group group = groupIterator.next();
-                List<ClearAccountDetail> details = clearDataDetailMap.get(group.getGroupId());
-                for (ClearAccountDetail detail : details) {
-                    Long tempUserId = detail.getUser().getUserId();
-                    if (userId.toString().equals(tempUserId.toString())) {
-
-                    }
-                }
-            }
-        }
-
-        //ClearAccount clearAccount = getClearAccount(accountVOList);
-        //List<ClearAccountDetail> detailList = getClearAccountDetail(clearAccount, accountVOList);
     }
 
-    private List<User> getUserList(List<GroupUser> groupUserList) {
+
+    /**
+     * 获取消费数据
+     *
+     * @return
+     */
+    private Map<Long, List<AccountVO>> getAccountData() {
+        String lastDate = getLatestClearDate();
+        String currentDate = DateUtil.makeDate2Str(Calendar.getInstance().getTime(), true);
+        Map<Long, List<AccountVO>> listMap = accountDao.getAccountGroupByGroupAndUser(lastDate, currentDate);
+        return listMap;
+    }
+
+    /**
+     * 获取组对应的用户
+     *
+     * @param group
+     * @return
+     */
+    private List<User> getUserList(Group group) {
         List<User> userList = new ArrayList<User>();
+        List<GroupUser> groupUserList = group.getGroupUserList();
         boolean groupUserNotNull = groupUserList != null && groupUserList.size() != 0;
         if (groupUserNotNull) {
             for (GroupUser groupUser : groupUserList) {
@@ -158,74 +184,134 @@ public class ClearAccountServiceImpl implements ClearAccountService {
     }
 
     /**
-     * 获取消费数据
+     * 获取需支付金额
      *
      * @return
      */
-    private Map<Long, List<AccountVO>> getAccountData() {
-        ClearAccountVO clearAccountVO = getLatestClearData();
-        String lastDate = clearAccountVO.getEndDate();
-        String currentDate = DateUtil.makeDate2Str(Calendar.getInstance().getTime(), true);
-        Map<Long, List<AccountVO>> listMap = accountDao.getAccountGroupByGroupAndUser(lastDate, currentDate);
-        return listMap;
+    private BigDecimal getPayMoney(List<AccountVO> accountVOList, List<User> groupUserList) {
+        BigDecimal totalMoney = BigDecimal.ZERO;
+        for (AccountVO accountVO : accountVOList) {
+            BigDecimal accountMoney = accountVO.getAccountMoney();
+            totalMoney = totalMoney.add(accountMoney);
+        }
+        BigDecimal userCount = new BigDecimal(groupUserList.size());
+        BigDecimal payMoney = totalMoney.divide(userCount, BigDecimal.ROUND_HALF_UP);
+        return payMoney;
+    }
+
+    /**
+     * 设置已付金额
+     *
+     * @param detailList
+     * @param accountVOList
+     * @param groupUserList
+     * @param payMoney
+     */
+    private void setDetailAccountUser(List<ClearAccountDetail> detailList, List<AccountVO> accountVOList, List<User> groupUserList, BigDecimal payMoney) {
+        for (ClearAccountDetail detail : detailList) {
+            User user = detail.getUser();
+            Long userId = user.getUserId();
+            for (AccountVO accountVO : accountVOList) {
+                Long id = accountVO.getUserId();
+                boolean equalUser = userId.toString().equals(id.toString());
+                if (!equalUser) {
+                    continue;
+                }
+                BigDecimal voMoney = accountVO.getAccountMoney();
+                BigDecimal accountMoney = detail.getAccountMoney();
+                detail.setAccountMoney(accountMoney.add(voMoney));
+                if (isInCurrentGroup(accountVO, groupUserList)) {
+                    BigDecimal clearMoney = detail.getClearMoney();
+                    BigDecimal subMoney = payMoney.subtract(voMoney);
+                    detail.setClearMoney(clearMoney.add(subMoney));
+                }
+            }
+        }
+    }
+
+    private void setDetailNotAccountUser(List<ClearAccountDetail> detailList, List<AccountVO> accountVOList, List<User> groupUserList, BigDecimal payMoney) {
+        List<User> notAccountUserList = new ArrayList<User>();
+        for (User user : groupUserList) {
+            Long userId = user.getUserId();
+            boolean isContain = false;
+            for (AccountVO accountVO : accountVOList) {
+                Long accountVOUserId = accountVO.getUserId();
+                if (userId.toString().equals(accountVOUserId.toString())) {
+                    isContain = true;
+                }
+            }
+            if (!isContain) {
+                notAccountUserList.add(user);
+            }
+        }
+        for (ClearAccountDetail detail : detailList) {
+            Long userId = detail.getUser().getUserId();
+            boolean isContain = false;
+            for (User user : notAccountUserList) {
+                Long id = user.getUserId();
+                if (userId.toString().equals(id.toString())) {
+                    isContain = true;
+                }
+            }
+            if (isContain) {
+                BigDecimal clearMoney = detail.getClearMoney();
+                detail.setClearMoney(clearMoney.add(payMoney));
+            }
+        }
+    }
+
+    /**
+     * 判断填写消费记录的用户是否在当前组里面
+     *
+     * @param accountVO
+     * @param groupUserList
+     * @return
+     */
+    private boolean isInCurrentGroup(AccountVO accountVO, List<User> groupUserList) {
+        Long id = accountVO.getUserId();
+        for (User user : groupUserList) {
+            Long userId = user.getUserId();
+            if (userId.toString().equals(id.toString())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * 设置还需支付金额
+     *
+     * @param detailList
+     */
+    private void setClearMoney(List<ClearAccountDetail> detailList) {
+        if (detailList == null || detailList.size() == 0) {
+            return;
+        }
+        for (ClearAccountDetail detail : detailList) {
+            BigDecimal payMoney = detail.getPayMoney();
+            BigDecimal accountMoney = detail.getAccountMoney();
+            BigDecimal clearMoney = payMoney.subtract(accountMoney);
+            detail.setClearMoney(clearMoney);
+        }
     }
 
     /**
      * 获取结算数据
      */
-    private ClearAccount getClearAccount(List<AccountVO> accountVOList) {
-        BigDecimal totalMoney = getTotalAccountMoney(accountVOList);
+    private ClearAccount getClearAccount(List<ClearAccountDetail> detailList) {
+        BigDecimal totalMoney = BigDecimal.ZERO;
+        for (ClearAccountDetail detail : detailList) {
+            totalMoney = totalMoney.add(detail.getAccountMoney());
+        }
         ClearAccount clearAccount = new ClearAccount();
         clearAccount.setAccountMoney(totalMoney);
-        ClearAccountVO clearAccountVO = getLatestClearData();
-        String lastDate = clearAccountVO.getEndDate();
+        String lastDate = getLatestClearDate();
         String currentDate = DateUtil.makeDate2Str(Calendar.getInstance().getTime(), true);
         clearAccount.setStartDate(DateUtil.makeStr2Date(lastDate, true));
         clearAccount.setEndDate(DateUtil.makeStr2Date(currentDate, true));
         clearAccount.setCreateUser(AuthenticationUtil.getUserName());
         clearAccount.setCreateTime(new Date());
         return clearAccount;
-    }
-
-    /**
-     * 获取消费总金额
-     *
-     * @param accountVOList
-     * @return
-     */
-    private BigDecimal getTotalAccountMoney(List<AccountVO> accountVOList) {
-        BigDecimal totalMoney = BigDecimal.ZERO;
-        if (accountVOList != null && accountVOList.size() != 0) {
-            for (AccountVO accountVO : accountVOList) {
-                BigDecimal accountMoney = accountVO.getAccountMoney();
-                totalMoney = totalMoney.add(accountMoney);
-            }
-        }
-        return totalMoney;
-    }
-
-    /**
-     * 获取结算明细记录
-     *
-     * @param clearAccount
-     * @param accountVOList
-     * @return
-     */
-    private List<ClearAccountDetail> getClearAccountDetail(ClearAccount clearAccount, List<AccountVO> accountVOList) {
-        List<ClearAccountDetail> detailList = new ArrayList<ClearAccountDetail>();
-        BigDecimal totalMoney = clearAccount.getAccountMoney();
-        int size = accountVOList.size();
-        if (accountVOList != null && size != 0) {
-            BigDecimal payMoney = totalMoney.divide(new BigDecimal(size), BigDecimal.ROUND_HALF_UP);
-            for (AccountVO accountVO : accountVOList) {
-                ClearAccountDetail detail = new ClearAccountDetail();
-                BigDecimal accountMoney = accountVO.getAccountMoney();
-                detail.setAccountMoney(accountMoney);
-                BigDecimal clearMoney = payMoney.subtract(accountMoney);
-                detail.setClearMoney(clearMoney);
-            }
-        }
-        return detailList;
     }
 
     /**
@@ -236,15 +322,17 @@ public class ClearAccountServiceImpl implements ClearAccountService {
      */
     private ClearAccountVO makePoToVo(ClearAccount clearAccount) {
         ClearAccountVO clearAccountVO = new ClearAccountVO();
-        clearAccountVO.setClearAccountId(clearAccount.getClearAccountId());
-        clearAccountVO.setAccountMoney(clearAccount.getAccountMoney());
-        Date startDate = clearAccount.getStartDate();
-        clearAccountVO.setStartDate(DateUtil.makeDate2Str(startDate, false));
-        Date endDate = clearAccount.getEndDate();
-        clearAccountVO.setEndDate(DateUtil.makeDate2Str(endDate, false));
-        clearAccountVO.setCreateUser(clearAccount.getCreateUser());
-        clearAccount.setCreateTime(clearAccount.getCreateTime());
-        clearAccount.setClearAccountRemark(clearAccount.getClearAccountRemark());
+        if (clearAccount != null) {
+            clearAccountVO.setClearAccountId(clearAccount.getClearAccountId());
+            clearAccountVO.setAccountMoney(clearAccount.getAccountMoney());
+            Date startDate = clearAccount.getStartDate();
+            clearAccountVO.setStartDate(DateUtil.makeDate2Str(startDate, false));
+            Date endDate = clearAccount.getEndDate();
+            clearAccountVO.setEndDate(DateUtil.makeDate2Str(endDate, false));
+            clearAccountVO.setCreateUser(clearAccount.getCreateUser());
+            clearAccount.setCreateTime(clearAccount.getCreateTime());
+            clearAccount.setClearAccountRemark(clearAccount.getClearAccountRemark());
+        }
         return clearAccountVO;
     }
 
