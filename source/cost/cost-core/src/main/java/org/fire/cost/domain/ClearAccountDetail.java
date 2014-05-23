@@ -15,7 +15,6 @@ import static javax.persistence.GenerationType.IDENTITY;
 @Table(name = "clear_account_detail", schema = "", catalog = "cost")
 public class ClearAccountDetail implements Serializable {
     private Long clearAccountDetailId;
-    private BigDecimal payMoney;
     private BigDecimal accountMoney;
     private BigDecimal clearMoney;
     private Integer overStatus;
@@ -32,16 +31,6 @@ public class ClearAccountDetail implements Serializable {
 
     public void setClearAccountDetailId(Long clearAccountDetailId) {
         this.clearAccountDetailId = clearAccountDetailId;
-    }
-
-    @Basic
-    @Column(name = "pay_money", nullable = false, insertable = true, updatable = true, length = 10, precision = 2)
-    public BigDecimal getPayMoney() {
-        return payMoney;
-    }
-
-    public void setPayMoney(BigDecimal payMoney) {
-        this.payMoney = payMoney;
     }
 
     @Basic
@@ -97,7 +86,6 @@ public class ClearAccountDetail implements Serializable {
         if (clearMoney != null ? !clearMoney.equals(that.clearMoney) : that.clearMoney != null) return false;
         if (detailRemark != null ? !detailRemark.equals(that.detailRemark) : that.detailRemark != null) return false;
         if (overStatus != null ? !overStatus.equals(that.overStatus) : that.overStatus != null) return false;
-        if (payMoney != null ? !payMoney.equals(that.payMoney) : that.payMoney != null) return false;
 
         return true;
     }
@@ -105,7 +93,6 @@ public class ClearAccountDetail implements Serializable {
     @Override
     public int hashCode() {
         int result = clearAccountDetailId != null ? clearAccountDetailId.hashCode() : 0;
-        result = 31 * result + (payMoney != null ? payMoney.hashCode() : 0);
         result = 31 * result + (accountMoney != null ? accountMoney.hashCode() : 0);
         result = 31 * result + (clearMoney != null ? clearMoney.hashCode() : 0);
         result = 31 * result + (overStatus != null ? overStatus.hashCode() : 0);
