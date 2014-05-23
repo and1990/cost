@@ -1,5 +1,6 @@
 package org.fire.cost.service;
 
+import org.fire.cost.vo.ClearAccountDetailVO;
 import org.fire.cost.vo.ClearAccountVO;
 import org.fire.cost.vo.PageData;
 
@@ -19,18 +20,26 @@ public interface ClearAccountService {
     List<ClearAccountVO> getClearData(PageData pageData);
 
     /**
-     * 获取最后一次的结算日期
-     *
-     * @return
-     */
-    String getLatestClearDate();
-
-    /**
      * 获取结算记录数
      *
      * @return
      */
     int getClearTotal();
+
+    /**
+     * 获取结算明细信息
+     *
+     * @param clearAccountId
+     * @return
+     */
+    List<ClearAccountDetailVO> getClearDetailData(Long clearAccountId);
+
+    /**
+     * 获取最后一次的结算日期
+     *
+     * @return
+     */
+    String getLatestClearDate();
 
     /**
      * 结算

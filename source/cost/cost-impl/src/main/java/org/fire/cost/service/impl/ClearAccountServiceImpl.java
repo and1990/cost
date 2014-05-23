@@ -58,6 +58,35 @@ public class ClearAccountServiceImpl implements ClearAccountService {
     }
 
     /**
+     * 获取结算记录数
+     *
+     * @return
+     */
+    @Override
+    public int getClearTotal() {
+        int total = clearAccountDao.getClearTotal();
+        return total;
+    }
+
+    /**
+     * 获取结算明细信息
+     *
+     * @param clearAccountId
+     * @return
+     */
+    @Override
+    public List<ClearAccountDetailVO> getClearDetailData(Long clearAccountId) {
+        List<ClearAccountDetailVO> detailVOList = new ArrayList<ClearAccountDetailVO>();
+        ClearAccount clearAccount = clearAccountDao.findOne(clearAccountId);
+        List<ClearAccountDetail> detailList = detailDao.findByClearAccount(clearAccount);
+        for (ClearAccountDetail detail : detailList) {
+            ClearAccountDetailVO detailVO = makeDetailPoToVo(detail);
+            detailVOList.add(detailVO);
+        }
+        return detailVOList;
+    }
+
+    /**
      * 获取最后一次的结算日期
      *
      * @return
@@ -73,17 +102,6 @@ public class ClearAccountServiceImpl implements ClearAccountService {
             date = DateUtil.makeDate2Str(endDate, true);
         }
         return date;
-    }
-
-    /**
-     * 获取结算记录数
-     *
-     * @return
-     */
-    @Override
-    public int getClearTotal() {
-        int total = clearAccountDao.getClearTotal();
-        return total;
     }
 
     /**
@@ -105,7 +123,7 @@ public class ClearAccountServiceImpl implements ClearAccountService {
         //保存明细数据
         List<ClearAccountDetail> detailList = new ArrayList<ClearAccountDetail>();
         for (ClearAccountDetailVO detailVO : detailVOList) {
-            ClearAccountDetail detail = makeDetailVoToPO(null, detailVO);
+            ClearAccountDetail detail = makeDetailVoToPo(null, detailVO);
             detailList.add(detail);
         }
         for (ClearAccountDetail detail : detailList) {
@@ -327,7 +345,7 @@ public class ClearAccountServiceImpl implements ClearAccountService {
      * @param detailVO
      * @return
      */
-    private ClearAccountDetail makeDetailVoToPO(ClearAccountDetail detail, ClearAccountDetailVO detailVO) {
+    private ClearAccountDetail makeDetailVoToPo(ClearAccountDetail detail, ClearAccountDetailVO detailVO) {
         if (detail == null) {
             detail = new ClearAccountDetail();
         }
@@ -337,5 +355,27 @@ public class ClearAccountServiceImpl implements ClearAccountService {
         Long userId = detailVO.getUserId();
         detail.setUser(userDao.findOne(userId));
         return detail;
+    }
+
+    /**
+     * 将结算明细po转换成vo
+     *
+     * @return
+     */
+    private ClearAccountDetailVO makeDetailPoToVo(ClearAccountDetail detail) {
+        ClearAccountDetailVO detailVO = new ClearAccountDetailVO();
+        detailVO.setClearAccountDetailId(detail.getClearAccountDetailId());
+        detailVO.setClearAccountId(detail.getClearAccount().getClearAccountId());
+        detailVO.setUserId(detail.getUser().getUserId());
+        detailVO.setUserName(detail.getUser().getUserName());
+        detailVO.setAccountMoney(detail.getAccountMoney());
+        detailVO.setClearMoney(detail.getClearMoney());
+        detailVO.setClearType(1);
+        detailVO.setClearTypeName("");
+        Integer overStatus = detail.getOverStatus();
+        detailVO.setOverStatus(overStatus);
+        detailVO.setOverStatusName(OverStatusEnum.getName(overStatus));
+        detailVO.setDetailRemark(detail.getDetailRemark());
+        return detailVO;
     }
 }

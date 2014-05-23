@@ -65,7 +65,7 @@
             toolbar: "#clear_tool_bar",
             onLoadSuccess: function (data) {
                 if (data.rows.length == 0) {
-                    //$.messager.alert("提示", "没有加载到数据！", "info");
+                    $.messager.alert("提示", "没有加载到数据！", "info");
                 }
             },
             view: detailview,
@@ -91,10 +91,9 @@
             columns: [
                 [
                     {field: 'userName', title: '用户名', width: 150, align: 'center'},
-                    {field: 'payMoney', title: '需支付金额', width: 100, align: 'center'},
                     {field: 'accountMoney', title: '已支付金额', width: 100, align: 'center'},
-                    {field: 'clearMoney', title: '缴纳金额', width: 100, align: 'center'},
-                    {field: 'clearType', title: '结算类型', width: 100, align: 'center'},
+                    {field: 'clearMoney', title: '需支付金额', width: 100, align: 'center'},
+                    {field: 'clearTypeName', title: '结算类型', width: 100, align: 'center'},
                     {field: 'overStatus', title: '结算状态', width: 100, align: 'center'},
                     {field: 'detailRemark', title: '备注', width: 100, align: 'center'}
                 ]

@@ -47,7 +47,7 @@ public class ClearAccount implements Serializable {
     }
 
     @Basic
-    @Column(name = "start_date", nullable = false, insertable = true, updatable = true, length = 10, precision = 0)
+    @Column(name = "start_date", nullable = false, insertable = true, updatable = true, length = 19, precision = 0)
     public Date getStartDate() {
         return startDate;
     }
@@ -57,7 +57,7 @@ public class ClearAccount implements Serializable {
     }
 
     @Basic
-    @Column(name = "end_date", nullable = false, insertable = true, updatable = true, length = 10, precision = 0)
+    @Column(name = "end_date", nullable = false, insertable = true, updatable = true, length = 19, precision = 0)
     public Date getEndDate() {
         return endDate;
     }

@@ -14,9 +14,9 @@ public abstract class BaseAction<T> extends ActionSupport {
     //分页对象
     protected PageData<T> pageData = new PageData<T>();
     //当前页
-    protected int page;
+    protected int page = 1;
     //每页显示条数
-    protected int rows;
+    protected int rows = 10;
 
     public PageData<T> getPageData() {
         return pageData;
