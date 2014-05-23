@@ -48,6 +48,22 @@
     </div>
 </div>
 
+<!-- 选择结算日期 -->
+<div id="clear_date_dialog" title="选择结算日期" class="easyui-dialog"
+     style="width:400px;height:200px;text-align:center"
+     data-options="closed:true,modal: true">
+    <div style="margin-top: 50px">
+        结算日期从: <input class="Wdate" id="clearStartDate" name="accountVO.accountStartTime" style="width: 100px"
+                      onfocus="WdatePicker({dateFmt:'yyyy-MM-dd',maxDate:'#F{$dp.$D(\'clearEndDate\');}'})">
+        到: <input class="Wdate" id="clearEndDate" name="accountVO.accountEndTime" style="width: 100px"
+                  onfocus="WdatePicker({dateFmt:'yyyy-MM-dd',minDate:'#F{$dp.$D(\'clearStartDate\');}',maxDate:'%y-%M-%d'})">
+    </div>
+
+    <div style="text-align:center;padding:5px;margin-top: 20px">
+        <a href="#" class="easyui-linkbutton" onclick="clearConfirm();">确定</a>
+    </div>
+</div>
+
 <script type="text/javascript">
     $(function () {
         $('#clear_data_table').datagrid({
@@ -127,6 +143,12 @@
 
     //结算
     function clearData() {
+        $("#clear_date_dialog").dialog("open");
+    }
+
+    //确定结算
+    function clearConfirm() {
+        var clearEndDate = $("#clearEndDate").val();
         $.ajax({
             method: "post",
             url: "<%=basePath%>/clearData.do",
@@ -135,6 +157,7 @@
             }
         });
     }
+
 </script>
 </body>
 </html>
