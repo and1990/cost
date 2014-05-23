@@ -119,7 +119,7 @@ public class ClearAccountServiceImpl implements ClearAccountService {
         //设置结算明细数据
         setClearAccountDetail(detailVOList, clearAccountVO);
         //获取结算数据
-        ClearAccount clearAccount = getClearAccount(detailVOList);
+        ClearAccount clearAccount = getClearAccount(detailVOList, clearAccountVO);
         clearAccount = clearAccountDao.save(clearAccount);
 
         //保存明细数据
@@ -162,15 +162,8 @@ public class ClearAccountServiceImpl implements ClearAccountService {
      * @param clearAccountVO
      */
     private void setClearAccountDetail(List<ClearAccountDetailVO> detailVoList, ClearAccountVO clearAccountVO) {
-        String startDate = clearAccountVO.getStartDate();
-        if (startDate == null || startDate.length() == 0) {
-            startDate = getLatestClearDate();
-        }
-        String endDate = clearAccountVO.getEndDate();
-        if (endDate == null || endDate.length() == 0) {
-            Date currentDate = Calendar.getInstance().getTime();
-            endDate = DateUtil.makeDate2Str(currentDate, true);
-        }
+        String startDate = getStartDate(clearAccountVO);
+        String endDate = getEndDate(clearAccountVO);
         Map<Long, List<AccountVO>> accountDataMap = accountDao.getAccountGroupByGroupAndUser(startDate, endDate);
         if (accountDataMap == null || accountDataMap.size() == 0) {
             return;
@@ -188,6 +181,7 @@ public class ClearAccountServiceImpl implements ClearAccountService {
         }
         setClearMoney(detailVoList);
     }
+
 
     /**
      * 获取组对应的用户
@@ -285,21 +279,51 @@ public class ClearAccountServiceImpl implements ClearAccountService {
      * 获取结算数据
      *
      * @param detailList
+     * @param clearAccountVO
      */
-    private ClearAccount getClearAccount(List<ClearAccountDetailVO> detailList) {
+    private ClearAccount getClearAccount(List<ClearAccountDetailVO> detailList, ClearAccountVO clearAccountVO) {
         BigDecimal totalMoney = BigDecimal.ZERO;
         for (ClearAccountDetailVO detailVo : detailList) {
             totalMoney = totalMoney.add(detailVo.getAccountMoney());
         }
         ClearAccount clearAccount = new ClearAccount();
         clearAccount.setAccountMoney(totalMoney);
-        String lastDate = getLatestClearDate();
-        String currentDate = DateUtil.makeDate2Str(Calendar.getInstance().getTime(), true);
-        clearAccount.setStartDate(DateUtil.makeStr2Date(lastDate, true));
-        clearAccount.setEndDate(DateUtil.makeStr2Date(currentDate, true));
+        String startDate = getStartDate(clearAccountVO);
+        String endDate = getEndDate(clearAccountVO);
+        clearAccount.setStartDate(DateUtil.makeStr2Date(startDate, false));
+        clearAccount.setEndDate(DateUtil.makeStr2Date(endDate, false));
         clearAccount.setCreateUser(AuthenticationUtil.getUserName());
         clearAccount.setCreateTime(new Date());
         return clearAccount;
+    }
+
+    /**
+     * 获取结算开始日期
+     *
+     * @param clearAccountVO
+     * @return
+     */
+    private String getStartDate(ClearAccountVO clearAccountVO) {
+        String startDate = clearAccountVO.getStartDate();
+        if (startDate == null || startDate.length() == 0) {
+            startDate = getLatestClearDate();
+        }
+        return startDate;
+    }
+
+    /**
+     * 获取结算截止日期
+     *
+     * @param clearAccountVO
+     * @return
+     */
+    private String getEndDate(ClearAccountVO clearAccountVO) {
+        String endDate = clearAccountVO.getEndDate();
+        if (endDate == null || endDate.length() == 0) {
+            Date currentDate = Calendar.getInstance().getTime();
+            endDate = DateUtil.makeDate2Str(currentDate, true);
+        }
+        return endDate;
     }
 
     /**
@@ -318,8 +342,9 @@ public class ClearAccountServiceImpl implements ClearAccountService {
             Date endDate = clearAccount.getEndDate();
             clearAccountVO.setEndDate(DateUtil.makeDate2Str(endDate, false));
             clearAccountVO.setCreateUser(clearAccount.getCreateUser());
-            clearAccount.setCreateTime(clearAccount.getCreateTime());
-            clearAccount.setClearAccountRemark(clearAccount.getClearAccountRemark());
+            Date createTime = clearAccount.getCreateTime();
+            clearAccountVO.setCreateTime(DateUtil.makeDate2Str(createTime, true));
+            clearAccountVO.setClearAccountRemark(clearAccount.getClearAccountRemark());
         }
         return clearAccountVO;
     }
