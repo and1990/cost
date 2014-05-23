@@ -4,11 +4,13 @@ import org.apache.struts2.convention.annotation.Action;
 import org.apache.struts2.convention.annotation.Namespace;
 import org.apache.struts2.convention.annotation.Result;
 import org.fire.cost.service.ClearAccountService;
+import org.fire.cost.util.DateUtil;
 import org.fire.cost.vo.ClearAccountDetailVO;
 import org.fire.cost.vo.ClearAccountVO;
 import org.springframework.stereotype.Controller;
 
 import javax.annotation.Resource;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -23,25 +25,11 @@ public class ClearAccountAction extends BaseAction {
     private ClearAccountService clearAccountService;
 
     //结算id
-    private Long clearAccountId;
+    private ClearAccountVO clearAccountVO = new ClearAccountVO();
 
     //结算明细vo
     private List<ClearAccountDetailVO> detailVOList;
 
-    /**
-     * 结算
-     *
-     * @return
-     */
-    @Action(value = "clearData", results = {@Result(type = "json", params = {"root", "pageData", "contentType", "text/html"})})
-    public String clearData() {
-        try {
-            clearAccountService.clearData();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return SUCCESS;
-    }
 
     /**
      * 获取结算信息
@@ -71,6 +59,7 @@ public class ClearAccountAction extends BaseAction {
     @Action(value = "getClearDetailData", results = {@Result(type = "json", params = {"root", "detailVOList", "contentType", "text/html"})})
     public String getClearDetailData() {
         try {
+            Long clearAccountId = clearAccountVO.getClearAccountId();
             detailVOList = clearAccountService.getClearDetailData(clearAccountId);
         } catch (Exception e) {
             e.printStackTrace();
@@ -78,12 +67,40 @@ public class ClearAccountAction extends BaseAction {
         return SUCCESS;
     }
 
-    public Long getClearAccountId() {
-        return clearAccountId;
+    @Action(value = "getLastestClearDate", results = {@Result(type = "json", params = {"root", "clearAccountVO", "contentType", "text/html"})})
+    public String getLastestClearDate() {
+        try {
+            String clearDate = clearAccountService.getLatestClearDate();
+            Date date = DateUtil.makeStr2Date(clearDate, false);
+            clearDate = DateUtil.makeDate2Str(date,false);
+            clearAccountVO.setStartDate(clearDate);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return SUCCESS;
     }
 
-    public void setClearAccountId(Long clearAccountId) {
-        this.clearAccountId = clearAccountId;
+    /**
+     * 结算
+     *
+     * @return
+     */
+    @Action(value = "clearData", results = {@Result(type = "json", params = {"root", "pageData", "contentType", "text/html"})})
+    public String clearData() {
+        try {
+            clearAccountService.clearData(clearAccountVO);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return SUCCESS;
+    }
+
+    public ClearAccountVO getClearAccountVO() {
+        return clearAccountVO;
+    }
+
+    public void setClearAccountVO(ClearAccountVO clearAccountVO) {
+        this.clearAccountVO = clearAccountVO;
     }
 
     public List<ClearAccountDetailVO> getDetailVOList() {

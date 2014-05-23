@@ -2,6 +2,7 @@ package org.fire.cost.service.impl;
 
 import org.fire.cost.dao.*;
 import org.fire.cost.domain.*;
+import org.fire.cost.enums.ClearResultEnum;
 import org.fire.cost.enums.GroupTypeEnum;
 import org.fire.cost.enums.OverStatusEnum;
 import org.fire.cost.service.ClearAccountService;
@@ -107,15 +108,16 @@ public class ClearAccountServiceImpl implements ClearAccountService {
     /**
      * 结算
      *
+     * @param clearAccountVO
      * @return
      */
     @Override
     @Transactional(value = "transactionManager", rollbackFor = RollbackException.class)
-    public void clearData() {
+    public void clearData(ClearAccountVO clearAccountVO) {
         //获取用户对应的结算明细
         List<ClearAccountDetailVO> detailVOList = getDetailList();
         //设置结算明细数据
-        setClearAccountDetail(detailVOList);
+        setClearAccountDetail(detailVOList, clearAccountVO);
         //获取结算数据
         ClearAccount clearAccount = getClearAccount(detailVOList);
         clearAccount = clearAccountDao.save(clearAccount);
@@ -157,11 +159,18 @@ public class ClearAccountServiceImpl implements ClearAccountService {
      * 设置结算明细
      *
      * @param detailVoList
+     * @param clearAccountVO
      */
-    private void setClearAccountDetail(List<ClearAccountDetailVO> detailVoList) {
-        String startDate = getLatestClearDate();
-        Date currentDate = Calendar.getInstance().getTime();
-        String endDate = DateUtil.makeDate2Str(currentDate, true);
+    private void setClearAccountDetail(List<ClearAccountDetailVO> detailVoList, ClearAccountVO clearAccountVO) {
+        String startDate = clearAccountVO.getStartDate();
+        if (startDate == null || startDate.length() == 0) {
+            startDate = getLatestClearDate();
+        }
+        String endDate = clearAccountVO.getEndDate();
+        if (endDate == null || endDate.length() == 0) {
+            Date currentDate = Calendar.getInstance().getTime();
+            endDate = DateUtil.makeDate2Str(currentDate, true);
+        }
         Map<Long, List<AccountVO>> accountDataMap = accountDao.getAccountGroupByGroupAndUser(startDate, endDate);
         if (accountDataMap == null || accountDataMap.size() == 0) {
             return;
@@ -369,9 +378,15 @@ public class ClearAccountServiceImpl implements ClearAccountService {
         detailVO.setUserId(detail.getUser().getUserId());
         detailVO.setUserName(detail.getUser().getUserName());
         detailVO.setAccountMoney(detail.getAccountMoney());
-        detailVO.setClearMoney(detail.getClearMoney());
-        detailVO.setClearType(1);
-        detailVO.setClearTypeName("");
+        BigDecimal clearMoney = detail.getClearMoney();
+        int clearType = ClearResultEnum.Pay.getCode();
+        if (clearMoney.compareTo(BigDecimal.ZERO) < 0) {
+            clearMoney = clearMoney.abs();
+            clearType = ClearResultEnum.Get.getCode();
+        }
+        detailVO.setClearMoney(clearMoney);
+        detailVO.setClearType(clearType);
+        detailVO.setClearTypeName(ClearResultEnum.getName(clearType));
         Integer overStatus = detail.getOverStatus();
         detailVO.setOverStatus(overStatus);
         detailVO.setOverStatusName(OverStatusEnum.getName(overStatus));

@@ -53,9 +53,9 @@
      style="width:400px;height:200px;text-align:center"
      data-options="closed:true,modal: true">
     <div style="margin-top: 50px">
-        结算日期从: <input class="Wdate" id="clearStartDate" name="accountVO.accountStartTime" style="width: 100px"
+        结算日期从: <input class="Wdate" id="clearStartDate" style="width: 100px"
                       onfocus="WdatePicker({dateFmt:'yyyy-MM-dd',maxDate:'#F{$dp.$D(\'clearEndDate\');}'})">
-        到: <input class="Wdate" id="clearEndDate" name="accountVO.accountEndTime" style="width: 100px"
+        到: <input class="Wdate" id="clearEndDate" style="width: 100px"
                   onfocus="WdatePicker({dateFmt:'yyyy-MM-dd',minDate:'#F{$dp.$D(\'clearStartDate\');}',maxDate:'%y-%M-%d'})">
     </div>
 
@@ -108,7 +108,7 @@
     function showClearDetail(index, row) {
         var detailTable = $('#clear_data_table').datagrid('getRowDetail', index).find('#clear_detail_table');
         detailTable.datagrid({
-            url: "<%=basePath%>/getClearDetailData.do?clearAccountId=" + row.clearAccountId,
+            url: "<%=basePath%>/getClearDetailData.do?clearAccountVO.clearAccountId=" + row.clearAccountId,
             fitColumns: true,
             singleSelect: true,
             rownumbers: true,
@@ -120,7 +120,7 @@
                     {field: 'accountMoney', title: '已支付金额', width: 100, align: 'center'},
                     {field: 'clearMoney', title: '需支付金额', width: 100, align: 'center'},
                     {field: 'clearTypeName', title: '结算类型', width: 100, align: 'center'},
-                    {field: 'overStatus', title: '结算状态', width: 100, align: 'center'},
+                    {field: 'overStatusName', title: '结算状态', width: 100, align: 'center'},
                     {field: 'detailRemark', title: '备注', width: 100, align: 'center'}
                 ]
             ],
@@ -133,7 +133,7 @@
                 }, 0);
             },
             rowStyler: function (index, row) {
-                if (row.type == 1) {
+                if (row.clearType == 2) {
                     return 'background-color:lightgreen;';
                 }
             }
@@ -144,14 +144,23 @@
     //结算
     function clearData() {
         $("#clear_date_dialog").dialog("open");
+        $.ajax({
+            method: "post",
+            url: "<%=basePath%>/getLastestClearDate.do",
+            success: function (returnData) {
+                var obj = JSON.parse(returnData);
+                $('#clearStartDate').val(obj.startDate);
+            }
+        });
     }
 
     //确定结算
     function clearConfirm() {
+        $("#clear_date_dialog").dialog("close");
         var clearEndDate = $("#clearEndDate").val();
         $.ajax({
             method: "post",
-            url: "<%=basePath%>/clearData.do",
+            url: "<%=basePath%>/clearData.do?clearAccountVO.endDate=" + clearEndDate,
             success: function (returnData) {
                 $('#clear_data_table').datagrid('reload');
             }
