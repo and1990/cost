@@ -39,10 +39,14 @@ public class CostAuthenticationRealm extends AuthorizingRealm {
             String password = user.getPassword();
             boolean passwordRight = password.equals(md5Password);
             boolean userEnable = user.getUserStatus() == UserStatusEnum.Enable.getCode();
-            if (passwordRight && userEnable) {
-                return new SimpleAuthenticationInfo(token.getPrincipal(), token.getPassword(), token.getUsername());
+            if (passwordRight) {
+                if (userEnable) {
+                    return new SimpleAuthenticationInfo(token.getPrincipal(), token.getPassword(), token.getUsername());
+                } else {
+                    throw new AuthenticationException("COST:用户被禁用");
+                }
             } else {
-                throw new AuthenticationException("COST:用户被禁用");
+                throw new AuthenticationException("COST:用户名或密码错误");
             }
         } else {
             throw new AuthenticationException("COST:用户名或密码错误");

@@ -236,6 +236,9 @@ function addUser() {
     $("#userAddress").val("");
     $("#userEmail").val("");
     $("#userRemark").val("");
+    //设置密码框显示
+    $("#tr_password").show();
+    $("#tr_repassword").show();
     //打开弹出框
     $("#user_dialog").dialog("open");
     //设置action、url值，1代表增加
@@ -363,8 +366,8 @@ function submitForm() {
                     $("#user_dialog").dialog("close");
                     $('#user_data_table').datagrid('reload');
                     if (action == 2) {
-                        $("#password").show();
-                        $("#repassword").show();
+                        $("#tr_password").show();
+                        $("#tr_repassword").show();
                     }
                 }
             }
