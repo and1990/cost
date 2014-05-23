@@ -61,7 +61,7 @@
             fit: true,
             fitColumns: true,
             singleSelect: true,
-            showFooter: true,
+            pagination: true,
             toolbar: "#clear_tool_bar",
             onLoadSuccess: function (data) {
                 if (data.rows.length == 0) {
@@ -76,6 +76,16 @@
                 showClearDetail(index, row);
             }
         });
+
+        //设置分页
+        $('#clear_data_table').datagrid('getPager').pagination({
+            pageSize: 10,
+            pageList: [10, 20, 30, 40, 50],
+            beforePageText: '第',
+            afterPageText: '页    共 {pages} 页',
+            displayMsg: '当前显示 {from}-{to} 条记录   共 {total} 条记录'
+        });
+
     });
 
     //显示流水明细
