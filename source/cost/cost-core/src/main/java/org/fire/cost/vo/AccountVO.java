@@ -55,6 +55,8 @@ public class AccountVO implements Serializable {
     private String accountEndTime;
     //是否分页
     private boolean isPage = true;
+    //月
+    private String month;
 
     public Long getAccountId() {
         return accountId;
@@ -230,5 +232,13 @@ public class AccountVO implements Serializable {
 
     public void setPage(boolean isPage) {
         this.isPage = isPage;
+    }
+
+    public String getMonth() {
+        return month;
+    }
+
+    public void setMonth(String month) {
+        this.month = month;
     }
 }

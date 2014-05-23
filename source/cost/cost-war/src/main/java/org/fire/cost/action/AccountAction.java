@@ -6,20 +6,16 @@ import org.apache.struts2.ServletActionContext;
 import org.apache.struts2.convention.annotation.Action;
 import org.apache.struts2.convention.annotation.Namespace;
 import org.apache.struts2.convention.annotation.Result;
-import org.fire.cost.enums.HttpStatusEnum;
-import org.fire.cost.enums.ResultEnum;
 import org.fire.cost.service.AccountService;
 import org.fire.cost.util.DateUtil;
-import org.fire.cost.util.MessageUtil;
 import org.fire.cost.vo.AccountVO;
-import org.fire.cost.vo.Message;
 import org.fire.cost.vo.TypeVo;
 import org.springframework.stereotype.Controller;
 
 import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.OutputStream;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -52,6 +48,11 @@ public class AccountAction extends BaseAction<AccountVO> {
     private Map<String, List<AccountVO>> accountVoListMap;
 
     /**
+     * 每月每个用户对应的金额
+     */
+    private Map<String, List<AccountVO>> monthListMap;
+
+    /**
      * 账单类型VO
      */
     private List<TypeVo> accountStatusList;
@@ -70,6 +71,10 @@ public class AccountAction extends BaseAction<AccountVO> {
      */
     private String accountIds;
 
+    /**
+     * 年
+     */
+    private int year;
 
     /**
      * 根据过滤条件查询账单信息
@@ -134,29 +139,6 @@ public class AccountAction extends BaseAction<AccountVO> {
             e.printStackTrace();
         }
         return SUCCESS;
-    }
-
-    /**
-     * 文件上传
-     *
-     * @return
-     */
-    @Action(value = "fileUpload", results = {@Result(type = "json", params = {"root", "pageData", "contentType", "text/html"})})
-    public Message fileUpload() {
-        Message message = new Message();
-        try {
-            HttpServletRequest request = ServletActionContext.getRequest();
-            HttpServletResponse response = ServletActionContext.getResponse();
-            if (accountService.fileUpload(request, response)) {
-                MessageUtil.setMessage(message, ResultEnum.Success, HttpStatusEnum.Success, "上传成功", null);
-            } else {
-                MessageUtil.setMessage(message, ResultEnum.Fail, HttpStatusEnum.Success, "上传失败", null);
-            }
-        } catch (Exception e) {
-            MessageUtil.setMessage(message, ResultEnum.Fail, HttpStatusEnum.ServerError, "上传失败，服务器内部错误", null);
-            e.printStackTrace();
-        }
-        return message;
     }
 
     /**
@@ -313,15 +295,16 @@ public class AccountAction extends BaseAction<AccountVO> {
     }
 
     /**
-     * 获取用户每种账单类型账单金额
+     * 获取每月每个用户的账单金额
      *
      * @return
      */
-    @Action(value = "getAccountGroupByTypeAndUser", results = {@Result(type = "json", params = {"root", "accountVoListMap", "contentType", "text/html"})})
-    public String getAccountGroupByTypeAndUser() {
-        String startTime = accountVO.getAccountStartTime();
-        String endTime = accountVO.getAccountEndTime();
-        accountVoListMap = accountService.getAccountGroupByTypeAndUser(startTime, endTime);
+    @Action(value = "getAccountGroupByMonthAndUser", results = {@Result(type = "json", params = {"root", "monthListMap", "contentType", "text/html"})})
+    public String getAccountGroupByMonthAndUser() {
+        if (year == 0) {
+            year = Calendar.getInstance().get(Calendar.YEAR);
+        }
+        monthListMap = accountService.getAccountGroupByMonthAndUser(year);
         return SUCCESS;
     }
 
@@ -381,6 +364,14 @@ public class AccountAction extends BaseAction<AccountVO> {
         this.accountVoListMap = accountVoListMap;
     }
 
+    public Map<String, List<AccountVO>> getMonthListMap() {
+        return monthListMap;
+    }
+
+    public void setMonthListMap(Map<String, List<AccountVO>> monthListMap) {
+        this.monthListMap = monthListMap;
+    }
+
     public List<TypeVo> getAccountTypeList() {
         return accountTypeList;
     }
@@ -411,5 +402,13 @@ public class AccountAction extends BaseAction<AccountVO> {
 
     public void setAccountIds(String accountIds) {
         this.accountIds = accountIds;
+    }
+
+    public int getYear() {
+        return year;
+    }
+
+    public void setYear(int year) {
+        this.year = year;
     }
 }

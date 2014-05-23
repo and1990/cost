@@ -5,9 +5,6 @@ import org.fire.cost.vo.AccountVO;
 import org.fire.cost.vo.PageData;
 import org.fire.cost.vo.TypeVo;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
@@ -56,15 +53,6 @@ public interface AccountService {
      * @return
      */
     boolean deleteAccount(Long accountId);
-
-    /**
-     * 文件上传
-     *
-     * @param request
-     * @param response
-     * @return
-     */
-    boolean fileUpload(HttpServletRequest request, HttpServletResponse response) throws IOException;
 
     /**
      * 结算账单
@@ -117,11 +105,12 @@ public interface AccountService {
     List<AccountVO> getAccountGroupByUser(String accountStartTime, String accountEndTime);
 
     /**
-     * 获取用户每种消费类型消费金额
+     * 获取每月每个用户消费金额
      *
+     * @param year
      * @return
      */
-    Map<String, List<AccountVO>> getAccountGroupByTypeAndUser(String startTime, String endTime);
+    Map<String, List<AccountVO>> getAccountGroupByMonthAndUser(int year);
 
     /**
      * 获取账单状态

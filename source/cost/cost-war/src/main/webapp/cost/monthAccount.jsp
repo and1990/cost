@@ -8,7 +8,15 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf8">
     <link rel="shortcut icon" href="<%=basePath%>/image/ico.jpg" type="image/x-icon"/>
+
+    <link rel="stylesheet" type="text/css" href="<%=basePath %>/third/easy-ui/themes/default/easyui.css">
+    <link rel="stylesheet" type="text/css" href="<%=basePath %>/third/easy-ui/themes/icon.css">
+
     <script type="text/javascript" src="<%=basePath%>/third/easy-ui/jquery.min.js"></script>
+
+    <script type="text/javascript" src="<%=basePath%>/third/easy-ui/jquery.easyui.min.js"></script>
+    <script type="text/javascript" src="<%=basePath%>/third/easy-ui/locale/easyui-lang-zh_CN.js"></script>
+
     <script type="text/javascript" src="<%=basePath%>/third/My97DatePicker/WdatePicker.js"></script>
     <script type="text/javascript" src="<%=basePath%>/third/Highcharts/highcharts.js"></script>
     <script type="text/javascript" src="<%=basePath%>/third/Highcharts/modules/exporting.js"></script>
@@ -17,7 +25,7 @@
 
 
 <div style="font-family: 'Microsoft YaHei';font-size:16px">
-    <div id="line_container" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+    <div id="month_line_container" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
 
     <div style="text-align: center;margin-bottom: 50px">
         <span id="null_data" style="color: #FF2F2F"></span>
@@ -25,53 +33,59 @@
 
     <div style="text-align: center;margin-top: 50px;">
         <div>
-            消费时间从: <input class="Wdate" id="line_start_time" name="accountVO.accountStartTime" style="width: 150px"
-                          onfocus="WdatePicker({dateFmt:'yyyy-MM-dd',maxDate:'#F{$dp.$D(\'line_end_time\');}'})">
-            &nbsp;
-            到: <input class="Wdate" id="line_end_time" name="accountVO.accountEndTime" style="width: 150px"
-                      onfocus="WdatePicker({dateFmt:'yyyy-MM-dd',minDate:'#F{$dp.$D(\'line_start_time\');}',maxDate:'%y-%M-%d'})">
-            &nbsp;&nbsp;
-            <a href="#" style="text-decoration: none" iconCls="icon-search" onclick="showLineChart();">查看</a>
+            <span>年份：</span>
+            <input id="monthChartYear" class="easyui-combobox" style="width:100px;" editable="false"/>
+            <a href="#" style="text-decoration: none" iconCls="icon-search" onclick="showMonthLineChart();">查看</a>
         </div>
     </div>
 </div>
 
 <script type="text/javascript">
-    var typeData = undefined;
+    var userData = undefined;
     $(function () {
-        $("#line_start_time").val("");
-        $("#line_end_time").val("");
         $.ajax({
             type: 'post',
-            url: '<%=basePath%>/getAccountType.do',
+            url: '<%=basePath%>/getUserByFilter.do?userVO.userStatus=2&userVo.isPage=false',
             success: function (returnData) {
                 if (returnData == undefined) {
                     $('#null_data').html("未加载到数据...");
                     return;
                 }
-                typeData = returnData;
+                userData = JSON.parse(returnData).rows;
                 $.ajax({
                     type: 'post',
-                    url: '<%=basePath%>/getAccountGroupByTypeAndUser.do',
+                    url: '<%=basePath%>/getAccountGroupByMonthAndUser.do',
                     success: function (returnData) {
                         if (returnData == undefined) {
                             return;
                         }
                         var dataObjArr = getData(returnData);
                         if (dataObjArr != undefined && dataObjArr.length != 0) {
-                            var userArr = getUserData(returnData);
-                            initChart(userArr, dataObjArr);
+                            initChart(dataObjArr);
                         }
                     }
                 });
             }
         });
 
+        //加载年份
+        $('#monthChartYear').combobox({
+            url: '<%=basePath%>/getYears.do',
+            valueField: 'code',
+            textField: 'name',
+            onLoadSuccess: function (data) {
+                $('#monthChartYear').combobox('setValue', data[0].code).combobox('setText', data[0].name);
+                var year = new Date().getFullYear();
+                $("#monthChartYear ").combobox("setValue", year);
+            }
+        });
+
     });
 
     //初始化图表
-    function initChart(userArr, dataObjArr) {
-        $('#line_container').highcharts({
+    function initChart(dataObjArr) {
+        var monthArr = getMonthArr();
+        $('#month_line_container').highcharts({
             chart: {
                 style: {fontFamily: 'Microsoft YaHei', fontSize: '16px'}
             },
@@ -79,14 +93,14 @@
                 text: ''
             },
             title: {
-                text: '线性图分析',
+                text: '每月用户消费',
                 x: -20
             },
             subtitle: {
                 x: -20
             },
             xAxis: {
-                categories: userArr
+                categories: monthArr
             },
             yAxis: {
                 title: {
@@ -113,52 +127,11 @@
         });
     }
     //显示图表
-    function showLineChart() {
-        var startTime = $("#line_start_time").val();
-        var endTime = $("#line_end_time").val();
-        loadData(startTime, endTime);
-        setChartTitle(startTime, endTime);
-    }
-
-    //设置图表格式
-    function setChartTitle(startTime, endTime) {
-        var title = undefined;
-        var startNotNull = startTime != undefined && startTime != '';
-        var endIsNull = endTime == undefined || endTime == '';
-        if (startNotNull && endIsNull) {
-            title = startTime + " 以后消费线性分析";
-        }
-
-        var startIsNull = startTime == undefined || startTime == '';
-        var endNotNull = endTime != undefined && endTime != '';
-        if (startIsNull && endNotNull) {
-            title = endTime + " 之前消费线性分析";
-        }
-
-        if (startNotNull && endNotNull) {
-            title = startTime + " 至 " + endTime + " 消费线性分析";
-        }
-
-        if (startIsNull && endIsNull) {
-            title = "消费线性分析";
-        }
-        var chart = $('#line_container').highcharts();
-        chart.setTitle({text: title});
-    }
-
-    //加载数据
-    function loadData(startTime, endTime) {
-        if (startTime == undefined) {
-            startTime = "";
-        }
-        if (endTime == undefined) {
-            endTime = "";
-        }
-        var data = {"accountVO.accountStartTime": startTime, "accountVO.accountEndTime": endTime};
+    function showMonthLineChart() {
+        var year = $('#monthChartYear').combobox('getValue');
         $.ajax({
             type: 'post',
-            url: '<%=basePath%>/getAccountGroupByTypeAndUser.do',
-            data: data,
+            url: '<%=basePath%>/getAccountGroupByMonthAndUser.do?year=' + year,
             success: function (returnData) {
                 if (returnData == undefined) {
                     $('#null_data').html("未加载到数据...");
@@ -169,7 +142,7 @@
                     $('#null_data').html("未加载到数据...");
                     return;
                 }
-                var chart = $('#line_container').highcharts();
+                var chart = $('#month_line_container').highcharts();
                 for (var index = 0; index < dataObjArr.length; index++) {
                     chart.series[index].setData(dataObjArr[index].data);
                 }
@@ -181,23 +154,23 @@
     //获取数据
     function getData(returnData) {
         var dataObjArr = new Array();
-        var typeArr = $.parseJSON(typeData);
+        var userArr = userData;
         var rows = $.parseJSON(returnData);
-        for (var typeIndex = 0; typeIndex < typeArr.length; typeIndex++) {
+        for (var userIndex = 0; userIndex < userArr.length; userIndex++) {
             var valueArr = new Array();
-            var code = typeArr[typeIndex].code;
+            var userId = userArr[userIndex].userId;
             for (var key in rows) {
                 var dataArr = rows[key];
                 for (var dataIndex = 0; dataIndex < dataArr.length; dataIndex++) {
                     var data = dataArr[dataIndex];
-                    if (code == data.accountType) {
+                    if (userId == data.userId) {
                         valueArr.push(data.accountMoney);
                     }
                 }
 
             }
             var dataObj = new Object();
-            dataObj.name = typeArr[typeIndex].name;
+            dataObj.name = userArr[userIndex].userName;
             dataObj.data = valueArr;
             dataObjArr.push(dataObj);
         }
@@ -205,14 +178,13 @@
         return dataObjArr;
     }
 
-    //获取用户名称
-    function getUserData(returnData) {
-        var userArr = new Array();
-        var rows = $.parseJSON(returnData);
-        for (var key in rows) {
-            userArr.push(key);
+    //获取月份
+    function getMonthArr() {
+        var monthArr = new Array();
+        for (var index = 1; index <= 12; index++) {
+            monthArr.push(index + "月份");
         }
-        return userArr;
+        return monthArr;
     }
 </script>
 </body>

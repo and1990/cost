@@ -126,32 +126,32 @@ public class SkipAction extends BaseAction {
     }
 
     /**
-     * 跳转到饼状图
+     * 跳转到百分比
      *
      * @return
      */
-    @Action(value = "showPie", results = {@Result(name = SUCCESS, location = "/cost/pieChart.jsp")})
+    @Action(value = "showPercentChart", results = {@Result(name = SUCCESS, location = "/cost/percentChart.jsp")})
     public String skipToPieChart() {
         return SUCCESS;
     }
 
     /**
-     * 跳转到柱状图
+     * 跳转到消费金额
      *
      * @return
      */
-    @Action(value = "showColumn", results = {@Result(name = SUCCESS, location = "/cost/columnChart.jsp")})
+    @Action(value = "showAccountMoneyChart", results = {@Result(name = SUCCESS, location = "/cost/accountMoneyChart.jsp")})
     public String skipToColumnChart() {
         return SUCCESS;
     }
 
     /**
-     * 跳转到线形图
+     * 跳转到每月用户消费金额
      *
      * @return
      */
-    @Action(value = "showLine", results = {@Result(name = SUCCESS, location = "/cost/lineChart.jsp")})
-    public String skipToLineChart() {
+    @Action(value = "showMonthChart", results = {@Result(name = SUCCESS, location = "/cost/monthAccount.jsp")})
+    public String skipToMothLineChart() {
         return SUCCESS;
     }
 
@@ -160,7 +160,7 @@ public class SkipAction extends BaseAction {
      *
      * @return
      */
-    @Action(value = "showStreamColumn", results = {@Result(name = SUCCESS, location = "/cost/streamColumnChart.jsp")})
+    @Action(value = "showStreamChart", results = {@Result(name = SUCCESS, location = "/cost/streamChart.jsp")})
     public String skipToStreamColumnChart() {
         return SUCCESS;
     }

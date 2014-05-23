@@ -131,17 +131,19 @@ public class AccountDaoCustomImpl extends BaseJpaDaoSupport<Account, Long> imple
      */
     @Override
     public List<AccountVO> getAccountGroupByUser(String accountStartTime, String accountEndTime) {
-        String sql = "SELECT  u.user_id as userId,u.user_name AS userName,SUM(a.account_money) AS accountMoney "
-                + "FROM  cost_user u LEFT JOIN cost_account a ON u.user_id = a.user_id WHERE 1=1 ";
+        String sql = "select u.user_id,u.user_name,IFNULL(ac.account_money,0) as account_money"
+                + " from cost_user u left join "
+                + " (select user_id,sum(account_money) as account_money from cost_account where 1=1";
         boolean accountStartTimeNotNull = accountStartTime != null && accountStartTime.trim().length() != 0;
         if (accountStartTimeNotNull) {
-            sql += "and a.account_time>=:startTime ";
+            sql += " and account_time>=:startTime ";
         }
         boolean accountEndTimeNotNull = accountEndTime != null && accountEndTime.trim().length() != 0;
         if (accountEndTimeNotNull) {
-            sql += "and a.account_time<:endTime ";
+            sql += " and account_time<:endTime ";
         }
-        sql += "GROUP BY u.user_id, u.user_name";
+        sql += " group by user_id) ac ";
+        sql += " on u.user_id=ac.user_id";
         Query query = entityManager.createNativeQuery(sql);
         if (accountStartTimeNotNull) {
             query.setParameter("startTime", accountStartTime);
@@ -156,11 +158,9 @@ public class AccountDaoCustomImpl extends BaseJpaDaoSupport<Account, Long> imple
         if (resultDataNotNull) {
             for (Map map : resultList) {
                 AccountVO accountVO = new AccountVO();
-                accountVO.setUserName(map.get("userName").toString());
+                accountVO.setUserName(map.get("user_name").toString());
                 BigDecimal accountMoney = BigDecimal.ZERO;
-                if (map.get("accountMoney") != null) {
-                    accountMoney = new BigDecimal(map.get("accountMoney").toString());
-                }
+                accountMoney = new BigDecimal(map.get("account_money").toString());
                 accountVO.setAccountMoney(accountMoney);
                 accountVOList.add(accountVO);
             }
@@ -169,35 +169,20 @@ public class AccountDaoCustomImpl extends BaseJpaDaoSupport<Account, Long> imple
     }
 
     /**
-     * 获取用户每种消费类型消费金额
+     * 获取每月每个用户消费金额
      *
+     * @param startTime
+     * @param endTime
      * @return
      */
     @Override
-    public List<AccountVO> getAccountGroupByTypeAndUser(String startTime, String endTime) {
-        String sql = "SELECT u.user_name,a.account_type, a.account_money " +
-                "FROM cost_user u LEFT JOIN  " +
-                "(SELECT a.account_type, a.user_id, sum(a.account_money) AS account_money " +
-                "  FROM cost_account a WHERE 1 = 1 ";
-
-        boolean accountStartTimeNotNull = startTime != null && startTime.trim().length() != 0;
-        if (accountStartTimeNotNull) {
-            sql += "and a.account_time>=:startTime ";
-        }
-        boolean accountEndTimeNotNull = endTime != null && endTime.trim().length() != 0;
-        if (accountEndTimeNotNull) {
-            sql += "and a.account_time<:endTime ";
-        }
-        sql += "  GROUP BY a.user_id,a.account_type " +
-                ") a  " +
-                "ON a.user_id = u.user_id";
+    public List<AccountVO> getAccountGroupByMonthAndUser(String startTime, String endTime) {
+        String sql = "select user_id,substring(account_time,6,2) as month,sum(account_money) as account_money";
+        sql += " from cost_account where account_time>=:startTime and account_time<=:endTime";
+        sql += " group by user_id, substring(account_time, 6, 2) ";
         Query query = entityManager.createNativeQuery(sql);
-        if (accountStartTimeNotNull) {
-            query.setParameter("startTime", startTime);
-        }
-        if (accountEndTimeNotNull) {
-            query.setParameter("endTime", endTime);
-        }
+        query.setParameter("startTime", startTime);
+        query.setParameter("endTime", endTime);
         query.unwrap(SQLQuery.class).setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP);
         List<Map> resultList = query.getResultList();
         List<AccountVO> accountVOList = new ArrayList<AccountVO>();
@@ -205,18 +190,18 @@ public class AccountDaoCustomImpl extends BaseJpaDaoSupport<Account, Long> imple
         if (resultDataNotNull) {
             for (Map map : resultList) {
                 AccountVO accountVO = new AccountVO();
-                Integer accountType = 4;
-                if (map.get("account_type") != null) {
-                    accountType = Integer.valueOf(map.get("account_type").toString());
+                Long userId = Long.valueOf(map.get("user_id").toString());
+                accountVO.setUserId(userId);
+                String month = map.get("month").toString();
+                if (month.indexOf("0") == 0) {
+                    month = month.substring(1, 2);
                 }
-                accountVO.setAccountType(accountType);
-
+                accountVO.setMonth(month);
                 BigDecimal accountMoney = BigDecimal.ZERO;
                 if (map.get("account_money") != null) {
                     accountMoney = new BigDecimal(map.get("account_money").toString());
                 }
                 accountVO.setAccountMoney(accountMoney);
-                accountVO.setUserName(map.get("user_name").toString());
                 accountVOList.add(accountVO);
             }
         }

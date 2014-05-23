@@ -110,9 +110,8 @@
             height: 'auto',
             columns: [
                 [
-                    {field: 'date', title: '日期', width: 150, align: 'center'},
-                    {field: 'typeName', title: '收支类型', width: 100, align: 'center'},
-                    {field: 'money', title: '金额', width: 100, align: 'center'},
+                    {field: 'date', title: '消费日期', width: 150, align: 'center'},
+                    {field: 'money', title: '消费金额', width: 100, align: 'center'},
                     {field: 'remark', title: '备注', width: 100, align: 'center'}
                 ]
             ],

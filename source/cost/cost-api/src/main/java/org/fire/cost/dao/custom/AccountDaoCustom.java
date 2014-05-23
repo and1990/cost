@@ -21,8 +21,7 @@ public interface AccountDaoCustom {
 
     List<AccountVO> getAccountGroupByUser(String accountStartTime, String accountEndTime);
 
-    List<AccountVO> getAccountGroupByTypeAndUser(String startTime, String endTime);
-
     Map<Long, List<AccountVO>> getAccountGroupByGroupAndUser(String startTime, String endTime);
 
+    List<AccountVO> getAccountGroupByMonthAndUser(String startTime, String endTime);
 }

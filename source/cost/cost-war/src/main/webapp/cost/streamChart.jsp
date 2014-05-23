@@ -86,7 +86,7 @@
                 text: ''
             },
             title: {
-                text: '每月收支情况'
+                text: '每月收支'
             },
             xAxis: {
                 categories: monthArr
