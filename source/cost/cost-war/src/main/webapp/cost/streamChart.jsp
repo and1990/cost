@@ -26,14 +26,14 @@
     <div id="stream_column_container" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
 
     <div style="text-align: center;margin-bottom: 50px">
-        <span id="null_data" style="color: #FF2F2F"></span>
+        <span id="stream_null_data" style="color: #FF2F2F"></span>
     </div>
 
     <div style="text-align: center;margin-top: 50px;">
         <div>
             <span>年份：</span>
             <input id="streamChartYear" class="easyui-combobox" style="width:100px;" editable="false"/>
-            <a href="#" style="text-decoration: none" iconCls="icon-search" onclick="showStreamColumnChart();">查看</a>
+            <a href="#" style="text-decoration: none" iconCls="icon-search" onclick="showStreamChart();">查看</a>
         </div>
     </div>
 </div>
@@ -45,7 +45,7 @@
             url: '<%=basePath%>/getStreamGroupByMonth.do',
             success: function (returnData) {
                 if (returnData != undefined) {
-                    initChart(getData(returnData));
+                    initStreamChart(getStreamData(returnData));
                 }
             }
         });
@@ -75,8 +75,8 @@
     });
 
     //初始化图表
-    function initChart(valueObjArr) {
-        var monthArr = getMonth();
+    function initStreamChart(valueObjArr) {
+        var monthArr = getMonthArr();
         $('#stream_column_container').highcharts({
             chart: {
                 type: 'column',
@@ -116,17 +116,17 @@
     }
 
     //显示图表
-    function showStreamColumnChart() {
+    function showStreamChart() {
         var year = $('#streamChartYear').combobox('getValue');
         $.ajax({
             type: 'post',
             url: "<%=basePath%>/getStreamGroupByMonth.do?year=" + year,
             success: function (returnData) {
                 if (returnData == undefined) {
-                    $('#null_data').html("未加载到数据...");
+                    $('#stream_null_data').html("未加载到数据...");
                 } else {
-                    initChart(getData(returnData));
-                    $('#null_data').html("");
+                    initStreamChart(getStreamData(returnData));
+                    $('#stream_null_data').html("");
                 }
             }
         });
@@ -134,7 +134,7 @@
 
 
     //获取数据
-    function getData(returnData) {
+    function getStreamData(returnData) {
         var dataObjArr = new Array();
         var rows = $.parseJSON(returnData);
         var valueArr = new Array();
@@ -152,7 +152,7 @@
     }
 
     //获取月份
-    function getMonth() {
+    function getMonthArr() {
         var monthArr = new Array();
         for (var i = 1; i <= 12; i++) {
             monthArr.push(i + "月份");

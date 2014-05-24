@@ -119,8 +119,9 @@
                     <tr>
                         <td>消费时间:</td>
                         <td>
+                            <%--onfocus="WdatePicker({minDate:'%y-%M-{%d-7}',maxDate:'%y-%M-%d'})"--%>
                             <input class="Wdate easyui-validatebox" id="accountTime" name="accountVO.accountTime"
-                                   onfocus="WdatePicker({minDate:'%y-%M-{%d-7}',maxDate:'%y-%M-%d'})"
+                                   onfocus="WdatePicker({maxDate:'%y-%M-%d'})"
                                    data-options="required:true"/>
                         </td>
                     </tr>

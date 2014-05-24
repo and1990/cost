@@ -28,14 +28,14 @@
     <div id="month_line_container" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
 
     <div style="text-align: center;margin-bottom: 50px">
-        <span id="null_data" style="color: #FF2F2F"></span>
+        <span id="month_null_data" style="color: #FF2F2F"></span>
     </div>
 
     <div style="text-align: center;margin-top: 50px;">
         <div>
             <span>年份：</span>
             <input id="monthChartYear" class="easyui-combobox" style="width:100px;" editable="false"/>
-            <a href="#" style="text-decoration: none" iconCls="icon-search" onclick="showMonthLineChart();">查看</a>
+            <a href="#" style="text-decoration: none" iconCls="icon-search" onclick="showMonthChart();">查看</a>
         </div>
     </div>
 </div>
@@ -48,7 +48,7 @@
             url: '<%=basePath%>/getUserByFilter.do?userVO.userStatus=2&userVo.isPage=false',
             success: function (returnData) {
                 if (returnData == undefined) {
-                    $('#null_data').html("未加载到数据...");
+                    $('#month_null_data').html("未加载到数据...");
                     return;
                 }
                 userData = JSON.parse(returnData).rows;
@@ -59,9 +59,9 @@
                         if (returnData == undefined) {
                             return;
                         }
-                        var dataObjArr = getData(returnData);
+                        var dataObjArr = getMonthData(returnData);
                         if (dataObjArr != undefined && dataObjArr.length != 0) {
-                            initChart(dataObjArr);
+                            initMonthChart(dataObjArr);
                         }
                     }
                 });
@@ -82,8 +82,19 @@
 
     });
 
+    Highcharts.setOptions({
+        lang: {
+            printChart: '打印图表',
+            downloadPNG: '保存为PNG',
+            downloadJPEG: '保存为JPEG',
+            downloadPDF: '保存为PDF',
+            downloadSVG: '',
+            loading: '正在加载...'
+        }
+    });
+
     //初始化图表
-    function initChart(dataObjArr) {
+    function initMonthChart(dataObjArr) {
         var monthArr = getMonthArr();
         $('#month_line_container').highcharts({
             chart: {
@@ -127,32 +138,29 @@
         });
     }
     //显示图表
-    function showMonthLineChart() {
+    function showMonthChart() {
         var year = $('#monthChartYear').combobox('getValue');
         $.ajax({
             type: 'post',
             url: '<%=basePath%>/getAccountGroupByMonthAndUser.do?year=' + year,
             success: function (returnData) {
                 if (returnData == undefined) {
-                    $('#null_data').html("未加载到数据...");
+                    $('#month_null_data').html("未加载到数据...");
                     return;
                 }
-                var dataObjArr = getData(returnData);
+                var dataObjArr = getMonthData(returnData);
                 if (dataObjArr == undefined || dataObjArr.length == 0) {
-                    $('#null_data').html("未加载到数据...");
+                    $('#month_null_data').html("未加载到数据...");
                     return;
                 }
-                var chart = $('#month_line_container').highcharts();
-                for (var index = 0; index < dataObjArr.length; index++) {
-                    chart.series[index].setData(dataObjArr[index].data);
-                }
-                $('#null_data').html("");
+                initMonthChart(dataObjArr);
+                $('#month_null_data').html("");
             }
         });
     }
 
     //获取数据
-    function getData(returnData) {
+    function getMonthData(returnData) {
         var dataObjArr = new Array();
         var userArr = userData;
         var rows = $.parseJSON(returnData);
