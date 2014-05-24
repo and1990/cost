@@ -6,7 +6,6 @@ import org.fire.cost.dao.UserDao;
 import org.fire.cost.domain.Group;
 import org.fire.cost.domain.GroupUser;
 import org.fire.cost.domain.User;
-import org.fire.cost.enums.GroupTypeEnum;
 import org.fire.cost.enums.StatusEnum;
 import org.fire.cost.service.GroupService;
 import org.fire.cost.util.AuthenticationUtil;
@@ -205,7 +204,6 @@ public class GroupServiceImpl implements GroupService {
             group.setGroupId(vo.getGroupId());
         }
         group.setGroupName(vo.getGroupName());
-        group.setGroupType(vo.getGroupType());
         group.setGroupStatus(vo.getGroupStatus());
         group.setModifyUser(AuthenticationUtil.getUserName());
         group.setModifyTime(new Date());
@@ -223,9 +221,6 @@ public class GroupServiceImpl implements GroupService {
         GroupVO vo = new GroupVO();
         vo.setGroupId(group.getGroupId());
         vo.setGroupName(group.getGroupName());
-        Integer groupType = group.getGroupType();
-        vo.setGroupType(groupType);
-        vo.setGroupTypeName(GroupTypeEnum.getName(groupType));
         vo.setGroupStatus(group.getGroupStatus());
         vo.setGroupStatusName(StatusEnum.getName(group.getGroupStatus()));
         vo.setCreateUser(group.getCreateUser());

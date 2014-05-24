@@ -3,15 +3,12 @@ package org.fire.cost.service.impl;
 import org.fire.cost.dao.*;
 import org.fire.cost.domain.*;
 import org.fire.cost.enums.ClearResultEnum;
-import org.fire.cost.enums.GroupTypeEnum;
 import org.fire.cost.enums.OverStatusEnum;
+import org.fire.cost.enums.StatusEnum;
 import org.fire.cost.service.ClearAccountService;
 import org.fire.cost.util.AuthenticationUtil;
 import org.fire.cost.util.DateUtil;
-import org.fire.cost.vo.AccountVO;
-import org.fire.cost.vo.ClearAccountDetailVO;
-import org.fire.cost.vo.ClearAccountVO;
-import org.fire.cost.vo.PageData;
+import org.fire.cost.vo.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -140,8 +137,10 @@ public class ClearAccountServiceImpl implements ClearAccountService {
      * @return
      */
     private List<ClearAccountDetailVO> getDetailList() {
-        Group group = groupDao.getGroupByType(GroupTypeEnum.All.getCode());
-        List<User> allUserList = getGroupUserList(group);
+        UserVO userVO = new UserVO();
+        userVO.setUserStatus(StatusEnum.Enable.getCode());
+        userVO.setPage(false);
+        List<User> allUserList = userDao.getUserByFilter(userVO, null);
         List<ClearAccountDetailVO> detailVOList = new ArrayList<ClearAccountDetailVO>();
         for (User user : allUserList) {
             ClearAccountDetailVO detailVO = new ClearAccountDetailVO();

@@ -30,7 +30,6 @@
                     editor:{type:'combobox', options:{ editable:false, onShowPanel:openUserDialog}}">组员
                 </th>
                 <th data-options="field:'groupStatus',width:60,align:'center',hidden:true"/>
-                <th data-options="field:'groupTypeName',width:60,align:'center'">类型</th>
                 <th data-options="field:'groupStatusName',width:60,align:'center'">状态</th>
                 <th data-options="field:'groupRemark',width:120,align:'center',editor:'text'">备注</th>
                 <th data-options="field:'createUser',width:120,align:'center'">创建人</th>
@@ -111,7 +110,7 @@ $(function () {
         collapsible: false,
         loadMsg: '数据装载中......',
         url: '<%=basePath%>/getGroupByFilter.do',
-        idField: 'accountId',
+        idField: 'groupId',
         fit: true,
         fitColumns: true,
         singleSelect: true,
@@ -153,6 +152,9 @@ function addGroup() {
 // 修改组
 function modifyGroup() {
     var rowDataArr = $("#group_data_table").datagrid("getChecked");
+    if (rowDataArr == undefined || rowDataArr.length == 0) {
+        return;
+    }
     var rowIndex = $("#group_data_table").datagrid("getRowIndex", rowDataArr[0]);
     $("#group_data_table").datagrid('selectRow', rowIndex).datagrid('beginEdit', rowIndex);
     action = 2;
