@@ -2,9 +2,7 @@ package org.fire.cost.domain;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 import static javax.persistence.GenerationType.IDENTITY;
 
@@ -24,7 +22,6 @@ public class Account implements java.io.Serializable {
     private Date accountTime;
     private Integer accountType;
     private Integer accountStatus;
-    private Integer clearType;
     private String accountFile;
     private String createUser;
     private Date createTime;
@@ -37,24 +34,22 @@ public class Account implements java.io.Serializable {
     }
 
 
-    public Account(User user, Group group, BigDecimal accountMoney, Date accountTime, Integer accountType, Integer accountStatus, Integer clearType) {
+    public Account(User user, Group group, BigDecimal accountMoney, Date accountTime, Integer accountType, Integer accountStatus) {
         this.user = user;
         this.group = group;
         this.accountMoney = accountMoney;
         this.accountTime = accountTime;
         this.accountType = accountType;
         this.accountStatus = accountStatus;
-        this.clearType = clearType;
     }
 
-    public Account(User user, Group group, BigDecimal accountMoney, Date accountTime, Integer accountType, Integer accountStatus, Integer clearType, String accountFile, String createUser, Date createTime, String modifyUser, Date modifyTime, String accountRemark) {
+    public Account(User user, Group group, BigDecimal accountMoney, Date accountTime, Integer accountType, Integer accountStatus, String accountFile, String createUser, Date createTime, String modifyUser, Date modifyTime, String accountRemark) {
         this.user = user;
         this.group = group;
         this.accountMoney = accountMoney;
         this.accountTime = accountTime;
         this.accountType = accountType;
         this.accountStatus = accountStatus;
-        this.clearType = clearType;
         this.accountFile = accountFile;
         this.createUser = createUser;
         this.createTime = createTime;
@@ -129,15 +124,6 @@ public class Account implements java.io.Serializable {
 
     public void setAccountStatus(Integer accountStatus) {
         this.accountStatus = accountStatus;
-    }
-
-    @Column(name = "clear_type", nullable = false)
-    public Integer getClearType() {
-        return this.clearType;
-    }
-
-    public void setClearType(Integer clearType) {
-        this.clearType = clearType;
     }
 
     @Column(name = "account_file", length = 100)

@@ -17,7 +17,7 @@ public interface GroupDaoCustom {
      *
      * @return
      */
-    List<Group> getGroupByFilter(PageData<GroupVO> pageData);
+    List<Group> getGroupByFilter(GroupVO groupVO, PageData<GroupVO> pageData);
 
     /**
      * 得到组数据总记录数
@@ -25,13 +25,6 @@ public interface GroupDaoCustom {
      * @return
      */
     int getGroupTotal();
-
-    /**
-     * 获取所有的组数据
-     *
-     * @return
-     */
-    List<Group> getAllGroupData();
 
     /**
      * 根据用户获取所在组（个人组）

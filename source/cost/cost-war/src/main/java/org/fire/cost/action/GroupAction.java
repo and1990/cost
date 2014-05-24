@@ -5,7 +5,6 @@ import org.apache.struts2.convention.annotation.Namespace;
 import org.apache.struts2.convention.annotation.Result;
 import org.fire.cost.service.GroupService;
 import org.fire.cost.vo.GroupVO;
-import org.fire.cost.vo.PageData;
 import org.springframework.stereotype.Controller;
 
 import javax.annotation.Resource;
@@ -23,45 +22,21 @@ public class GroupAction extends BaseAction<GroupVO> {
     @Resource
     private GroupService groupService;
 
-    private GroupVO groupVO;
+    private GroupVO groupVO = new GroupVO();
 
     private List<GroupVO> groupVOList;
-
-    /**
-     * 跳转到组员信息
-     *
-     * @return
-     */
-    /*@Action(value = "group", results = {@Result(name = SUCCESS, location = "/cost/group.jsp")})
-    public String skipToGroupData() {
-        return SUCCESS;
-    }*/
-
-    @Action(value = "getAllGroupData", results = {@Result(type = "json", params = {"root", "groupVOList", "contentType", "text/html"})})
-    public String getAllGroupData() {
-        try {
-            groupVOList = groupService.getAllGroupData();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return SUCCESS;
-    }
 
     /**
      * 根据过滤条件查询“组”数据
      *
      * @return
      */
-    @Action(value = "getGroupByPage", results = {@Result(type = "json", params = {"root", "pageData", "contentType", "text/html"})})
-    public String getGroupByPage() {
+    @Action(value = "getGroupByFilter", results = {@Result(type = "json", params = {"root", "pageData", "contentType", "text/html"})})
+    public String getGroupByFilter() {
         try {
-            if (pageData == null) {
-                pageData = new PageData<GroupVO>();
-            } else {
-                pageData.setPage(page);
-                pageData.setPageSize(rows);
-            }
-            List<GroupVO> voList = groupService.getGroupByFilter(pageData);
+            pageData.setPage(page);
+            pageData.setPageSize(rows);
+            List<GroupVO> voList = groupService.getGroupByFilter(groupVO, pageData);
             int total = groupService.getGroupTotal();
             pageData.setRows(voList);
             pageData.setTotal(total);

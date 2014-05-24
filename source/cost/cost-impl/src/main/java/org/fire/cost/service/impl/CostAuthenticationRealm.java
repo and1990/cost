@@ -8,7 +8,7 @@ import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.fire.cost.dao.UserDao;
 import org.fire.cost.domain.User;
-import org.fire.cost.enums.UserStatusEnum;
+import org.fire.cost.enums.StatusEnum;
 import org.fire.cost.util.AuthenticationUtil;
 import org.springframework.stereotype.Service;
 
@@ -37,7 +37,7 @@ public class CostAuthenticationRealm extends AuthorizingRealm {
         String md5Password = DigestUtils.md5Hex(inputPassword);
         String password = user.getPassword();
         if (user != null && password.equals(md5Password)) {
-            if (user.getUserStatus() == UserStatusEnum.Enable.getCode()) {
+            if (user.getUserStatus() == StatusEnum.Enable.getCode()) {
                 return new SimpleAuthenticationInfo(token.getPrincipal(), token.getPassword(), token.getUsername());
             } else {
                 throw new AuthenticationException("COST:用户被禁用");

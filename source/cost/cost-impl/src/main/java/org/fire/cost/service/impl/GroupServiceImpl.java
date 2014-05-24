@@ -7,7 +7,7 @@ import org.fire.cost.domain.Group;
 import org.fire.cost.domain.GroupUser;
 import org.fire.cost.domain.User;
 import org.fire.cost.enums.GroupTypeEnum;
-import org.fire.cost.enums.UserStatusEnum;
+import org.fire.cost.enums.StatusEnum;
 import org.fire.cost.service.GroupService;
 import org.fire.cost.util.AuthenticationUtil;
 import org.fire.cost.util.DateUtil;
@@ -39,31 +39,6 @@ public class GroupServiceImpl implements GroupService {
     private UserDao userDao;
 
     /**
-     * 获取所有的组数据
-     *
-     * @return
-     */
-    @Override
-    @Transactional(value = "transactionManager")
-    public List<GroupVO> getAllGroupData() {
-        List<GroupVO> groupVOList = new ArrayList<GroupVO>();
-        try {
-            List<Group> groupList = groupDao.getAllGroupData();
-            if (groupList == null || groupList.size() == 0) {
-                return groupVOList;
-            }
-            for (Group group : groupList) {
-                GroupVO groupVO = makeGroup2VO(group);
-                groupVOList.add(groupVO);
-            }
-        } catch (Exception ex) {
-            ex.printStackTrace();
-            throw new RuntimeException(ex);
-        }
-        return groupVOList;
-    }
-
-    /**
      * 得到当前用户所在的组（个人组）
      *
      * @return
@@ -81,15 +56,16 @@ public class GroupServiceImpl implements GroupService {
     /**
      * 根据过滤条件查询“组”数据
      *
+     * @param groupVO
      * @param pageData
      * @return
      */
     @Override
     @Transactional(value = "transactionManager")
-    public List<GroupVO> getGroupByFilter(PageData<GroupVO> pageData) {
+    public List<GroupVO> getGroupByFilter(GroupVO groupVO, PageData<GroupVO> pageData) {
         List<GroupVO> voList = new ArrayList<GroupVO>();
         try {
-            List<Group> groupList = groupDao.getGroupByFilter(pageData);
+            List<Group> groupList = groupDao.getGroupByFilter(groupVO, pageData);
             if (groupList == null || groupList.size() == 0) {
                 return voList;
             }
@@ -104,10 +80,10 @@ public class GroupServiceImpl implements GroupService {
                     String userName = user.getUserName();
                     userNames = userNames == null ? userName : userNames + "," + userName;
                 }
-                GroupVO groupVO = makeGroup2VO(group);
-                groupVO.setUserIds(userIds);
-                groupVO.setUserNames(userNames);
-                voList.add(groupVO);
+                GroupVO vo = makeGroup2VO(group);
+                vo.setUserIds(userIds);
+                vo.setUserNames(userNames);
+                voList.add(vo);
             }
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -126,7 +102,7 @@ public class GroupServiceImpl implements GroupService {
     @Transactional(value = "transactionManager")
     public boolean addGroup(GroupVO vo) {
         try {
-            vo.setGroupStatus(UserStatusEnum.Enable.getCode());
+            vo.setGroupStatus(StatusEnum.Enable.getCode());
             Group group = groupDao.save(makeVO2Group(vo, null));
             String[] userIdArr = vo.getUserIds().split(",");
             List<GroupUser> groupUserList = new ArrayList<GroupUser>();
@@ -251,7 +227,7 @@ public class GroupServiceImpl implements GroupService {
         vo.setGroupType(groupType);
         vo.setGroupTypeName(GroupTypeEnum.getName(groupType));
         vo.setGroupStatus(group.getGroupStatus());
-        vo.setGroupStatusName(UserStatusEnum.getName(group.getGroupStatus()));
+        vo.setGroupStatusName(StatusEnum.getName(group.getGroupStatus()));
         vo.setCreateUser(group.getCreateUser());
         vo.setCreateTime(DateUtil.makeDate2Str(group.getCreateTime(), true));
         vo.setModifyUser(group.getModifyUser());

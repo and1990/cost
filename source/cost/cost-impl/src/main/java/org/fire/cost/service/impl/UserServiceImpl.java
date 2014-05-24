@@ -5,7 +5,7 @@ import org.apache.log4j.Logger;
 import org.apache.poi.hssf.usermodel.*;
 import org.fire.cost.dao.UserDao;
 import org.fire.cost.domain.User;
-import org.fire.cost.enums.UserStatusEnum;
+import org.fire.cost.enums.StatusEnum;
 import org.fire.cost.enums.UserTypeEnum;
 import org.fire.cost.service.UserService;
 import org.fire.cost.util.AuthenticationUtil;
@@ -93,7 +93,7 @@ public class UserServiceImpl implements UserService {
     @Transactional(value = "transactionManager", rollbackFor = RollbackException.class)
     public boolean addUser(UserVO vo) {
         try {
-            vo.setUserStatus(UserStatusEnum.Enable.getCode());
+            vo.setUserStatus(StatusEnum.Enable.getCode());
             vo.setUserType(UserTypeEnum.Common.getCode());
             User user = makeVO2User(vo, null);
             String password = vo.getPassword();
@@ -361,7 +361,7 @@ public class UserServiceImpl implements UserService {
             cell.setCellValue(userTypeName);
             cell = row.createCell(6);
             Integer userStatus = vo.getUserStatus();
-            String userStatusName = UserStatusEnum.getName(userStatus);
+            String userStatusName = StatusEnum.getName(userStatus);
             cell.setCellValue(userStatusName);
             cell = row.createCell(7);
             cell.setCellValue(vo.getCreateUser());
@@ -429,7 +429,7 @@ public class UserServiceImpl implements UserService {
         vo.setUserImage(user.getUserImage());
         vo.setLoginTime(DateUtil.makeDate2Str(user.getLoginTime(), true));
         vo.setUserStatus(user.getUserStatus());
-        vo.setUserStatusName(UserStatusEnum.getName(user.getUserStatus()));
+        vo.setUserStatusName(StatusEnum.getName(user.getUserStatus()));
         vo.setUserType(user.getUserType());
         vo.setUserTypeName(UserTypeEnum.getName(user.getUserType()));
         vo.setCreateUser(user.getCreateUser());

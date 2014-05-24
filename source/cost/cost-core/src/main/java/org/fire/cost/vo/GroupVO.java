@@ -34,6 +34,9 @@ public class GroupVO implements Serializable {
 
     private String groupRemark;
 
+    //是否分页
+    private boolean isPage;
+
     public GroupVO() {
 
     }
@@ -148,5 +151,13 @@ public class GroupVO implements Serializable {
 
     public void setGroupRemark(String groupRemark) {
         this.groupRemark = groupRemark;
+    }
+
+    public boolean isPage() {
+        return isPage;
+    }
+
+    public void setPage(boolean isPage) {
+        this.isPage = isPage;
     }
 }

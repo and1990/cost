@@ -27,7 +27,6 @@
                 <th data-options="field:'userName',width:80,align:'center'">用户名</th>
                 <th data-options="field:'accountMoney',width:80,align:'center' ">金额</th>
                 <th data-options="field:'accountTypeName',width:60,align:'center'">消费类型</th>
-                <th data-options="field:'clearTypeName',width:60,align:'center'">结算方式</th>
                 <th data-options="field:'groupName',width:60,align:'center'">消费组</th>
                 <th data-options="field:'accountTime',width:80,align:'center'">消费时间</th>
                 <th data-options="field:'accountStatusName',width:60,align:'center'">状态</th>
@@ -65,11 +64,11 @@
             <input class="text" name="accountVO.userName" style="width:100px;"/>
 
             <span>消费类型：</span>
-            <input class="accountType easyui-combobox" name="accountVO.accountType"
+            <input class="accountType easyui-combobox" name="accountVO.accountType" id="filterAccountType"
                    style="width:100px;" editable="false"/>
 
             <span>状态：</span>
-            <input class="accountStatus easyui-combobox" name="accountVO.accountStatus"
+            <input class="accountStatus easyui-combobox" name="accountVO.accountStatus" id="filterAccountStatus"
                    style="width:100px;" editable="false"/>
 
             消费时间从: <input class="Wdate" id="accountStartTime" name="accountVO.accountStartTime" style="width: 100px"
@@ -82,11 +81,11 @@
     </div>
 </div>
 
-<!-- 添加、修改账单对话框 -->
+<!-- 添加、修改消费对话框 -->
 <div id="account_dialog" class="easyui-dialog"
-     style="width:500px;height:400px;padding:2px;border:1px" data-options="closed:true,modal: true">
-    <div class="easyui-panel" style="width:480px;text-align:center">
-        <div style="padding:10px 10px 10px 100px">
+     style="width:550px;height:300px;padding:2px;border:1px" data-options="closed:true,modal: true">
+    <div class="easyui-panel" style="width:530px;text-align:center">
+        <div style="padding:10px 0px 10px 150px">
             <form id="account_form" method="post">
                 <table cellpadding="5">
                     <tr>
@@ -104,32 +103,25 @@
                     <tr>
                         <td>消费类型:</td>
                         <td>
-                            <select class="accountType easyui-combobox" id="accountType"
-                                    name="accountVO.accountType" style="width:150px;">
-                            </select>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>结算方式:</td>
-                        <td>
-                            <select class="clearType easyui-combobox" id="clearType"
-                                    name="accountVO.clearType" style="width:150px;">
-                            </select>
+                            <input class="accountType easyui-combobox" id="accountType"
+                                   name="accountVO.accountType" style="width:150px;"
+                                   data-options="required:true"/>
                         </td>
                     </tr>
                     <tr>
                         <td>消费组:</td>
                         <td>
-                            <select class="groupId easyui-combobox" id="groupId"
-                                    name="accountVO.groupId" style="width:150px;">
-                            </select>
+                            <input class="groupId easyui-combobox" id="groupId"
+                                   name="accountVO.groupId" style="width:150px;"
+                                   data-options="required:true"/>
                         </td>
                     </tr>
                     <tr>
                         <td>消费时间:</td>
                         <td>
                             <input class="Wdate easyui-validatebox" id="accountTime" name="accountVO.accountTime"
-                                   onfocus="WdatePicker({minDate:'%y-%M-{%d-7}',maxDate:'%y-%M-%d'})"/>
+                                   onfocus="WdatePicker({minDate:'%y-%M-{%d-7}',maxDate:'%y-%M-%d'})"
+                                   data-options="required:true"/>
                         </td>
                     </tr>
                     <tr>
@@ -138,12 +130,6 @@
                             <input class="text" id="accountRemark" name="accountVO.accountRemark"/>
                         </td>
                     </tr>
-                    <%--<tr>
-                        <td>上传附件:</td>
-                        <td>
-                            <input class="text" id="accountFile" name="accountVO.accountFile"/>
-                        </td>
-                    </tr>--%>
                 </table>
             </form>
             <div style="text-align:center;padding:5px">
@@ -234,68 +220,66 @@ $(function () {
         displayMsg: '当前显示 {from}-{to} 条记录   共 {total} 条记录'
     });
 
-    //加载账单类型
-    $('.accountType').combobox({
+    //加载消费类型
+    $.ajax({
         url: '<%=basePath%>/getAccountType.do',
-        valueField: 'code',
-        textField: 'name',
-        onLoadSuccess: function (data) {
-            $('.accountType').combobox('setValue', data[0].code).combobox('setText', data[0].name);
-        }
-    });
-
-    //加载账单状态
-    $('.accountStatus').combobox({
-        url: '<%=basePath%>/getAccountStatus.do',
-        valueField: 'code',
-        textField: 'name',
-        onLoadSuccess: function (data) {
-            $('.accountStatus').combobox('setValue', data[0].code).combobox('setText', data[0].name);
-        }
-    });
-
-    //加载结算方式
-    $('.clearType').combobox({
-        url: '<%=basePath%>/getClearType.do',
-        valueField: 'code',
-        textField: 'name',
-        onLoadSuccess: function (data) {
-            $('.clearType').combobox('setValue', data[0].code).combobox('setText', data[0].name);
-        },
-        onSelect: function (data) {
-            //$(".groupId").combo({disabled: false});
-        },
-        onChange: function (newValue, oldValue) {
-            if (newValue == 3) {
-                $.ajax({
-                    type: "POST",
-                    url: "<%=basePath%>/getGroupByUser.do",
-                    success: function (data) {
-                        var groupVo = JSON.parse(data);
-                        $('#groupId').combobox('setValue', groupVo.groupId);
-                        $(".groupId").combo({disabled: true});
-                    }
-                });
-            } else {
-                $(".groupId").combo("clear").combo({disabled: false});
+        success: function (data) {
+            if (data == undefined || data.length == 0) {
+                return;
             }
+            var objArr = new Array();
+            var rows = JSON.parse(data);
+            for (var i = 0; i < rows.length; i++) {
+                var typeVo = rows[i];
+                var obj = new Object();
+                obj.value = typeVo.code;
+                obj.text = typeVo.name;
+                objArr.push(obj);
+            }
+            $('#filterAccountType').combobox({valueField: 'value', textField: 'text', data: objArr});
+            $('#accountType').combobox({valueField: 'value', textField: 'text', data: objArr});
+            $('#filterAccountType').combobox('setValue', " ");
+            $('#accountType').combobox('setValue', " ");
+        }
+    });
+
+    //加载消费状态
+    $.ajax({
+        url: '<%=basePath%>/getAccountStatus.do',
+        success: function (data) {
+            if (data == undefined || data.length == 0) {
+                return;
+            }
+            var objArr = new Array();
+            var rows = JSON.parse(data);
+            for (var i = 0; i < rows.length; i++) {
+                var typeVo = rows[i];
+                var obj = new Object();
+                obj.value = typeVo.code;
+                obj.text = typeVo.name;
+                objArr.push(obj);
+            }
+            $('#filterAccountStatus').combobox({valueField: 'value', textField: 'text', data: objArr});
         }
     });
 
     //加载组信息
-    $('.groupId').combobox({
-        url: '<%=basePath%>/getAllGroupData.do',
-        valueField: 'groupId',
-        textField: 'groupName',
-        onLoadSuccess: function (data) {
-            var rows = JSON.parse(data);
-            if (rows == undefined || rows.length == 0) {
+    $.ajax({
+        url: '<%=basePath%>/getGroupByFilter.do?groupVO.groupStatus=2&isPage=false',
+        success: function (pageData) {
+            if (pageData == undefined || pageData.length == 0) {
                 return;
             }
+            var rows = JSON.parse(pageData).rows;
+            var objArr = new Array();
             for (var i = 0; i < rows.length; i++) {
-                var groupVO = rows[i];
-                $('.groupId').combobox('setValue', groupVO.groupId).combobox('setText', groupVO.groupName);
+                var row = rows[i];
+                var obj = new Object();
+                obj.value = row.groupId;
+                obj.text = row.groupName;
+                objArr.push(obj);
             }
+            $('#groupId').combobox({valueField: 'value', textField: 'text', data: objArr});
         }
     });
 });
@@ -320,10 +304,10 @@ function getAccountByFilter() {
     };
 })(jQuery);
 
-//增加账单
+//增加消费
 function addAccount() {
     //设置标题
-    $('#account_dialog').dialog({ title: '增加账单信息'});
+    $('#account_dialog').dialog({ title: '增加消费信息'});
     //打开弹出框
     $("#account_dialog").dialog("open");
     //设置action、url值，1代表增加
@@ -331,7 +315,7 @@ function addAccount() {
     $("#url").val('<%=basePath%>/addAccount.do');
 }
 
-//修改账单
+//修改消费
 function modifyAccount() {
     var rowDataArr = $("#account_data_table").datagrid("getChecked");
     if (rowDataArr == undefined || rowDataArr.length == 0) {
@@ -344,7 +328,7 @@ function modifyAccount() {
     }
 
     //设置标题
-    $('#account_dialog').dialog({ title: '修改账单信息'});
+    $('#account_dialog').dialog({ title: '修改消费信息'});
     //打开弹出框
     $("#account_dialog").dialog("open");
     //设置action值，2代表修改
@@ -356,7 +340,6 @@ function modifyAccount() {
     $("#accountId").val(rowData.accountId);
     $("#accountMoney").numberbox({value: rowData.accountMoney});
     $('#accountType').combobox('setValue', rowData.accountType);
-    $('#clearType').combobox('setValue', rowData.clearType);
     $('#groupId').combobox('setValue', rowData.groupId);
     $("#accountTime").val(rowData.accountTime);
     $("#accountRemark").val(rowData.accountRemark);
@@ -364,7 +347,7 @@ function modifyAccount() {
     $("#accountStatus").val(rowData.accountStatus);
 }
 
-//删除账单
+//删除消费
 function deleteAccount() {
     var rowDataArr = $("#account_data_table").datagrid("getChecked");
     if (rowDataArr == undefined || rowDataArr.length == 0) {
@@ -472,11 +455,15 @@ function submitForm() {
     $('#account_form').form('submit', {
                 url: url,
                 onSubmit: function () {
-                    if (action == 1) {
-                        var isValid = $(this).form('validate');
-                        if (!isValid) {
-                            $.messager.progress('close');
-                        }
+                    var isValid = $(this).form('validate');
+                    var accountType = $("#accountType").combobox("getValue");
+                    accountType = accountType.trim();
+                    if (accountType == undefined || accountType == "" || accountType == "0") {
+                        $.messager.alert("提示", "选择消费类型", "info");
+                        isValid = false;
+                    }
+                    if (!isValid) {
+                        $.messager.progress('close');
                     }
                     return isValid;
                 },

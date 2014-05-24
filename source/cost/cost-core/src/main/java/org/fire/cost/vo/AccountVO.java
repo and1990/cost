@@ -34,8 +34,6 @@ public class AccountVO implements Serializable {
 
     private String accountStatusName;
 
-    private Integer clearType;
-
     private String clearTypeName;
 
     private String accountFile;
@@ -144,14 +142,6 @@ public class AccountVO implements Serializable {
 
     public void setAccountStatusName(String accountStatusName) {
         this.accountStatusName = accountStatusName;
-    }
-
-    public Integer getClearType() {
-        return clearType;
-    }
-
-    public void setClearType(Integer clearType) {
-        this.clearType = clearType;
     }
 
     public String getClearTypeName() {

@@ -16,19 +16,6 @@ import java.util.List;
 public class GroupDaoCustomImpl extends BaseJpaDaoSupport<Group, Long> implements GroupDaoCustom {
 
     /**
-     * 获取所有的组数据
-     *
-     * @return
-     */
-    @Override
-    public List<Group> getAllGroupData() {
-        String sql = "select * from cost_group where group_status<>2 order by modify_time desc";
-        Query query = entityManager.createNativeQuery(sql, Group.class);
-        List<Group> resultList = query.getResultList();
-        return resultList;
-    }
-
-    /**
      * 获取用户所在组（个人组）
      *
      * @param userId
@@ -60,14 +47,24 @@ public class GroupDaoCustomImpl extends BaseJpaDaoSupport<Group, Long> implement
      * @return
      */
     @Override
-    public List<Group> getGroupByFilter(PageData<GroupVO> pageData) {
-        String sql = "select * from cost_group order by modify_time desc";
+    public List<Group> getGroupByFilter(GroupVO groupVO, PageData<GroupVO> pageData) {
+        String sql = "select * from cost_group where 1=1";
+        Integer groupStatus = groupVO.getGroupStatus();
+        if (groupStatus != null && groupStatus != 0) {
+            sql += " and group_status=:groupStatus";
+        }
+        sql += " order by modify_time desc";
         Query query = entityManager.createNativeQuery(sql, Group.class);
-        int page = pageData.getPage();
-        int pageSize = pageData.getPageSize();
-        int start = (page - 1) * pageSize;
-        query.setFirstResult(start);
-        query.setMaxResults(pageSize);
+        if (groupStatus != null && groupStatus != 0) {
+            query.setParameter("groupStatus", groupStatus);
+        }
+        if (groupVO.isPage()) {
+            int page = pageData.getPage();
+            int pageSize = pageData.getPageSize();
+            int start = (page - 1) * pageSize;
+            query.setFirstResult(start);
+            query.setMaxResults(pageSize);
+        }
         List<Group> resultList = query.getResultList();
         return resultList;
     }
