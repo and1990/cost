@@ -23,9 +23,9 @@
     </div>
     <div style="text-align: center;margin-top: 50px;">
         <div>
-            按用户查看：<input type="radio" name="accountType" value="1" checked="true"/>
+            按用户查看：<input type="radio" name="percentAccountType" value="1" checked="true"/>
             &nbsp;
-            按消费类型查看：<input type="radio" name="accountType" value="2"/>
+            按消费类型查看：<input type="radio" name="percentAccountType" value="2"/>
             &nbsp;
             消费时间从: <input class="Wdate" id="pie_start_time" name="accountVO.accountStartTime" style="width: 150px"
                           onfocus="WdatePicker({dateFmt:'yyyy-MM-dd',maxDate:'#F{$dp.$D(\'pie_end_time\');}'})">
@@ -33,7 +33,7 @@
             到: <input class="Wdate" id="pie_end_time" name="accountVO.accountEndTime" style="width: 150px"
                       onfocus="WdatePicker({dateFmt:'yyyy-MM-dd',minDate:'#F{$dp.$D(\'pie_start_time\');}',maxDate:'%y-%M-%d'})">
             &nbsp;&nbsp;
-            <a href="#" style="text-decoration: none" iconCls="icon-search" onclick="showPieChart();">查看</a>
+            <a href="#" style="text-decoration: none" iconCls="icon-search" onclick="showPercentChart();">查看</a>
         </div>
     </div>
 </div>
@@ -49,7 +49,7 @@
                 if (returnData != undefined) {
                     var accountArr = getAccountDataByUser(returnData);
                     if (accountArr != undefined && accountArr.length != 0) {
-                        initChart(accountArr);
+                        initPercentChart(accountArr);
                     }
                 } else {
                     $('#null_data').html("未加载到数据...");
@@ -71,7 +71,7 @@
     });
 
     //初始化图表
-    function initChart(accountArr) {
+    function initPercentChart(accountArr) {
         $('#pie_container').highcharts({
                     chart: {
                         style: {
@@ -117,16 +117,16 @@
     }
 
     //显示图表
-    function showPieChart() {
+    function showPercentChart() {
         var startTime = $("#pie_start_time").val();
         var endTime = $("#pie_end_time").val();
-        var showType = $("input[name='accountType']:checked").val()
-        loadData(startTime, endTime, showType);
-        setChartTitle(startTime, endTime, showType);
+        var showType = $("input[name='percentAccountType']:checked").val()
+        loadPercentData(startTime, endTime, showType);
+        setPercentChartTitle(startTime, endTime, showType);
     }
 
     //设置图表格式
-    function setChartTitle(startTime, endTime, showType) {
+    function setPercentChartTitle(startTime, endTime, showType) {
         var typeText = "用户";
         if (showType == 2) {
             typeText = "消费类型";
@@ -157,7 +157,7 @@
     }
 
     //加载数据
-    function loadData(startTime, endTime, showType) {
+    function loadPercentData(startTime, endTime, showType) {
         var url = "<%=basePath%>/getAccountGroupByUser.do";
         if (showType == 2) {
             url = "<%=basePath%>/getAccountGroupByAccountType.do";

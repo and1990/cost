@@ -23,9 +23,9 @@
 
     <div style="text-align: center;margin-top: 50px;">
         <div>
-            按用户查看：<input type="radio" name="accountType" value="1" checked="true"/>
+            按用户查看：<input type="radio" name="moneyAccountType" value="1" checked="true"/>
             &nbsp;
-            按消费类型查看：<input type="radio" name="accountType" value="2"/>
+            按消费类型查看：<input type="radio" name="moneyAccountType" value="2"/>
             &nbsp;
             消费时间从: <input class="Wdate" id="column_start_time" name="accountVO.accountStartTime" style="width: 150px"
                           onfocus="WdatePicker({dateFmt:'yyyy-MM-dd',maxDate:'#F{$dp.$D(\'column_end_time\');}'})">
@@ -33,7 +33,7 @@
             到: <input class="Wdate" id="column_end_time" name="accountVO.accountEndTime" style="width: 150px"
                       onfocus="WdatePicker({dateFmt:'yyyy-MM-dd',minDate:'#F{$dp.$D(\'column_start_time\');}',maxDate:'%y-%M-%d'})">
             &nbsp;&nbsp;
-            <a href="#" style="text-decoration: none" iconCls="icon-search" onclick="showColumnChart();">查看</a>
+            <a href="#" style="text-decoration: none" iconCls="icon-search" onclick="showAccountMoneyChart();">查看</a>
         </div>
     </div>
 </div>
@@ -53,14 +53,14 @@
                 var valueArr = new Array();
                 setAccountDataByUser(nameArr, valueArr, returnData);
                 if (nameArr.length != 0 && valueArr.length != 0) {
-                    initChart(nameArr, valueArr);
+                    initAccountMoneyChart(nameArr, valueArr);
                 }
             }
         });
     });
 
     //初始化图表
-    function initChart(nameArr, valueArr) {
+    function initAccountMoneyChart(nameArr, valueArr) {
         $('#column_container').highcharts({
             chart: {
                 type: 'column',
@@ -123,16 +123,16 @@
     }
 
     //显示图表
-    function showColumnChart() {
+    function showAccountMoneyChart() {
         var startTime = $("#column_start_time").val();
         var endTime = $("#column_end_time").val();
-        var showType = $("input[name='accountType']:checked").val()
-        loadData(startTime, endTime, showType);
-        setChartTitle(startTime, endTime, showType);
+        var showType = $("input[name='moneyAccountType']:checked").val()
+        loadAccountMoneyData(startTime, endTime, showType);
+        setAccountMoneyChartTitle(startTime, endTime, showType);
     }
 
     //设置图表格式
-    function setChartTitle(startTime, endTime, showType) {
+    function setAccountMoneyChartTitle(startTime, endTime, showType) {
         var typeText = "用户";
         if (showType == 2) {
             typeText = "消费类型";
@@ -163,7 +163,7 @@
     }
 
     //加载数据
-    function loadData(startTime, endTime, showType) {
+    function loadAccountMoneyData(startTime, endTime, showType) {
         var url = "<%=basePath%>/getAccountGroupByUser.do";
         if (showType == 2) {
             url = "<%=basePath%>/getAccountGroupByAccountType.do";

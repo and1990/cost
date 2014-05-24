@@ -150,7 +150,7 @@ public class SkipAction extends BaseAction {
      *
      * @return
      */
-    @Action(value = "showMonthChart", results = {@Result(name = SUCCESS, location = "/cost/monthAccount.jsp")})
+    @Action(value = "showMonthChart", results = {@Result(name = SUCCESS, location = "/cost/monthAccountChart.jsp")})
     public String skipToMothLineChart() {
         return SUCCESS;
     }
