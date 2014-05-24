@@ -1,4 +1,6 @@
 <%@page language="java" contentType="text/html; charset=utf8" pageEncoding="utf8" %>
+<%@taglib prefix="shiro" uri="http://shiro.apache.org/tags" %>
+
 <%
     String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + request.getContextPath();
 %>
@@ -29,7 +31,6 @@
                 <th data-options="field:'groupName',width:60,align:'center'">消费组</th>
                 <th data-options="field:'accountTime',width:80,align:'center'">消费时间</th>
                 <th data-options="field:'accountStatusName',width:60,align:'center'">状态</th>
-                <%--<th data-options="field:'accountFile',width:80,align:'center'">附件</th>--%>
                 <th data-options="field:'createTime',width:120,align:'center'">创建时间</th>
                 <th data-options="field:'accountRemark',width:120,align:'center'">备注</th>
             </tr>
@@ -41,21 +42,21 @@
 <!-- 工具栏 -->
 <div id="account_tool_bar" style="padding: 5px; height: auto">
     <div style="margin-bottom: 5px">
-        <a href="#" class="easyui-linkbutton" iconCls="icon-add" plain="true"
+        <a href="#" id="account_add_button" class="easyui-linkbutton" iconCls="icon-add" plain="true"
            onclick="addAccount();">增加</a>
-        <a href="#" class="easyui-linkbutton" iconCls="icon-edit" plain="true"
+        <a href="#" id="account_modify_button" class="easyui-linkbutton" iconCls="icon-edit" plain="true"
            onclick="modifyAccount();">修改</a>
-        <a href="#" class="easyui-linkbutton" iconCls="icon-remove" plain="true"
+        <a href="#" id="account_delete_button" class="easyui-linkbutton" iconCls="icon-remove" plain="true"
            onclick="deleteAccount();">删除</a>
-        <a href="#" class="easyui-linkbutton" iconCls="icon-tag-blue" plain="true"
-           onclick="approveAccount();">审批</a>
-        <a href="#" class="easyui-linkbutton" iconCls="icon-tag-red" plain="true"
-           onclick="clearAccount();">结算</a>
-        <a href="#" class="easyui-linkbutton" iconCls="icon-print" plain="true"
+        <shiro:hasRole name="admin">
+            <a href="#" id="account_approve_button" class="easyui-linkbutton" iconCls="icon-tag-blue" plain="true"
+               onclick="approveAccount();">审批</a>
+        </shiro:hasRole>
+        <a href="#" id="account_excel_button" class="easyui-linkbutton" iconCls="icon-print" plain="true"
            onclick="exportAccountToExcel();">导出Excel</a>
-        <a href="#" class="easyui-linkbutton" iconCls="icon-search" plain="true"
+        <a href="#" id="account_week_button" class="easyui-linkbutton" iconCls="icon-search" plain="true"
            onclick="queryAccountByThisWeek();">查看本周</a>
-        <a href="#" class="easyui-linkbutton" iconCls="icon-search" plain="true"
+        <a href="#" id="account_month_button" class="easyui-linkbutton" iconCls="icon-search" plain="true"
            onclick="queryAccountByThisMonth();">查看本月</a>
     </div>
     <div>
@@ -171,13 +172,10 @@
     </div>
 </div>
 
-//文件上传对话框
-<div id="fileUploadDialog">
-    <input type="file" name="file_upload" id="file_upload"/>
+<!-- 隐藏字段 -->
+<div>
+    <input type="hidden" id="login_user_userId" name="userId" value="${userId}"/>
 </div>
-
-//图片浏览对话框
-<div id="lightbox"></div>
 
 <script type="text/javascript">
 $(function () {
@@ -195,7 +193,36 @@ $(function () {
         selectOnCheck: true,
         checkOnSelect: true,
         pagination: true,
-        toolbar: "#account_tool_bar"
+        toolbar: "#account_tool_bar",
+        onCheck: function (rowIndex, rowData) {
+            var userId = $("#login_user_userId").val();
+            if (userId != rowData.userId) {
+                $('#account_modify_button').linkbutton('disable');
+                $('#account_delete_button').linkbutton('disable');
+            }
+        },
+        onUncheck: function (rowIndex, rowData) {
+            var rows = $("#account_data_table").datagrid("getChecked");
+            if (rows == undefined || rows.length == 0) {
+                $('#account_modify_button').linkbutton('enable');
+                $('#account_delete_button').linkbutton('enable');
+            } else {
+                if (onlyOwnData(rows)) {
+                    $('#account_modify_button').linkbutton('enable');
+                    $('#account_delete_button').linkbutton('enable');
+                }
+            }
+        },
+        onCheckAll: function (rows) {
+            if (!onlyOwnData(rows)) {
+                $('#account_modify_button').linkbutton('disable');
+                $('#account_delete_button').linkbutton('disable');
+            }
+        },
+        onUncheckAll: function (rows) {
+            $('#account_modify_button').linkbutton('enable');
+            $('#account_delete_button').linkbutton('enable');
+        }
     });
 
     //设置分页
@@ -472,6 +499,18 @@ function getCheckedAccountIds() {
         accountIds = accountIds == undefined ? accountId : accountIds + "," + accountId;
     }
     return accountIds;
+}
+
+//是否是自己添加的数据
+function onlyOwnData(rows) {
+    var userId = $("#login_user_userId").val();
+    var onlyOwnData = true;
+    for (var index = 0; index < rows.length; index++) {
+        if (userId != rows[index].userId) {
+            onlyOwnData = false;
+        }
+    }
+    return onlyOwnData;
 }
 </script>
 </body>

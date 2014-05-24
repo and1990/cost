@@ -1,5 +1,6 @@
 <%@page language="java" contentType="text/html; charset=utf8" pageEncoding="utf8" %>
 <%@taglib prefix="shiro" uri="http://shiro.apache.org/tags" %>
+
 <%
     String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + request.getContextPath();
 %>
@@ -43,8 +44,10 @@
 <!-- 工具栏 -->
 <div id="clear_tool_bar" style="padding: 5px; height: auto">
     <div style="margin-bottom: 5px">
-        <a href="#" id="approve_button" class="easyui-linkbutton" iconCls="icon-tag-blue" plain="true"
-           onclick="clearData();">结算</a>
+        <shiro:hasRole name="admin">
+            <a href="#" id="approve_button" class="easyui-linkbutton" iconCls="icon-tag-blue" plain="true"
+               onclick="clearData();">结算</a>
+        </shiro:hasRole>
     </div>
 </div>
 

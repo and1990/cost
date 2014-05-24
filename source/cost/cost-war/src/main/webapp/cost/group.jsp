@@ -1,5 +1,6 @@
-<%@page language="java" contentType="text/html; charset=utf8"
-        pageEncoding="utf8" %>
+<%@page language="java" contentType="text/html; charset=utf8" pageEncoding="utf8" %>
+<%@taglib prefix="shiro" uri="http://shiro.apache.org/tags" %>
+
 <%
     String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + request.getContextPath();
 %>
@@ -43,10 +44,12 @@
 <!-- 工具栏 -->
 <div id="group_filter_bar" style="padding: 5px; height: auto">
     <div style="margin-bottom: 5px">
-        <a href="#" class="easyui-linkbutton" iconCls="icon-add" plain="true" onclick="addGroup();">增加</a>
-        <a href="#" class="easyui-linkbutton" iconCls="icon-edit" plain="true" onclick="modifyGroup();">修改</a>
-        <a href="#" class="easyui-linkbutton" iconCls="icon-remove" plain="true" onclick="deleteGroup();">删除</a>
-        <a href="#" class="easyui-linkbutton" iconCls="icon-save" plain="true" onclick="saveGroup();">保存</a>
+        <shiro:hasRole name="admin">
+            <a href="#" class="easyui-linkbutton" iconCls="icon-add" plain="true" onclick="addGroup();">增加</a>
+            <a href="#" class="easyui-linkbutton" iconCls="icon-edit" plain="true" onclick="modifyGroup();">修改</a>
+            <a href="#" class="easyui-linkbutton" iconCls="icon-remove" plain="true" onclick="deleteGroup();">删除</a>
+            <a href="#" class="easyui-linkbutton" iconCls="icon-save" plain="true" onclick="saveGroup();">保存</a>
+        </shiro:hasRole>
     </div>
 </div>
 

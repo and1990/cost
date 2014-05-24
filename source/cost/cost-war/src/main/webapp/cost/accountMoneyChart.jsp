@@ -69,7 +69,7 @@
             },
             plotOptions: {
                 series: {
-                    pointWidth: 60
+                    pointWidth: 40
                 }
             },
             credits: {

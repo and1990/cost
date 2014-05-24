@@ -1,6 +1,7 @@
 <%@page language="java" contentType="text/html; charset=utf8"
         pageEncoding="utf8" %>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@taglib prefix="shiro" uri="http://shiro.apache.org/tags" %>
 
 <%
     String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + request.getContextPath();
@@ -41,17 +42,21 @@
 
 <div id="user_tool_bar" style="padding: 5px; height: auto">
     <div style="margin-bottom: 5px">
-        <a href="#" class="easyui-linkbutton" iconCls="icon-add" plain="true"
-           onclick="addUser();">增加</a>
-        <a href="#" class="easyui-linkbutton" iconCls="icon-edit" plain="true"
+        <shiro:hasRole name="admin">
+            <a href="#" id="user_add_button" class="easyui-linkbutton" iconCls="icon-add" plain="true"
+               onclick="addUser();">增加</a>
+        </shiro:hasRole>
+        <a href="#" id="user_modify_button" class="easyui-linkbutton" iconCls="icon-edit" plain="true"
            onclick="modifyUser();">修改</a>
-        <a href="#" class="easyui-linkbutton" iconCls="icon-remove" plain="true"
-           onclick="deleteUser();">删除</a>
-        <a href="#" class="easyui-linkbutton" iconCls="icon-tag-blue" plain="true"
-           onclick="modifyUserStatus(2);">启用</a>
-        <a href="#" class="easyui-linkbutton" iconCls="icon-tag-red" plain="true"
-           onclick="modifyUserStatus(1);">禁用</a>
-        <a href="#" class="easyui-linkbutton" iconCls="icon-print" plain="true"
+        <shiro:hasRole name="admin">
+            <a href="#" id="user_delete_button" class="easyui-linkbutton" iconCls="icon-remove" plain="true"
+               onclick="deleteUser();">删除</a>
+            <a href="#" id="user_enable_button" class="easyui-linkbutton" iconCls="icon-tag-blue" plain="true"
+               onclick="modifyUserStatus(2);">启用</a>
+            <a href="#" id="user_unable_button" class="easyui-linkbutton" iconCls="icon-tag-red" plain="true"
+               onclick="modifyUserStatus(1);">禁用</a>
+        </shiro:hasRole>
+        <a href="#" id="user_excel_button" class="easyui-linkbutton" iconCls="icon-print" plain="true"
            onclick="exportUserToExcel();">导出Excel</a>
     </div>
     <div>
@@ -166,6 +171,11 @@
     </div>
 </div>
 
+<!-- 隐藏字段 -->
+<div>
+    <input type="hidden" id="login_user_userId" name="userId" value="${userId}"/>
+</div>
+
 <script type="text/javascript">
 $(function () {
     $('#user_data_table').datagrid({
@@ -182,7 +192,31 @@ $(function () {
         selectOnCheck: true,
         checkOnSelect: true,
         pagination: true,
-        toolbar: '#user_tool_bar'
+        toolbar: '#user_tool_bar',
+        onCheck: function (rowIndex, rowData) {
+            var userId = $("#login_user_userId").val();
+            if (userId != rowData.userId) {
+                $('#user_modify_button').linkbutton('disable');
+            }
+        },
+        onUncheck: function (rowIndex, rowData) {
+            var rows = $("#user_data_table").datagrid("getChecked");
+            if (rows == undefined || rows.length == 0) {
+                $('#user_modify_button').linkbutton('enable');
+            } else {
+                if (onlyCurrentUser(rows)) {
+                    $('#user_modify_button').linkbutton('enable');
+                }
+            }
+        },
+        onCheckAll: function (rows) {
+            if (!onlyCurrentUser(rows)) {
+                $('#user_modify_button').linkbutton('disable');
+            }
+        },
+        onUncheckAll: function (rows) {
+            $('#user_modify_button').linkbutton('enable');
+        }
     });
 
     $('#user_data_table').datagrid('getPager').pagination({
@@ -231,6 +265,9 @@ function addUser() {
     $("#userAddress").val("");
     $("#userEmail").val("");
     $("#userRemark").val("");
+    //显示密码输入框
+    $("#tr_password").show();
+    $("#tr_repassword").show();
     //打开弹出框
     $("#user_dialog").dialog("open");
     //设置action、url值，1代表增加
@@ -352,8 +389,8 @@ function submitForm() {
                     $("#user_dialog").dialog("close");
                     $('#user_data_table').datagrid('reload');
                     if (action == 2) {
-                        $("#password").show();
-                        $("#repassword").show();
+                        $("#tr_password").show();
+                        $("#tr_repassword").show();
                     }
                 }
             }
@@ -374,6 +411,18 @@ function getCheckedUserIds() {
 //导出excel
 function exportUserToExcel() {
     window.location.href = "<%=basePath%>/exportUserToExcel.do";
+}
+
+//是否选择的只是当前用户自己
+function onlyCurrentUser(rows) {
+    var userId = $("#login_user_userId").val();
+    var onlyCurrentUser = true;
+    for (var index = 0; index < rows.length; index++) {
+        if (userId != rows[index].userId) {
+            onlyCurrentUser = false;
+        }
+    }
+    return onlyCurrentUser;
 }
 </script>
 </body>
