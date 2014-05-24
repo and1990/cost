@@ -38,10 +38,6 @@
             <div><input type="password" name="password" id="password" class="input_text"/></div>
             <br>
 
-            <div>
-                <input type="checkbox"/><span>记住密码</span> &nbsp;&nbsp;&nbsp;&nbsp;
-                <a>快速注册</a>
-            </div>
         </form>
         <div>
             <input type="button" value="登 &nbsp;&nbsp;&nbsp;&nbsp;录" class="input_button" onclick="userLogin();"/>

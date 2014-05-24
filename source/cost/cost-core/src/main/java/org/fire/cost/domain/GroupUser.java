@@ -10,7 +10,7 @@ import static javax.persistence.GenerationType.IDENTITY;
  * 作者：刘腾飞
  */
 @Entity
-@Table(name = "cost_group_user", catalog = "cost")
+@Table(name = "cost_group_user")
 public class GroupUser implements java.io.Serializable {
 
     private Long groupUserId;

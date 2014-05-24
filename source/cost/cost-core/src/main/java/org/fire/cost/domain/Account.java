@@ -12,7 +12,7 @@ import static javax.persistence.GenerationType.IDENTITY;
  * 作者：刘腾飞
  */
 @Entity
-@Table(name = "cost_account", catalog = "cost")
+@Table(name = "cost_account")
 public class Account implements java.io.Serializable {
 
     private Long accountId;

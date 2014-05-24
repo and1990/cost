@@ -12,7 +12,7 @@ import static javax.persistence.GenerationType.IDENTITY;
  * 作者：刘腾飞[liutengfei]
  */
 @Entity
-@Table(name = "clear_account_detail", schema = "", catalog = "cost")
+@Table(name = "clear_account_detail")
 public class ClearAccountDetail implements Serializable {
     private Long clearAccountDetailId;
     private BigDecimal accountMoney;

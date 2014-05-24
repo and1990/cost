@@ -96,22 +96,22 @@
     <!-- shiro -->
     <bean id="shiroFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">
         <property name="securityManager" ref="securityManager"/>
-        <!--<property name="filters">
+        <property name="filters">
             <map>
-                <entry key="authFilter">
+               <!-- <entry key="authFilter">
                     <bean class="org.fire.cost.filter.CostAuthenticationFilter"/>
-                </entry>
+                </entry>-->
             </map>
-        </property>-->
+        </property>
         <property name="filterChainDefinitions">
-            <value>
-                /js/** = anon
-                /css/** = anon
-                /image/** = anon
-                /third/** = anon
-                /welcome.do = anon
-                /login.do = anon
-                /** = anon
+           <value>
+               <!--/js/** = anon
+               /css/** = anon
+               /image/** = anon
+               /third/** = anon
+               /welcome.do = anon
+               /login.do = anon
+               /** = authFilter-->
             </value>
         </property>
     </bean>

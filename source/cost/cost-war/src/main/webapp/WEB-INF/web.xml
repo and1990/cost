@@ -140,6 +140,6 @@
     </listener>
 
     <welcome-file-list>
-        <welcome-file>/cost/login.jsp</welcome-file>
+        <welcome-file>view.do</welcome-file>
     </welcome-file-list>
 </web-app>
