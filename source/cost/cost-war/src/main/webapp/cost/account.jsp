@@ -162,6 +162,7 @@
 <!-- 隐藏字段 -->
 <div>
     <input type="hidden" id="login_user_userId" name="userId" value="${userId}"/>
+    <input type="hidden" id="hidden_userType" name="userType" value="${userType}"/>
 </div>
 
 <script type="text/javascript">
@@ -183,7 +184,8 @@ $(function () {
         toolbar: "#account_tool_bar",
         onCheck: function (rowIndex, rowData) {
             var userId = $("#login_user_userId").val();
-            if (userId != rowData.userId) {
+            var userType = $("#hidden_userType").val();
+            if (userId != rowData.userId && userType == 1) {
                 $('#account_modify_button').linkbutton('disable');
                 $('#account_delete_button').linkbutton('disable');
             }
@@ -201,7 +203,8 @@ $(function () {
             }
         },
         onCheckAll: function (rows) {
-            if (!onlyOwnData(rows)) {
+            var userType = $("#hidden_userType").val();
+            if (!onlyOwnData(rows) && userType == 1) {
                 $('#account_modify_button').linkbutton('disable');
                 $('#account_delete_button').linkbutton('disable');
             }
