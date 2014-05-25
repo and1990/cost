@@ -13,5 +13,6 @@ public class DateTest {
     @Test
     public void testWeek() {
         Date firstDayOfWeek = DateUtil.getFirstDayOfWeek();
+        Date endDayOfWeek = DateUtil.getEndDayOfWeek();
     }
 }

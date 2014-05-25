@@ -61,6 +61,7 @@ public class DateUtil extends DateUtils {
         int min = calendar.getActualMinimum(Calendar.DAY_OF_WEEK) + 1;
         int current = calendar.get(Calendar.DAY_OF_WEEK);
         calendar.add(Calendar.DAY_OF_WEEK, min - current);
+        calendar.add(Calendar.DATE, -1);
         Date start = calendar.getTime();
         return start;
     }
@@ -76,6 +77,7 @@ public class DateUtil extends DateUtils {
         int current = calendar.get(Calendar.DAY_OF_WEEK);
         calendar.add(Calendar.DAY_OF_WEEK, min - current);
         calendar.add(Calendar.DAY_OF_WEEK, 6);
+        calendar.add(Calendar.DATE, -1);
         Date end = calendar.getTime();
         return end;
     }
