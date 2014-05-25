@@ -79,8 +79,8 @@
                         <span>状态：</span>
                         <select class="easyui-combobox" name="userVO.userStatus" style="width:120px;">
                             <option value="0">全部</option>
-                            <option value="1">可用</option>
-                            <option value="2">禁用</option>
+                            <option value="2">可用</option>
+                            <option value="1">禁用</option>
                         </select>
                     </td>
                     <td>
@@ -164,7 +164,7 @@
             <div style="text-align:center;padding:5px">
                 <input type="hidden" id="action" name="action">
                 <input type="hidden" id="url" name="url">
-                <a href="javascript:void(0)" class="easyui-linkbutton" onclick="submitForm()">确定</a>
+                <a href="javascript:void(0)" class="easyui-linkbutton" onclick="submitUserForm()">确定</a>
                 <a href="javascript:void(0)" class="easyui-linkbutton" onclick="$('#user_form').form('clear');">取消</a>
             </div>
         </div>
@@ -330,7 +330,7 @@ function modifyUserStatus(userStatus) {
 }
 
 //提交表单
-function submitForm() {
+function submitUserForm() {
     //打开进度条
     $.messager.progress();
     var action = $("#action").val();
