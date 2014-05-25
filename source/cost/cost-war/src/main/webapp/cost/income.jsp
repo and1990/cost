@@ -46,7 +46,7 @@
         <a href="#" id="delete_button_income" class="easyui-linkbutton" iconCls="icon-remove" plain="true"
            onclick="deleteIncome();">删除</a>
         <a href="#" class="easyui-linkbutton" iconCls="icon-print" plain="true"
-           onclick="exportincomeToExcel();">导出Excel</a>
+           onclick="exportIncomeToExcel();">导出Excel</a>
     </div>
     <div>
         <form id="income_filter_form" method="post">
@@ -110,7 +110,7 @@
             <div style="text-align:center;padding:5px">
                 <input type="hidden" id="action" name="action">
                 <input type="hidden" id="url" name="url">
-                <a href="#" class="easyui-linkbutton" onclick="submitForm()">确定</a>
+                <a href="#" class="easyui-linkbutton" onclick="submitIncomeForm()">确定</a>
                 <a href="#" class="easyui-linkbutton" onclick="$('#income_form').form('clear');">取消</a>
             </div>
         </div>
@@ -154,7 +154,7 @@ $(function () {
                 $('#modify_button_income').linkbutton('enable');
                 $('#delete_button_income').linkbutton('enable');
             } else {
-                if (onlyOwnData(rows)) {
+                if (onlyOwnIncomeData(rows)) {
                     $('#modify_button_income').linkbutton('enable');
                     $('#delete_button_income').linkbutton('enable');
                 }
@@ -162,7 +162,7 @@ $(function () {
         },
         onCheckAll: function (rows) {
             var userType = $("#hidden_userType").val();
-            if (!onlyOwnData(rows) && userType == 1) {
+            if (!onlyOwnIncomeData(rows) && userType == 1) {
                 $('#modify_button_income').linkbutton('disable');
                 $('#delete_button_income').linkbutton('disable');
             }
@@ -280,12 +280,12 @@ function deleteIncome() {
 }
 
 //导出Excel
-function exportincomeToExcel() {
+function exportIncomeToExcel() {
     window.location.href = "<%=basePath%>/exportIncomeToExcel.do";
 }
 
 //提交表单
-function submitForm() {
+function submitIncomeForm() {
     $.messager.progress();
     var action = $("#action").val();
     var url = $("#url").val();
@@ -322,7 +322,7 @@ function getCheckedIncome() {
 }
 
 //是否是自己添加的数据
-function onlyOwnData(rows) {
+function onlyOwnIncomeData(rows) {
     var userId = $("#userId").val();
     var onlyOwnData = true;
     for (var index = 0; index < rows.length; index++) {

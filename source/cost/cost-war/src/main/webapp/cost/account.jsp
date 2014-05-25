@@ -140,7 +140,7 @@
             <div style="text-align:center;padding:5px">
                 <input type="hidden" id="action" name="action">
                 <input type="hidden" id="url" name="url">
-                <a href="#" class="easyui-linkbutton" onclick="submitForm()">确定</a>
+                <a href="#" class="easyui-linkbutton" onclick="submitAccountForm()">确定</a>
                 <a href="#" class="easyui-linkbutton" onclick="$('#account_form').form('clear');">取消</a>
             </div>
         </div>
@@ -200,7 +200,7 @@ $(function () {
                 $('#modify_button').linkbutton('enable');
                 $('#delete_button').linkbutton('enable');
             } else {
-                if (onlyOwnData(rows)) {
+                if (onlyOwnAccountData(rows)) {
                     $('#modify_button').linkbutton('enable');
                     $('#delete_button').linkbutton('enable');
                 }
@@ -208,7 +208,7 @@ $(function () {
         },
         onCheckAll: function (rows) {
             var userType = $("#hidden_userType").val();
-            if (!onlyOwnData(rows) && userType == 1) {
+            if (!onlyOwnAccountData(rows) && userType == 1) {
                 $('#modify_button').linkbutton('disable');
                 $('#delete_button').linkbutton('disable');
             }
@@ -413,7 +413,7 @@ function queryAccountByThisMonth() {
 }
 
 //提交表单
-function submitForm() {
+function submitAccountForm() {
     $.messager.progress();
     var action = $("#action").val();
     var url = $("#url").val();
@@ -450,7 +450,7 @@ function getCheckedAccount() {
 }
 
 //是否是自己添加的数据
-function onlyOwnData(rows) {
+function onlyOwnAccountData(rows) {
     var userId = $("#hidden_userId").val();
     var onlyOwnData = true;
     for (var index = 0; index < rows.length; index++) {
