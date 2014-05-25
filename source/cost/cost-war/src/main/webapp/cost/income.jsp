@@ -120,6 +120,7 @@
 <!-- 隐藏字段 -->
 <div>
     <input type="hidden" id="userId" name="userId" value="${userId}"/>
+    <input type="hidden" id="hidden_userType" name="userType" value="${userType}"/>
 </div>
 
 <script type="text/javascript">
@@ -141,7 +142,8 @@ $(function () {
         toolbar: "#income_tool_bar",
         onCheck: function (rowIndex, rowData) {
             var userId = $("#userId").val();
-            if (userId != rowData.userId) {
+            var userType = $("#hidden_userType").val();
+            if (userId != rowData.userId && userType == 1) {
                 $('#modify_button_income').linkbutton('disable');
                 $('#delete_button_income').linkbutton('disable');
             }
@@ -159,7 +161,8 @@ $(function () {
             }
         },
         onCheckAll: function (rows) {
-            if (!onlyOwnData(rows)) {
+            var userType = $("#hidden_userType").val();
+            if (!onlyOwnData(rows) && userType == 1) {
                 $('#modify_button_income').linkbutton('disable');
                 $('#delete_button_income').linkbutton('disable');
             }
