@@ -18,7 +18,7 @@ import java.util.*;
 /**
  * 账单扩展实现类
  *
- * @author liutengfei
+ * @author duansasha
  */
 public class AccountDaoCustomImpl extends BaseJpaDaoSupport<Account, Long> implements AccountDaoCustom {
 

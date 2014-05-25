@@ -9,7 +9,7 @@ import java.util.List;
 /**
  * 账单dao扩展类
  *
- * @author liutengfei
+ * @author duansasha
  */
 public interface AccountDaoCustom {
     List<Account> getAccountByFilter(AccountVO vo, PageData<AccountVO> pageData);
