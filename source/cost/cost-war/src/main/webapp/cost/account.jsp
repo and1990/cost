@@ -291,6 +291,7 @@ $(function () {
 //获取查询参数
 function getAccountByFilter() {
     var queryData = $("#account_filter_form").serializeJson();
+    console.info(queryData);
     $("#account_data_table").datagrid(
             {
                 queryParams: queryData,
@@ -302,7 +303,7 @@ function getAccountByFilter() {
     $.fn.serializeJson = function () {
         var serializeObj = {};
         $(this.serializeArray()).each(function () {
-            serializeObj[this.name] = this.value;
+            serializeObj[this.name] = this.value.trim();
         });
         return serializeObj;
     };
@@ -369,7 +370,7 @@ function deleteAccount() {
                     type: "post",
                     url: url,
                     success: function (returnData) {
-                        $('#account_data_table').datagrid('reload');
+                        $('#account_data_table').datagrid('reload').datagrid('uncheckAll');
                     }
                 }
         );
@@ -475,7 +476,7 @@ function submitForm() {
                     $.messager.progress('close');
                     $('#account_form').form('clear');
                     $("#account_dialog").dialog("close");
-                    $('#account_data_table').datagrid('reload');
+                    $('#account_data_table').datagrid('reload').datagrid('uncheckAll');
                 }
             }
     );

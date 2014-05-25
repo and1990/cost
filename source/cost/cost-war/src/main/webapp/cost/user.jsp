@@ -174,6 +174,7 @@
 <!-- 隐藏字段 -->
 <div>
     <input type="hidden" id="login_user_userId" name="userId" value="${userId}"/>
+    <input type="hidden" id="hidden_userType" name="userType" value="${userType}"/>
 </div>
 
 <script type="text/javascript">
@@ -195,7 +196,8 @@ $(function () {
         toolbar: '#user_tool_bar',
         onCheck: function (rowIndex, rowData) {
             var userId = $("#login_user_userId").val();
-            if (userId != rowData.userId) {
+            var userType = $("#hidden_userType").val();
+            if (userId != rowData.userId && userType == 1) {
                 $('#user_modify_button').linkbutton('disable');
             }
         },
@@ -210,7 +212,8 @@ $(function () {
             }
         },
         onCheckAll: function (rows) {
-            if (!onlyCurrentUser(rows)) {
+            var userType = $("#hidden_userType").val();
+            if (!onlyCurrentUser(rows) && userType == 1) {
                 $('#user_modify_button').linkbutton('disable');
             }
         },
@@ -329,7 +332,7 @@ function deleteUser() {
                     type: "post",
                     url: url,
                     success: function (returnData) {
-                        $('#user_data_table').datagrid('reload');
+                        $('#user_data_table').datagrid('reload').datagrid('uncheckAll');
                     }
                 }
         );
@@ -351,7 +354,7 @@ function modifyUserStatus(userStatus) {
                     type: "post",
                     url: url,
                     success: function (returnData) {
-                        $('#user_data_table').datagrid('reload');
+                        $('#user_data_table').datagrid('reload').datagrid('uncheckAll');
                     }
                 }
         );
@@ -387,7 +390,7 @@ function submitForm() {
                     $.messager.progress('close');
                     $('#user_form').form('clear');
                     $("#user_dialog").dialog("close");
-                    $('#user_data_table').datagrid('reload');
+                    $('#user_data_table').datagrid('reload').datagrid('uncheckAll');
                     if (action == 2) {
                         $("#tr_password").show();
                         $("#tr_repassword").show();
