@@ -58,11 +58,12 @@ public class DateUtil extends DateUtils {
      */
     public static Date getFirstDayOfWeek() {
         Calendar calendar = Calendar.getInstance();
-        calendar.add(Calendar.DATE, -1);
-        int min = calendar.getActualMinimum(Calendar.DAY_OF_WEEK) + 1;
-        int current = calendar.get(Calendar.DAY_OF_WEEK);
-        calendar.add(Calendar.DAY_OF_WEEK, min - current);
-        //calendar.add(Calendar.DATE, -1);
+        int dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK) - 1;
+        if (dayOfWeek == 0) {
+            calendar.add(Calendar.DATE, -6);
+        } else {
+            calendar.add(Calendar.DATE, -(dayOfWeek - 1));
+        }
         Date start = calendar.getTime();
         return start;
     }
