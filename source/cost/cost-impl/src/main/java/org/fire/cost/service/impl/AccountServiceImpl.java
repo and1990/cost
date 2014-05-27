@@ -249,7 +249,7 @@ public class AccountServiceImpl implements AccountService {
         style.setBorderLeft(HSSFCellStyle.BORDER_THIN);
         style.setBorderRight(HSSFCellStyle.BORDER_THIN);
         // 列宽
-        HSSFSheet sheet = hwb.createSheet("用户");
+        HSSFSheet sheet = hwb.createSheet("账单");
         for (int i = 0; i < 6; i++) {
             sheet.setColumnWidth(i, (short) 5000);
         }
