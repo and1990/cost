@@ -17,8 +17,8 @@ cost
 	NOTE: 以后memcached将作为windows的一个服务每次开机时自动启动。这样服务器端已经安装完毕了。
 	
 4.引入项目
-1）打开Intellij Idea
-2）引入项目文件，选择到最顶级的pom.xml文件，点击“确定”
-3）配置maven
-4）部署项目
-5）访问路径：http://localhost:8080/cost/view.do
+	1）打开Intellij Idea
+	2）引入项目文件，选择到最顶级的pom.xml文件，点击“确定”
+	3）配置maven
+	4）部署项目
+	5）访问路径：http://localhost:8080/cost/view.do
