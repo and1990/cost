@@ -144,8 +144,12 @@
                     {field: 'operation', title: '操作', width: 100, align: 'center',
                         formatter: function (value, row, index) {
                             var detailId = row.clearDetailId;
-                            return " <span><a href='#' onclick='detailClear(" + detailId + ");' id='clear_button_" + detailId + "' style='text-decoration: NONE'>结算</a></span> " +
-                                    "<span><a href='#' onclick='cancelClear(" + detailId + ");' id='cancel_button_" + detailId + "' style='text-decoration: NONE'>取消</a></span> ";
+                            if (row.clearResult == 1) {
+                                return " <span><a href='#' onclick='detailClear(" + detailId + ");' id='clear_button_" + detailId + "' style='text-decoration: NONE'>结算</a></span> " +
+                                        "<span><a href='#' onclick='cancelClear(" + detailId + ");' id='cancel_button_" + detailId + "' style='text-decoration: NONE'>取消</a></span> ";
+                            } else {
+                                return "";
+                            }
                         }
                     }
                 ]
@@ -161,9 +165,14 @@
             rowStyler: function (index, row) {
                 if (row.clearResult == 2) {
                     return 'background-color:#CCFFCC;';
+                } else {
+                    if (row.overStatus == 1) {
+                        return 'background-color:#FFCCCC;';
+                    }
                 }
             }
-        });
+        })
+        ;
         $('#clear_data_table').datagrid('fixDetailRowHeight', index);
     }
 
