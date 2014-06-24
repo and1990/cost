@@ -31,6 +31,7 @@
                 <th data-options="field:'createUser',width:60,align:'center'">创建人</th>
                 <th data-options="field:'createTime',width:60,align:'center'">创建时间</th>
                 <th data-options="field:'clearAccountRemark',width:60,align:'center'">备注</th>
+                <th data-options="field:'allClearName',width:60,align:'center'">结算</th>
             </tr>
             </thead>
         </table>
@@ -67,6 +68,21 @@
     </div>
 </div>
 
+<!-- 结算操作按钮 -->
+<div id="clear_button_dialog">
+    <span>
+        <a href="#" onclick="detailClear(this);" id="detail_clear">结算</a>
+    </span>
+    &nbsp;&nbsp;
+    <span>
+        <a href="#" onclick="cancelClear();" id="cancel_clear">取消</a>
+    </span>
+    &nbsp;&nbsp;
+    <span>
+        <a href="#" onclick="deleteClear();" id="delete_clear">删除</a>
+    </span>
+</div>
+
 <script type="text/javascript">
     $(function () {
         $('#clear_data_table').datagrid({
@@ -85,6 +101,11 @@
             onLoadSuccess: function (data) {
                 if (data.rows.length == 0) {
                     $.messager.alert("提示", "没有加载到数据！", "info");
+                }
+            },
+            rowStyler: function (index, row) {
+                if (row.allClear == 2) {
+                    return 'background-color:lightgreen;';
                 }
             },
             view: detailview,
@@ -108,10 +129,10 @@
     });
 
     //显示流水明细
-    function showClearDetail(index, row) {
+    function showClearDetail(index, clearRow) {
         var detailTable = $('#clear_data_table').datagrid('getRowDetail', index).find('#clear_detail_table');
         detailTable.datagrid({
-            url: "<%=basePath%>/getClearDetailData.do?clearAccountVO.clearAccountId=" + row.clearAccountId,
+            url: "<%=basePath%>/getClearDetailData.do?clearAccountVO.clearAccountId=" + clearRow.clearAccountId,
             fitColumns: true,
             singleSelect: true,
             rownumbers: true,
@@ -122,21 +143,35 @@
                     {field: 'userName', title: '用户名', width: 150, align: 'center'},
                     {field: 'accountMoney', title: '已支付金额', width: 100, align: 'center'},
                     {field: 'clearMoney', title: '需支付金额', width: 100, align: 'center'},
-                    {field: 'clearTypeName', title: '结算类型', width: 100, align: 'center'},
+                    {field: 'clearResultName', title: '结算类型', width: 100, align: 'center'},
                     {field: 'overStatusName', title: '结算状态', width: 100, align: 'center'},
-                    {field: 'detailRemark', title: '备注', width: 100, align: 'center'}
+                    {field: 'detailRemark', title: '备注', width: 100, align: 'center'},
+                    {field: 'operation', title: '操作', width: 100, align: 'center',
+                        formatter: function (value, row, index) {
+                            var detailId = row.clearDetailId;
+                            return " <span><a href='#' onclick='detailClear(" + detailId + ");' id='clear_button_" + detailId + "'>结算</a></span> " +
+                                    "<span><a href='#' onclick='cancelClear(" + detailId + ");' id='cancel_button_" + detailId + "'>取消</a></span> ";
+                        }
+                    }
                 ]
             ],
             onResize: function () {
                 $('#clear_data_table').datagrid('fixDetailRowHeight', index);
             },
-            onLoadSuccess: function () {
+            onLoadSuccess: function (data) {
                 setTimeout(function () {
                     $('#clear_data_table').datagrid('fixDetailRowHeight', index);
                 }, 0);
+                var rows = data.rows;
+                for (var index = 0; index < rows.length; index++) {
+                    var detailRow = rows[index];
+                    var detailId = detailRow.clearDetailId;
+                    if (detailRow.overStatus == 1) {
+                    }
+                }
             },
             rowStyler: function (index, row) {
-                if (row.clearType == 2) {
+                if (row.clearResult == 2) {
                     return 'background-color:lightgreen;';
                 }
             }
@@ -169,7 +204,27 @@
             }
         });
     }
+    //结算明细
+    function detailClear(detailId) {
+        $.ajax({
+            method: "post",
+            url: "<%=basePath%>/clearDetail.do?clearAccountDetailId=" + detailId,
+            success: function (returnData) {
+                $('#clear_detail_table').datagrid('reload');
+            }
+        });
+    }
 
+    //取消结算
+    function cancelClear(detailId) {
+        $.ajax({
+            method: "post",
+            url: "<%=basePath%>/cancelDetail.do?clearAccountDetailId=" + detailId,
+            success: function (returnData) {
+                $('#clear_detail_table').datagrid('reload');
+            }
+        });
+    }
 </script>
 </body>
 </html>

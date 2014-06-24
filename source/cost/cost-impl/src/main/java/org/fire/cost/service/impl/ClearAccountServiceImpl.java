@@ -47,9 +47,11 @@ public class ClearAccountServiceImpl implements ClearAccountService {
     @Override
     public List<ClearAccountVO> getClearData(PageData pageData) {
         List<ClearAccount> clearAccountList = clearAccountDao.getClearData(pageData);
+        Map<Long, List<ClearAccountDetailVO>> clearDetailDataMap = getClearDetailDataMap(clearAccountList);
         List<ClearAccountVO> clearAccountVOList = new ArrayList<ClearAccountVO>();
         for (ClearAccount clearAccount : clearAccountList) {
             ClearAccountVO clearAccountVO = makePoToVo(clearAccount);
+            setAllClear(clearAccountVO, clearDetailDataMap);
             clearAccountVOList.add(clearAccountVO);
         }
         return clearAccountVOList;
@@ -129,6 +131,53 @@ public class ClearAccountServiceImpl implements ClearAccountService {
             detail.setClearAccount(clearAccount);
         }
         detailDao.save(detailList);
+    }
+
+    /**
+     * 更新结算明细结算状态
+     *
+     * @param overStatus
+     * @param clearAccountDetailId
+     */
+    @Override
+    @Transactional(value = "transactionManager", rollbackFor = RollbackException.class)
+    public void updateClearDetail(int overStatus, Long clearAccountDetailId) {
+        detailDao.updateClearDetail(overStatus, clearAccountDetailId);
+    }
+
+    /**
+     * 根据结算id批量获取结算明细记录
+     *
+     * @param clearAccountList
+     * @return
+     */
+    private Map<Long, List<ClearAccountDetailVO>> getClearDetailDataMap(List<ClearAccount> clearAccountList) {
+        Map<Long, List<ClearAccountDetailVO>> clearDataMap = new HashMap<Long, List<ClearAccountDetailVO>>();
+        for (ClearAccount clearAccount : clearAccountList) {
+            Long clearAccountId = clearAccount.getClearAccountId();
+            List<ClearAccountDetailVO> detailVOList = getClearDetailData(clearAccountId);
+            clearDataMap.put(clearAccountId, detailVOList);
+        }
+        return clearDataMap;
+    }
+
+    /**
+     * 设置是否全部结算
+     *
+     * @param clearAccountVO
+     * @param clearDetailDataMap
+     */
+    private void setAllClear(ClearAccountVO clearAccountVO, Map<Long, List<ClearAccountDetailVO>> clearDetailDataMap) {
+        Long clearAccountId = clearAccountVO.getClearAccountId();
+        List<ClearAccountDetailVO> detailVOList = clearDetailDataMap.get(clearAccountId);
+        for (ClearAccountDetailVO detailVO : detailVOList) {
+            Integer overStatus = detailVO.getOverStatus();
+            if (overStatus == OverStatusEnum.Not_Clear.getCode()) {
+                clearAccountVO.setAllClear(OverStatusEnum.Not_Clear.getCode());
+                clearAccountVO.setAllClearName(OverStatusEnum.Not_Clear.getName());
+
+            }
+        }
     }
 
     /**
@@ -397,7 +446,7 @@ public class ClearAccountServiceImpl implements ClearAccountService {
      */
     private ClearAccountDetailVO makeDetailPoToVo(ClearAccountDetail detail) {
         ClearAccountDetailVO detailVO = new ClearAccountDetailVO();
-        detailVO.setClearAccountDetailId(detail.getClearAccountDetailId());
+        detailVO.setClearDetailId(detail.getClearAccountDetailId());
         detailVO.setClearAccountId(detail.getClearAccount().getClearAccountId());
         detailVO.setUserId(detail.getUser().getUserId());
         detailVO.setUserName(detail.getUser().getUserName());
@@ -409,8 +458,8 @@ public class ClearAccountServiceImpl implements ClearAccountService {
             clearType = ClearResultEnum.Get.getCode();
         }
         detailVO.setClearMoney(clearMoney);
-        detailVO.setClearType(clearType);
-        detailVO.setClearTypeName(ClearResultEnum.getName(clearType));
+        detailVO.setClearResult(clearType);
+        detailVO.setClearResultName(ClearResultEnum.getName(clearType));
         Integer overStatus = detail.getOverStatus();
         detailVO.setOverStatus(overStatus);
         detailVO.setOverStatusName(OverStatusEnum.getName(overStatus));

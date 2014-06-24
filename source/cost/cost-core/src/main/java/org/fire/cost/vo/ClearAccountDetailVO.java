@@ -8,12 +8,12 @@ import java.math.BigDecimal;
  * 作者：刘腾飞[liutengfei]
  */
 public class ClearAccountDetailVO {
-    private Long clearAccountDetailId;
+    private Long clearDetailId;
     private BigDecimal payMoney;
     private BigDecimal accountMoney;
     private BigDecimal clearMoney;
-    private Integer clearType;
-    private String clearTypeName;
+    private Integer clearResult;
+    private String clearResultName;
     private Integer overStatus;
     private String overStatusName;
     private String detailRemark;
@@ -21,12 +21,12 @@ public class ClearAccountDetailVO {
     private Long userId;
     private String userName;
 
-    public Long getClearAccountDetailId() {
-        return clearAccountDetailId;
+    public Long getClearDetailId() {
+        return clearDetailId;
     }
 
-    public void setClearAccountDetailId(Long clearAccountDetailId) {
-        this.clearAccountDetailId = clearAccountDetailId;
+    public void setClearDetailId(Long clearDetailId) {
+        this.clearDetailId = clearDetailId;
     }
 
     public BigDecimal getPayMoney() {
@@ -53,20 +53,20 @@ public class ClearAccountDetailVO {
         this.clearMoney = clearMoney;
     }
 
-    public Integer getClearType() {
-        return clearType;
+    public Integer getClearResult() {
+        return clearResult;
     }
 
-    public void setClearType(Integer clearType) {
-        this.clearType = clearType;
+    public void setClearResult(Integer clearResult) {
+        this.clearResult = clearResult;
     }
 
-    public String getClearTypeName() {
-        return clearTypeName;
+    public String getClearResultName() {
+        return clearResultName;
     }
 
-    public void setClearTypeName(String clearTypeName) {
-        this.clearTypeName = clearTypeName;
+    public void setClearResultName(String clearResultName) {
+        this.clearResultName = clearResultName;
     }
 
     public Integer getOverStatus() {

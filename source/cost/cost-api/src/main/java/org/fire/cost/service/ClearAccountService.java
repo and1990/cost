@@ -43,7 +43,16 @@ public interface ClearAccountService {
 
     /**
      * 结算
+     *
      * @param clearAccountVO
      */
     void clearData(ClearAccountVO clearAccountVO);
+
+    /**
+     * 更新结算明细结算状态
+     *
+     * @param code
+     * @param clearAccountDetailId
+     */
+    void updateClearDetail(int code, Long clearAccountDetailId);
 }

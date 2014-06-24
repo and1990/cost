@@ -250,7 +250,7 @@ public class AccountAction extends BaseAction<AccountVO> {
      *
      * @return
      */
-    @Action(value = "getClearType", results = {@Result(type = "json", params = {"root", "clearTypeList", "contentType", "text/html"})})
+    @Action(value = "getClearResult", results = {@Result(type = "json", params = {"root", "clearTypeList", "contentType", "text/html"})})
     public String getClearType() {
         try {
             clearTypeList = accountService.getClearType();

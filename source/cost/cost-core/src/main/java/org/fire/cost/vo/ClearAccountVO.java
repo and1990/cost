@@ -26,6 +26,10 @@ public class ClearAccountVO implements Serializable {
 
     private String clearAccountRemark;
 
+    //是否全部结算，1：未全部结算；2：全部结算
+    private int allClear = 2;
+    private String allClearName;
+
     public Long getClearAccountId() {
         return clearAccountId;
     }
@@ -80,5 +84,21 @@ public class ClearAccountVO implements Serializable {
 
     public void setClearAccountRemark(String clearAccountRemark) {
         this.clearAccountRemark = clearAccountRemark;
+    }
+
+    public int getAllClear() {
+        return allClear;
+    }
+
+    public void setAllClear(int allClear) {
+        this.allClear = allClear;
+    }
+
+    public String getAllClearName() {
+        return allClearName;
+    }
+
+    public void setAllClearName(String allClearName) {
+        this.allClearName = allClearName;
     }
 }

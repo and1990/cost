@@ -3,6 +3,7 @@ package org.fire.cost.action;
 import org.apache.struts2.convention.annotation.Action;
 import org.apache.struts2.convention.annotation.Namespace;
 import org.apache.struts2.convention.annotation.Result;
+import org.fire.cost.enums.OverStatusEnum;
 import org.fire.cost.service.ClearAccountService;
 import org.fire.cost.util.DateUtil;
 import org.fire.cost.vo.ClearAccountDetailVO;
@@ -29,6 +30,9 @@ public class ClearAccountAction extends BaseAction {
 
     //结算明细vo
     private List<ClearAccountDetailVO> detailVOList;
+
+    //结算明细id
+    private Long clearAccountDetailId;
 
 
     /**
@@ -72,7 +76,7 @@ public class ClearAccountAction extends BaseAction {
         try {
             String clearDate = clearAccountService.getLatestClearDate();
             Date date = DateUtil.makeStr2Date(clearDate, false);
-            clearDate = DateUtil.makeDate2Str(date,false);
+            clearDate = DateUtil.makeDate2Str(date, false);
             clearAccountVO.setStartDate(clearDate);
         } catch (Exception e) {
             e.printStackTrace();
@@ -95,6 +99,28 @@ public class ClearAccountAction extends BaseAction {
         return SUCCESS;
     }
 
+    /**
+     * 明细结算
+     *
+     * @return
+     */
+    @Action(value = "clearDetail", results = {@Result(type = "json", params = {"root", "pageData", "contentType", "text/html"})})
+    public String clearDetail() {
+        clearAccountService.updateClearDetail(OverStatusEnum.Clear.getCode(), clearAccountDetailId);
+        return SUCCESS;
+    }
+
+    /**
+     * 明细取消结算
+     *
+     * @return
+     */
+    @Action(value = "cancelDetail", results = {@Result(type = "json", params = {"root", "pageData", "contentType", "text/html"})})
+    public String cancelDetail() {
+        clearAccountService.updateClearDetail(OverStatusEnum.Not_Clear.getCode(), clearAccountDetailId);
+        return SUCCESS;
+    }
+
     public ClearAccountVO getClearAccountVO() {
         return clearAccountVO;
     }
@@ -109,5 +135,13 @@ public class ClearAccountAction extends BaseAction {
 
     public void setDetailVOList(List<ClearAccountDetailVO> detailVOList) {
         this.detailVOList = detailVOList;
+    }
+
+    public Long getClearAccountDetailId() {
+        return clearAccountDetailId;
+    }
+
+    public void setClearAccountDetailId(Long clearAccountDetailId) {
+        this.clearAccountDetailId = clearAccountDetailId;
     }
 }
