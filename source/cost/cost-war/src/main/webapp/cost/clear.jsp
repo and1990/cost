@@ -79,7 +79,7 @@
     </span>
     &nbsp;&nbsp;
     <span>
-        <a href="#" onclick="deleteClear();" id="delete_clear">删除</a>
+        <a href="#" onclick="deleteClear();" id="delete_clear" style="color: ">删除</a>
     </span>
 </div>
 
@@ -149,8 +149,8 @@
                     {field: 'operation', title: '操作', width: 100, align: 'center',
                         formatter: function (value, row, index) {
                             var detailId = row.clearDetailId;
-                            return " <span><a href='#' onclick='detailClear(" + detailId + ");' id='clear_button_" + detailId + "'>结算</a></span> " +
-                                    "<span><a href='#' onclick='cancelClear(" + detailId + ");' id='cancel_button_" + detailId + "'>取消</a></span> ";
+                            return " <span><a href='#' onclick='detailClear(" + detailId + ");' id='clear_button_" + detailId + "' style='text-decoration: NONE'>结算</a></span> " +
+                                    "<span><a href='#' onclick='cancelClear(" + detailId + ");' id='cancel_button_" + detailId + "' style='text-decoration: NONE'>取消</a></span> ";
                         }
                     }
                 ]
@@ -162,13 +162,6 @@
                 setTimeout(function () {
                     $('#clear_data_table').datagrid('fixDetailRowHeight', index);
                 }, 0);
-                var rows = data.rows;
-                for (var index = 0; index < rows.length; index++) {
-                    var detailRow = rows[index];
-                    var detailId = detailRow.clearDetailId;
-                    if (detailRow.overStatus == 1) {
-                    }
-                }
             },
             rowStyler: function (index, row) {
                 if (row.clearResult == 2) {

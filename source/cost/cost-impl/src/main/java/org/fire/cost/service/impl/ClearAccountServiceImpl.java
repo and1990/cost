@@ -168,6 +168,8 @@ public class ClearAccountServiceImpl implements ClearAccountService {
      * @param clearDetailDataMap
      */
     private void setAllClear(ClearAccountVO clearAccountVO, Map<Long, List<ClearAccountDetailVO>> clearDetailDataMap) {
+        clearAccountVO.setAllClear(OverStatusEnum.Clear.getCode());
+        clearAccountVO.setAllClearName(OverStatusEnum.Clear.getName());
         Long clearAccountId = clearAccountVO.getClearAccountId();
         List<ClearAccountDetailVO> detailVOList = clearDetailDataMap.get(clearAccountId);
         for (ClearAccountDetailVO detailVO : detailVOList) {
@@ -175,7 +177,6 @@ public class ClearAccountServiceImpl implements ClearAccountService {
             if (overStatus == OverStatusEnum.Not_Clear.getCode()) {
                 clearAccountVO.setAllClear(OverStatusEnum.Not_Clear.getCode());
                 clearAccountVO.setAllClearName(OverStatusEnum.Not_Clear.getName());
-
             }
         }
     }
