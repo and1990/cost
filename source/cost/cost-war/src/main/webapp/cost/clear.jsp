@@ -79,7 +79,7 @@
     </span>
     &nbsp;&nbsp;
     <span>
-        <a href="#" onclick="deleteClear();" id="delete_clear" style="color: ">删除</a>
+        <a href="#" onclick="deleteClear();" id="delete_clear">删除</a>
     </span>
 </div>
 
@@ -101,11 +101,6 @@
             onLoadSuccess: function (data) {
                 if (data.rows.length == 0) {
                     $.messager.alert("提示", "没有加载到数据！", "info");
-                }
-            },
-            rowStyler: function (index, row) {
-                if (row.allClear == 2) {
-                    return 'background-color:lightgreen;';
                 }
             },
             view: detailview,
@@ -165,7 +160,7 @@
             },
             rowStyler: function (index, row) {
                 if (row.clearResult == 2) {
-                    return 'background-color:lightgreen;';
+                    return 'background-color:#CCFFCC;';
                 }
             }
         });
