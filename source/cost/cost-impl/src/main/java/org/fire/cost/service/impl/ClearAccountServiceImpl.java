@@ -434,7 +434,12 @@ public class ClearAccountServiceImpl implements ClearAccountService {
         }
         detail.setAccountMoney(detailVO.getAccountMoney());
         detail.setClearMoney(detailVO.getClearMoney());
-        detail.setOverStatus(OverStatusEnum.Not_Clear.getCode());
+        Integer clearResult = detailVO.getClearResult();
+        if (clearResult == ClearResultEnum.Get.getCode()) {
+            detail.setOverStatus(OverStatusEnum.Clear.getCode());
+        } else {
+            detail.setOverStatus(OverStatusEnum.Not_Clear.getCode());
+        }
         Long userId = detailVO.getUserId();
         detail.setUser(userDao.findOne(userId));
         return detail;
