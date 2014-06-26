@@ -1,6 +1,5 @@
 <%@page language="java" contentType="text/html; charset=utf8" pageEncoding="utf8" %>
 <%@taglib prefix="shiro" uri="http://shiro.apache.org/tags" %>
-
 <%
     String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + request.getContextPath();
 %>
@@ -232,6 +231,10 @@ $(function () {
                 return;
             }
             var objArr = new Array();
+            var obj = new Object();
+            obj.value = "0";
+            obj.text = "全部";
+            objArr.push(obj);
             var rows = JSON.parse(data);
             for (var i = 0; i < rows.length; i++) {
                 var typeVo = rows[i];
@@ -254,10 +257,10 @@ $(function () {
             if (data == undefined || data.length == 0) {
                 return;
             }
-            var objArr = new Array();
+            var objArr = getFilterObject();
             var rows = JSON.parse(data);
-            for (var i = 0; i < rows.length; i++) {
-                var typeVo = rows[i];
+            for (var index = 0; index < rows.length; index++) {
+                var typeVo = rows[index];
                 var obj = new Object();
                 obj.value = typeVo.code;
                 obj.text = typeVo.name;
@@ -275,9 +278,9 @@ $(function () {
                 return;
             }
             var rows = JSON.parse(pageData).rows;
-            var objArr = new Array();
-            for (var i = 0; i < rows.length; i++) {
-                var row = rows[i];
+            var objArr = getFilterObject();
+            for (var index = 0; index < rows.length; index++) {
+                var row = rows[index];
                 var obj = new Object();
                 obj.value = row.groupId;
                 obj.text = row.groupName;
@@ -503,6 +506,16 @@ function onlyOwnData(rows) {
         }
     }
     return onlyOwnData;
+}
+
+//获取查询条件列表
+function getFilterObject() {
+    var objArr = new Array();
+    var obj = new Object();
+    obj.value = "0";
+    obj.text = "全部";
+    objArr.push(obj);
+    return objArr;
 }
 </script>
 </body>

@@ -11,7 +11,6 @@ import org.fire.cost.enums.AccountStatusEnum;
 import org.fire.cost.enums.AccountTypeEnum;
 import org.fire.cost.enums.ClearTypeEnum;
 import org.fire.cost.service.AccountService;
-import org.fire.cost.service.UserService;
 import org.fire.cost.util.AuthenticationUtil;
 import org.fire.cost.util.DateUtil;
 import org.fire.cost.vo.AccountVO;
@@ -34,9 +33,6 @@ import java.util.*;
 @Service
 public class AccountServiceImpl implements AccountService {
     @Resource
-    private UserService userService;
-
-    @Resource
     private AccountDao accountDao;
 
     @Resource
@@ -44,7 +40,6 @@ public class AccountServiceImpl implements AccountService {
 
     @Resource
     private GroupDao groupDao;
-    private Map<String, List<AccountVO>> accountDataIfMonthIsNull;
 
     /**
      * 根据过滤条件查询账单信息
@@ -199,8 +194,6 @@ public class AccountServiceImpl implements AccountService {
         AccountTypeEnum[] typeEnums = AccountTypeEnum.values();
         List<TypeVo> typeList = new ArrayList<TypeVo>();
         TypeVo typeVo = new TypeVo();
-        typeVo.setCode(0);
-        typeVo.setName("全部");
         typeList.add(typeVo);
         for (AccountTypeEnum typeEnum : typeEnums) {
             TypeVo vo = new TypeVo();
@@ -221,8 +214,6 @@ public class AccountServiceImpl implements AccountService {
         AccountStatusEnum[] typeEnums = AccountStatusEnum.values();
         List<TypeVo> typeList = new ArrayList<TypeVo>();
         TypeVo typeVo = new TypeVo();
-        typeVo.setCode(0);
-        typeVo.setName("全部");
         typeList.add(typeVo);
         for (AccountStatusEnum typeEnum : typeEnums) {
             TypeVo vo = new TypeVo();
