@@ -1,147 +1,138 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%
-    String path = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + request.getContextPath();
-%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-    <meta name="author" content="Darko Bunic"/>
-    <meta name="description" content="Drag and drop table content with JavaScript"/>
-    <link rel="stylesheet" href="<%=path%>/css/style.css" type="text/css" media="screen"/>
-    <script type="text/javascript" src="<%=path%>/js/drag.js"></script>
-    <!-- initialize drag and drop -->
-    <script type="text/javascript">
-        window.onload = function () {
-            var num = 0,			// number of successfully placed elements
-                    rd = REDIPS.drag;	// reference to the REDIPS.drag class
-            // initialization
-            rd.init();
-            // set hover color
-            rd.hover_color = '#9BB3DA';
-            // define green elements for green cells
-            rd.mark.exception.green = 'green_cell';
-            rd.mark.exception.greenc0 = 'green_cell';
-            rd.mark.exception.greenc1 = 'green_cell';
-            rd.mark.exception.greenc2 = 'green_cell';
-            // define orange elements for orange cells
-            rd.mark.exception.orange = 'orange_cell';
-            rd.mark.exception.orangec0 = 'orange_cell';
-            rd.mark.exception.orangec1 = 'orange_cell';
-            rd.mark.exception.orangec2 = 'orange_cell';
-
-            // this function (event handler) is called after element is dropped
-            REDIPS.drag.myhandler_dropped = function () {
-                var msg; // message text
-                // if the DIV element was placed on allowed cell then
-                if (rd.target_cell.className.indexOf(rd.mark.exception[rd.obj.id]) !== -1) {
-                    // make it a unmovable
-                    rd.enable_drag(false, rd.obj.id);
-                    // increase counter
-                    num++;
-                    // prepare and display message
-                    if (num < 6)    msg = 'Number of successfully placed elements: ' + num;
-                    else            msg = 'Well done!';
-                    document.getElementById('message').innerHTML = msg;
-                }
-            }
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <?
+	$keywords = "Drag and drop script,DHTML drag and drop,drag,drop";
+	@include($_SERVER['DOCUMENT_ROOT']."/config/metatags.inc");
+	?>
+    <style type="text/css">
+        #mainContainer {
+            width: 600px;
+            margin: 0 auto;
+            margin-top: 10px;
+            border: 1px solid #000;
+            padding: 2px;
         }
-    </script>
+
+        #leftColumn {
+            width: 300px;
+            float: left;
+            border: 1px solid #000;
+            background-color: #E2EBED;
+            padding: 3px;
+            height: 400px;
+        }
+
+        #rightColumn {
+            width: 200px;
+            float: right;
+            margin: 2px;
+            height: 400px;
+        }
+
+        .dragableBox {
+            width: 100px;
+            height: 40px;
+            border: 1px solid #000;
+            background-color: #FFF;
+            margin-bottom: 5px;
+            padding: 10px;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        .dropBox {
+            width: 190px;
+            border: 1px solid #000;
+            background-color: #E2EBED;
+            height: 400px;
+            margin-bottom: 10px;
+            padding: 3px;
+            overflow: auto;
+        }
+
+        a {
+            color: #F00;
+        }
+
+        .clear {
+            clear: both;
+        }
+
+        img {
+            border: 0px;
+        }
+    </style>
+    <script type="text/javascript" src="js/drag-drop-custom.js"></script>
 </head>
 <body>
-<div id="drag">
-    <table id="table1">
-        <colgroup>
-            <col width="100"/>
-            <col width="50"/>
-            <col width="100"/>
-            <col width="100"/>
-            <col width="100"/>
-            <col width="100"/>
-            <col width="100"/>
-        </colgroup>
-        <tr>
-            <td class="dark"></td>
-            <td class="mark blank"></td>
-            <td class="dark single" title="Single content cell"></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td class="dark single" title="Single content cell"></td>
-        </tr>
-        <tr>
-            <td class="dark"></td>
-            <td class="mark blank"></td>
-            <td></td>
-            <td></td>
-            <td class="mark green_cell single"></td>
-            <td></td>
-            <td></td>
-        </tr>
-        <tr>
-            <!-- define green clone element (2 cloned elements + last element) -->
-            <td class="dark">
-                <div id="green" class="drag green clone climit1_2">Green</div>
-            </td>
-            <td class="mark blank"></td>
-            <td></td>
-            <td class="mark orange_cell single"></td>
-            <td></td>
-            <td class="mark orange_cell single"></td>
-            <td></td>
-        </tr>
-        <tr>
-            <td class="dark"></td>
-            <td class="mark blank"></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-        </tr>
-        <tr>
-            <!-- define orange clone element (2 cloned elements + last element) -->
-            <td class="dark">
-                <div id="orange" class="drag orange clone climit1_2">Orange</div>
-            </td>
-            <td class="mark blank"></td>
-            <td></td>
-            <td class="mark green_cell single"></td>
-            <td></td>
-            <td class="mark green_cell single"></td>
-            <td></td>
-        </tr>
-        <tr>
-            <td class="dark"></td>
-            <td class="mark blank"></td>
-            <td></td>
-            <td></td>
-            <td class="mark orange_cell single"></td>
-            <td></td>
-            <td></td>
-        </tr>
-        <tr>
-            <td class="dark"></td>
-            <td class="mark blank"></td>
-            <td class="dark single" title="Single content cell"></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td class="dark single" title="Single content cell"></td>
-        </tr>
-        <!-- empty row -->
-        <tr>
-            <td colspan="7" class="mark blank"></td>
-        </tr>
-        <!-- message row -->
-        <tr>
-            <td class="mark blank"></td>
-            <td class="mark blank"></td>
-            <td id="message" colspan="5" class="mark dark2">Set green and orange elements to the green and orange cells,
-                respectively.
-            </td>
-        </tr>
-    </table>
+<div id="mainContainer">
+    <div id="leftColumn">
+        <div id="dropContent">
+            <div class="dragableBox" id="box1">CAT</div>
+            <div class="dragableBox" id="box2">DOG</div>
+            <div class="dragableBox" id="box3">HORSE</div>
+            <div class="dragableBox" id="box4">TIGER</div>
+        </div>
+    </div>
+
+    <div id="rightColumn">
+        <div id="dropBox" class="dropBox">
+            <div></div>
+            <table border="1">
+                <tr>
+                    <td id="dropContent2">row 1, cell 1</td>
+                    <td>row 1, cell 2</td>
+                </tr>
+                <tr>
+                    <td>row 2, cell 1</td>
+                    <td>row 2, cell 2</td>
+                </tr>
+            </table>
+        </div>
+    </div>
+
 </div>
+
+
+<script type="text/javascript">
+    function dropItems(idOfDraggedItem, targetId, x, y) {
+        if (targetId == 'dropBox') {
+            var obj = document.getElementById(idOfDraggedItem);
+            if (obj.parentNode.id == 'dropContent2')
+                return;
+            else
+                document.getElementById('dropContent2').appendChild(obj);
+        }
+        if (targetId == 'leftColumn') {
+            var obj = document.getElementById(idOfDraggedItem);
+            if (obj.parentNode.id == 'dropContent')
+                return;
+            else
+                document.getElementById('dropContent').appendChild(obj);
+        }
+
+    }
+
+    function onDragFunction(cloneId, origId) {
+        self.status = 'Started dragging element with id ' + cloneId;
+
+        var obj = document.getElementById(cloneId);
+        obj.style.border = '4px solid #F00';
+    }
+
+
+    var dragDropObj = new DHTMLgoodies_dragDrop();
+    dragDropObj.addSource('box1', true, true, true, false, 'onDragFunction');
+    dragDropObj.addSource('box2', true, true, true, false, 'onDragFunction');
+    dragDropObj.addSource('box3', true, true, true, false, 'onDragFunction');
+    dragDropObj.addSource('box4', true, true, true, false, 'onDragFunction');
+    dragDropObj.addTarget('dropBox', 'dropItems');
+    dragDropObj.addTarget('leftColumn', 'dropItems');
+    dragDropObj.init();
+</script>
+
+<br><br>
 </body>
 </html>
