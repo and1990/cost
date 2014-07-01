@@ -1,6 +1,5 @@
 package org.fire.cost.filter;
 
-import net.rubyeye.xmemcached.exception.MemcachedException;
 import org.fire.cost.context.ThreadMessageContext;
 import org.fire.cost.context.UserContext;
 import org.fire.cost.service.CostContextService;
@@ -16,7 +15,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
-import java.util.concurrent.TimeoutException;
 
 /**
  * 认证过滤
@@ -32,7 +30,7 @@ public class CostAuthenticationFilter implements Filter {
     /**
      * 登出路径
      */
-    @Value("${cost.logout.ptah}")
+    @Value("${cost.logout.path}")
     private String logoutPath;
 
     /**
@@ -56,11 +54,7 @@ public class CostAuthenticationFilter implements Filter {
                     costContextService.delay(sessionId);
                     setValue(httpRequest);
                     chain.doFilter(httpRequest, httpResponse);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                } catch (MemcachedException e) {
-                    e.printStackTrace();
-                } catch (TimeoutException e) {
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
             } else {
