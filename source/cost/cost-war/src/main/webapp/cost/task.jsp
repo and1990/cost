@@ -40,15 +40,15 @@
 
 <div id="user_data">
     <table id="user_table" border="1" style="width: 600px;height: 50px;text-align: center">
-        <tr>
-            <td> world</td>
-            <td> world</td>
-            <td> world</td>
-            <td> world</td>
-            <td> world</td>
-            <td> world</td>
-            <td> world</td>
-            <td> world</td>
+        <tr id="user_table_tr">
+            <td> world1</td>
+            <td> world2</td>
+            <td> world3</td>
+            <td> world4</td>
+            <td> world5</td>
+            <td> world6</td>
+            <td> world7</td>
+            <td> world8</td>
         </tr>
     </table>
 </div>
@@ -82,6 +82,9 @@
             columns[columnIndex].id = id;
             dragDropObj.addSource(id, true);
         }
+
+        //把user表设置成目标对象，这样user表既是源对象，又是目标对象
+        dragDropObj.addTarget("user_table_tr", "dropItems");
 
         dragDropObj.init();
     });
