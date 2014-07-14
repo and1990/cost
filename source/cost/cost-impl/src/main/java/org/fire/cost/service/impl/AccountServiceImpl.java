@@ -502,9 +502,9 @@ public class AccountServiceImpl implements AccountService {
             account = new Account();
             account.setCreateUser(AuthenticationUtil.getUserName());
             account.setCreateTime(new Date());
+            User user = userDao.findOne(AuthenticationUtil.getLoginUserId());
+            account.setUser(user);
         }
-        User user = userDao.findOne(AuthenticationUtil.getLoginUserId());
-        account.setUser(user);
         Group group = groupDao.findOne(vo.getGroupId());
         account.setGroup(group);
         account.setAccountMoney(vo.getAccountMoney());
