@@ -114,4 +114,11 @@ public interface UserService {
      * @return
      */
     HSSFWorkbook getExcelData();
+
+    /**
+     * 根据登陆名称获取用户
+     *
+     * @return
+     */
+    UserVO findByLoginName(String loginName);
 }

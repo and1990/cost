@@ -53,7 +53,7 @@
 </div>
 
 <!-- 选择结算日期 -->
-<div id="clear_date_dialog" title="选择结算日期" class="easyui-dialog"
+<div id="clear_data_dialog" title="选择结算日期" class="easyui-dialog"
      style="width:400px;height:200px;text-align:center"
      data-options="closed:true,modal: true">
     <div style="margin-top: 50px">
@@ -141,15 +141,14 @@
                     {field: 'clearResultName', title: '结算类型', width: 100, align: 'center'},
                     {field: 'overStatusName', title: '结算状态', width: 100, align: 'center'},
                     {field: 'detailRemark', title: '备注', width: 100, align: 'center'},
-                    {field: 'operation', title: '操作', width: 100, align: 'center',
-                        formatter: function (value, row, index) {
+                    {
+                        field: 'operation', title: '操作', width: 100, align: 'center',
+                        formatter: function (value, row, detailIndex) {
                             var detailId = row.clearDetailId;
-                            if (row.clearResult == 1) {
-                                return " <span><a href='#' onclick='detailClear(" + detailId + ");' id='clear_button_" + detailId + "' style='text-decoration: NONE'>结算</a></span> " +
-                                        "<span><a href='#' onclick='cancelClear(" + detailId + ");' id='cancel_button_" + detailId + "' style='text-decoration: NONE'>取消</a></span> ";
-                            } else {
-                                return "";
-                            }
+                            var html = " <span><a href='#' onclick=detailClear(" + detailId + "," + index + "," + detailIndex + "); >结算</a></span> ";
+                            html += "<span><a href='#' onclick=cancelClear(" + detailId + "," + index + "," + detailIndex + ");>取消</a></span> ";
+                            return html;
+
                         }
                     }
                 ]
@@ -178,7 +177,7 @@
 
     //结算
     function clearData() {
-        $("#clear_date_dialog").dialog("open");
+        $("#clear_data_dialog").dialog("open");
         $.ajax({
             method: "post",
             url: "<%=basePath%>/getLastestClearDate.do",
@@ -191,7 +190,7 @@
 
     //确定结算
     function clearConfirm() {
-        $("#clear_date_dialog").dialog("close");
+        $("#clear_data_dialog").dialog("close");
         var clearEndDate = $("#clearEndDate").val();
         $.ajax({
             method: "post",
@@ -202,12 +201,13 @@
         });
     }
     //结算明细
-    function detailClear(detailId) {
+    function detailClear(detailId, index, detailIndex) {
         $.ajax({
             method: "post",
             url: "<%=basePath%>/clearDetail.do?clearAccountDetailId=" + detailId,
             success: function (returnData) {
-                $('#clear_detail_table').datagrid('reload');
+                var detailTable = $('#clear_data_table').datagrid('getRowDetail', index).find('#clear_detail_table');
+                detailTable.datagrid('reload');
             }
         });
     }
@@ -218,7 +218,7 @@
             method: "post",
             url: "<%=basePath%>/cancelDetail.do?clearAccountDetailId=" + detailId,
             success: function (returnData) {
-                $('#clear_detail_table').datagrid('reload');
+                $('#clear_detail_table').datagrid('refreshRow', index);
             }
         });
     }

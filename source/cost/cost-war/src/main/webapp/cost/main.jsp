@@ -29,7 +29,7 @@
     <!--头信息-->
     <div id="headInfo" data-options="region:'north',split:true" style="height: 30px;background:#E7F0FF">
         <div style="font-family: Microsoft YaHei;font-size: 15px;">
-            <span>欢迎你，${sessionScope.userName}</span>
+            <span>欢迎你，${sessionScope.loginName}</span>
             <span>|</span>
             <span><a href="#" style="text-decoration: none" onclick="openModifyPasswordTab();">修改密码</a></span>
             <span>|</span>

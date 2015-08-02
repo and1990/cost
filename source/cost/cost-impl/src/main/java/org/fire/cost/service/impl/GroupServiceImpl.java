@@ -8,7 +8,7 @@ import org.fire.cost.domain.GroupUser;
 import org.fire.cost.domain.User;
 import org.fire.cost.enums.StatusEnum;
 import org.fire.cost.service.GroupService;
-import org.fire.cost.util.AuthenticationUtil;
+import org.fire.cost.util.UserUtil;
 import org.fire.cost.util.DateUtil;
 import org.fire.cost.vo.GroupVO;
 import org.fire.cost.vo.PageData;
@@ -198,14 +198,14 @@ public class GroupServiceImpl implements GroupService {
     private Group makeVO2Group(GroupVO vo, Group group) throws Exception {
         if (group == null) {
             group = new Group();
-            group.setCreateUser(AuthenticationUtil.getUserName());
+            group.setCreateUser(UserUtil.getUserName());
             group.setCreateTime(new Date());
         } else {
             group.setGroupId(vo.getGroupId());
         }
         group.setGroupName(vo.getGroupName());
         group.setGroupStatus(vo.getGroupStatus());
-        group.setModifyUser(AuthenticationUtil.getUserName());
+        group.setModifyUser(UserUtil.getUserName());
         group.setModifyTime(new Date());
         group.setGroupRemark(vo.getGroupRemark());
         return group;

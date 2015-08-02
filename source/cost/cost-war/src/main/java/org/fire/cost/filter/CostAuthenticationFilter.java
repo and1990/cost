@@ -1,19 +1,10 @@
 package org.fire.cost.filter;
 
-import org.fire.cost.context.ThreadMessageContext;
-import org.fire.cost.context.UserContext;
-import org.fire.cost.service.CostContextService;
-import org.fire.cost.util.AuthenticationUtil;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 
-import javax.annotation.Resource;
 import javax.servlet.*;
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
 /**
@@ -22,10 +13,6 @@ import java.io.IOException;
  * @author liutengfei
  */
 public class CostAuthenticationFilter implements Filter {
-    private static final Logger log = LoggerFactory.getLogger(CostAuthenticationFilter.class);
-
-    @Resource
-    private CostContextService costContextService;
 
     /**
      * 登出路径
@@ -45,29 +32,10 @@ public class CostAuthenticationFilter implements Filter {
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
         HttpServletRequest httpRequest = (HttpServletRequest) request;
         HttpServletResponse httpResponse = (HttpServletResponse) response;
-        String sessionId = getCookieValue(httpRequest, "sessionId");
-        if (sessionId != null && sessionId.trim().length() > 0) {
-            UserContext userContext = costContextService.getUserContext(sessionId);
-            if (userContext != null) {
-                ThreadMessageContext.set(userContext);
-                try {
-                    costContextService.delay(sessionId);
-                    setValue(httpRequest);
-                    chain.doFilter(httpRequest, httpResponse);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            } else {
-                if (log.isDebugEnabled()) {
-                    log.debug("缓存不存在或者失效，请重新登录");
-                }
-                httpResponse.sendRedirect(logoutPath);
-                return;
-            }
+        Object loginName = httpRequest.getSession().getAttribute("loginName");
+        if (loginName != null) {
+            chain.doFilter(httpRequest, httpResponse);
         } else {
-            if (log.isDebugEnabled()) {
-                log.debug("请求信息不全，无效，请检查http头信息");
-            }
             httpResponse.sendRedirect(logoutPath);
             return;
         }
@@ -76,37 +44,4 @@ public class CostAuthenticationFilter implements Filter {
     public void destroy() {
 
     }
-
-    /**
-     * 得到cookie的值
-     *
-     * @return
-     */
-    private String getCookieValue(HttpServletRequest request, String key) {
-        Cookie[] cookieArr = request.getCookies();
-        if (cookieArr != null && cookieArr.length != 0) {
-            for (Cookie cookie : cookieArr) {
-                if ("sessionId".equals(cookie.getName()) && "sessionId".equals(key)) {
-                    return cookie.getValue();
-                }
-            }
-        }
-        return null;
-    }
-
-    /**
-     * 设置值
-     *
-     * @param httpRequest
-     */
-    private void setValue(HttpServletRequest httpRequest) {
-        HttpSession session = httpRequest.getSession();
-        String userName = AuthenticationUtil.getUserName();
-        session.setAttribute("userName", userName);
-        Long userId = AuthenticationUtil.getLoginUserId();
-        session.setAttribute("userId", userId);
-        int userType = AuthenticationUtil.getUserType();
-        session.setAttribute("userType", userType);
-    }
-
 }

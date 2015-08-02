@@ -12,16 +12,16 @@ import org.fire.cost.context.UserContext;
 import org.fire.cost.enums.HttpStatusEnum;
 import org.fire.cost.enums.ResultEnum;
 import org.fire.cost.service.AuthenticationService;
-import org.fire.cost.service.CostContextService;
 import org.fire.cost.service.UserService;
-import org.fire.cost.util.AuthenticationUtil;
 import org.fire.cost.util.MessageUtil;
 import org.fire.cost.vo.Message;
+import org.fire.cost.vo.UserVO;
 import org.springframework.stereotype.Controller;
 
 import javax.annotation.Resource;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 @Namespace("/")
 @Controller
@@ -34,10 +34,6 @@ public class AuthenticationAction extends BaseAction {
     //验证服务类
     @Resource
     private AuthenticationService authenticationService;
-
-    //上下文信息
-    @Resource
-    private CostContextService costContextService;
 
     //用户名
     private String loginName;
@@ -59,12 +55,13 @@ public class AuthenticationAction extends BaseAction {
             //自动调用AuthenticationService的doGetAuthenticationInfo方法验证
             Subject currentUser = SecurityUtils.getSubject();
             currentUser.login(token);
-            //建立用户上下文
-            UserContext userContext = authenticationService.buildUserContext(loginName);
-            //创建cookie
-            setCookie(userContext);
-            //更新登录时间
-            userService.changeUserLoginTime(userContext.getUserId());
+            //保存session
+            UserVO vo = userService.findByLoginName(loginName);
+            HttpSession session = ServletActionContext.getRequest().getSession();
+            session.setAttribute("loginName", loginName);
+            session.setAttribute("userId", vo.getUserId());
+            session.setMaxInactiveInterval(30 * 60);
+
             //设置返回信息
             MessageUtil.setMessage(message, ResultEnum.Success, HttpStatusEnum.Success, null, null);
         } catch (AuthenticationException e) {
@@ -87,10 +84,8 @@ public class AuthenticationAction extends BaseAction {
      */
     @Action(value = "loginOut", results = {@Result(name = SUCCESS, location = "/cost/login.jsp")})
     public String loginOut() {
-        String sessionId = AuthenticationUtil.getSessionId();
-        if (sessionId != null && sessionId.trim().length() > 0) {
-            costContextService.remove(sessionId);
-        }
+        HttpSession session = ServletActionContext.getRequest().getSession();
+        session.setAttribute("loginName", null);
         return SUCCESS;
 
     }

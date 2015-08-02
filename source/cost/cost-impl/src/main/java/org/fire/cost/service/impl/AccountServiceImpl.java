@@ -11,7 +11,7 @@ import org.fire.cost.enums.AccountStatusEnum;
 import org.fire.cost.enums.AccountTypeEnum;
 import org.fire.cost.enums.ClearTypeEnum;
 import org.fire.cost.service.AccountService;
-import org.fire.cost.util.AuthenticationUtil;
+import org.fire.cost.util.UserUtil;
 import org.fire.cost.util.DateUtil;
 import org.fire.cost.vo.AccountVO;
 import org.fire.cost.vo.PageData;
@@ -44,7 +44,7 @@ public class AccountServiceImpl implements AccountService {
     /**
      * 根据过滤条件查询账单信息
      */
-    @Override
+
     @Transactional(value = "transactionManager", rollbackFor = RollbackException.class)
     public List<AccountVO> getAccountByFilter(AccountVO vo, PageData<AccountVO> pageData) {
         List<AccountVO> voList = new ArrayList<AccountVO>();
@@ -69,7 +69,6 @@ public class AccountServiceImpl implements AccountService {
      *
      * @return
      */
-    @Override
     @Transactional(value = "transactionManager", rollbackFor = RollbackException.class)
     public int getAccountTotal(AccountVO vo) {
         int total = accountDao.getAccountTotal(vo);
@@ -130,7 +129,6 @@ public class AccountServiceImpl implements AccountService {
      * @param accountStatus
      * @return
      */
-    @Override
     @Transactional(value = "transactionManager", rollbackFor = RollbackException.class)
     public void approveAccount(String accountIds, Integer accountStatus) {
         try {
@@ -160,7 +158,6 @@ public class AccountServiceImpl implements AccountService {
      * @param accountIds
      * @return
      */
-    @Override
     @Transactional(value = "transactionManager", rollbackFor = RollbackException.class)
     public void clearAccount(String accountIds) {
         try {
@@ -189,7 +186,6 @@ public class AccountServiceImpl implements AccountService {
      *
      * @return
      */
-    @Override
     public List<TypeVo> getAccountType() {
         AccountTypeEnum[] typeEnums = AccountTypeEnum.values();
         List<TypeVo> typeList = new ArrayList<TypeVo>();
@@ -209,7 +205,6 @@ public class AccountServiceImpl implements AccountService {
      *
      * @return
      */
-    @Override
     public List<TypeVo> getAccountStatus() {
         AccountStatusEnum[] typeEnums = AccountStatusEnum.values();
         List<TypeVo> typeList = new ArrayList<TypeVo>();
@@ -229,7 +224,7 @@ public class AccountServiceImpl implements AccountService {
      *
      * @return
      */
-    @Override
+
     @Transactional(value = "transactionManager", rollbackFor = RollbackException.class)
     public HSSFWorkbook getExcelData() {
         HSSFWorkbook hwb = new HSSFWorkbook();
@@ -256,7 +251,7 @@ public class AccountServiceImpl implements AccountService {
      *
      * @return
      */
-    @Override
+
     public List<TypeVo> getClearType() {
         ClearTypeEnum[] typeEnums = ClearTypeEnum.values();
         List<TypeVo> typeList = new ArrayList<TypeVo>();
@@ -276,7 +271,7 @@ public class AccountServiceImpl implements AccountService {
      * @param accountEndTime   消费结束时间
      * @return
      */
-    @Override
+
     public List<AccountVO> getAccountGroupByAccountType(String accountStartTime, String accountEndTime) {
         List<AccountVO> accountVOList = accountDao.getAccountGroupByAccountType(accountStartTime, accountEndTime);
         return accountVOList;
@@ -289,7 +284,7 @@ public class AccountServiceImpl implements AccountService {
      * @param accountEndTime   消费结束时间
      * @return
      */
-    @Override
+
     public List<AccountVO> getAccountGroupByUser(String accountStartTime, String accountEndTime) {
         List<AccountVO> accountVOList = accountDao.getAccountGroupByUser(accountStartTime, accountEndTime);
         return accountVOList;
@@ -500,9 +495,9 @@ public class AccountServiceImpl implements AccountService {
     private Account makeVO2Account(AccountVO vo, Account account) throws ParseException {
         if (account == null) {
             account = new Account();
-            account.setCreateUser(AuthenticationUtil.getUserName());
+            account.setCreateUser(UserUtil.getUserName());
             account.setCreateTime(new Date());
-            User user = userDao.findOne(AuthenticationUtil.getLoginUserId());
+            User user = userDao.findOne(UserUtil.getLoginUserId());
             account.setUser(user);
         }
         Group group = groupDao.findOne(vo.getGroupId());
@@ -512,7 +507,7 @@ public class AccountServiceImpl implements AccountService {
         account.setAccountStatus(vo.getAccountStatus());
         account.setAccountType(vo.getAccountType());
         account.setAccountFile(vo.getAccountFile());
-        account.setModifyUser(AuthenticationUtil.getUserName());
+        account.setModifyUser(UserUtil.getUserName());
         account.setModifyTime(new Date());
         account.setAccountRemark(vo.getAccountRemark());
         return account;

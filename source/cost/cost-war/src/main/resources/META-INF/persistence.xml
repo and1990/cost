@@ -15,20 +15,6 @@
 
         <properties>
             <property name="hibernate.dialect" value="org.hibernate.dialect.MySQLDialect"/>
-            <property name="hibernate.hbm2ddl.auto" value="update"/>
-            <property name="hibernate.cache.use_second_level_cache" value="true"/>
-            <property name="hibernate.show_sql" value="true"/>
-            <property name="hibernate.cache.use_structured_entries" value="true"/>
-            <property name="hibernate.cache.use_query_cache" value="true"/>
-            <property name="hibernate.cache.provider_class"
-                      value="com.googlecode.hibernate.memcached.MemcachedCacheProvider"/>
-            <property name="hibernate.memcached.servers" value="127.0.0.1:11211"/>
-            <property name="hibernate.memcached.memcacheClientFactory"
-                      value="net.rubyeye.xmemcached.utils.hibernate.XmemcachedClientFactory"/>
-            <property name="hibernate.connection.url" value="jdbc:mysql://localhost:3306/cost"/>
-            <property name="hibernate.connection.driver_class" value="com.mysql.jdbc.Driver"/>
-            <property name="hibernate.connection.username" value="root"/>
-            <property name="hibernate.connection.password" value="1234"/>
         </properties>
 
     </persistence-unit>

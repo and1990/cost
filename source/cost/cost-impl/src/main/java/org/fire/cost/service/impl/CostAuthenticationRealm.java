@@ -9,7 +9,6 @@ import org.apache.shiro.subject.PrincipalCollection;
 import org.fire.cost.dao.UserDao;
 import org.fire.cost.domain.User;
 import org.fire.cost.enums.StatusEnum;
-import org.fire.cost.util.AuthenticationUtil;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -56,10 +55,14 @@ public class CostAuthenticationRealm extends AuthorizingRealm {
      */
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
-        int userType = AuthenticationUtil.getUserType();
-        String role = userType == 1 ? "common" : "admin";
-        SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
-        info.addRole(role);
-        return info;
+        Object loginName = principals.getPrimaryPrincipal();
+        if (loginName != null) {
+            User user = userDao.findByLoginName(loginName.toString());
+            String role = user.getUserType() == 1 ? "common" : "admin";
+            SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
+            info.addRole(role);
+            return info;
+        }
+        return new SimpleAuthorizationInfo();
     }
 }

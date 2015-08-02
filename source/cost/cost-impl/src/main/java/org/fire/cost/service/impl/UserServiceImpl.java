@@ -8,7 +8,7 @@ import org.fire.cost.domain.User;
 import org.fire.cost.enums.StatusEnum;
 import org.fire.cost.enums.UserTypeEnum;
 import org.fire.cost.service.UserService;
-import org.fire.cost.util.AuthenticationUtil;
+import org.fire.cost.util.UserUtil;
 import org.fire.cost.util.DateUtil;
 import org.fire.cost.vo.PageData;
 import org.fire.cost.vo.UserVO;
@@ -81,7 +81,6 @@ public class UserServiceImpl implements UserService {
      *
      * @return
      */
-    @Override
     public int getUserDataTotal(UserVO vo) {
         int total = userDao.getUserDataTotal(vo);
         return total;
@@ -145,7 +144,7 @@ public class UserServiceImpl implements UserService {
      * @return
      */
     public String getLoginUserName() {
-        Long userId = AuthenticationUtil.getLoginUserId();
+        Long userId = UserUtil.getLoginUserId();
         if (userId != null && userId != 0) {
             User user = userDao.findByUserId(userId);
             if (user != null) {
@@ -202,7 +201,7 @@ public class UserServiceImpl implements UserService {
      * @param userIds
      * @param userStatus
      */
-    @Override
+
     public void modifyUserStatus(String userIds, Integer userStatus) {
         String[] userIdArr = userIds.trim().split(",");
         List<User> userList = new ArrayList<User>();
@@ -219,10 +218,10 @@ public class UserServiceImpl implements UserService {
      *
      * @return
      */
-    @Override
+
     public void modifyPassword(String password) {
         try {
-            Long userId = AuthenticationUtil.getLoginUserId();
+            Long userId = UserUtil.getLoginUserId();
             User user = userDao.findOne(userId);
             boolean passwordNotNull = password != null && password.trim().length() != 0;
             if (user != null && passwordNotNull) {
@@ -239,10 +238,10 @@ public class UserServiceImpl implements UserService {
      *
      * @return
      */
-    @Override
+
     public boolean validatePassword(String inputPassword) {
         try {
-            Long userId = AuthenticationUtil.getLoginUserId();
+            Long userId = UserUtil.getLoginUserId();
             User user = userDao.findOne(userId);
             boolean passwordNotNull = inputPassword != null && inputPassword.trim().length() != 0;
             if (user != null && passwordNotNull) {
@@ -262,7 +261,7 @@ public class UserServiceImpl implements UserService {
      *
      * @return
      */
-    @Override
+
     public HSSFWorkbook getExcelData() {
         HSSFWorkbook hwb = new HSSFWorkbook();
         // 加边框
@@ -281,6 +280,24 @@ public class UserServiceImpl implements UserService {
         createExcelTitle(sheet, style, row, cell);
         createExcelBody(sheet, style, row, cell);
         return hwb;
+    }
+
+    /**
+     * 根据登陆名称获取用户
+     *
+     * @return
+     */
+    public UserVO findByLoginName(String loginName) {
+        try {
+            User user = userDao.findByLoginName(loginName);
+            if (user != null) {
+                return makeUser2VO(user);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            logger.error("根据登陆名称获取用户异常", e);
+        }
+        return null;
     }
 
     /**

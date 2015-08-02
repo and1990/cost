@@ -6,7 +6,7 @@ import org.fire.cost.enums.ClearResultEnum;
 import org.fire.cost.enums.OverStatusEnum;
 import org.fire.cost.enums.StatusEnum;
 import org.fire.cost.service.ClearAccountService;
-import org.fire.cost.util.AuthenticationUtil;
+import org.fire.cost.util.UserUtil;
 import org.fire.cost.util.DateUtil;
 import org.fire.cost.vo.*;
 import org.springframework.stereotype.Service;
@@ -44,7 +44,7 @@ public class ClearAccountServiceImpl implements ClearAccountService {
      *
      * @return
      */
-    @Override
+
     public List<ClearAccountVO> getClearData(PageData pageData) {
         List<ClearAccount> clearAccountList = clearAccountDao.getClearData(pageData);
         Map<Long, List<ClearAccountDetailVO>> clearDetailDataMap = getClearDetailDataMap(clearAccountList);
@@ -62,7 +62,7 @@ public class ClearAccountServiceImpl implements ClearAccountService {
      *
      * @return
      */
-    @Override
+
     public int getClearTotal() {
         int total = clearAccountDao.getClearTotal();
         return total;
@@ -74,7 +74,7 @@ public class ClearAccountServiceImpl implements ClearAccountService {
      * @param clearAccountId
      * @return
      */
-    @Override
+
     public List<ClearAccountDetailVO> getClearDetailData(Long clearAccountId) {
         List<ClearAccountDetailVO> detailVOList = new ArrayList<ClearAccountDetailVO>();
         ClearAccount clearAccount = clearAccountDao.findOne(clearAccountId);
@@ -91,7 +91,7 @@ public class ClearAccountServiceImpl implements ClearAccountService {
      *
      * @return
      */
-    @Override
+
     public String getLatestClearDate() {
         String date = "";
         ClearAccount clearAccount = clearAccountDao.getLatestClearData();
@@ -110,7 +110,7 @@ public class ClearAccountServiceImpl implements ClearAccountService {
      * @param clearAccountVO
      * @return
      */
-    @Override
+
     @Transactional(value = "transactionManager", rollbackFor = RollbackException.class)
     public void clearData(ClearAccountVO clearAccountVO) {
         //获取用户对应的结算明细
@@ -139,7 +139,7 @@ public class ClearAccountServiceImpl implements ClearAccountService {
      * @param overStatus
      * @param clearAccountDetailId
      */
-    @Override
+
     @Transactional(value = "transactionManager", rollbackFor = RollbackException.class)
     public void updateClearDetail(int overStatus, Long clearAccountDetailId) {
         detailDao.updateClearDetail(overStatus, clearAccountDetailId);
@@ -195,6 +195,7 @@ public class ClearAccountServiceImpl implements ClearAccountService {
         for (User user : allUserList) {
             ClearAccountDetailVO detailVO = new ClearAccountDetailVO();
             detailVO.setUserId(user.getUserId());
+            detailVO.setUserName(user.getUserName());
             detailVO.setPayMoney(BigDecimal.ZERO);
             detailVO.setAccountMoney(BigDecimal.ZERO);
             detailVO.setClearMoney(BigDecimal.ZERO);
@@ -341,7 +342,7 @@ public class ClearAccountServiceImpl implements ClearAccountService {
         String endDate = getEndDate(clearAccountVO);
         clearAccount.setStartDate(DateUtil.makeStr2Date(startDate, false));
         clearAccount.setEndDate(DateUtil.makeStr2Date(endDate, false));
-        clearAccount.setCreateUser(AuthenticationUtil.getUserName());
+        clearAccount.setCreateUser(UserUtil.getUserName());
         clearAccount.setCreateTime(new Date());
         return clearAccount;
     }
@@ -408,7 +409,7 @@ public class ClearAccountServiceImpl implements ClearAccountService {
     private ClearAccount makeVoToPo(ClearAccount clearAccount, ClearAccountVO clearAccountVO) {
         if (clearAccount == null) {
             clearAccount = new ClearAccount();
-            String userName = AuthenticationUtil.getUserName();
+            String userName = UserUtil.getUserName();
             clearAccount.setCreateUser(userName);
             clearAccount.setCreateTime(new Date());
         }
@@ -434,12 +435,12 @@ public class ClearAccountServiceImpl implements ClearAccountService {
         }
         detail.setAccountMoney(detailVO.getAccountMoney());
         detail.setClearMoney(detailVO.getClearMoney());
-        Integer clearResult = detailVO.getClearResult();
-        if (clearResult == ClearResultEnum.Get.getCode()) {
-            detail.setOverStatus(OverStatusEnum.Clear.getCode());
-        } else {
-            detail.setOverStatus(OverStatusEnum.Not_Clear.getCode());
-        }
+        //Integer clearResult = detailVO.getClearResult();
+        //if (clearResult == ClearResultEnum.Get.getCode()) {
+        //    detail.setOverStatus(OverStatusEnum.Clear.getCode());
+        //} else {
+        detail.setOverStatus(OverStatusEnum.Not_Clear.getCode());
+        //}
         Long userId = detailVO.getUserId();
         detail.setUser(userDao.findOne(userId));
         return detail;

@@ -59,40 +59,6 @@
     </jpa:repositories>
     <tx:annotation-driven transaction-manager="transactionManager"/>
 
-    <!--memcache -->
-    <bean name="memcachedClientBuilder" class="net.rubyeye.xmemcached.XMemcachedClientBuilder">
-        <constructor-arg>
-            <list>
-                <bean class="java.net.InetSocketAddress">
-                    <constructor-arg>
-                        <value>${memcached.server.address}</value>
-                    </constructor-arg>
-                    <constructor-arg>
-                        <value>${memcached.server.port}</value>
-                    </constructor-arg>
-                </bean>
-            </list>
-        </constructor-arg>
-        <constructor-arg>
-            <list>
-                <value>1</value>
-            </list>
-        </constructor-arg>
-        <property name="connectionPoolSize" value="50"></property>
-        <property name="opTimeout" value="50000"></property>
-        <property name="commandFactory">
-            <bean class="net.rubyeye.xmemcached.command.TextCommandFactory"/>
-        </property>
-        <property name="sessionLocator">
-            <bean class="net.rubyeye.xmemcached.impl.KetamaMemcachedSessionLocator"/>
-        </property>
-        <property name="transcoder">
-            <bean class="net.rubyeye.xmemcached.transcoders.SerializingTranscoder"/>
-        </property>
-    </bean>
-    <bean name="memcachedClient" factory-bean="memcachedClientBuilder"
-          factory-method="build" destroy-method="shutdown"/>
-
     <!-- shiro -->
     <bean id="shiroFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">
         <property name="securityManager" ref="securityManager"/>

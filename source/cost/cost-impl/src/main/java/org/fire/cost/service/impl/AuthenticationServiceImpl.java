@@ -7,7 +7,6 @@ import org.fire.cost.context.UserContext;
 import org.fire.cost.dao.UserDao;
 import org.fire.cost.domain.User;
 import org.fire.cost.service.AuthenticationService;
-import org.fire.cost.service.CostContextService;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -33,13 +32,9 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     @Resource
     private UserDao userDao;
 
-    @Resource
-    private CostContextService costContextService;
-
     /**
      * 建立用户信息上下文
      */
-    @Override
     public UserContext buildUserContext(String loginName) {
         UserContext userContext = buildContext(loginName);
         try {
@@ -47,7 +42,6 @@ public class AuthenticationServiceImpl implements AuthenticationService {
             if (log.isDebugEnabled()) {
                 log.debug("用户上下文信息\n" + json);
             }
-            costContextService.add(userContext.getSessionId(), json);
         } catch (IOException e1) {
             e1.printStackTrace();
             log.error("创建用户上下文信息失败");
